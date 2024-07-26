@@ -1,0 +1,21 @@
+<div cdkDropListGroup>
+  <div *ngFor="let folder of TEST_CASE_DATA">
+    <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>
+  </div>
+
+  <ng-template #folderTemplate let-folder="folder">
+    <div [ngClass]="{'nested-folder': folder.parentFolderId}">
+      <h2>{{ folder.name }}</h2>
+      <div cdkDropList [cdkDropListData]="testCasesMap[folder.name]" (cdkDropListDropped)="drop($event, folder.name)">
+        <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag>
+          {{ testCase.name }}
+        </div>
+      </div>
+      <div *ngIf="folder.folders" class="subfolder">
+        <div *ngFor="let subFolder of folder.folders">
+          <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
