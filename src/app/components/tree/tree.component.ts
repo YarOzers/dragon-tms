@@ -122,6 +122,7 @@ export class TreeComponent implements OnInit {
     console.log('testCaseData in OnInit: ', this.TEST_CASE_DATA);
     this.generateTestCaseArrays();
     this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+
   }
 
   private generateTestCaseArrays() {
@@ -160,7 +161,7 @@ export class TreeComponent implements OnInit {
     if (type === 'testCase' && event.item.data.type === 'testCase') {
       this.dropTestCase(event, targetId);
     } else if (type === 'folder' && event.item.data.type === 'folder') {
-      this.moveFolder(event, targetId);
+      this.dropFolder(event, targetId);
     }
   }
 
@@ -226,6 +227,55 @@ export class TreeComponent implements OnInit {
 
   toggleFolder(folder: Folder) {
     folder.expanded = !folder.expanded;
+  }
+dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number){
+    this.checkNestedFoldersForId(event,targetFolderId);
+
+}
+  checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number): void {
+    const sourceFolderId = event.item.data.id;
+    const findFolderById = (folders: Folder[], id: number): Folder | undefined => {
+      for (let folder of folders) {
+        if (folder.id === id) {
+          return folder;
+        }
+        if (folder.folders) {
+          const nestedFolder = findFolderById(folder.folders, id);
+          if (nestedFolder) {
+            return nestedFolder;
+          }
+        }
+      }
+      return undefined;
+    };
+
+    const checkForNestedId = (folders: Folder[], id: number): boolean => {
+      for (let folder of folders) {
+        if (folder.id === id) {
+          return true;
+        }
+        if (folder.folders) {
+          if (checkForNestedId(folder.folders, id)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    const sourceFolder = findFolderById(this.TEST_CASE_DATA, sourceFolderId);
+    if (!sourceFolder) {
+      console.error(`Source folder with id ${sourceFolderId} not found.`);
+      return;
+    }
+
+    if (checkForNestedId(sourceFolder.folders || [], targetFolderId)) {
+      console.log('Error: Target folder ID found within the nested folders of the source folder.');
+
+    } else {
+      console.log('No nested folder with the target ID found within the source folder.');
+      this.moveFolder(event,targetFolderId);
+    }
   }
 }
 
