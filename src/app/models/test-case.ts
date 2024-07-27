@@ -61,4 +61,5 @@ export interface TestCase{
   id: number;
   name: string;
   folder: string;
+  type: 'testCase'
 }

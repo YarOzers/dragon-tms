@@ -7,7 +7,7 @@
     <div [ngClass]="{'nested-folder': folder.parentFolderId, 'hidden': !folder.expanded}">
       <div cdkDropList
            [cdkDropListData]="folder.folders"
-           (cdkDropListDropped)="moveFolder($event, folder.id)">
+           (cdkDropListDropped)="onDrop($event, 'folder', folder.id)">
         <div class="folder-header">
           <button mat-icon-button (click)="toggleFolder(folder)">
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
@@ -22,7 +22,7 @@
       </div>
       <div *ngIf="folder.expanded" cdkDropList
            [cdkDropListData]="testCasesMap[folder.name]"
-           (cdkDropListDropped)="dropTestCase($event, folder.name)">
+           (cdkDropListDropped)="onDrop($event, 'testCase', folder.name)">
         <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag [cdkDragData]="testCase">
           {{ testCase.name }}
         </div>
