@@ -5,7 +5,7 @@
   border: 1px solid #ccc;
   background-color: #f9f9f9;
   min-height: 25px; /* Добавим минимальную высоту для удобства */
-  margin-bottom: 10px; /* Добавим отступ снизу для разделения блоков */
+  margin-bottom: 2px; /* Добавим отступ снизу для разделения блоков */
   border-radius: 4px; /* Скруглим углы */
 }
 
@@ -20,7 +20,7 @@
 
 /* Стиль для папок */
 .folder-header {
-  background-color: #e0e0e0; /* Светло-серый фон для папок */
+  background-color: #b9d6ea; /* Светло-серый фон для папок */
   padding: 2px;
   border-bottom: 1px solid #ccc;
   display: flex;
@@ -32,9 +32,10 @@
 .subfolder {
   margin-left: 50px;
   background-color: #f0f0f0; /* Светло-серый фон для подкаталогов */
-  padding: 8px;
+  padding: 2px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  position: relative;
 }
 
 /* Стиль для тест-кейсов */
@@ -50,6 +51,34 @@
 }
 
 /* Стиль для элементов, которые скрыты (если папка не развёрнута) */
-/*.nested-folder {*/
-/*  margin-left: 50px;*/
-/*}*/
+.nested-folder {
+}
+
+.cdk-drag.subfolder {
+  width: 1px;
+  transform: translateX(-26px);
+  background-color: #a6a1a1;
+  padding: 0;
+}
+
+.test-case-item {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.background-element{
+  background-color: #a6a1a1;
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  height: 2px;
+  transform: translateX(-26px);
+  margin-right: 12px;
+}
+
+.test-case-item mat-icon {
+  margin-right: 8px; /* Отступ справа от иконки */
+}
+
