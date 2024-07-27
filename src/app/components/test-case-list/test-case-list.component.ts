@@ -59,6 +59,9 @@ export class TestCaseListComponent implements OnInit{
     name: 'testcase 6',
     folder: 'folder 4'
   }
+
+  //  Folders                    ========================================
+
   private folder5: Folder = {
     id: 5,
     parentFolderId: 4,
@@ -97,6 +100,8 @@ export class TestCaseListComponent implements OnInit{
 
   ngOnInit(): void {
     this.generateTestCaseArrays();
+    this.moveFolder(1,3);
+    console.log('after movefolder: ',this.TEST_CASE_DATA);
   }
 
   private generateTestCaseArrays() {
@@ -146,4 +151,46 @@ export class TestCaseListComponent implements OnInit{
       }
     }
   }
+
+  // New function to move folder
+  moveFolder(sourceFolderId: number, targetFolderId: number) {
+    let sourceFolder: Folder | undefined;
+    let targetFolder: Folder | undefined;
+
+    // Find source and target folders
+    const findFolders = (folders: Folder[], parentFolder: Folder | null = null) => {
+      for (let folder of folders) {
+        if (folder.id === sourceFolderId) {
+          sourceFolder = folder;
+          if (parentFolder) {
+            if (parentFolder.folders) {
+              parentFolder.folders = parentFolder.folders.filter(f => f.id !== sourceFolderId);
+            }
+          } else {
+            this.TEST_CASE_DATA = this.TEST_CASE_DATA.filter(f => f.id !== sourceFolderId);
+          }
+        }
+        if (folder.id === targetFolderId) {
+          targetFolder = folder;
+        }
+        if (folder.folders) {
+          findFolders(folder.folders, folder);
+        }
+      }
+    };
+
+    findFolders(this.TEST_CASE_DATA);
+
+    if (sourceFolder && targetFolder) {
+      if (!targetFolder.folders) {
+        targetFolder.folders = [];
+      }
+      targetFolder.folders.push(sourceFolder);
+      console.log('Folder moved successfully');
+    } else {
+      console.log('Source or Target folder not found');
+    }
+  }
+
+
 }
