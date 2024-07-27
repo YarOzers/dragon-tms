@@ -6,4 +6,5 @@ export interface Folder {
   parentFolderId?: number;
   folders?: Folder[];
   testCases?: TestCase[];
+  expanded?: boolean;
 }

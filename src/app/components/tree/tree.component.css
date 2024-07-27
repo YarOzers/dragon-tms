@@ -1,0 +1,27 @@
+/* test-case-list.component.css */
+[cdkDropList] {
+  display: block;
+  width: 200px;
+  border: 1px solid #ccc;
+
+  background-color: #f9f9f9;
+}
+
+[cdkDrag] {
+  border: 1px solid #ddd;
+  background-color: white;
+  cursor: move;
+}
+
+.nested-folder {
+  margin-left: 20px;
+}
+
+.subfolder {
+  margin-left: 40px;
+}
+
+.tree-node{
+  margin: 0px;
+  padding: 0px;
+}
