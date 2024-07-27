@@ -234,6 +234,10 @@ dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number){
 }
   checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number): void {
     const sourceFolderId = event.item.data.id;
+    if (sourceFolderId === targetFolderId) {
+      console.log("Нельзя переместиться в ту же папку");
+      return
+    }
     const findFolderById = (folders: Folder[], id: number): Folder | undefined => {
       for (let folder of folders) {
         if (folder.id === id) {
