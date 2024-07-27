@@ -4,25 +4,25 @@
   </div>
 
   <ng-template #folderTemplate let-folder="folder">
-    <div [ngClass]="{'nested-folder': folder.parentFolderId, 'hidden': !folder.expanded}">
+    <div [ngClass]="{'nested-folder': folder.parentFolderId}">
       <div cdkDropList
            [cdkDropListData]="folder.folders"
-           (cdkDropListDropped)="onDrop($event, 'folder', folder.id)">
-        <div class="folder-header">
-          <button mat-icon-button (click)="toggleFolder(folder)">
-            <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
-          </button>
-          <span cdkDrag [cdkDragData]="folder">{{ folder.name }}</span>
-        </div>
-        <div *ngIf="folder.expanded">
-          <div *ngFor="let subFolder of folder.folders" cdkDrag [cdkDragData]="subFolder" class="subfolder">
-            <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>
-          </div>
+           (cdkDropListDropped)="onDrop($event, 'folder', folder.id)"
+           class="folder-header">
+        <button mat-icon-button (click)="toggleFolder(folder)">
+          <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
+        </button>
+        <span cdkDrag [cdkDragData]="folder">{{ folder.name }}</span>
+      </div>
+      <div *ngIf="folder.expanded">
+        <div *ngFor="let subFolder of folder.folders" cdkDrag [cdkDragData]="subFolder" class="subfolder">
+          <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>
         </div>
       </div>
       <div *ngIf="folder.expanded" cdkDropList
            [cdkDropListData]="testCasesMap[folder.name]"
-           (cdkDropListDropped)="onDrop($event, 'testCase', folder.name)">
+           (cdkDropListDropped)="onDrop($event, 'testCase', folder.name)"
+           class="test-case-list">
         <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag [cdkDragData]="testCase">
           {{ testCase.name }}
         </div>
@@ -30,6 +30,7 @@
     </div>
   </ng-template>
 </div>
+
 
 
 <!--<div cdkDropListGroup>-->
