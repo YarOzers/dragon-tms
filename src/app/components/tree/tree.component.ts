@@ -228,10 +228,12 @@ export class TreeComponent implements OnInit {
   toggleFolder(folder: Folder) {
     folder.expanded = !folder.expanded;
   }
-dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number){
-    this.checkNestedFoldersForId(event,targetFolderId);
 
-}
+  dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number) {
+    this.checkNestedFoldersForId(event, targetFolderId);
+
+  }
+
   checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number): void {
     const sourceFolderId = event.item.data.id;
     if (sourceFolderId === targetFolderId) {
@@ -278,7 +280,7 @@ dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number){
 
     } else {
       console.log('No nested folder with the target ID found within the source folder.');
-      this.moveFolder(event,targetFolderId);
+      this.moveFolder(event, targetFolderId);
     }
   }
 }

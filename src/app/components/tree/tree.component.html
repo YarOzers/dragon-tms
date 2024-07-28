@@ -32,38 +32,3 @@
   </ng-template>
 </div>
 
-
-
-
-<!--<div cdkDropListGroup>-->
-<!--  <div *ngFor="let folder of TEST_CASE_DATA">-->
-<!--    <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>-->
-<!--  </div>-->
-
-<!--  <ng-template #folderTemplate let-folder="folder">-->
-<!--    <div [ngClass]="{'nested-folder': folder.parentFolderId}">-->
-<!--      <div class="folder-header">-->
-<!--        <button mat-icon-button (click)="toggleFolder(folder)">-->
-<!--          <mat-icon>-->
-<!--            {{ folder.expanded ? 'expand_more' : 'chevron_right' }}-->
-<!--          </mat-icon>-->
-<!--        </button>-->
-<!--        <span>{{ folder.name }}</span>-->
-<!--      </div>-->
-<!--      <div *ngIf="folder.expanded" class="test-cases">-->
-<!--        <div cdkDropList [cdkDropListData]="testCasesMap[folder.name]" (cdkDropListDropped)="dropTestCase($event, folder.name)">-->
-<!--          <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag>-->
-<!--            {{ testCase.name }}-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div *ngIf="folder.folders" class="subfolder">-->
-<!--          <div *ngFor="let subFolder of folder.folders">-->
-<!--            <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </ng-template>-->
-<!--</div>-->
-<!--</div>-->
-
