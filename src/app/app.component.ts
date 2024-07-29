@@ -8,7 +8,7 @@ import {ListProjectComponent} from "./components/project/list-project/list-proje
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TreeComponent],
+  imports: [RouterOutlet, TreeComponent, ListProjectComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
