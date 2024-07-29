@@ -5,8 +5,8 @@ import {Folder} from "./folder";
 export interface Project {
   id: number;
   name: string;
-  users: User[];
-  folder: Folder[];
-  testPlan: TestPlan[];
-  createdDate: string;
+  users?: User[];
+  folder?: Folder[];
+  testPlan?: TestPlan[];
+  createdDate?: string;
 }

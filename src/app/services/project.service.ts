@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
 import {Project} from "../models/project";
 import {delay, Observable, of} from "rxjs";
-import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  private _projects: Project[] = [
+
+  private _projects: Project[]=[
     {id: 1,
-    name: 'first project',
-    users: [],
-    folder: [],
-    testPlan: [],
-    createdDate: this.getCurrentDateTimeString()
+      name: 'first project',
+      users: [],
+      folder: [],
+      testPlan: [],
+      createdDate: this.getCurrentDateTimeString()
     },
     {id: 2,
       name: 'second project',
@@ -22,14 +22,11 @@ export class ProjectService {
       testPlan: [],
       createdDate: this.getCurrentDateTimeString()
     }
-
   ];
+
   private nextId: number = 1;
 
-  constructor(private http: HttpClient) {}
-  getData() {
-    return this.http.get('https://api.example.com/data');
-  }
+  constructor() {}
 
   //получение текущей даты и времени
   getCurrentDateTimeString(): string {

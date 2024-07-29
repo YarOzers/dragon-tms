@@ -1,0 +1,23 @@
+.table-container {
+  width: 800px;
+  height: 700px;
+  border: 1px solid #000000;
+  border-radius: 20px;
+  margin: 10px;
+  overflow: auto;
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  position: absolute;
+}
+
+mat-header-row{
+  background-color: #c8e6c9;
+}
+
+mat-row{
+  background-color: white;
+  color: slategray;
+}
