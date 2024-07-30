@@ -1,0 +1,9 @@
+
+
+
+
+<app-child [message]="newMessage" (messageEvent)="receiveMessage($event)"></app-child>
+<p>message from child: {{message}}</p>
+
+<button (click)="setNewMessage()" >new</button>
+
