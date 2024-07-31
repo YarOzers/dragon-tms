@@ -21,6 +21,10 @@ $dragon-tms-theme: mat.define-theme((
 :root {
   //@include mat.all-component-themes(m3-theme-light.$light-theme);
   //@include mat.system-level-colors(m3-theme-light.$light-theme);
+  //--scrollbar-width: 12px;
+  //--scrollbar-track-color: #f1f1f1;
+  //--scrollbar-thumb-color: #888;
+  //--scrollbar-thumb-hover-color: #555;
 }
 
 
@@ -58,3 +62,33 @@ body {
   @include mat.all-component-typographies(m3-theme-dark.$dark-theme);
   background-color: #000000;
 }
+
+
+
+
+//      Скролбар   =========================================================
+
+/* Для Webkit-браузеров */
+::-webkit-scrollbar {
+  width: 8px; /* ширина вертикального скроллбара */
+  height: 8px; /* высота горизонтального скроллбара */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* цвет дорожки скроллбара */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888; /* цвет ползунка */
+  border-radius: 6px; /* скругление углов ползунка */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* цвет ползунка при наведении */
+}
+
+/* Для Firefox */
+//* {
+//  scrollbar-width: thin; /* ширина скроллбара */
+//  scrollbar-color: #888 #f1f1f1; /* цвет ползунка и цвет дорожки */
+//}
