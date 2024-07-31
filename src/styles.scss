@@ -1,18 +1,10 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-@use 'styles/m3-theme';
-@use 'styles/m3-theme-green';
+@use 'styles/m3-theme-light';
+@use 'styles/m3-theme-dark';
 
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
 @include mat.core();
-
-// Define the theme object.
-
 
 $dragon-tms-theme: mat.define-theme((
   color: (
@@ -25,27 +17,22 @@ $dragon-tms-theme: mat.define-theme((
   )
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
+
 :root {
-  //@include mat.all-component-themes(m3-theme.$light-theme);
+  //@include mat.all-component-themes(m3-theme-light.$light-theme);
+  //@include mat.system-level-colors(m3-theme-light.$light-theme);
 }
 
-// Comment out the line below if you want to use the pre-defined typography utility classes.
-// For more information: https://material.angular.io/guide/typography#using-typography-styles-in-your-application.
-// @include mat.typography-hierarchy($dragon-tms-theme);
 
-// Comment out the line below if you want to use the deprecated `color` inputs.
-// @include mat.color-variants-backwards-compatibility($dragon-tms-theme);
 
 html, body {
   height: 100%;
-  @include mat.core-theme(m3-theme-green.$light-theme);
-  @include mat.button-theme(m3-theme-green.$light-theme);
-  @include mat.system-level-colors(m3-theme-green.$light-theme);
-  @include mat.bottom-sheet-base(m3-theme-green.$light-theme);
-  @include mat.table-theme(m3-theme-green.$light-theme);
+  //@include mat.core-theme(m3-theme-light.$light-theme);
+  //@include mat.button-theme(m3-theme-light.$light-theme);
+  //@include mat.system-level-colors(m3-theme-light.$light-theme);
+  //@include mat.bottom-sheet-base(m3-theme-light.$light-theme);
+  //@include mat.table-theme(m3-theme-light.$light-theme);
+  //@include mat.all-component-themes(m3-theme-light.$light-theme);
 
 }
 
@@ -55,4 +42,18 @@ body {
 }
 
 
+.light-theme {
+  @include mat.all-component-bases(m3-theme-light.$light-theme);
+  @include mat.system-level-colors(m3-theme-light.$light-theme);
+  @include mat.all-component-themes(m3-theme-light.$light-theme);
+  @include mat.all-component-typographies(m3-theme-light.$light-theme);
+  background-color: #fbf8ff ;
+}
 
+.dark-theme {
+  @include mat.system-level-colors(m3-theme-dark.$dark-theme);
+  @include mat.all-component-bases(m3-theme-dark.$dark-theme);
+  @include mat.all-component-themes(m3-theme-dark.$dark-theme);
+  @include mat.all-component-typographies(m3-theme-dark.$dark-theme);
+  background-color: #000000;
+}

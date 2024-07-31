@@ -6,15 +6,17 @@ import {ListProjectComponent} from "./components/project/list-project/list-proje
 import {ExampleComponent} from "./lessons/example/example.component";
 import {ParentComponent} from "./lessons/parent/parent.component";
 import {OneMoreComponent} from "./lessons/one-more/one-more.component";
+import {MainContainerComponent} from "./components/main-container/main-container.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TreeComponent, ListProjectComponent, ExampleComponent, ParentComponent, OneMoreComponent],
+  imports: [RouterOutlet, TreeComponent, ListProjectComponent, ExampleComponent, ParentComponent, OneMoreComponent, MainContainerComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'dragon-tms';
+
 }

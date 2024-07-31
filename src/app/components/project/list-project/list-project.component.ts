@@ -21,7 +21,7 @@ import {MatButton} from "@angular/material/button";
     MatButton
   ],
   templateUrl: './list-project.component.html',
-  styleUrl: './list-project.component.css'
+  styleUrl: './list-project.component.scss'
 })
 export class ListProjectComponent implements OnInit, AfterViewInit {
 
