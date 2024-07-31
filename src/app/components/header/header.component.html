@@ -1,2 +1,11 @@
-
+<div fxLayout="row" class="header">
+  <div fxFlex="95">
+    <button mat-icon-button><mat-icon>home</mat-icon></button>
+  </div>
+  <div fxFlex="5">
+    <button mat-icon-button (click)="toggleIcon()">
+      <mat-icon>{{ matIcon }}</mat-icon>
+    </button>
+  </div>
+</div>
 

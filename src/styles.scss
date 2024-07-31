@@ -27,6 +27,7 @@ $dragon-tms-theme: mat.define-theme((
 
 html, body {
   height: 100%;
+  overflow: auto;
   //@include mat.core-theme(m3-theme-light.$light-theme);
   //@include mat.button-theme(m3-theme-light.$light-theme);
   //@include mat.system-level-colors(m3-theme-light.$light-theme);

@@ -6,3 +6,10 @@
 .mat-mdc-table .mat-mdc-header-cell.dark-theme{
   background-color: #000e00;
 }
+
+.table-container{
+  width: 90vw;
+  height: 60vh;
+  margin-bottom: 1rem;
+  overflow: auto;
+}

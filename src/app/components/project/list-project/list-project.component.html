@@ -27,13 +27,7 @@
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 </div>
+<button  mat-flat-button (click)="openDialog()">Добавить проект</button>
 
-<form>
-  <label for="name">Name:</label>
-  <input type="text" id="name" [(ngModel)]="projectName" name="name">
-  <p>Your input: {{ projectName }}</p>
-</form>
-<button  mat-button color='ptymary' (click)="addProject()">Кнопка</button>
-<button  mat-flat-button (click)="addProject()">Кнопка</button>
-<button  mat-raised-button (click)="addProject()">Кнопка</button>
+
 

@@ -1,0 +1,29 @@
+<div fxFlex="column">
+  <div mat-dialog-content class="dialog-content" fxLayoutAlign="center center">
+    <ng-container [ngSwitch]="data.type" >
+      <div *ngSwitchCase="'project'">
+        <p fxLayoutAlign="start center">Введите имя проекта</p>
+        <form [formGroup]="form">
+          <mat-form-field>
+            <mat-label>Input</mat-label>
+            <input matInput formControlName="projectName">
+            <mat-error *ngIf="form.get('projectName')?.invalid" fxLayoutAlign="start center">{{ getErrorMessage() }}</mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div *ngSwitchCase="'type2'">
+        <p>Это контент для типа 2.</p>
+      </div>
+      <div *ngSwitchCase="'type3'">
+        <p>Это контент для типа 3.</p>
+      </div>
+      <div *ngSwitchDefault>
+        <p>Это контент по умолчанию.</p>
+      </div>
+    </ng-container>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-flat-button (click)="saveProject()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>
+    <button mat-button (click)="closeMatDialog()" fxLayoutAlign="space-between center" class="close-btn">Отмена</button>
+  </div>
+</div>

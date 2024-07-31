@@ -5,9 +5,11 @@ import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatSort, MatSortModule, Sort} from "@angular/material/sort";
 import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatProgressBar} from "@angular/material/progress-bar";
-import {NgIf} from "@angular/common";
+import {CommonModule, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
+import {MatDialog} from "@angular/material/dialog";
+import {DialogComponent} from "../../dialog/dialog.component";
 
 @Component({
   selector: 'app-list-project',
@@ -18,7 +20,9 @@ import {MatButton} from "@angular/material/button";
     MatProgressBar,
     NgIf,
     FormsModule,
-    MatButton
+    MatButton,
+    DialogComponent,
+    CommonModule
   ],
   templateUrl: './list-project.component.html',
   styleUrl: './list-project.component.scss'
@@ -32,13 +36,14 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   protected projectName = '';
   private projectId = this.projectTableData.length;
   private project: Project = {
-    id:0,
-    name:''
+    id: 0,
+    name: ''
   };
 
   constructor(
     private projectService: ProjectService,
-    private _liveAnnouncer: LiveAnnouncer
+    private _liveAnnouncer: LiveAnnouncer,
+    private dialog: MatDialog
   ) {
   }
 
@@ -89,15 +94,36 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
   }
 
-  addProject() {
+  addProject(projectName: string) {
     this.project = {
       id: this.projectId + 1,
-      name: this.projectName
+      name: projectName
     }
     this.projectService.createProject(this.project);
     this.isLoading = true;
     this.ngOnInit();
 
+  }
+
+
+  openDialog(): void {
+
+    const dialogRef = this.dialog.open(DialogComponent, {
+
+      width: 'auto',
+      data: {
+        type: 'project',
+        projectName: ''
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result !== undefined && result !== ''){
+        this.addProject(result);
+      }else {
+        console.log("Введите имя проекта!!!")
+      }
+    });
   }
 
 }
