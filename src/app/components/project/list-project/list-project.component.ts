@@ -7,6 +7,7 @@ import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-list-project',
@@ -16,7 +17,8 @@ import {FormsModule} from "@angular/forms";
     MatSortModule,
     MatProgressBar,
     NgIf,
-    FormsModule
+    FormsModule,
+    MatButton
   ],
   templateUrl: './list-project.component.html',
   styleUrl: './list-project.component.css'
@@ -97,4 +99,5 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     this.ngOnInit();
 
   }
+
 }

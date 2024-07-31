@@ -14,10 +14,15 @@
 }
 
 mat-header-row{
-  background-color: #c8e6c9;
+
 }
 
 mat-row{
-  background-color: white;
-  color: slategray;
+
+}
+
+
+.mat-mdc-unelevated-button{
+  margin: 1rem;
+  border-radius: 5px;
 }
