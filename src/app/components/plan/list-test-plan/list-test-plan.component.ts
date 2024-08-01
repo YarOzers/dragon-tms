@@ -164,6 +164,7 @@ export class ListTestPlanComponent {
     dialogRef.afterClosed().subscribe(result => {
       if(result !== undefined && result !== ''){
         this.addTestPlan(result);
+        this.router.navigate([`/project-detail/${this.projectId}/test-plan-create`]);
       }else {
         console.log("Введите имя тест плана!!!")
       }
@@ -172,6 +173,6 @@ export class ListTestPlanComponent {
 
   navigateToProject(row: any) {
     this.headerService.showButtons(true);
-    this.router.navigate([`/project-detail/${row.id}`]);
+    this.router.navigate([`/project-detail/${row.id}/test-plan-create`]);
   }
 }
