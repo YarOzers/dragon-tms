@@ -106,11 +106,14 @@ export class ProjectService {
 
 // POST: добавление тестплана в проект
   addTestPlan(projectId: number, testPlan: any): Observable<any> {
+    console.log('projectId in addTestPlan in service: ', projectId);
+    console.log('testPlan in addTestPlan in service: ', testPlan);
     const project = this._projects.find(p => p.id === projectId);
 
     if (project) {
       if (project.testPlan) {
         project.testPlan.push(testPlan);
+        console.log('projects----------------------------------------: ', this._projects)
       }
       return of(testPlan).pipe(delay(500)); // Симуляция задержки
     } else {

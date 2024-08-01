@@ -21,6 +21,7 @@ import {HeaderService} from "../../../services/header.service";
 import {DialogComponent} from "../../dialog/dialog.component";
 import {TestPlan} from "../../../models/test-plan";
 import {TestPlanService} from "../../../services/test-plan.service";
+import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -133,7 +134,7 @@ export class ListTestPlanComponent {
 
   addTestPlan(testPlanName: string) {
     this.testPlan = {
-      id: this.testPlanId + 1,
+      id: ++this.testPlanId,
       name: testPlanName,
       createdDate: this.testPlanService.getCurrentDateTimeString(),
       author: '',
@@ -142,7 +143,7 @@ export class ListTestPlanComponent {
       status: 'await',
       testCaseCount: 0
     }
-    this.testPlanService.createTestPlan(this.testPlan);
+    this.projectService.addTestPlan(+this.projectId, this.testPlan);
     this.isLoading = true;
     this.ngOnInit();
 
@@ -155,8 +156,8 @@ export class ListTestPlanComponent {
 
       width: 'auto',
       data: {
-        type: 'project',
-        projectName: ''
+        type: 'test-plan',
+        testPlanName: ''
       } // Можно передать данные в диалоговое окно
     });
 
@@ -164,7 +165,7 @@ export class ListTestPlanComponent {
       if(result !== undefined && result !== ''){
         this.addTestPlan(result);
       }else {
-        console.log("Введите имя проекта!!!")
+        console.log("Введите имя тест плана!!!")
       }
     });
   }

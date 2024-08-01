@@ -73,6 +73,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   goHome() {
+    console.log('Go home was clicked!!!')
     this.router.navigate([''])
   }
 

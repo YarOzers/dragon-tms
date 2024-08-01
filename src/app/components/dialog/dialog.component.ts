@@ -43,20 +43,25 @@ import {MatFormFieldModule} from "@angular/material/form-field";
   styleUrl: './dialog.component.scss'
 })
 export class DialogComponent implements OnInit{
-  form: FormGroup;
+  projectForm: FormGroup;
+  testPlanForm: FormGroup;
+
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<DialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.form = this.fb.group({
+    this.projectForm = this.fb.group({
       projectName: [this.data.projectName || '', [Validators.required, Validators.minLength(3)]]
     });
+    this.testPlanForm = this.fb.group({
+      testPlanName: [this.data.testPlanName || '', [Validators.required, Validators.minLength(3)]]
+    })
   }
 
-  getErrorMessage() {
-    const control = this.form.get('projectName');
+  getProjectErrorMessage() {
+    const control = this.projectForm.get('projectName');
     if (control?.hasError('required')) {
 
       return 'Вы должны ввести название проекта';
@@ -67,13 +72,43 @@ export class DialogComponent implements OnInit{
     return '';
   }
 
-  saveProject() {
-    if (this.form.valid) {
-      this.data.projectName = this.form.get('projectName')?.value;
-      console.log(this.data.projectName);
+  getTestPlanErrorMessage() {
+    const control = this.testPlanForm.get('testPlanName');
+    if (control?.hasError('required')) {
+
+      return 'Вы должны ввести название тест плана';
+    }
+    if (control?.hasError('minlength')) {
+      return 'Минимальная длина 3 символа';
+    }
+    return '';
+  }
+
+  save() {
+    if (this.data.type === 'project') {
+      this.addProject();
+    } else if (this.data.type === 'test-plan') {
+      this.addTestPlan();
+    } else {
+      this.dialogRef.close();
+    }
+  }
+  addProject() {
+    if (this.projectForm.valid) {
+      this.data.projectName = this.projectForm.get('projectName')?.value;
+      console.log('addProject testPlanName : ',this.data.projectName);
       this.dialogRef.close(this.data.projectName);
     }
   }
+
+  addTestPlan() {
+    if (this.testPlanForm.valid) {
+      this.data.testPlanName = this.testPlanForm.get('testPlanName')?.value;
+      console.log('this.data.testPlanName: ',this.data.testPlanName);
+      this.dialogRef.close(this.data.testPlanName);
+    }
+  }
+
 
   closeMatDialog() {
     this.dialogRef.close();
