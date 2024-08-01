@@ -24,6 +24,7 @@ import {HeaderService} from "../../../services/header.service";
 import {DialogComponent} from "../../dialog/dialog.component";
 import {TestPlan} from "../../../models/test-plan";
 import {TestPlanService} from "../../../services/test-plan.service";
+import {RouterParamsService} from "../../../services/router-params.service";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -74,7 +75,8 @@ export class ListTestPlanComponent {
     private dialog: MatDialog,
     private router: Router,
     private headerService: HeaderService,
-    private activeRouter: ActivatedRoute
+    private activeRouter: ActivatedRoute,
+    private routerParamsService: RouterParamsService
   ) {
   }
 
@@ -176,6 +178,7 @@ export class ListTestPlanComponent {
 
   navigateToProject(row: any) {
     this.headerService.showButtons(true);
+    this.routerParamsService.setProjectId(this.projectId);
     this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
   }
 }

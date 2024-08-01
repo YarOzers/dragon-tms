@@ -6,6 +6,7 @@ import {MatIcon} from "@angular/material/icon";
 import {NgIf} from "@angular/common";
 import {HeaderService} from "../../services/header.service";
 import {filter} from "rxjs";
+import {RouterParamsService} from "../../services/router-params.service";
 
 @Component({
   selector: 'app-header',
@@ -32,7 +33,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   constructor(
     private headerService: HeaderService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private routeParamsService: RouterParamsService
   ) {
   }
 
@@ -61,6 +63,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
     console.log("сюда заходит,,,,,,,,,,,,,,?")
     this.checkActiveRoute();
+
   }
 
   checkActiveRoute() {
@@ -82,12 +85,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   goToTestPlans() {
-    this.activatedRoute.paramMap.subscribe(params =>{
-      console.log('params id: ',params.get('projectId'))
-      if (params.get('projectId')){
-        this.projectId = Number(params.get('projectId'));
-        console.log('ProjectId: 7777777777777777777777',this.projectId)
-      }
+    this.routeParamsService.projectId$.subscribe(id => {
+      this.projectId = id;
     });
     this.router.navigate([`project-detail/${this.projectId}`])
   }
