@@ -121,4 +121,19 @@ export class ProjectService {
     }
   }
 
+  // GET: получение определенного тест-плана по id
+// GET: получение определенного тест-плана по id
+// GET: получение определенного тест-плана по id
+  getTestPlanById(projectId: number, testPlanId: number): Observable<any | undefined> {
+    const project = this._projects.find(p => p.id === projectId);
+    if (project) {
+      if (project.testPlan) {
+        const testPlan = project.testPlan.find(tp => tp.id === testPlanId);
+        return of(testPlan).pipe(delay(500)); // Симуляция задержки
+      }
+
+    }
+    return of(undefined).pipe(delay(500)); // Возвращаем undefined, если проект не найден
+  }
+
 }

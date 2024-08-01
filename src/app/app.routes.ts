@@ -8,7 +8,7 @@ export const routes: Routes = [
   {path: '', component: MainContainerComponent,
   children:[
     {path: '', component: ListProjectComponent},
-    {path: 'project-detail/:id', component: DetailProjectComponent},
-    {path: 'project-detail/:id/test-plan-create', component: CreateTestPlanComponent}
+    {path: 'project-detail/:projectId', component: DetailProjectComponent},
+    {path: 'project-detail/:projectId/test-plan-create/:testPlanId', component: CreateTestPlanComponent}
   ]}
 ];
