@@ -10,6 +10,8 @@ import {FormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogComponent} from "../../dialog/dialog.component";
+import {Router} from "@angular/router";
+import {HeaderService} from "../../../services/header.service";
 
 @Component({
   selector: 'app-list-project',
@@ -43,7 +45,9 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   constructor(
     private projectService: ProjectService,
     private _liveAnnouncer: LiveAnnouncer,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router,
+    private headerService: HeaderService
   ) {
   }
 
@@ -126,4 +130,8 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     });
   }
 
+  navigateToProject(row: any) {
+    this.headerService.showButtons(true);
+    this.router.navigate([`/project-detail/${row.id}`]);
+  }
 }

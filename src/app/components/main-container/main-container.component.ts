@@ -3,6 +3,7 @@ import {ListProjectComponent} from "../project/list-project/list-project.compone
 import {ThemeService} from "../../../styles/theme.service";
 import {HeaderComponent} from "../header/header.component";
 import {FlexModule} from "@angular/flex-layout";
+import {RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'app-main-container',
@@ -10,7 +11,8 @@ import {FlexModule} from "@angular/flex-layout";
   imports: [
     ListProjectComponent,
     HeaderComponent,
-    FlexModule
+    FlexModule,
+    RouterOutlet
   ],
   templateUrl: './main-container.component.html',
   styleUrl: './main-container.component.css'

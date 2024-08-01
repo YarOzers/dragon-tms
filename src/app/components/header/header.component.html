@@ -1,6 +1,14 @@
 <div fxLayout="row" class="header">
-  <div fxFlex="95">
-    <button mat-icon-button><mat-icon>home</mat-icon></button>
+  <div fxFlex="5" fxLayoutAlign="end center">
+    <button mat-icon-button>
+      <mat-icon (click)="goHome()">home</mat-icon>
+    </button>
+  </div>
+  <div fxFlex="90">
+    <div *ngIf="showProjectButtons">
+      <button mat-flat-button>Тест планы</button>
+      <button mat-flat-button>Тест кейсы</button>
+    </div>
   </div>
   <div fxFlex="5">
     <button mat-icon-button (click)="toggleIcon()">
