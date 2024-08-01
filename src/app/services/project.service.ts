@@ -7,138 +7,39 @@ import {delay, Observable, of} from "rxjs";
 })
 export class ProjectService {
 
-  private _projects: Project[]=[
-    {id: 1,
+  private _projects: Project[] = [
+    {
+      id: 1,
       name: 'first project',
       users: [],
       folder: [],
-      testPlan: [],
+      testPlan: [{
+        id: 1,
+        name: 'first test plan',
+        createdDate: '',
+        author: 'author',
+        testCaseCount: 0,
+        status: 'await',
+        qas: [],
+        folders: []
+      }],
       createdDate: this.getCurrentDateTimeString()
     },
-    {id: 2,
+    {
+      id: 2,
       name: 'second project',
       users: [],
       folder: [],
       testPlan: [],
       createdDate: this.getCurrentDateTimeString()
     },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 1,
-      name: 'first project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    },
-    {id: 2,
-      name: 'second project',
-      users: [],
-      folder: [],
-      testPlan: [],
-      createdDate: this.getCurrentDateTimeString()
-    }
+
   ];
 
   private nextId: number = 1;
 
-  constructor() {}
+  constructor() {
+  }
 
   //получение текущей даты и времени
   getCurrentDateTimeString(): string {
@@ -190,6 +91,31 @@ export class ProjectService {
   // Сеттер для установки проектов
   set projects(value: Project[]) {
     this._projects = value;
+  }
+
+  // GET: получение тестпланов по проекту
+  getTestPlans(projectId: number | null): Observable<any[] | undefined> {
+    const project = this._projects.find(p => p.id === projectId);
+    if (project) {
+      console.log('тест-планы найдены:', project.testPlan);
+      return of(project.testPlan).pipe(delay(500));
+    } else {
+      return of([]).pipe(delay(500)); // Возвращаем пустой массив, если проект не найден
+    }
+  }
+
+// POST: добавление тестплана в проект
+  addTestPlan(projectId: number, testPlan: any): Observable<any> {
+    const project = this._projects.find(p => p.id === projectId);
+
+    if (project) {
+      if (project.testPlan) {
+        project.testPlan.push(testPlan);
+      }
+      return of(testPlan).pipe(delay(500)); // Симуляция задержки
+    } else {
+      return of(null).pipe(delay(500)); // Возвращаем null, если проект не найден
+    }
   }
 
 }

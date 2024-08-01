@@ -6,8 +6,8 @@ export interface TestPlan {
   name: string;
   createdDate: string;
   author: string;
-  startDate: string;
-  finishDate: string;
+  startDate?: string;
+  finishDate?: string;
   testCaseCount: number;
   status: 'await' | 'process' | 'finished';
   qas: User[];
