@@ -4,15 +4,18 @@ import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
-  MatRow, MatRowDef, MatTable, MatTableDataSource
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource
 } from "@angular/material/table";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatSort, MatSortHeader, Sort} from "@angular/material/sort";
 import {NgIf} from "@angular/common";
-import {Project} from "../../../models/project";
 import {ProjectService} from "../../../services/project.service";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatDialog} from "@angular/material/dialog";
@@ -21,7 +24,6 @@ import {HeaderService} from "../../../services/header.service";
 import {DialogComponent} from "../../dialog/dialog.component";
 import {TestPlan} from "../../../models/test-plan";
 import {TestPlanService} from "../../../services/test-plan.service";
-import {timeout} from "rxjs";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -84,7 +86,7 @@ export class ListTestPlanComponent {
       if (params.get('projectId')){
         this.projectId = params.get('projectId');
       }
-    })
+    });
 
     this.projectService.getTestPlans(+this.projectId).subscribe({
       next: (testPlans) => {

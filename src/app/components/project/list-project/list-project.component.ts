@@ -103,7 +103,10 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   addProject(projectName: string) {
     this.project = {
       id: this.projectId,
-      name: projectName
+      name: projectName,
+      folder: [],
+      testPlan: [],
+      users: []
     }
     this.projectService.createProject(this.project);
     this.isLoading = true;

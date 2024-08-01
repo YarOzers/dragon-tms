@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   // Method to toggle the icon
   showProjectButtons: boolean = false;
+  private projectId: number | null = null;
 
   constructor(
     private headerService: HeaderService,
@@ -78,5 +79,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+  }
+
+  goToTestPlans() {
+    this.activatedRoute.paramMap.subscribe(params =>{
+      console.log('params id: ',params.get('projectId'))
+      if (params.get('projectId')){
+        this.projectId = Number(params.get('projectId'));
+        console.log('ProjectId: 7777777777777777777777',this.projectId)
+      }
+    });
+    this.router.navigate([`project-detail/${this.projectId}`])
   }
 }
