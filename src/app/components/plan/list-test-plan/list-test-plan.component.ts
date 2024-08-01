@@ -43,7 +43,7 @@ import {TestPlanService} from "../../../services/test-plan.service";
     MatHeaderCellDef
   ],
   templateUrl: './list-test-plan.component.html',
-  styleUrl: './list-test-plan.component.css'
+  styleUrl: './list-test-plan.component.scss'
 })
 export class ListTestPlanComponent {
   projectId: any;

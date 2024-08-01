@@ -60,10 +60,10 @@ body {
   @include mat.all-component-bases(m3-theme-dark.$dark-theme);
   @include mat.all-component-themes(m3-theme-dark.$dark-theme);
   @include mat.all-component-typographies(m3-theme-dark.$dark-theme);
+  @include mat.system-level-typography(m3-theme-dark.$dark-theme);
   background-color: #000000;
+  color: #3a4c9c;
 }
-
-
 
 
 //      Скролбар   =========================================================
