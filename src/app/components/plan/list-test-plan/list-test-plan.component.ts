@@ -93,6 +93,7 @@ export class ListTestPlanComponent {
         if (testPlans){
 
           this.dataSource.data = [...testPlans]
+          this.testPlanId = testPlans.length +1;
         }
         this.isLoading = false;
       }, error: (err) => {
@@ -134,7 +135,7 @@ export class ListTestPlanComponent {
 
   addTestPlan(testPlanName: string) {
     this.testPlan = {
-      id: ++this.testPlanId,
+      id: this.testPlanId,
       name: testPlanName,
       createdDate: this.testPlanService.getCurrentDateTimeString(),
       author: '',
@@ -173,6 +174,6 @@ export class ListTestPlanComponent {
 
   navigateToProject(row: any) {
     this.headerService.showButtons(true);
-    this.router.navigate([`/project-detail/${row.id}/test-plan-create/${this.projectId}`]);
+    this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
   }
 }

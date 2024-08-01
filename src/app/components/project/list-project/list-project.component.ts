@@ -36,7 +36,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Project> = new MatTableDataSource(this.projectTableData);
   isLoading = true;
   protected projectName = '';
-  private projectId = this.projectTableData.length;
+  private projectId  = 0;
   private project: Project = {
     id: 0,
     name: ''
@@ -58,6 +58,8 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     this.projectService.getProjects().subscribe({
       next: (projects) => {
         console.log('projects: ', projects)
+        this.projectId = projects.length +1;
+        console.log('PROJECTID: ',this.projectId);
         this.projectTableData = projects;
         this.dataSource.data = this.projectTableData;
         this.isLoading = false;
@@ -100,7 +102,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
   addProject(projectName: string) {
     this.project = {
-      id: this.projectId + 1,
+      id: this.projectId,
       name: projectName
     }
     this.projectService.createProject(this.project);

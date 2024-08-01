@@ -36,7 +36,6 @@ export class ProjectService {
 
   ];
 
-  private nextId: number = 1;
 
   constructor() {
   }
@@ -62,7 +61,6 @@ export class ProjectService {
   // POST: создание нового проекта
   createProject(project: Project): Observable<Project> {
     project.createdDate = this.getCurrentDateTimeString();
-    project.id = this.nextId++;
     this._projects.push(project);
 
     return of(project).pipe(delay(500)); // Симуляция задержки
