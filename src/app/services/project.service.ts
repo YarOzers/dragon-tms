@@ -254,6 +254,7 @@ export class ProjectService {
           if (folder.id === parentFolderId) {
             folder.folders = folder.folders || [];
             folder.folders.push(newFolder);
+            console.log('Projects:  ',this._projects)
             return true;
           }
           if (folder.folders) {
