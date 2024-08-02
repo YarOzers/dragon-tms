@@ -19,10 +19,16 @@
 </button>
 <mat-menu #menu="matMenu">
   <button mat-menu-item (click)="openDialogToAddFolder(folder.id)">
+    <mat-icon>playlist_add</mat-icon>
+    <span>Добавить тест кейс</span>
+  </button>
+  <button mat-menu-item (click)="openDialogToAddFolder(folder.id)">
     <mat-icon>add</mat-icon>
     <span>Добавить папку</span>
   </button>
-  <button mat-menu-item (click)="openDialogToDeleteFolder(folder.id)">
+  <button  mat-menu-item
+           (click)="openDialogToDeleteFolder(folder.id)"
+           [disabled]="folder.id === 0">
     <mat-icon>delete_outline</mat-icon>
     <span>Удалить папку</span>
   </button>
