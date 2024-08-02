@@ -327,8 +327,77 @@ export class ProjectService {
       }
 
     }
-
     return maxId;
+  }
+
+  addTestCase(projectId: number, folderId: number, testCase: TestCase): void {
+    const project = this._projects.find(p => p.id === projectId);
+
+    if (!project) {
+      console.error(`Project with ID ${projectId} not found.`);
+      return;
+    }
+
+    const addTestCaseRecursively = (folders: Folder[]): boolean => {
+      for (const folder of folders) {
+        if (folder.id === folderId) {
+          folder.testCases = folder.testCases || [];
+          folder.testCases.push(testCase);
+          return true;
+        }
+        if (folder.folders) {
+          const added = addTestCaseRecursively(folder.folders);
+          if (added) return true;
+        }
+      }
+      return false;
+    };
+
+    if (project.testPlan) {
+      for (const testPlan of project.testPlan) {
+        if (addTestCaseRecursively(testPlan.folders)) {
+          console.log(`Test case added to folder ID ${folderId} in project ID ${projectId}.`);
+          return;
+        }
+      }
+    }
+    console.error(`Folder with ID ${folderId} not found in project ID ${projectId}.`);
+  }
+
+  removeTestCase(projectId: number, folderId: number, testCaseId: number): void {
+    const project = this._projects.find(p => p.id === projectId);
+
+    if (!project) {
+      console.error(`Project with ID ${projectId} not found.`);
+      return;
+    }
+
+    const removeTestCaseRecursively = (folders: Folder[]): boolean => {
+      for (const folder of folders) {
+        if (folder.id === folderId) {
+          const index = folder.testCases.findIndex(tc => tc.id === testCaseId);
+          if (index !== -1) {
+            folder.testCases.splice(index, 1);
+            console.log(`Test case ID ${testCaseId} removed from folder ID ${folderId}.`);
+            return true;
+          }
+        }
+        if (folder.folders) {
+          const removed = removeTestCaseRecursively(folder.folders);
+          if (removed) return true;
+        }
+      }
+      return false;
+    };
+
+    if (project.testPlan) {
+      for (const testPlan of project.testPlan) {
+        if (removeTestCaseRecursively(testPlan.folders)) {
+          return;
+        }
+      }
+    }
+    console.error(`Test case ID ${testCaseId} not found in folder ID ${folderId} or folder not found in project ID ${projectId}.`);
   }
 
 
