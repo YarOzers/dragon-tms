@@ -13,6 +13,7 @@ import {NgForOf, NgIf} from "@angular/common";
 })
 export class EditorComponent {
   editors: number[] = [1, 2, 3]; // три текстовых редактора для примера
+  activeStyle: string | null = null;
 
   fontWait = false;
   fontStyle = false;
@@ -28,28 +29,22 @@ export class EditorComponent {
   applyStyle(style: string, value?: string) {
     if (style === 'color' && value) {
       this.applyColor(value);
+      this.activeStyle = style + '-' + value;
       return;
     }
 
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-
-      // Создаем новый DocumentFragment для хранения новых узлов
-      const fragment = document.createDocumentFragment();
-
-      // Обрабатываем каждый узел внутри выделенного диапазона
-      range.cloneContents().childNodes.forEach((node) => {
-        this.processNode(node, style, value, fragment);
-      });
-
-      // Удаляем текущее содержимое диапазона и вставляем новый фрагмент
-      range.deleteContents();
-      range.insertNode(fragment);
-
-      // Восстанавливаем выделение, если это необходимо
-      selection.removeAllRanges();
-      selection.addRange(range);
+    if (style === 'bold') {
+      document.execCommand('bold', false);
+      this.activeStyle = 'bold';
+    } else if (style === 'italic') {
+      document.execCommand('italic', false);
+      this.activeStyle = 'italic';
+    } else if (style === 'underline') {
+      document.execCommand('underline', false);
+      this.activeStyle = 'underline';
+    } else if (style === 'normal') {
+      document.execCommand('removeFormat', false);
+      this.activeStyle = 'normal'
     }
   }
 
@@ -60,9 +55,8 @@ export class EditorComponent {
 
       // Применяем стиль
       if (style === 'bold') {
-        this.fontWait = true;
         span.style.fontWeight = 'bold';
-        console.log(this.fontWait)
+
       } else if (style === 'italic') {
         span.style.fontStyle = 'italic';
       } else if (style === 'underline') {
@@ -70,8 +64,8 @@ export class EditorComponent {
       } else if (style === 'color') {
         span.style.color = value || 'black';
       } else if (style === 'normal') {
-        // Удаляем стили, возвращая текст к нормальному состоянию
         this.fontWait = false;
+        // Удаляем стили, возвращая текст к нормальному состоянию
         span.style.fontWeight = 'normal';
         span.style.fontStyle = 'normal';
         span.style.textDecoration = 'none';
@@ -101,9 +95,9 @@ export class EditorComponent {
       } else if (style === 'normal') {
         // Удаляем стили, возвращая текст к нормальному состоянию
         newElement.style.fontWeight = 'normal';
-        // newElement.style.fontStyle = 'normal';
-        // newElement.style.textDecoration = 'none';
-        // newElement.style.color = 'inherit';
+        newElement.style.fontStyle = 'normal';
+        newElement.style.textDecoration = 'none';
+        newElement.style.color = 'inherit';
       }
 
       // Создаем временный фрагмент для обработки дочерних узлов

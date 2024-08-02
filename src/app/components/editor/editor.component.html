@@ -1,13 +1,17 @@
 <div class="editor-container">
   <div class="toolbar">
-    <button  *ngIf="!fontWait" (click)="applyStyle('bold')">B</button>
-    <button  class="active_btn" *ngIf="fontWait" (click)="applyStyle('normal')">B</button>
+    <button class="btn_bold" (click)="applyStyle('bold')" [class.active]="activeStyle === 'bold'"><b>B</b></button>
     <button (click)="applyStyle('normal')">N</button>
-    <button (click)="applyStyle('italic')">I</button>
-    <button (click)="applyStyle('underline')">U</button>
-    <button (click)="applyStyle('color', 'red')">Red</button>
-    <button (click)="applyStyle('color', 'green')">Green</button>
-    <button (click)="applyStyle('color', 'black')">Black</button>
+    <button (click)="applyStyle('italic')" [class.active]="activeStyle === 'italic'">I</button>
+    <button (click)="applyStyle('underline')" [class.active]="activeStyle === 'underline'">U</button>
+    <button class="btn_red" (click)="applyStyle('color', 'red')" [class.active]="activeStyle === 'color-red'">Red
+    </button>
+    <button class="btn_green" (click)="applyStyle('color', 'green')" [class.active]="activeStyle === 'color-green'">
+      Green
+    </button>
+    <button class="btn_black" (click)="applyStyle('color', 'black')" [class.active]="activeStyle === 'color-black'">
+      Black
+    </button>
     <button (click)="applyStyle('insertUnorderedList')">• List</button>
     <button (click)="insertImage()">Image</button>
     <button (click)="applyStyle('pre')">Code</button>
