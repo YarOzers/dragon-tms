@@ -21,6 +21,11 @@ export class EditorComponent {
   }
 
   applyStyle(style: string, value?: string) {
+    if (style === 'color' && value) {
+      this.applyColor(value);
+      return;
+    }
+
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
@@ -57,6 +62,12 @@ export class EditorComponent {
         span.style.textDecoration = 'underline';
       } else if (style === 'color') {
         span.style.color = value || 'black';
+      } else if (style === 'normal') {
+        // Удаляем стили, возвращая текст к нормальному состоянию
+        span.style.fontWeight = 'normal';
+        span.style.fontStyle = 'normal';
+        span.style.textDecoration = 'none';
+        span.style.color = 'inherit';
       }
 
       span.textContent = node.textContent;
@@ -79,6 +90,12 @@ export class EditorComponent {
         newElement.style.textDecoration = 'underline';
       } else if (style === 'color') {
         newElement.style.color = value || 'black';
+      } else if (style === 'normal') {
+        // Удаляем стили, возвращая текст к нормальному состоянию
+        newElement.style.fontWeight = 'normal';
+        // newElement.style.fontStyle = 'normal';
+        // newElement.style.textDecoration = 'none';
+        // newElement.style.color = 'inherit';
       }
 
       // Создаем временный фрагмент для обработки дочерних узлов
@@ -91,6 +108,10 @@ export class EditorComponent {
       newElement.appendChild(tempFragment);
       fragment.appendChild(newElement);
     }
+  }
+
+  applyColor(color: string) {
+    document.execCommand('foreColor', false, color);
   }
 
 

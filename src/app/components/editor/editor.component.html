@@ -11,7 +11,6 @@
     <button (click)="insertImage()">Image</button>
     <button (click)="applyStyle('pre')">Code</button>
   </div>
+  <div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
+  </div>
 </div>
-<div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
-</div>
-
