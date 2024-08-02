@@ -25,8 +25,21 @@
           </mat-form-field>
         </form>
       </div>
-      <div *ngSwitchCase="'type3'">
-        <p>Это контент для типа 3.</p>
+      <div *ngSwitchCase="'folder'">
+        <p fxLayoutAlign="start center">Введите имя папки</p>
+        <form [formGroup]="folderForm">
+          <mat-form-field>
+            <mat-label>Input</mat-label>
+            <input matInput formControlName="folderName">
+            <mat-error *ngIf="folderForm.get('folderName')?.invalid"
+                       fxLayoutAlign="start center">{{ getFolderErrorMessage() }}
+            </mat-error>
+          </mat-form-field>
+        </form>
+      </div>
+      <div *ngSwitchCase="'new type'">
+
+        <p>Это контент для типа new type.</p>
       </div>
       <div *ngSwitchDefault>
         <p>Это контент по умолчанию.</p>

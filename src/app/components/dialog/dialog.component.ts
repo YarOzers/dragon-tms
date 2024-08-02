@@ -42,9 +42,10 @@ import {MatFormFieldModule} from "@angular/material/form-field";
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss'
 })
-export class DialogComponent implements OnInit{
+export class DialogComponent implements OnInit {
   projectForm: FormGroup;
   testPlanForm: FormGroup;
+  folderForm: FormGroup;
 
 
   constructor(
@@ -57,7 +58,10 @@ export class DialogComponent implements OnInit{
     });
     this.testPlanForm = this.fb.group({
       testPlanName: [this.data.testPlanName || '', [Validators.required, Validators.minLength(3)]]
-    })
+    });
+    this.folderForm = this.fb.group({
+      folderName: [this.data.folderName || '', [Validators.required, Validators.minLength(3)]]
+    });
   }
 
   getProjectErrorMessage() {
@@ -84,19 +88,35 @@ export class DialogComponent implements OnInit{
     return '';
   }
 
+  getFolderErrorMessage() {
+    const control = this.folderForm.get('folderName');
+    if (control?.hasError('required')) {
+
+      return 'Вы должны ввести название папки';
+    }
+    if (control?.hasError('minlength')) {
+      return 'Минимальная длина 3 символа';
+    }
+    return '';
+  }
+
   save() {
     if (this.data.type === 'project') {
       this.addProject();
     } else if (this.data.type === 'test-plan') {
       this.addTestPlan();
+    } else if (this.data.type === 'folder') {
+      this.addFolder();
     } else {
       this.dialogRef.close();
     }
+
   }
+
   addProject() {
     if (this.projectForm.valid) {
       this.data.projectName = this.projectForm.get('projectName')?.value;
-      console.log('addProject testPlanName : ',this.data.projectName);
+      console.log('addProject testPlanName : ', this.data.projectName);
       this.dialogRef.close(this.data.projectName);
     }
   }
@@ -104,7 +124,7 @@ export class DialogComponent implements OnInit{
   addTestPlan() {
     if (this.testPlanForm.valid) {
       this.data.testPlanName = this.testPlanForm.get('testPlanName')?.value;
-      console.log('this.data.testPlanName: ',this.data.testPlanName);
+      console.log('this.data.testPlanName: ', this.data.testPlanName);
       this.dialogRef.close(this.data.testPlanName);
     }
   }
@@ -115,5 +135,13 @@ export class DialogComponent implements OnInit{
   }
 
   ngOnInit(): void {
+  }
+
+  private addFolder() {
+    if (this.folderForm.valid) {
+      this.data.folderName = this.folderForm.get('folderName')?.value;
+      console.log('this.data.folderName: ', this.data.folderName);
+      this.dialogRef.close(this.data.folderName);
+    }
   }
 }

@@ -27,11 +27,15 @@
 /* Стиль для папок */
 .folder-header {
   background-color: #b9d6ea; /* Светло-серый фон для папок */
+  min-width: 300px;
   padding: 2px;
   border-bottom: 1px solid #ccc;
   display: flex;
   align-items: center;
   cursor: pointer; /* Изменим курсор на указатель при наведении */
+}
+.folder-name{
+  min-width: 150px;
 }
 
 /* Стиль для подкаталогов (вложенных папок) */

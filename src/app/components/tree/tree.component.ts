@@ -15,6 +15,8 @@ import {MatIcon} from "@angular/material/icon";
 import {ProjectService} from "../../services/project.service";
 import {RouterParamsService} from "../../services/router-params.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {DialogComponent} from "../dialog/dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 
 @Component({
@@ -40,8 +42,11 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 export class TreeComponent implements OnInit, AfterViewInit {
   private projectId: number | null = 0;
 
-  constructor(private projectService: ProjectService,
-              private routerParamsService: RouterParamsService) {
+  constructor(
+    private projectService: ProjectService,
+    private routerParamsService: RouterParamsService,
+    private dialog: MatDialog
+  ) {
     this.routerParamsService.projectId$.subscribe(id => {
       this.projectId = id;
     })
@@ -53,8 +58,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
-      console.log('getProjectFolders: ' , folders);
-      if(folders){
+      console.log('getProjectFolders: ', folders);
+      if (folders) {
         this.TEST_CASE_DATA = [...folders];
         this.generateTestCaseArrays();
         if (this.TEST_CASE_DATA) {
@@ -243,6 +248,36 @@ export class TreeComponent implements OnInit, AfterViewInit {
       this.moveFolder(event, targetFolderId);
     }
   }
+
+  addFolder(parentFolderId: number) {
+
+  }
+
+  openDialogToAddFolder(folderId: number): void {
+
+    const dialogRef = this.dialog.open(DialogComponent, {
+
+      width: 'auto',
+      data: {
+        type: 'folder',
+        folderName: ''
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result !== '') {
+        console.log('полученное имя из формы: ', result)
+        console.log('Id проекта: ', this.projectId)
+        console.log('Id папки: ', folderId)
+
+
+        this.projectService.addFolder(this.projectId,folderId,result)
+      } else {
+        console.log("Введите имя папки!!!")
+      }
+    });
+  }
+
 
 }
 

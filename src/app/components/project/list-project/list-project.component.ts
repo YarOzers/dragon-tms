@@ -123,8 +123,8 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
       width: 'auto',
       data: {
-        type: 'project',
-        projectName: ''
+        type: 'folder',
+        folderName: ''
       } // Можно передать данные в диалоговое окно
     });
 

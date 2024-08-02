@@ -126,7 +126,6 @@ export class ProjectService {
   ];
 
 
-
   constructor() {
   }
 
@@ -236,4 +235,68 @@ export class ProjectService {
     return of(undefined).pipe(delay(500)); // Возвращаем undefined, если проект не найден или нет testPlan
   }
 
+  addFolder(projectId: number | null, parentFolderId: number, name: string): void {
+    const project = this._projects.find(p => p.id === projectId);
+    const id = this.getMaxFolderId(projectId) + 1;
+    const newFolder: Folder = {
+      id: id,
+      name: name,
+      parentFolderId: parentFolderId,
+      folders: [],
+      testCases: [],
+      type: 'folder'
+    }
+
+    if (project) {
+      const addFolderRecursively = (folders: Folder[]): boolean => {
+
+        for (const folder of folders) {
+          if (folder.id === parentFolderId) {
+            folder.folders = folder.folders || [];
+            folder.folders.push(newFolder);
+            return true;
+          }
+          if (folder.folders) {
+            const added = addFolderRecursively(folder.folders);
+            if (added) return true;
+          }
+        }
+        return false;
+      };
+      if (project.testPlan) {
+        for (const testPlan of project.testPlan) {
+          if (addFolderRecursively(testPlan.folders)) {
+            break;
+          }
+        }
+      }
+
+    }
+  }
+
+  getMaxFolderId(projectId: number | null): number {
+    const project = this._projects.find(p => p.id === projectId);
+    let maxId = 0;
+
+    if (project) {
+      const findMaxIdRecursively = (folders: Folder[]): void => {
+        for (const folder of folders) {
+          if (folder.id > maxId) {
+            maxId = folder.id;
+          }
+          if (folder.folders) {
+            findMaxIdRecursively(folder.folders);
+          }
+        }
+      };
+      if (project.testPlan) {
+        for (const testPlan of project.testPlan) {
+          findMaxIdRecursively(testPlan.folders);
+        }
+      }
+
+    }
+
+    return maxId;
+  }
 }
