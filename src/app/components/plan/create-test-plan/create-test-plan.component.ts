@@ -10,7 +10,7 @@ import {ActivatedRoute} from "@angular/router";
   styleUrl: './create-test-plan.component.css'
 })
 export class CreateTestPlanComponent implements OnInit {
-  private testPlan: any;
+  protected testPlan: any;
   private projectId: any;
   private testPlanId: any;
 
