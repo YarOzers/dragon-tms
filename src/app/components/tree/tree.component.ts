@@ -271,7 +271,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
         console.log('Id папки: ', folderId)
 
 
-        this.projectService.addFolder(this.projectId,folderId,result)
+        this.projectService.addFolder(this.projectId, folderId, result)
       } else {
         console.log("Введите имя папки!!!")
       }
@@ -279,6 +279,24 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
 
+  openDialogToDeleteFolder(id: number) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+
+      width: 'auto',
+      data: {
+        type: 'folder-del',
+        del: false
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log("from delFolder in dialog :", result);
+        this.projectService.deleteFolder(this.projectId, id).subscribe(folders => {
+        });
+      }
+    });
+  }
 }
 
 

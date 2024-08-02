@@ -107,6 +107,8 @@ export class DialogComponent implements OnInit {
       this.addTestPlan();
     } else if (this.data.type === 'folder') {
       this.addFolder();
+    } else if (this.data.type === 'folder-del') {
+      this.deleteFolder();
     } else {
       this.dialogRef.close();
     }
@@ -143,5 +145,10 @@ export class DialogComponent implements OnInit {
       console.log('this.data.folderName: ', this.data.folderName);
       this.dialogRef.close(this.data.folderName);
     }
+  }
+
+  private deleteFolder(){
+    this.data.del = true;
+    this.dialogRef.close(this.data.del);
   }
 }

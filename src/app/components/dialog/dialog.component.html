@@ -37,6 +37,9 @@
           </mat-form-field>
         </form>
       </div>
+      <div *ngSwitchCase="'folder-del'">
+        <p>Вы действительно хотите удалить папку {{data?.folderName}} ?</p>
+      </div>
       <div *ngSwitchCase="'new type'">
 
         <p>Это контент для типа new type.</p>

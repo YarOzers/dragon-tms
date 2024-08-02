@@ -22,7 +22,7 @@
     <mat-icon>add</mat-icon>
     <span>Добавить папку</span>
   </button>
-  <button mat-menu-item>
+  <button mat-menu-item (click)="openDialogToDeleteFolder(folder.id)">
     <mat-icon>delete_outline</mat-icon>
     <span>Удалить папку</span>
   </button>

@@ -254,7 +254,7 @@ export class ProjectService {
           if (folder.id === parentFolderId) {
             folder.folders = folder.folders || [];
             folder.folders.push(newFolder);
-            console.log('Projects:  ',this._projects)
+            console.log('Projects:  ', this._projects)
             return true;
           }
           if (folder.folders) {
@@ -273,6 +273,36 @@ export class ProjectService {
       }
 
     }
+  }
+
+
+  deleteFolder(projectId: number | null, folderId: number): Observable<Folder[] | undefined> {
+    const project: Project | undefined = this._projects.find(p => p.id === projectId);
+    if (project && project.testPlan) {
+      for (const testPlan of project.testPlan) {
+        this.removeFolderRecursively(testPlan.folders, folderId);
+      }
+    }
+
+    return of(project?.folder).pipe(delay(500)); // Return the updated project with a simulated delay
+  }
+
+  private removeFolderRecursively(folders: Folder[] | undefined, folderId: number): boolean  {
+    if(!folders){
+      return false;
+    }
+    for (let i = 0; i < folders.length; i++) {
+      if (folders[i].id === folderId) {
+        folders.splice(i, 1);
+        return true;
+      } else if (folders[i].folders) {
+        const removed = this.removeFolderRecursively(folders[i].folders, folderId);
+        if (removed) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   getMaxFolderId(projectId: number | null): number {
@@ -300,4 +330,6 @@ export class ProjectService {
 
     return maxId;
   }
+
+
 }
