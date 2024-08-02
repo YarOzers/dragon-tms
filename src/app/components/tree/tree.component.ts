@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {
   CdkDrag,
   CdkDragDrop,
@@ -12,6 +12,9 @@ import {TestCase} from "../../models/test-case";
 import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
+import {ProjectService} from "../../services/project.service";
+import {RouterParamsService} from "../../services/router-params.service";
+
 
 @Component({
   selector: 'app-tree',
@@ -28,123 +31,69 @@ import {MatIcon} from "@angular/material/icon";
     NgIf
   ],
   templateUrl: './tree.component.html',
-  styleUrl: './tree.component.css'
+  styleUrl: './tree.component.scss'
 })
-export class TreeComponent implements OnInit {
-  testCase1: TestCase = {
-    id: 1,
-    name: 'testcase 1',
-    folder: 'folder 1',
-    type: 'testCase'
-  };
-  testCase2: TestCase = {
-    id: 2,
-    name: 'testcase 2',
-    folder: 'folder 1',
-    type: 'testCase'
-  };
-  testCase3: TestCase = {
-    id: 3,
-    name: 'testcase 3',
-    folder: 'folder 3',
-    type: 'testCase'
-  };
-  testCase4: TestCase = {
-    id: 4,
-    name: 'testcase 4',
-    folder: 'folder 3',
-    type: 'testCase'
-  };
-  testCase5: TestCase = {
-    id: 5,
-    name: 'testcase 5',
-    folder: 'folder 3',
-    type: 'testCase'
-  };
-  testCase6: TestCase = {
-    id: 6,
-    name: 'testcase 6',
-    folder: 'folder 4',
-    type: 'testCase'
-  };
+export class TreeComponent implements OnInit, AfterViewInit {
+  private projectId: number | null = 0;
 
-  private folder5: Folder = {
-    id: 5,
-    parentFolderId: 4,
-    name: 'folder 5',
-    testCases: [],
-    type: 'folder'
-  };
-  private folder4: Folder = {
-    id: 4,
-    name: 'folder 4',
-    parentFolderId: 1,
-    testCases: [this.testCase6],
-    folders: [this.folder5],
-    type: 'folder'
-  };
-  private folder1: Folder = {
-    id: 1,
-    name: 'folder 1',
-    parentFolderId: 0,
-    folders: [this.folder4],
-    testCases: [this.testCase1, this.testCase2],
-    type: 'folder'
-  };
+  constructor(private projectService: ProjectService,
+              private routerParamsService: RouterParamsService) {
+    this.routerParamsService.projectId$.subscribe(id => {
+      this.projectId = id;
+    })
+  }
 
-  private folder2: Folder = {
-    id: 2,
-    parentFolderId: 0,
-    name: 'folder 2',
-    testCases: [this.testCase3, this.testCase4],
-    type: 'folder'
-  };
+  protected TEST_CASE_DATA: Folder[] | null = [];
 
-  private folder3: Folder = {
-    id: 3,
-    parentFolderId: 0,
-    name: 'folder 3',
-    testCases: [this.testCase5],
-    type: 'folder'
-  };
-  private root_folder: Folder = {
-    id: 0,
-    name: 'root_folder',
-    testCases: [],
-    folders: [this.folder1, this.folder2, this.folder3],
-    type: 'folder'
-  };
-
-  protected TEST_CASE_DATA: Folder[] = [this.root_folder];
   testCasesMap: { [key: string]: TestCase[] } = {};
 
   ngOnInit(): void {
-    console.log('testCaseData in OnInit: ', this.TEST_CASE_DATA);
-    this.generateTestCaseArrays();
-    this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+    this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
+      console.log('getProjectFolders: ' , folders);
+      if(folders){
+        this.TEST_CASE_DATA = [...folders];
+        this.generateTestCaseArrays();
+        if (this.TEST_CASE_DATA) {
+          this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+        }
+      }
+      console.log('TEST_CASE_DATA: ', this.TEST_CASE_DATA);
+    });
+  }
+
+  ngAfterViewInit(): void {
 
   }
 
   private generateTestCaseArrays() {
-    this.TEST_CASE_DATA.forEach(folder => {
-      this.addTestCasesToMap(folder);
-    });
+    console.log('GenerateTestCaseArray :', this.TEST_CASE_DATA);
+    if (this.TEST_CASE_DATA) {
+      this.TEST_CASE_DATA.forEach(folder => {
+        this.addTestCasesToMap(folder);
+      });
+    }
     console.log('Test Cases Map after generation:', this.testCasesMap);
   }
 
   private addTestCasesToMap(folder: Folder) {
+    console.log('addTestCaseToMap folder: ', folder);
     if (folder.name) {
+      console.log('folder.name: ', folder.name);
       this.testCasesMap[folder.name] = folder.testCases!;
+      console.log('testCaseMap: ', this.testCasesMap);
       if (folder.folders) {
         folder.folders.forEach(subFolder => this.addTestCasesToMap(subFolder));
+        console.log('afterAdding Test cases to map: ', this.testCasesMap);
       }
     }
   }
 
   private updateTestCaseData() {
-    this.TEST_CASE_DATA.forEach(folder => {
-      this.syncFolderTestCases(folder);
-    });
+    if (this.TEST_CASE_DATA) {
+      this.TEST_CASE_DATA.forEach(folder => {
+        this.syncFolderTestCases(folder);
+      });
+    }
     console.log('Updated TEST_CASE_DATA:', this.TEST_CASE_DATA);
   }
 
@@ -192,8 +141,8 @@ export class TreeComponent implements OnInit {
     let sourceFolder: Folder | undefined;
     let targetFolder: Folder | undefined;
 
-    const findFolders = (folders: Folder[], parentFolder: Folder | null = null) => {
-      for (let folder of folders) {
+    const findFolders = (folders: Folder[] | null, parentFolder: Folder | null = null) => {
+      for (let folder of folders ?? []) {
         if (folder.id === currentFolderId) {
           sourceFolder = folder;
           if (parentFolder) {
@@ -201,7 +150,9 @@ export class TreeComponent implements OnInit {
               parentFolder.folders = parentFolder.folders.filter(f => f.id !== currentFolderId);
             }
           } else {
-            this.TEST_CASE_DATA = this.TEST_CASE_DATA.filter(f => f.id !== currentFolderId);
+            if (this.TEST_CASE_DATA) {
+              this.TEST_CASE_DATA = this.TEST_CASE_DATA.filter(f => f.id !== currentFolderId);
+            }
           }
         }
         if (folder.id === targetFolderId) {
@@ -240,20 +191,24 @@ export class TreeComponent implements OnInit {
       console.log("Нельзя переместиться в ту же папку");
       return
     }
-    const findFolderById = (folders: Folder[], id: number): Folder | undefined => {
-      for (let folder of folders) {
-        if (folder.id === id) {
-          return folder;
-        }
-        if (folder.folders) {
-          const nestedFolder = findFolderById(folder.folders, id);
-          if (nestedFolder) {
-            return nestedFolder;
+    const findFolderById = (folders: Folder[] | null, id: number): Folder | undefined => {
+      if (folders) {
+        for (let folder of folders) {
+          if (folder.id === id) {
+            return folder;
+          }
+          if (folder.folders) {
+            const nestedFolder = findFolderById(folder.folders, id);
+            if (nestedFolder) {
+              return nestedFolder;
+            }
           }
         }
       }
       return undefined;
+
     };
+
 
     const checkForNestedId = (folders: Folder[], id: number): boolean => {
       for (let folder of folders) {
@@ -283,6 +238,7 @@ export class TreeComponent implements OnInit {
       this.moveFolder(event, targetFolderId);
     }
   }
+
 }
 
 

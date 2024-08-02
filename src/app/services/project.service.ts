@@ -1,18 +1,107 @@
 import {Injectable} from '@angular/core';
 import {Project} from "../models/project";
 import {delay, Observable, of} from "rxjs";
+import {TestCase} from "../models/test-case";
+import {Folder} from "../models/folder";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
+  testCase1: TestCase = {
+    id: 1,
+    name: 'testcase 1',
+    folder: 'folder 1',
+    type: 'testCase'
+  };
+  testCase2: TestCase = {
+    id: 2,
+    name: 'testcase 2',
+    folder: 'folder 1',
+    type: 'testCase'
+  };
+  testCase3: TestCase = {
+    id: 3,
+    name: 'testcase 3',
+    folder: 'folder 3',
+    type: 'testCase'
+  };
+  testCase4: TestCase = {
+    id: 4,
+    name: 'testcase 4',
+    folder: 'folder 3',
+    type: 'testCase'
+  };
+  testCase5: TestCase = {
+    id: 5,
+    name: 'testcase 5',
+    folder: 'folder 3',
+    type: 'testCase'
+  };
+  testCase6: TestCase = {
+    id: 6,
+    name: 'testcase 6',
+    folder: 'folder 4',
+    type: 'testCase'
+  };
+
+  private folder5: Folder = {
+    id: 5,
+    parentFolderId: 4,
+    name: 'folder 5',
+    testCases: [],
+    type: 'folder'
+  };
+  private folder4: Folder = {
+    id: 4,
+    name: 'folder 4',
+    parentFolderId: 1,
+    testCases: [this.testCase6],
+    folders: [this.folder5],
+    type: 'folder'
+  };
+  private folder1: Folder = {
+    id: 1,
+    name: 'folder 1',
+    parentFolderId: 0,
+    folders: [this.folder4],
+    testCases: [this.testCase1, this.testCase2],
+    type: 'folder'
+  };
+
+  private folder2: Folder = {
+    id: 2,
+    parentFolderId: 0,
+    name: 'folder 2',
+    testCases: [this.testCase3, this.testCase4],
+    type: 'folder'
+  };
+
+  private folder3: Folder = {
+    id: 3,
+    parentFolderId: 0,
+    name: 'folder 3',
+    testCases: [this.testCase5],
+    type: 'folder'
+  };
+  private root_folder: Folder = {
+    id: 0,
+    name: 'root_folder',
+    testCases: [],
+    folders: [this.folder1, this.folder2, this.folder3],
+    type: 'folder'
+  };
+
+  protected TEST_CASE_DATA: Folder[] = [this.root_folder];
+
+  // PROJECTS=======================================================================================
 
   private _projects: Project[] = [
     {
       id: 1,
       name: 'first project',
       users: [],
-      folder: [],
+      folder: this.TEST_CASE_DATA,
       testPlan: [{
         id: 1,
         name: 'first test plan',
@@ -21,7 +110,7 @@ export class ProjectService {
         testCaseCount: 0,
         status: 'await',
         qas: [],
-        folders: []
+        folders: this.TEST_CASE_DATA
       }],
       createdDate: this.getCurrentDateTimeString()
     },
@@ -35,6 +124,7 @@ export class ProjectService {
     },
 
   ];
+
 
 
   constructor() {
@@ -119,9 +209,22 @@ export class ProjectService {
     }
   }
 
+
+  // GET: получение папок по проекту
+  getProjectFolders(projectId: number | null): Observable<Folder[]> {
+    const project = this._projects.find(p => p.id === projectId);
+    if (project) {
+      if (project.testPlan) {
+        const folders = project.testPlan.flatMap(testPlan => testPlan.folders);
+        folders.forEach(folder => {
+        });
+        return of(folders).pipe(delay(500)); // Симуляция задержки
+      }
+    }
+    return of([]).pipe(delay(500)); // Возвращаем пустой массив, если проект не найден или нет testPlan
+  }
+
   // GET: получение определенного тест-плана по id
-// GET: получение определенного тест-плана по id
-// GET: получение определенного тест-плана по id
   getTestPlanById(projectId: number, testPlanId: number): Observable<any | undefined> {
     const project = this._projects.find(p => p.id === projectId);
     if (project) {
@@ -129,9 +232,8 @@ export class ProjectService {
         const testPlan = project.testPlan.find(tp => tp.id === testPlanId);
         return of(testPlan).pipe(delay(500)); // Симуляция задержки
       }
-
     }
-    return of(undefined).pipe(delay(500)); // Возвращаем undefined, если проект не найден
+    return of(undefined).pipe(delay(500)); // Возвращаем undefined, если проект не найден или нет testPlan
   }
 
 }

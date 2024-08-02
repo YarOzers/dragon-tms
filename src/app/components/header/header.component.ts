@@ -90,4 +90,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
     this.router.navigate([`project-detail/${this.projectId}`])
   }
+
+  goToTestCases() {
+    this.router.navigate([`project-detail/${this.projectId}/testcases`])
+  }
 }
