@@ -1,12 +1,14 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
+import {MatMiniFabButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-editor',
   standalone: true,
   imports: [
     NgForOf,
-    NgIf
+    NgIf,
+    MatMiniFabButton
   ],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.css'

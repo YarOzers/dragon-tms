@@ -1,16 +1,16 @@
 <div class="editor-container">
   <div class="toolbar">
-    <button class="btn_bold" (click)="applyStyle('bold')" [class.active]="activeStyle === 'bold'"><b>B</b></button>
-    <button (click)="applyStyle('normal')">N</button>
-    <button (click)="applyStyle('italic')" [class.active]="activeStyle === 'italic'">I</button>
-    <button (click)="applyStyle('underline')" [class.active]="activeStyle === 'underline'">U</button>
-    <button class="btn_red" (click)="applyStyle('color', 'red')" [class.active]="activeStyle === 'color-red'">Red
+    <button mat-mini-fab class="btn_bold" (click)="applyStyle('bold')" [class.active]="activeStyle === 'bold'"><b>B</b></button>
+    <button mat-mini-fab (click)="applyStyle('normal')">N</button>
+    <button mat-mini-fab (click)="applyStyle('italic')" [class.active]="activeStyle === 'italic'">I</button>
+    <button mat-mini-fab (click)="applyStyle('underline')" [class.active]="activeStyle === 'underline'">U</button>
+    <button mat-mini-fab class="btn_red" (click)="applyStyle('color', 'red')" [class.active]="activeStyle === 'color-red'">R
     </button>
-    <button class="btn_green" (click)="applyStyle('color', 'green')" [class.active]="activeStyle === 'color-green'">
-      Green
+    <button mat-mini-fab class="btn_green" (click)="applyStyle('color', 'green')" [class.active]="activeStyle === 'color-green'">
+      G
     </button>
     <button class="btn_black" (click)="applyStyle('color', 'black')" [class.active]="activeStyle === 'color-black'">
-      Black
+      Bl
     </button>
     <button (click)="applyStyle('insertUnorderedList')">• List</button>
     <button (click)="insertImage()">Image</button>
