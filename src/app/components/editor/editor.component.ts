@@ -1,17 +1,22 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
-import {NgForOf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-editor',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    NgIf
   ],
   templateUrl: './editor.component.html',
   styleUrl: './editor.component.css'
 })
 export class EditorComponent {
   editors: number[] = [1, 2, 3]; // три текстовых редактора для примера
+
+  fontWait = false;
+  fontStyle = false;
+  textDecoration = false;
 
   @ViewChild('editor', { static: true }) editor: ElementRef<HTMLDivElement> | undefined;
   activeEditor: HTMLElement | null = null;
@@ -55,7 +60,9 @@ export class EditorComponent {
 
       // Применяем стиль
       if (style === 'bold') {
+        this.fontWait = true;
         span.style.fontWeight = 'bold';
+        console.log(this.fontWait)
       } else if (style === 'italic') {
         span.style.fontStyle = 'italic';
       } else if (style === 'underline') {
@@ -64,6 +71,7 @@ export class EditorComponent {
         span.style.color = value || 'black';
       } else if (style === 'normal') {
         // Удаляем стили, возвращая текст к нормальному состоянию
+        this.fontWait = false;
         span.style.fontWeight = 'normal';
         span.style.fontStyle = 'normal';
         span.style.textDecoration = 'none';

@@ -14,3 +14,7 @@
   min-height: 100px;
   margin-bottom: 10px;
 }
+
+.active_btn{
+  background-color: #a6a1a1;
+}

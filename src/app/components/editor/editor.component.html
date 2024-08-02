@@ -1,6 +1,7 @@
 <div class="editor-container">
   <div class="toolbar">
-    <button (click)="applyStyle('bold')">B</button>
+    <button  *ngIf="!fontWait" (click)="applyStyle('bold')">B</button>
+    <button  class="active_btn" *ngIf="fontWait" (click)="applyStyle('normal')">B</button>
     <button (click)="applyStyle('normal')">N</button>
     <button (click)="applyStyle('italic')">I</button>
     <button (click)="applyStyle('underline')">U</button>
