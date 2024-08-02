@@ -1,0 +1,17 @@
+<div class="editor-container">
+  <div class="toolbar">
+    <button (click)="applyStyle('bold')">B</button>
+    <button (click)="applyStyle('normal')">N</button>
+    <button (click)="applyStyle('italic')">I</button>
+    <button (click)="applyStyle('underline')">U</button>
+    <button (click)="applyStyle('color', 'red')">Red</button>
+    <button (click)="applyStyle('color', 'green')">Green</button>
+    <button (click)="applyStyle('color', 'black')">Black</button>
+    <button (click)="applyStyle('insertUnorderedList')">• List</button>
+    <button (click)="insertImage()">Image</button>
+    <button (click)="applyStyle('pre')">Code</button>
+  </div>
+</div>
+<div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
+</div>
+

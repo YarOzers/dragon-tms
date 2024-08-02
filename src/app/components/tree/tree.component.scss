@@ -1,8 +1,8 @@
 /* Общий стиль для всех элементов, которые можно перетаскивать */
 :host {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
 }
 
 [cdkDropList] {
@@ -100,3 +100,7 @@
   display: inline;
 }
 
+
+:host {
+  --mdc-dialog-container-shape: 0px;
+}

@@ -1,1 +1,44 @@
-<p>create-test-case works!</p>
+<div class="dialog-container">
+  <div mat-dialog-content class="dialog-content">
+
+
+
+    <div class="editor-container">
+      <div class="toolbar">
+        <button (click)="execCommand('bold')">B</button>
+        <button (click)="execCommand('normal')">N</button>
+        <button (click)="execCommand('italic')">I</button>
+        <button (click)="execCommand('underline')">U</button>
+        <button (click)="execCommand('foreColor', '#ff0000')">Red</button>
+        <button (click)="execCommand('foreColor', '#00ff00')">Green</button>
+        <button (click)="execCommand('insertUnorderedList')">• List</button>
+        <button (click)="execCommand('insertImage', prompt('Enter image URL', ''))">Image</button>
+        <button (click)="execCommand('formatBlock', '<pre>')">Code</button>
+      </div>
+      <div contenteditable="true" class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+</div>
+<!--<div mat-dialog-actions>-->
+<!--  <button mat-flat-button (click)="save()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>-->
+<!--  <button mat-button (click)="closeMatDialog()" fxLayoutAlign="space-between center" class="close-btn">Отмена</button>-->
+<!--</div>-->

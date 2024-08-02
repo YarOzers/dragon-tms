@@ -6,3 +6,8 @@
   margin: 1rem;
   border-radius: 5px;
 }
+
+
+:host {
+  --mdc-dialog-container-shape: 0px;
+}

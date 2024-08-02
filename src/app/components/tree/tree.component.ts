@@ -17,6 +17,7 @@ import {RouterParamsService} from "../../services/router-params.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogComponent} from "../dialog/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
+import {CreateTestCaseComponent} from "../case/create-test-case/create-test-case.component";
 
 
 @Component({
@@ -294,6 +295,31 @@ export class TreeComponent implements OnInit, AfterViewInit {
         console.log("from delFolder in dialog :", result);
         this.projectService.deleteFolder(this.projectId, id).subscribe(folders => {
         });
+      }
+    });
+  }
+
+  openDialogToCreateTestCase(folderId: number): void {
+
+    const dialogRef = this.dialog.open(CreateTestCaseComponent, {
+
+      width: '100%',
+      height: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      data: {
+        type: 'folder',
+        folderName: ''
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result !== '') {
+        console.log('RESULT from dialog: ',result);
+
+
+      } else {
+        console.log("Ошибка при сохранении тест кейса!!!")
       }
     });
   }
