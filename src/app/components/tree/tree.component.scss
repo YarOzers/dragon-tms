@@ -88,3 +88,11 @@
   margin-right: 8px; /* Отступ справа от иконки */
 }
 
+.folder-btn-menu {
+  display: none;
+}
+
+.folder-header:hover .folder-btn-menu{
+  display: inline;
+}
+

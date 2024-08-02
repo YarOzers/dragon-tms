@@ -14,6 +14,7 @@ import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {ProjectService} from "../../services/project.service";
 import {RouterParamsService} from "../../services/router-params.service";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 
 @Component({
@@ -28,7 +29,10 @@ import {RouterParamsService} from "../../services/router-params.service";
     CdkDrag,
     MatIconButton,
     MatIcon,
-    NgIf
+    NgIf,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem
   ],
   templateUrl: './tree.component.html',
   styleUrl: './tree.component.scss'
@@ -176,8 +180,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  toggleFolder(folder: Folder) {
+  toggleFolder(folder: Folder, event: MouseEvent) {
     folder.expanded = !folder.expanded;
+    (event.target as HTMLElement).blur();
   }
 
   dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number) {
