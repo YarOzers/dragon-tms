@@ -76,7 +76,7 @@ export class EditorComponent implements AfterViewInit {
 
     if (style === 'color' && value) {
       this.toggleColor(value);
-    } else if (style === 'bold' || style === 'italic' || style === 'underline') {
+    } else if (style === 'bold' || style === 'italic') {
       this.toggleTextStyle(style);
     }
 
@@ -138,8 +138,6 @@ export class EditorComponent implements AfterViewInit {
       span.style.fontWeight = this.currentStyles['bold'] ? 'normal' : 'bold';
     } else if (command === 'italic') {
       span.style.fontStyle = this.currentStyles['italic'] ? 'normal' : 'italic';
-    } else if (command === 'underline') {
-      span.style.textDecoration = this.currentStyles['underline'] ? 'none' : 'underline';
     }
 
     span.innerHTML = '\u200B'; // Добавление невидимого пробела
@@ -295,7 +293,6 @@ export class EditorComponent implements AfterViewInit {
     // Обновление состояния стилей (жирный, курсив, подчеркивание)
     this.currentStyles['bold'] = document.queryCommandState('bold');
     this.currentStyles['italic'] = document.queryCommandState('italic');
-    this.currentStyles['underline'] = document.queryCommandState('underline');
 
     // Обновление состояния цвета текста
     const foreColor = document.queryCommandValue('foreColor').toLowerCase();

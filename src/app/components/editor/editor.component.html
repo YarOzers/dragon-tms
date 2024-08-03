@@ -3,14 +3,14 @@
     <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')" [class.active]="currentStyles['bold']"><b>B</b></button>
     <button mat-mini-fab (click)="toggleStyle('normal')" [class.active]="!currentStyles['bold'] && !currentStyles['italic'] && !currentStyles['underline']">N</button>
     <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')" [class.active]="currentStyles['italic']"><i>I</i></button>
-    <button mat-mini-fab class="btn_underline" (click)="toggleStyle('underline')" [class.active]="currentStyles['underline']"><u>U</u></button>
     <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')" [class.active]="currentStyles['color-red']">R</button>
     <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')" [class.active]="currentStyles['color-green']">G</button>
     <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')" [class.active]="currentStyles['color-black']">Bl</button>
     <button (click)="toggleStyle('insertUnorderedList')">• List</button>
     <button (click)="insertImage()">Image</button>
     <button (click)="toggleStyle('pre')">Code</button>
-    <button (click)="toggleCustomClass('highlight')">Add class</button>
+    <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight')">AС</button>
+    <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline')">U</button>
   </div>
   <div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
   </div>
