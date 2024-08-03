@@ -45,8 +45,6 @@ export class EditorComponent {
     }
 
     document.execCommand(style, false);
-    this.currentStyles[style] = document.queryCommandState(style);
-
     this.updateButtonStyles();
   }
 
@@ -66,15 +64,24 @@ export class EditorComponent {
       return;
     }
 
-    // Обновляем стили кнопок
-    this.currentStyles['bold'] = document.queryCommandState('bold');
-    this.currentStyles['italic'] = document.queryCommandState('italic');
-    this.currentStyles['underline'] = document.queryCommandState('underline');
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      return;
+    }
 
-    const foreColor = document.queryCommandValue('foreColor').toLowerCase();
-    this.currentStyles['color-red'] = foreColor === 'rgb(255, 0, 0)' || foreColor === '#ff0000' || foreColor === 'red';
-    this.currentStyles['color-green'] = foreColor === 'rgb(0, 128, 0)' || foreColor === '#008000' || foreColor === 'green';
-    this.currentStyles['color-black'] = foreColor === 'rgb(0, 0, 0)' || foreColor === '#000000' || foreColor === 'black';
+    const range = selection.getRangeAt(0);
+    const parentElement = range.commonAncestorContainer.nodeType === 1 ? range.commonAncestorContainer as HTMLElement : range.commonAncestorContainer.parentElement;
+
+    if (parentElement) {
+      this.currentStyles['bold'] = document.queryCommandState('bold');
+      this.currentStyles['italic'] = document.queryCommandState('italic');
+      this.currentStyles['underline'] = document.queryCommandState('underline');
+
+      const foreColor = document.queryCommandValue('foreColor').toLowerCase();
+      this.currentStyles['color-red'] = foreColor === 'rgb(255, 0, 0)' || foreColor === '#ff0000' || foreColor === 'red';
+      this.currentStyles['color-green'] = foreColor === 'rgb(0, 128, 0)' || foreColor === '#008000' || foreColor === 'green';
+      this.currentStyles['color-black'] = foreColor === 'rgb(0, 0, 0)' || foreColor === '#000000' || foreColor === 'black';
+    }
   }
 
   insertImage() {
