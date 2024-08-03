@@ -3,18 +3,20 @@ import { NgForOf, NgIf } from "@angular/common";
 import { MatMiniFabButton } from "@angular/material/button";
 
 @Component({
-  selector: 'app-editor',
-  standalone: true,
+  selector: 'app-editor', // Указывает на селектор компонента, который используется в HTML
+  standalone: true, // Указывает, что компонент не зависит от других модулей
   imports: [
-    NgForOf,
-    NgIf,
-    MatMiniFabButton
+    NgForOf, // Директива, используемая для итерации по массиву и отображения его элементов
+    NgIf, // Директива, используемая для условного отображения элементов
+    MatMiniFabButton // Компонент Angular Material для мини-кнопок FAB
   ],
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.css']
+  templateUrl: './editor.component.html', // Путь к HTML-шаблону компонента
+  styleUrls: ['./editor.component.css'] // Путь к файлу CSS-стилей компонента
 })
 export class EditorComponent implements AfterViewInit {
+  // Массив редакторов, представляющий количество редакторов
   editors: number[] = [1, 2, 3];
+  // Объект для отслеживания текущих примененных стилей
   currentStyles: { [key: string]: boolean } = {
     bold: false,
     italic: false,
@@ -24,25 +26,32 @@ export class EditorComponent implements AfterViewInit {
     'color-black': false
   };
 
+  // ViewChild позволяет получить доступ к элементу DOM через Angular
   @ViewChild('editor', { static: true }) editor: ElementRef<HTMLDivElement> | undefined;
+  // Текущий активный редактор
   activeEditor: HTMLElement | null = null;
+  // Сохраненный диапазон выделения текста
   private savedRange: Range | null = null;
 
   constructor(private renderer: Renderer2) {}
 
+  // Метод жизненного цикла Angular, вызывается после инициализации представления
   ngAfterViewInit() {
     if (this.editor) {
+      // Прослушивание событий 'input', 'click', 'keyup' для обновления стилей кнопок
       this.renderer.listen(this.editor.nativeElement, 'input', () => this.updateButtonStyles());
       this.renderer.listen(this.editor.nativeElement, 'click', () => this.updateButtonStyles());
       this.renderer.listen(this.editor.nativeElement, 'keyup', () => this.updateButtonStyles());
     }
   }
 
+  // Устанавливает активный редактор при его фокусировке
   setActiveEditor(event: FocusEvent) {
     this.activeEditor = event.target as HTMLElement;
-    this.updateButtonStyles();
+    this.updateButtonStyles(); // Обновляет стили кнопок на панели инструментов
   }
 
+  // Сохраняет текущее выделение текста (диапазон)
   saveSelection() {
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
@@ -50,6 +59,7 @@ export class EditorComponent implements AfterViewInit {
     }
   }
 
+  // Восстанавливает сохраненное выделение текста
   restoreSelection() {
     const selection = window.getSelection();
     if (this.savedRange && selection) {
@@ -58,10 +68,11 @@ export class EditorComponent implements AfterViewInit {
     }
   }
 
+  // Переключение стиля текста
   toggleStyle(style: string, value?: string) {
     if (!this.activeEditor) return;
 
-    this.saveSelection();
+    this.saveSelection(); // Сохранить текущее выделение текста
 
     if (style === 'color' && value) {
       this.toggleColor(value);
@@ -69,19 +80,22 @@ export class EditorComponent implements AfterViewInit {
       this.toggleTextStyle(style);
     }
 
-    this.restoreSelection();
-    this.activeEditor.focus();
-    this.updateButtonStyles();
+    this.restoreSelection(); // Восстановить выделение
+    this.activeEditor.focus(); // Вернуть фокус на активный редактор
+    this.updateButtonStyles(); // Обновить стили кнопок
   }
 
+  // Переключение цвета текста
   toggleColor(color: string) {
     if (!this.activeEditor) return;
 
     this.saveSelection();
 
     if (this.savedRange && !this.savedRange.collapsed) {
+      // Если есть выделение текста, применить цвет ко всему выделенному
       document.execCommand('foreColor', false, color);
     } else {
+      // Если выделения нет, применить цвет к новому символу, который будет введен
       this.applyStyleToCaret('foreColor', color);
     }
 
@@ -90,14 +104,17 @@ export class EditorComponent implements AfterViewInit {
     this.updateButtonStyles();
   }
 
+  // Переключение стиля текста (жирный, курсив, подчеркивание)
   toggleTextStyle(style: string) {
     if (!this.activeEditor) return;
 
     this.saveSelection();
 
     if (this.savedRange && !this.savedRange.collapsed) {
+      // Применить стиль ко всему выделенному тексту
       document.execCommand(style);
     } else {
+      // Применить стиль к новому символу, который будет введен
       this.applyStyleToCaret(style);
     }
 
@@ -106,6 +123,7 @@ export class EditorComponent implements AfterViewInit {
     this.updateButtonStyles();
   }
 
+  // Применение стиля к позиции каретки
   applyStyleToCaret(command: string, value?: string) {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
@@ -113,6 +131,7 @@ export class EditorComponent implements AfterViewInit {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
 
+    // Установка стилей для созданного span в зависимости от команды
     if (command === 'foreColor') {
       span.style.color = value!;
     } else if (command === 'bold') {
@@ -123,8 +142,8 @@ export class EditorComponent implements AfterViewInit {
       span.style.textDecoration = this.currentStyles['underline'] ? 'none' : 'underline';
     }
 
-    span.innerHTML = '\u200B'; // Zero-width space
-    range.insertNode(span);
+    span.innerHTML = '\u200B'; // Добавление невидимого пробела
+    range.insertNode(span); // Вставка span на место каретки
     range.setStartAfter(span);
     range.collapse(true);
 
@@ -132,6 +151,7 @@ export class EditorComponent implements AfterViewInit {
     selection.addRange(range);
   }
 
+  // Переключение пользовательского класса
   toggleCustomClass(className: string) {
     if (!this.activeEditor) return;
 
@@ -139,25 +159,26 @@ export class EditorComponent implements AfterViewInit {
     const selection = window.getSelection();
 
     if (selection && !selection.isCollapsed) {
-      this.toggleClassOnSelection(className);
+      this.toggleClassOnSelection(className); // Если текст выделен
     } else {
-      this.toggleClassAtCaret(className);
+      this.toggleClassAtCaret(className); // Если текст не выделен
     }
 
     this.restoreSelection();
     this.updateButtonStyles();
   }
 
+  // Переключение класса на выделении текста
   toggleClassOnSelection(className: string) {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
 
     const range = selection.getRangeAt(0);
-    const contents = range.extractContents();
+    const contents = range.extractContents(); // Извлекаем выделенное содержимое
     const span = document.createElement('span');
     span.className = className;
 
-    // Проверка на вложенные элементы с тем же классом
+    // Проверка на наличие вложенных элементов с тем же классом
     let hasClass = false;
     Array.from(contents.childNodes).forEach(node => {
       if (node.nodeType === Node.ELEMENT_NODE && (node as Element).classList.contains(className)) {
@@ -166,14 +187,14 @@ export class EditorComponent implements AfterViewInit {
     });
 
     if (hasClass) {
-      // Удалить класс с вложенных элементов
+      // Удаление класса с вложенных элементов
       this.unwrapElements(contents, className);
     } else {
-      this.wrapWithClass(contents, className);
+      this.wrapWithClass(contents, className); // Обернуть содержимое в span с классом
     }
 
-    range.deleteContents();
-    range.insertNode(contents);
+    range.deleteContents(); // Удалить текущее содержимое диапазона
+    range.insertNode(contents); // Вставить новое содержимое
 
     // Обновление выделения
     selection.removeAllRanges();
@@ -183,6 +204,7 @@ export class EditorComponent implements AfterViewInit {
     selection.addRange(newRange);
   }
 
+  // Переключение класса на месте каретки
   toggleClassAtCaret(className: string) {
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
@@ -190,13 +212,14 @@ export class EditorComponent implements AfterViewInit {
     const range = selection.getRangeAt(0);
     const parentSpan = range.startContainer.parentElement;
 
+    // Проверка, находится ли каретка внутри элемента с нужным классом
     if (parentSpan && parentSpan.nodeName === 'SPAN' && parentSpan.classList.contains(className)) {
       const isCaretAtEnd = range.startOffset === parentSpan.textContent!.length;
 
       if (isCaretAtEnd) {
-        // Создать новый span без класса и переместить каретку внутрь него
+        // Если каретка в конце элемента, создать новый span без класса
         const newSpan = document.createElement('span');
-        newSpan.textContent = '\u200B'; // Zero-width space
+        newSpan.textContent = '\u200B'; // Добавление невидимого пробела
         parentSpan.after(newSpan);
 
         // Переместить каретку в новый span
@@ -205,17 +228,17 @@ export class EditorComponent implements AfterViewInit {
         selection.removeAllRanges();
         selection.addRange(range);
       } else {
-        // Если каретка не в конце, просто убираем класс
+        // Если каретка не в конце, убрать класс
         this.unwrap(parentSpan);
       }
     } else {
       // Создание нового span с указанным классом
       const newSpan = document.createElement('span');
       newSpan.className = className;
-      newSpan.textContent = '\u200B'; // Zero-width space
+      newSpan.textContent = '\u200B'; // Добавление невидимого пробела
       range.insertNode(newSpan);
 
-      // Переместить каретку после zero-width space
+      // Переместить каретку после невидимого пробела
       range.setStart(newSpan, 1);
       range.setEnd(newSpan, 1);
       range.collapse(true);
@@ -224,6 +247,7 @@ export class EditorComponent implements AfterViewInit {
     }
   }
 
+  // Обертка выделения в элемент с классом
   wrapSelectionWithClass(className: string) {
     const selection = window.getSelection();
     if (!selection) return;
@@ -232,48 +256,55 @@ export class EditorComponent implements AfterViewInit {
     const span = document.createElement('span');
     span.className = className;
 
-    // Extract contents and wrap them in a span
+    // Извлечение содержимого и обертка его в span
     span.appendChild(range.extractContents());
     range.insertNode(span);
 
-    // Adjust selection to the new element
+    // Обновление выделения
     selection.removeAllRanges();
     range.selectNodeContents(span);
     selection.addRange(range);
   }
 
+  // Удаление обертки элемента (убрать класс)
   unwrap(element: HTMLElement) {
     const parent = element.parentNode;
     if (!parent) return;
 
+    // Перенос всех дочерних элементов на уровень родителя и удаление обертки
     while (element.firstChild) {
       parent.insertBefore(element.firstChild, element);
     }
     parent.removeChild(element);
   }
 
+  // Удаление обертки элементов с указанным классом внутри фрагмента
   unwrapElements(fragment: DocumentFragment, className: string) {
     Array.from(fragment.querySelectorAll(`.${className}`)).forEach(span => {
       this.unwrap(span as HTMLElement);
     });
   }
 
+  // Обновление стилей кнопок в соответствии с текущими стилями выделенного текста
   updateButtonStyles() {
     if (!this.activeEditor) return;
 
     const selection = window.getSelection();
     if (!selection || selection.rangeCount === 0) return;
 
+    // Обновление состояния стилей (жирный, курсив, подчеркивание)
     this.currentStyles['bold'] = document.queryCommandState('bold');
     this.currentStyles['italic'] = document.queryCommandState('italic');
     this.currentStyles['underline'] = document.queryCommandState('underline');
 
+    // Обновление состояния цвета текста
     const foreColor = document.queryCommandValue('foreColor').toLowerCase();
     this.currentStyles['color-red'] = foreColor === 'rgb(255, 0, 0)' || foreColor === '#ff0000' || foreColor === 'red';
     this.currentStyles['color-green'] = foreColor === 'rgb(0, 128, 0)' || foreColor === '#008000' || foreColor === 'green';
     this.currentStyles['color-black'] = foreColor === 'rgb(0, 0, 0)' || foreColor === '#000000' || foreColor === 'black';
   }
 
+  // Вставка изображения по URL
   insertImage() {
     const url = prompt('Enter image URL', '');
     if (url) {
@@ -281,6 +312,7 @@ export class EditorComponent implements AfterViewInit {
     }
   }
 
+  // Обертка содержимого в элементы с указанным классом
   wrapWithClass(fragment: DocumentFragment, className: string) {
     Array.from(fragment.childNodes).forEach(node => {
       if (node.nodeType === Node.TEXT_NODE && node.textContent!.trim() !== '') {
