@@ -10,6 +10,7 @@
     <button (click)="toggleStyle('insertUnorderedList')">• List</button>
     <button (click)="insertImage()">Image</button>
     <button (click)="toggleStyle('pre')">Code</button>
+    <button (click)="toggleCustomClass('highlight')">Add class</button>
   </div>
   <div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
   </div>
