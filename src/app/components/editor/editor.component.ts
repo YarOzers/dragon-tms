@@ -26,6 +26,12 @@ export class EditorComponent implements AfterViewInit {
     'color-black': false
   };
 
+  // Новый объект для отслеживания текущих примененных классов
+  currentClasses: { [key: string]: boolean } = {
+    highlight: false,
+    underline: false
+  };
+
   // ViewChild позволяет получить доступ к элементу DOM через Angular
   @ViewChild('editor', { static: true }) editor: ElementRef<HTMLDivElement> | undefined;
   // Текущий активный редактор
@@ -150,7 +156,8 @@ export class EditorComponent implements AfterViewInit {
   }
 
   // Переключение пользовательского класса
-  toggleCustomClass(className: string) {
+  toggleCustomClass(className: string, buttonClass: string) {
+    console.log(buttonClass);
     if (!this.activeEditor) return;
 
     this.saveSelection();
@@ -162,8 +169,14 @@ export class EditorComponent implements AfterViewInit {
       this.toggleClassAtCaret(className); // Если текст не выделен
     }
 
+    // Переключение класса кнопки
+    this.currentClasses[className] = !this.currentClasses[className];
+
     this.restoreSelection();
     this.updateButtonStyles();
+
+    // Обновить класс кнопки
+    this.updateButtonClass(buttonClass, this.currentClasses[className]);
   }
 
   // Переключение класса на выделении текста
@@ -299,6 +312,27 @@ export class EditorComponent implements AfterViewInit {
     this.currentStyles['color-red'] = foreColor === 'rgb(255, 0, 0)' || foreColor === '#ff0000' || foreColor === 'red';
     this.currentStyles['color-green'] = foreColor === 'rgb(0, 128, 0)' || foreColor === '#008000' || foreColor === 'green';
     this.currentStyles['color-black'] = foreColor === 'rgb(0, 0, 0)' || foreColor === '#000000' || foreColor === 'black';
+
+    // Обновление состояния классов
+    this.updateClassState('highlight');
+    this.updateClassState('underline');
+  }
+
+  // Обновление состояния класса
+  updateClassState(className: string) {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    const container = range.commonAncestorContainer;
+
+    if (container.nodeType === Node.ELEMENT_NODE) {
+      this.currentClasses[className] = (container as Element).classList.contains(className);
+    } else if (container.nodeType === Node.TEXT_NODE && container.parentElement) {
+      this.currentClasses[className] = container.parentElement.classList.contains(className);
+    } else {
+      this.currentClasses[className] = false;
+    }
   }
 
   // Вставка изображения по URL
@@ -321,5 +355,17 @@ export class EditorComponent implements AfterViewInit {
         (node as HTMLElement).classList.add(className);
       }
     });
+  }
+
+  // Обновление класса кнопки
+  updateButtonClass(buttonClass: string, isActive: boolean) {
+    const button = document.querySelector(`.${buttonClass}`);
+    if (button) {
+      if (isActive) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    }
   }
 }

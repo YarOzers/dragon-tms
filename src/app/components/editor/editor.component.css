@@ -72,3 +72,8 @@ button.active.btn_black {
 .underline{
   background-color: #5c2269;
 }
+
+
+.mat-mdc-mini-fab.active-underline{
+  background-color: #5c2269;
+}

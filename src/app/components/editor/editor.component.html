@@ -9,8 +9,9 @@
     <button (click)="toggleStyle('insertUnorderedList')">• List</button>
     <button (click)="insertImage()">Image</button>
     <button (click)="toggleStyle('pre')">Code</button>
-    <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight')">AС</button>
-    <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline')">U</button>
+    <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')" [class.active-highlight]="currentClasses['highlight']">AС</button>
+    <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline', 'active-underline')" [class.active-underline]="currentClasses['underline']">U</button>
+
   </div>
   <div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
   </div>
