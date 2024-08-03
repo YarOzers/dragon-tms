@@ -1,15 +1,15 @@
 <div class="editor-container">
   <div class="toolbar">
     <button mat-mini-fab class="btn_bold" (click)="applyStyle('bold')" [class.active]="activeStyle === 'bold'"><b>B</b></button>
-    <button mat-mini-fab (click)="applyStyle('normal')">N</button>
-    <button mat-mini-fab (click)="applyStyle('italic')" [class.active]="activeStyle === 'italic'">I</button>
-    <button mat-mini-fab (click)="applyStyle('underline')" [class.active]="activeStyle === 'underline'">U</button>
+    <button mat-mini-fab  (click)="applyStyle('normal')">N</button>
+    <button mat-mini-fab class="btn_italic" (click)="applyStyle('italic')" [class.active]="activeStyle === 'italic'">I</button>
+    <button mat-mini-fab class="btn_underline" (click)="applyStyle('underline')" [class.active]="activeStyle === 'underline'">U</button>
     <button mat-mini-fab class="btn_red" (click)="applyStyle('color', 'red')" [class.active]="activeStyle === 'color-red'">R
     </button>
     <button mat-mini-fab class="btn_green" (click)="applyStyle('color', 'green')" [class.active]="activeStyle === 'color-green'">
       G
     </button>
-    <button class="btn_black" (click)="applyStyle('color', 'black')" [class.active]="activeStyle === 'color-black'">
+    <button mat-mini-fab class="btn_black" (click)="applyStyle('color', 'black')" [class.active]="activeStyle === 'color-black'">
       Bl
     </button>
     <button (click)="applyStyle('insertUnorderedList')">• List</button>
