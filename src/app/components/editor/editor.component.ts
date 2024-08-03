@@ -41,29 +41,24 @@ export class EditorComponent {
 
     if (style === 'color' && value) {
       this.toggleColor(value);
-      this.currentStyles[`${style}-${value}`] = !this.currentStyles[`${style}-${value}`];
       return;
     }
 
-    if (this.currentStyles[style]) {
-      document.execCommand(style, false); // Команда execCommand сама переключает стиль
-      this.currentStyles[style] = !this.currentStyles[style];
-    } else {
-      document.execCommand(style, false);
-      this.currentStyles[style] = true;
-    }
+    document.execCommand(style, false);
+    this.currentStyles[style] = document.queryCommandState(style);
 
     this.updateButtonStyles();
   }
 
   toggleColor(color: string) {
     document.execCommand('foreColor', false, color);
-    Object.keys(this.currentStyles).forEach(key => {
-      if (key.startsWith('color-')) {
-        this.currentStyles[key] = false;
-      }
-    });
-    this.currentStyles[`color-${color}`] = true;
+
+    // Обновляем активные стили
+    this.currentStyles['color-red'] = color === 'red';
+    this.currentStyles['color-green'] = color === 'green';
+    this.currentStyles['color-black'] = color === 'black';
+
+    this.updateButtonStyles();
   }
 
   updateButtonStyles() {
@@ -71,12 +66,15 @@ export class EditorComponent {
       return;
     }
 
+    // Обновляем стили кнопок
     this.currentStyles['bold'] = document.queryCommandState('bold');
     this.currentStyles['italic'] = document.queryCommandState('italic');
     this.currentStyles['underline'] = document.queryCommandState('underline');
-    this.currentStyles['color-red'] = document.queryCommandValue('foreColor') === 'rgb(255, 0, 0)';
-    this.currentStyles['color-green'] = document.queryCommandValue('foreColor') === 'rgb(0, 128, 0)';
-    this.currentStyles['color-black'] = document.queryCommandValue('foreColor') === 'rgb(0, 0, 0)';
+
+    const foreColor = document.queryCommandValue('foreColor').toLowerCase();
+    this.currentStyles['color-red'] = foreColor === 'rgb(255, 0, 0)' || foreColor === '#ff0000' || foreColor === 'red';
+    this.currentStyles['color-green'] = foreColor === 'rgb(0, 128, 0)' || foreColor === '#008000' || foreColor === 'green';
+    this.currentStyles['color-black'] = foreColor === 'rgb(0, 0, 0)' || foreColor === '#000000' || foreColor === 'black';
   }
 
   insertImage() {
