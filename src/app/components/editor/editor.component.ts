@@ -63,16 +63,21 @@ export class EditorComponent {
       return;
     }
 
+    // Сохраняем текущее выделение
     this.saveSelection();
 
     if (style === 'color' && value) {
+      // Если стиль - это цвет
       this.toggleColor(value);
     } else if (style === 'bold' || style === 'italic' || style === 'underline') {
+      // Если стиль - это текстовый стиль (жирный, курсив, подчеркивание)
       this.toggleTextStyle(style);
     } else {
+      // Применяем команду стиля
       document.execCommand(style, false);
     }
 
+    // Восстанавливаем выделение и устанавливаем фокус на редактор
     this.restoreSelection();
     this.activeEditor.focus();
     this.updateButtonStyles();
@@ -83,16 +88,18 @@ export class EditorComponent {
       return;
     }
 
+    // Сохраняем текущее выделение
     this.saveSelection();
 
     if (this.savedRange && !this.savedRange.collapsed) {
-      // Если есть выделение
+      // Если есть выделение, применяем цвет к выделенному тексту
       document.execCommand('foreColor', false, color);
     } else {
       // Если нет выделения, меняем цвет для текущей позиции каретки
       this.applyStyleToCaret('foreColor', color);
     }
 
+    // Восстанавливаем выделение и устанавливаем фокус на редактор
     this.restoreSelection();
     this.activeEditor.focus();
     this.updateButtonStyles();
@@ -103,16 +110,18 @@ export class EditorComponent {
       return;
     }
 
+    // Сохраняем текущее выделение
     this.saveSelection();
 
     if (this.savedRange && !this.savedRange.collapsed) {
-      // Если есть выделение
+      // Если есть выделение, применяем стиль к выделенному тексту
       document.execCommand(style, false);
     } else {
-      // Если нет выделения, меняем стиль для текущей позиции каретки
+      // Если нет выделения, применяем стиль к текущей позиции каретки
       this.applyStyleToCaret(style);
     }
 
+    // Восстанавливаем выделение и устанавливаем фокус на редактор
     this.restoreSelection();
     this.activeEditor.focus();
     this.updateButtonStyles();
@@ -127,17 +136,18 @@ export class EditorComponent {
     const range = selection.getRangeAt(0);
     const span = document.createElement('span');
 
+    // Устанавливаем стиль в зависимости от команды
     if (command === 'foreColor') {
       span.style.color = value!;
     } else if (command === 'bold') {
-      span.style.fontWeight = 'bold';
+      span.style.fontWeight = this.currentStyles['bold'] ? 'normal' : 'bold';
     } else if (command === 'italic') {
-      span.style.fontStyle = 'italic';
+      span.style.fontStyle = this.currentStyles['italic'] ? 'normal' : 'italic';
     } else if (command === 'underline') {
-      span.style.textDecoration = 'underline';
+      span.style.textDecoration = this.currentStyles['underline'] ? 'none' : 'underline';
     }
 
-    // Если в месте каретки уже есть текст, продолжаем его вводить с новым стилем
+    // Вставляем невидимый символ в место каретки
     span.innerHTML = '&#8203;'; // Невидимый символ
     range.insertNode(span);
 
@@ -163,10 +173,12 @@ export class EditorComponent {
     const parentElement = range.commonAncestorContainer.nodeType === 1 ? range.commonAncestorContainer as HTMLElement : range.commonAncestorContainer.parentElement;
 
     if (parentElement) {
+      // Обновляем состояние кнопок в зависимости от текущих стилей текста
       this.currentStyles['bold'] = document.queryCommandState('bold');
       this.currentStyles['italic'] = document.queryCommandState('italic');
       this.currentStyles['underline'] = document.queryCommandState('underline');
 
+      // Проверяем текущий цвет текста
       const foreColor = document.queryCommandValue('foreColor').toLowerCase();
       this.currentStyles['color-red'] = foreColor === 'rgb(255, 0, 0)' || foreColor === '#ff0000' || foreColor === 'red';
       this.currentStyles['color-green'] = foreColor === 'rgb(0, 128, 0)' || foreColor === '#008000' || foreColor === 'green';
