@@ -1,20 +1,15 @@
 <div class="editor-container">
   <div class="toolbar">
-    <button mat-mini-fab class="btn_bold" (click)="applyStyle('bold')" [class.active]="activeStyle === 'bold'"><b>B</b></button>
-    <button mat-mini-fab  (click)="applyStyle('normal')">N</button>
-    <button mat-mini-fab class="btn_italic" (click)="applyStyle('italic')" [class.active]="activeStyle === 'italic'">I</button>
-    <button mat-mini-fab class="btn_underline" (click)="applyStyle('underline')" [class.active]="activeStyle === 'underline'">U</button>
-    <button mat-mini-fab class="btn_red" (click)="applyStyle('color', 'red')" [class.active]="activeStyle === 'color-red'">R
-    </button>
-    <button mat-mini-fab class="btn_green" (click)="applyStyle('color', 'green')" [class.active]="activeStyle === 'color-green'">
-      G
-    </button>
-    <button mat-mini-fab class="btn_black" (click)="applyStyle('color', 'black')" [class.active]="activeStyle === 'color-black'">
-      Bl
-    </button>
-    <button (click)="applyStyle('insertUnorderedList')">• List</button>
+    <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')" [class.active]="currentStyles['bold']"><b>B</b></button>
+    <button mat-mini-fab (click)="toggleStyle('normal')" [class.active]="!currentStyles['bold'] && !currentStyles['italic'] && !currentStyles['underline']">N</button>
+    <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')" [class.active]="currentStyles['italic']"><i>I</i></button>
+    <button mat-mini-fab class="btn_underline" (click)="toggleStyle('underline')" [class.active]="currentStyles['underline']"><u>U</u></button>
+    <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')" [class.active]="currentStyles['color-red']">R</button>
+    <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')" [class.active]="currentStyles['color-green']">G</button>
+    <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')" [class.active]="currentStyles['color-black']">Bl</button>
+    <button (click)="toggleStyle('insertUnorderedList')">• List</button>
     <button (click)="insertImage()">Image</button>
-    <button (click)="applyStyle('pre')">Code</button>
+    <button (click)="toggleStyle('pre')">Code</button>
   </div>
   <div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
   </div>

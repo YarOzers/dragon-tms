@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
 import {NgForOf, NgIf} from "@angular/common";
 import {MatMiniFabButton} from "@angular/material/button";
 
@@ -15,109 +15,69 @@ import {MatMiniFabButton} from "@angular/material/button";
 })
 export class EditorComponent {
   editors: number[] = [1, 2, 3]; // три текстовых редактора для примера
-  activeStyle: string | null = null;
-
-  fontWait = false;
-  fontStyle = false;
-  textDecoration = false;
+  currentStyles: { [key: string]: boolean } = {
+    bold: false,
+    italic: false,
+    underline: false,
+    'color-red': false,
+    'color-green': false,
+    'color-black': false
+  };
 
   @ViewChild('editor', { static: true }) editor: ElementRef<HTMLDivElement> | undefined;
   activeEditor: HTMLElement | null = null;
 
+  constructor(private renderer: Renderer2) {}
+
   setActiveEditor(event: FocusEvent) {
     this.activeEditor = event.target as HTMLElement;
+    this.updateButtonStyles();
   }
 
-  applyStyle(style: string, value?: string) {
-    if (style === 'color' && value) {
-      this.applyColor(value);
-      this.activeStyle = style + '-' + value;
+  toggleStyle(style: string, value?: string) {
+    if (!this.activeEditor) {
       return;
     }
 
-    if (style === 'bold') {
-      document.execCommand('bold', false);
-      this.activeStyle = 'bold';
-    } else if (style === 'italic') {
-      document.execCommand('italic', false);
-      this.activeStyle = 'italic';
-    } else if (style === 'underline') {
-      document.execCommand('underline', false);
-      this.activeStyle = 'underline';
-    } else if (style === 'normal') {
-      document.execCommand('removeFormat', false);
-      this.activeStyle = 'normal'
+    if (style === 'color' && value) {
+      this.toggleColor(value);
+      this.currentStyles[`${style}-${value}`] = !this.currentStyles[`${style}-${value}`];
+      return;
     }
+
+    if (this.currentStyles[style]) {
+      document.execCommand(style, false); // Команда execCommand сама переключает стиль
+      this.currentStyles[style] = !this.currentStyles[style];
+    } else {
+      document.execCommand(style, false);
+      this.currentStyles[style] = true;
+    }
+
+    this.updateButtonStyles();
   }
 
-  processNode(node: Node, style: string, value: string | undefined, fragment: DocumentFragment) {
-    if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) {
-      // Оборачиваем текстовый узел в span с нужными стилями
-      const span = document.createElement('span');
-
-      // Применяем стиль
-      if (style === 'bold') {
-        span.style.fontWeight = 'bold';
-
-      } else if (style === 'italic') {
-        span.style.fontStyle = 'italic';
-      } else if (style === 'underline') {
-        span.style.textDecoration = 'underline';
-      } else if (style === 'color') {
-        span.style.color = value || 'black';
-      } else if (style === 'normal') {
-        this.fontWait = false;
-        // Удаляем стили, возвращая текст к нормальному состоянию
-        span.style.fontWeight = 'normal';
-        span.style.fontStyle = 'normal';
-        span.style.textDecoration = 'none';
-        span.style.color = 'inherit';
-      }
-
-      span.textContent = node.textContent;
-      fragment.appendChild(span);
-    } else if (node.nodeType === Node.ELEMENT_NODE) {
-      // Если узел является элементом, клонируем его и применяем стиль ко всем дочерним узлам
-      const element = node as HTMLElement;
-      const newElement = document.createElement(element.tagName);
-
-      // Копируем атрибуты и стили
-      Array.from(element.attributes).forEach(attr => newElement.setAttribute(attr.name, attr.value));
-      newElement.style.cssText = element.style.cssText;
-
-      // Применяем новый стиль
-      if (style === 'bold') {
-        newElement.style.fontWeight = 'bold';
-      } else if (style === 'italic') {
-        newElement.style.fontStyle = 'italic';
-      } else if (style === 'underline') {
-        newElement.style.textDecoration = 'underline';
-      } else if (style === 'color') {
-        newElement.style.color = value || 'black';
-      } else if (style === 'normal') {
-        // Удаляем стили, возвращая текст к нормальному состоянию
-        newElement.style.fontWeight = 'normal';
-        newElement.style.fontStyle = 'normal';
-        newElement.style.textDecoration = 'none';
-        newElement.style.color = 'inherit';
-      }
-
-      // Создаем временный фрагмент для обработки дочерних узлов
-      const tempFragment = document.createDocumentFragment();
-      Array.from(element.childNodes).forEach(childNode => {
-        this.processNode(childNode, style, value, tempFragment);
-      });
-
-      // Добавляем временный фрагмент к новому элементу
-      newElement.appendChild(tempFragment);
-      fragment.appendChild(newElement);
-    }
-  }
-
-  applyColor(color: string) {
+  toggleColor(color: string) {
     document.execCommand('foreColor', false, color);
+    Object.keys(this.currentStyles).forEach(key => {
+      if (key.startsWith('color-')) {
+        this.currentStyles[key] = false;
+      }
+    });
+    this.currentStyles[`color-${color}`] = true;
   }
 
+  updateButtonStyles() {
+    if (!this.activeEditor) {
+      return;
+    }
+
+    this.currentStyles['bold'] = document.queryCommandState('bold');
+    this.currentStyles['italic'] = document.queryCommandState('italic');
+    this.currentStyles['underline'] = document.queryCommandState('underline');
+    this.currentStyles['color-red'] = document.queryCommandValue('foreColor') === 'rgb(255, 0, 0)';
+    this.currentStyles['color-green'] = document.queryCommandValue('foreColor') === 'rgb(0, 128, 0)';
+    this.currentStyles['color-black'] = document.queryCommandValue('foreColor') === 'rgb(0, 0, 0)';
+  }
 
   insertImage() {
     const url = prompt('Enter image URL', '');
@@ -126,17 +86,11 @@ export class EditorComponent {
     }
   }
 
-  getNextNode(node: Node): Node | null {
-    if (node.firstChild) {
-      return node.firstChild;
+  ngAfterViewInit() {
+    if (this.editor) {
+      this.renderer.listen(this.editor.nativeElement, 'input', () => this.updateButtonStyles());
+      this.renderer.listen(this.editor.nativeElement, 'click', () => this.updateButtonStyles());
+      this.renderer.listen(this.editor.nativeElement, 'keyup', () => this.updateButtonStyles());
     }
-    while (node) {
-      if (node.nextSibling) {
-        return node.nextSibling;
-      }
-      node = node.parentNode!;
-    }
-    return null;
   }
-
 }
