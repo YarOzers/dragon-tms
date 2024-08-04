@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {
   TestCase,
   TestCaseData,
@@ -10,6 +10,7 @@ import {User} from "../../models/user";
 import {NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
+import {MatCheckbox} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-create-test-case-ecample',
@@ -17,12 +18,16 @@ import {MatButton} from "@angular/material/button";
   imports: [
     NgForOf,
     FormsModule,
-    MatButton
+    MatButton,
+    MatCheckbox
   ],
   templateUrl: './create-test-case-example.component.html',
   styleUrl: './create-test-case-example.component.css'
 })
 export class CreateTestCaseExampleComponent {
+  allSelected = false;
+  indeterminate = false;
+
   private user: User = {
     id: 1,
     role: 'admin',
@@ -84,6 +89,7 @@ export class CreateTestCaseExampleComponent {
     selected: null
   }
 
+
 addStep(){
     const step: TestCaseStep = {
       id: this.steps.length +1,
@@ -92,6 +98,7 @@ addStep(){
       expectedResult: ''
     }
     this.steps.push(step);
+    this.updateAllSelected();
 }
 
   addPreCondition(){
@@ -102,6 +109,7 @@ addStep(){
       expectedResult: ''
     }
     this.steps.push(preCondition);
+    this.updateAllSelected();
   }
 
   addPostCondition(){
@@ -112,7 +120,23 @@ addStep(){
       expectedResult: ''
     }
     this.steps.push(postCondition);
+    this.updateAllSelected();
   }
 
+  deleteSelectedSteps() {
+    this.steps = this.steps.filter(step => !step.selected);
+    this.updateAllSelected();
+  }
+
+  selectAllSteps(checked: boolean) {
+    this.steps.forEach(step => step.selected = checked);
+    this.allSelected = checked;
+  }
+
+  updateAllSelected() {
+    const totalSelected = this.steps.filter(step => step.selected).length;
+    this.allSelected = totalSelected === this.steps.length;
+    this.indeterminate = totalSelected > 0 && totalSelected < this.steps.length;
+  }
 
 }
