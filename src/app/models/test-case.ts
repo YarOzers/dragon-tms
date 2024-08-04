@@ -4,6 +4,7 @@ import {User} from "./user";
 export interface TestCase {
   id: number;
   name: string;
+  folderId: number | null;
   folder: string;
   type: 'testCase' | 'checkList'
   author: User;
@@ -55,13 +56,4 @@ export interface TestCasePostCondition {
   id: number;
   action: string;
   expectedResult?: string
-}
-
-import {Folder} from "./folder";
-
-export interface TestCase{
-  id: number;
-  name: string;
-  folder: string;
-  type: 'testCase'
 }

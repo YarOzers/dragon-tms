@@ -8,42 +8,42 @@ import {Folder} from "../models/folder";
   providedIn: 'root'
 })
 export class ProjectService {
-  testCase1: TestCase = {
-    id: 1,
-    name: 'testcase 1',
-    folder: 'folder 1',
-    type: 'testCase'
-  };
-  testCase2: TestCase = {
-    id: 2,
-    name: 'testcase 2',
-    folder: 'folder 1',
-    type: 'testCase'
-  };
-  testCase3: TestCase = {
-    id: 3,
-    name: 'testcase 3',
-    folder: 'folder 3',
-    type: 'testCase'
-  };
-  testCase4: TestCase = {
-    id: 4,
-    name: 'testcase 4',
-    folder: 'folder 3',
-    type: 'testCase'
-  };
-  testCase5: TestCase = {
-    id: 5,
-    name: 'testcase 5',
-    folder: 'folder 3',
-    type: 'testCase'
-  };
-  testCase6: TestCase = {
-    id: 6,
-    name: 'testcase 6',
-    folder: 'folder 4',
-    type: 'testCase'
-  };
+  // testCase1: TestCase = {
+  //   id: 1,
+  //   name: 'testcase 1',
+  //   folder: 'folder 1',
+  //   type: 'testCase'
+  // };
+  // testCase2: TestCase = {
+  //   id: 2,
+  //   name: 'testcase 2',
+  //   folder: 'folder 1',
+  //   type: 'testCase'
+  // };
+  // testCase3: TestCase = {
+  //   id: 3,
+  //   name: 'testcase 3',
+  //   folder: 'folder 3',
+  //   type: 'testCase'
+  // };
+  // testCase4: TestCase = {
+  //   id: 4,
+  //   name: 'testcase 4',
+  //   folder: 'folder 3',
+  //   type: 'testCase'
+  // };
+  // testCase5: TestCase = {
+  //   id: 5,
+  //   name: 'testcase 5',
+  //   folder: 'folder 3',
+  //   type: 'testCase'
+  // };
+  // testCase6: TestCase = {
+  //   id: 6,
+  //   name: 'testcase 6',
+  //   folder: 'folder 4',
+  //   type: 'testCase'
+  // };
 
   private folder5: Folder = {
     id: 5,
@@ -56,7 +56,9 @@ export class ProjectService {
     id: 4,
     name: 'folder 4',
     parentFolderId: 1,
-    testCases: [this.testCase6],
+    testCases: [
+      // this.testCase6
+    ],
     folders: [this.folder5],
     type: 'folder'
   };
@@ -65,7 +67,9 @@ export class ProjectService {
     name: 'folder 1',
     parentFolderId: 0,
     folders: [this.folder4],
-    testCases: [this.testCase1, this.testCase2],
+    testCases: [
+      // this.testCase1, this.testCase2
+    ],
     type: 'folder'
   };
 
@@ -73,7 +77,9 @@ export class ProjectService {
     id: 2,
     parentFolderId: 0,
     name: 'folder 2',
-    testCases: [this.testCase3, this.testCase4],
+    testCases: [
+      // this.testCase3, this.testCase4
+    ],
     type: 'folder'
   };
 
@@ -81,7 +87,9 @@ export class ProjectService {
     id: 3,
     parentFolderId: 0,
     name: 'folder 3',
-    testCases: [this.testCase5],
+    testCases: [
+      // this.testCase5
+    ],
     type: 'folder'
   };
   private root_folder: Folder = {

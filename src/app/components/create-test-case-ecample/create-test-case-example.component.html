@@ -1,1 +1,10 @@
 
+
+
+
+<div *ngFor="let step of steps">
+  <input type="text" [(ngModel)]="step.action">
+  <input type="text" [(ngModel)]="step.expectedResult">
+</div>
+
+<button mat-flat-button (click)="addStep()">Добавить шаг</button>

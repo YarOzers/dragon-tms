@@ -9,12 +9,13 @@ import {OneMoreComponent} from "./lessons/one-more/one-more.component";
 import {MainContainerComponent} from "./components/main-container/main-container.component";
 import {CreateTestCaseComponent} from "./components/case/create-test-case/create-test-case.component";
 import {EditorComponent} from "./components/editor/editor.component";
+import {CreateTestCaseExampleComponent} from "./components/create-test-case-ecample/create-test-case-example.component";
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TreeComponent, ListProjectComponent, ExampleComponent, ParentComponent, OneMoreComponent, MainContainerComponent, CreateTestCaseComponent, EditorComponent],
+  imports: [RouterOutlet, TreeComponent, ListProjectComponent, ExampleComponent, ParentComponent, OneMoreComponent, MainContainerComponent, CreateTestCaseComponent, EditorComponent, CreateTestCaseExampleComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
