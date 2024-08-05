@@ -3,12 +3,16 @@
     Выбрать все
   </mat-checkbox>
 </div>
+<div style="background-color: #7abb6c">
+  <div *ngFor="let step of steps" fxLayout="row">
 
-<div *ngFor="let step of steps">
-  <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelected()"></mat-checkbox>
-  <input type="text" [(ngModel)]="step.action" placeholder="Действие">
-  <input type="text" [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат">
+    <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelected()" fxFlex="4"></mat-checkbox>
+    <input type="text" [(ngModel)]="step.action" placeholder="Действие" fxFlex="48">
+    <input type="text" [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="48">
+  </div>
+  <div fxLayout="row" fxLayoutAlign="end center">
+    <button mat-icon-button (click)="addStep()" ><mat-icon>add</mat-icon></button>
+    <button mat-icon-button (click)="deleteSelectedSteps()" ><mat-icon>delete</mat-icon></button>
+  </div>
 </div>
 
-<button mat-flat-button (click)="addStep()">Добавить шаг</button>
-<button mat-flat-button (click)="deleteSelectedSteps()">Удалить выбранные шаги</button>

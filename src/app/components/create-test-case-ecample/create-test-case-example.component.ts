@@ -9,8 +9,10 @@ import {
 import {User} from "../../models/user";
 import {NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatCheckbox} from "@angular/material/checkbox";
+import {FlexModule} from "@angular/flex-layout";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-create-test-case-ecample',
@@ -19,7 +21,10 @@ import {MatCheckbox} from "@angular/material/checkbox";
     NgForOf,
     FormsModule,
     MatButton,
-    MatCheckbox
+    MatCheckbox,
+    FlexModule,
+    MatIconButton,
+    MatIcon
   ],
   templateUrl: './create-test-case-example.component.html',
   styleUrl: './create-test-case-example.component.css'
