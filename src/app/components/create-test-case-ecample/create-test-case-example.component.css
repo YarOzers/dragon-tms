@@ -1,3 +1,16 @@
+.sidenav-container {
+  height: 100%;
+  width: 100%;
+}
+
+.mat-sidenav-container {
+  height: 100%;
+}
+
+.mat-sidenav {
+  width: 200px;
+}
+
 textarea {
   overflow: hidden;
   resize: none;
@@ -18,4 +31,8 @@ input{
 }
 .header{
   margin: 1rem;
+}
+
+mat-checkbox{
+  text-align: center;
 }
