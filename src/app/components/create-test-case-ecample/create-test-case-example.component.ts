@@ -61,8 +61,8 @@ export class CreateTestCaseExampleComponent {
     expectedResult: ''
   }
   protected steps: TestCaseStep[] = [this.step];
-  private preconditions: TestCasePreCondition[] = [this.preCondition];
-  private postConditions: TestCasePostCondition[] = [this.postCondition];
+  protected preconditions: TestCasePreCondition[] = [this.preCondition];
+  protected postConditions: TestCasePostCondition[] = [this.postCondition];
   private testCaseId = 1;
   private folderName = '';
   private folderId: null = null;
@@ -80,7 +80,7 @@ export class CreateTestCaseExampleComponent {
     type: null,
     version: 1
   }
-  private testCase: TestCase = {
+  protected testCase: TestCase = {
     id: this.testCaseId,
     name: '',
     folderId: this.folderId,
@@ -142,6 +142,12 @@ addStep(){
     const totalSelected = this.steps.filter(step => step.selected).length;
     this.allSelected = totalSelected === this.steps.length;
     this.indeterminate = totalSelected > 0 && totalSelected < this.steps.length;
+  }
+
+  autoResize(event: Event) {
+    const target = event.target as HTMLTextAreaElement;
+    target.style.height = 'auto';
+    target.style.height = target.scrollHeight + 'px';
   }
 
 }

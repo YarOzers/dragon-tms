@@ -1,0 +1,21 @@
+textarea {
+  overflow: hidden;
+  resize: none;
+  min-height: 40px; /* Минимальная высота */
+}
+
+span{
+  text-align: center;
+  padding: 10px;
+}
+
+input{
+  height: 40px;
+}
+
+.steps{
+  margin: 1rem;
+}
+.header{
+  margin: 1rem;
+}

@@ -1,18 +1,84 @@
-<div>
-  <mat-checkbox [(ngModel)]="allSelected" [indeterminate]="indeterminate" (change)="selectAllSteps($event.checked)">
-    Выбрать все
-  </mat-checkbox>
+<div class="header" >
+  <div fxLayout="row" fxLayoutAlign="center-center">
+    <span fxFlex="4" >{{testCase.id}}</span>
+    <input type="text" fxFlex="96">
+  </div>
 </div>
-<div style="background-color: #7abb6c">
-  <div *ngFor="let step of steps" fxLayout="row">
+<div class="step-container">
+  <div class="steps">
+    <div>
+      <mat-checkbox [(ngModel)]="allSelected" [indeterminate]="indeterminate" (change)="selectAllSteps($event.checked)">
+        Предусловия
+      </mat-checkbox>
+    </div>
+    <div style="background-color: #7abb6c">
+      <div *ngFor="let step of preconditions" fxLayout="row">
+        <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelected()" fxFlex="4"></mat-checkbox>
+        <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="48" (input)="autoResize($event)"></textarea>
+        <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="48"
+                  (input)="autoResize($event)"></textarea>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="addStep()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteSelectedSteps()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
 
-    <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelected()" fxFlex="4"></mat-checkbox>
-    <input type="text" [(ngModel)]="step.action" placeholder="Действие" fxFlex="48">
-    <input type="text" [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="48">
+  <div class="steps">
+    <div>
+      <mat-checkbox [(ngModel)]="allSelected" [indeterminate]="indeterminate" (change)="selectAllSteps($event.checked)">
+        Шаги
+      </mat-checkbox>
+    </div>
+    <div style="background-color: #7abb6c">
+      <div *ngFor="let step of steps" fxLayout="row">
+        <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelected()" fxFlex="4"></mat-checkbox>
+        <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="48" (input)="autoResize($event)"></textarea>
+        <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="48"
+                  (input)="autoResize($event)"></textarea>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="addStep()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteSelectedSteps()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
-  <div fxLayout="row" fxLayoutAlign="end center">
-    <button mat-icon-button (click)="addStep()" ><mat-icon>add</mat-icon></button>
-    <button mat-icon-button (click)="deleteSelectedSteps()" ><mat-icon>delete</mat-icon></button>
+
+  <div class="steps">
+    <div>
+      <mat-checkbox [(ngModel)]="allSelected" [indeterminate]="indeterminate" (change)="selectAllSteps($event.checked)">
+        Постусловия
+      </mat-checkbox>
+    </div>
+    <div style="background-color: #7abb6c">
+      <div *ngFor="let step of postConditions" fxLayout="row">
+        <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelected()" fxFlex="4"></mat-checkbox>
+        <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="48" (input)="autoResize($event)"></textarea>
+        <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="48"
+                  (input)="autoResize($event)"></textarea>
+      </div>
+      <div fxLayout="row" fxLayoutAlign="end center">
+        <button mat-icon-button (click)="addStep()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="deleteSelectedSteps()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
+
+
+
+
 
