@@ -15,6 +15,9 @@ import {FlexModule} from "@angular/flex-layout";
 import {MatIcon} from "@angular/material/icon";
 import {MatSidenav, MatSidenavContainer, MatSidenavModule} from "@angular/material/sidenav";
 import {MatListItem, MatNavList} from "@angular/material/list";
+import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
+import {MatOption, MatSelect} from "@angular/material/select";
+import {MatInput} from "@angular/material/input";
 
 @Component({
   selector: 'app-create-test-case-ecample',
@@ -31,6 +34,11 @@ import {MatListItem, MatNavList} from "@angular/material/list";
     MatNavList,
     MatListItem,
     MatSidenavModule,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    MatFormFieldModule,
+    MatInput
   ],
   templateUrl: './create-test-case-example.component.html',
   styleUrl: './create-test-case-example.component.css'
@@ -71,32 +79,40 @@ export class CreateTestCaseExampleComponent {
     action: '',
     expectedResult: ''
   }
+  protected typeOf: 'testCase' | 'checkList' = 'testCase';
+  protected name: string = '';
   protected steps: TestCaseStep[] = [this.step];
   protected preconditions: TestCasePreCondition[] = [this.preCondition];
   protected postConditions: TestCasePostCondition[] = [this.postCondition];
   private testCaseId = 1;
   private folderName = '';
   private folderId: null = null;
+  protected typeOfTest: string | null = null;
+  protected type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null = null;
+  protected automationFlag: 'auto' | 'manual' | null = null;
+  protected executionTime: string | null = '00:00';
+  protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
   private data: TestCaseData = {
-    automationFlag: null,
+    status: this.status,
+    automationFlag: this.automationFlag,
     changesAuthor: this.user,
     createdTime: null,
-    executionTime:  null,
-    expectedExecutionTime:  null,
-    name: '',
-    preConditionItems:  this.preconditions,
+    executionTime: null,
+    expectedExecutionTime: this.executionTime,
+    name: this.name,
+    preConditionItems: this.preconditions,
     stepItems: this.steps,
     postConditionItems: this.postConditions,
     priority: null,
-    type: null,
+    type: this.type,
     version: 1
   }
   protected testCase: TestCase = {
     id: this.testCaseId,
-    name: '',
+    name: this.name,
     folderId: this.folderId,
     folder: this.folderName,
-    type: 'testCase',
+    type: this.typeOf,
     author: this.user,
     data: [this.data],
     loading: null,
@@ -109,21 +125,37 @@ export class CreateTestCaseExampleComponent {
   toggleSidenav() {
     this.sidenav.toggle();
   }
+  private reorderPreConditions() {
+    this.preconditions.forEach((step, index) => {
+      step.id = index + 1;
+    });
+  }
 
-addStep(){
+  private reorderSteps() {
+    this.steps.forEach((step, index) => {
+      step.id = index + 1;
+    });
+  }
+
+  private reorderPostConditions() {
+    this.postConditions.forEach((step, index) => {
+      step.id = index + 1;
+    });
+  }
+  addStep() {
     const step: TestCaseStep = {
-      id: this.steps.length +1,
+      id: this.steps.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
     }
     this.steps.push(step);
     this.updateAllSelectedSteps();
-}
+  }
 
-  addPreCondition(){
+  addPreCondition() {
     const preCondition: TestCasePreCondition = {
-      id: this.preconditions.length +1,
+      id: this.preconditions.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -132,9 +164,9 @@ addStep(){
     this.updateAllSelectedPreconditions();
   }
 
-  addPostCondition(){
+  addPostCondition() {
     const postCondition: TestCasePostCondition = {
-      id: this.postConditions.length +1,
+      id: this.postConditions.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -145,6 +177,7 @@ addStep(){
 
   deleteSelectedSteps() {
     this.steps = this.steps.filter(step => !step.selected);
+    this.reorderSteps();
     this.updateAllSelectedSteps();
     this.allSelectedSteps = false;
   }
@@ -179,6 +212,7 @@ addStep(){
 
   deleteSelectedPreconditions() {
     this.preconditions = this.preconditions.filter(step => !step.selected);
+    this.reorderPreConditions();
     this.updateAllSelectedPreconditions();
     this.allSelectedPreConditions = false;
   }
@@ -196,7 +230,42 @@ addStep(){
 
   deleteSelectedPostConditions() {
     this.postConditions = this.postConditions.filter(step => !step.selected);
+    this.reorderPostConditions();
     this.updateAllSelectedPostConditions();
     this.allSelectedPostConditions = false;
   }
+
+
+//   Sidenav ===========================================================
+
+  typesOfTests = [
+    'functional',
+    'system',
+    'performance',
+    'regression',
+    'unit',
+    'security',
+    'localization',
+    'usability'
+  ];
+  typesOfPriority = [
+    'Highest',
+    'High',
+    'Medium',
+    'Low'
+  ];
+
+  automationFlags = [
+    'auto',
+    'manual'
+  ]
+
+  statuses = [
+    'ready' ,
+    'not ready' ,
+    'requires updating'
+  ]
+
 }
+
+

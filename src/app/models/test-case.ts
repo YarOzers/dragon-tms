@@ -22,12 +22,13 @@ export interface TestCaseData {
   executionTime: string | null;
   expectedExecutionTime: string | null;
   name: string;
-  preConditionItems: TestCasePreCondition[] | null;
-  postConditionItems: TestCasePostCondition[] | null;
+  preConditionItems: TestCasePreCondition[] | null; //+
+  postConditionItems: TestCasePostCondition[] | null; //+
   priority: 'High' | 'Medium' | 'Low' | null;
-  stepItems: TestCaseStep[] | null;
+  stepItems: TestCaseStep[] | null; //*
   type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null;
   version: number;
+  status: 'ready' | 'not ready' | 'requires updating'
 }
 
 export interface testCaseResult {
