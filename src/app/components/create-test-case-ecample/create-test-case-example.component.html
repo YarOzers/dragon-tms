@@ -60,11 +60,14 @@
           </mat-checkbox>
         </div>
         <div style="background-color: #7abb6c">
-          <div *ngFor="let step of preconditions" fxLayout="row">
+          <div *ngFor="let step of preconditions" fxLayout="row" >
             <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedPreconditions()" fxFlex="6">{{step.id}}</mat-checkbox>
-            <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="47" (input)="autoResize($event)"></textarea>
-            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="47"
-                      (input)="autoResize($event)"></textarea>
+            <div class="steps-container" fxFlex="94">
+              <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="50" (input)="autoResize($event)"></textarea>
+              <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="50"
+                        (input)="autoResize($event)"></textarea>
+            </div>
+
           </div>
           <div fxLayout="row" fxLayoutAlign="end center">
             <button mat-icon-button (click)="addPreCondition()">
@@ -86,9 +89,11 @@
         <div style="background-color: #7abb6c">
           <div *ngFor="let step of steps" fxLayout="row">
             <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">{{step.id}}</mat-checkbox>
-            <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="47" (input)="autoResize($event)"></textarea>
-            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="47"
+            <div class="steps-container" fxFlex="94">
+            <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="50" (input)="autoResize($event)"></textarea>
+            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="50"
                       (input)="autoResize($event)"></textarea>
+            </div>
           </div>
           <div fxLayout="row" fxLayoutAlign="end center">
             <button mat-icon-button (click)="addStep()">
@@ -110,9 +115,11 @@
         <div style="background-color: #7abb6c">
           <div *ngFor="let step of postConditions" fxLayout="row">
             <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedPostConditions()" fxFlex="6">{{step.id}}</mat-checkbox>
-            <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="47" (input)="autoResize($event)"></textarea>
-            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="47"
+            <div class="steps-container" fxFlex="94">
+            <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="50" (input)="autoResize($event)"></textarea>
+            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="50"
                       (input)="autoResize($event)"></textarea>
+            </div>
           </div>
           <div fxLayout="row" fxLayoutAlign="end center">
             <button mat-icon-button (click)="addPostCondition()">
