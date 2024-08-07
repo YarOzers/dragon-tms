@@ -48,9 +48,25 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-    <button mat-icon-button (click)="toggleSidenav()">
-      <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
-    </button>
+      <div>
+        <button mat-icon-button (click)="toggleSidenav()">
+          <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
+        </button>
+        <div class="toolbar">
+          <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')" [class.active]="currentStyles['bold']"><b>B</b></button>
+          <button mat-mini-fab (click)="toggleStyle('normal')" [class.active]="!currentStyles['bold'] && !currentStyles['italic'] && !currentStyles['underline']">N</button>
+          <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')" [class.active]="currentStyles['italic']"><i>I</i></button>
+          <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')" [class.active]="currentStyles['color-red']">R</button>
+          <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')" [class.active]="currentStyles['color-green']">G</button>
+          <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')" [class.active]="currentStyles['color-black']">Bl</button>
+          <button (click)="toggleStyle('insertUnorderedList')">• List</button>
+          <button (click)="insertImage()">Image</button>
+          <button (click)="toggleStyle('pre')">Code</button>
+          <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')" [class.active-highlight]="currentClasses['highlight']">AС</button>
+          <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline', 'active-underline')" [class.active-underline]="currentClasses['underline']">U</button>
+
+        </div>
+      </div>
 
     <div class="step-container" fxLayout="column">
       <div class="steps">
@@ -63,6 +79,7 @@
           <div *ngFor="let step of preconditions" fxLayout="row" >
             <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedPreconditions()" fxFlex="6">{{step.id}}</mat-checkbox>
             <div class="steps-container" fxFlex="94">
+              <div contenteditable="true" #editor class="editor" (focus)="setActiveEditor($event)"></div>
               <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="50" (input)="autoResize($event)"></textarea>
               <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="50"
                         (input)="autoResize($event)"></textarea>

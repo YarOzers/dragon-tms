@@ -1,0 +1,79 @@
+button {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.btn_container {
+  min-width: 15px;
+  min-height: 15px;
+  border: solid black 1px;
+}
+
+.editor-container {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.toolbar {
+  margin-bottom: 10px;
+}
+
+.toolbar button {
+  margin-right: 5px;
+}
+
+.editor {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+button.active.btn_bold {
+  background-color: #a1a1bd;
+  font-weight: bold;
+}
+
+button.active.btn_italic {
+  background-color: #a1a1bd;
+  font-style: italic;
+}
+
+button.active.btn_underline {
+  background-color: #a1a1bd;
+  text-decoration: underline;
+}
+
+button.active.btn_green {
+  background-color: #2f6b26;
+}
+
+button.active.btn_red {
+  background-color: #93000a;
+}
+
+button.active.btn_black {
+  background-color: #2a2727;
+}
+
+.mat-mdc-mini-fab {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+}
+
+.highlight{
+  background-color: #0d3480;
+}
+
+.underline{
+  background-color: #5c2269;
+}
+
+
+.mat-mdc-mini-fab.active-underline{
+  background-color: #5c2269;
+}
