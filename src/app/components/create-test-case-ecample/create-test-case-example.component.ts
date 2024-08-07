@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  signal,
-  ViewChild
-} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {
   TestCase,
   TestCaseData,
@@ -58,10 +49,17 @@ import {MatInput} from "@angular/material/input";
 })
 export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
+  @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef<HTMLDivElement> | undefined;
 
   //////////////////////////////////////////////////////////////////
 
-  @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement> | undefined;
+
+
+
+
+  // Массив редакторов, представляющий количество редакторов
+
+  // Объект для отслеживания текущих примененных стилей
   currentStyles: { [key: string]: boolean } = {
     bold: false,
     italic: false,
@@ -77,7 +75,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     underline: false
   };
 
-
+  // ViewChild позволяет получить доступ к элементу DOM через Angular
 
   // Текущий активный редактор
   activeEditor: HTMLElement | null = null;
@@ -123,7 +121,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   protected typeOf: 'testCase' | 'checkList' = 'testCase';
   protected name: string = '';
   protected steps: TestCaseStep[] = [this.step];
-  protected preconditions: TestCasePreCondition[] = [this.preCondition];
+  protected preConditions: TestCasePreCondition[] = [this.preCondition];
   protected postConditions: TestCasePostCondition[] = [this.postCondition];
   private testCaseId = 1;
   private folderName = '';
@@ -133,6 +131,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   protected automationFlag: 'auto' | 'manual' | null = null;
   protected executionTime: string | null = '00:00';
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
+  counter = this.preConditions.length +1;
   private data: TestCaseData = {
     status: this.status,
     automationFlag: this.automationFlag,
@@ -141,7 +140,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     executionTime: null,
     expectedExecutionTime: this.executionTime,
     name: this.name,
-    preConditionItems: this.preconditions,
+    preConditionItems: this.preConditions,
     stepItems: this.steps,
     postConditionItems: this.postConditions,
     priority: null,
@@ -171,12 +170,64 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.editor) {
-      // Прослушивание событий 'input', 'click', 'keyup' для обновления стилей кнопок
-      this.renderer.listen(this.editor.nativeElement, 'input', () => this.updateButtonStyles());
-      this.renderer.listen(this.editor.nativeElement, 'click', () => this.updateButtonStyles());
-      this.renderer.listen(this.editor.nativeElement, 'keyup', () => this.updateButtonStyles());
-    }
+    setTimeout(() => {
+      this.preConditions.forEach((preCondition, index) => {
+        const actionEditor = this.getEditorByIndex(index, 'action');
+        const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+        if (actionEditor) {
+          this.setHtmlContent(actionEditor, preCondition.action || '');
+        }
+        if (expectedResultEditor) {
+          this.setHtmlContent(expectedResultEditor, preCondition.expectedResult || '');
+        }
+      });
+
+      const editorContainerElement = this.editorContainer?.nativeElement;
+      if (editorContainerElement) {
+        this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
+      }
+    });
+    setTimeout(() => {
+      this.steps.forEach((step, index) => {
+        const actionEditor = this.getEditorByIndex(index, 'action');
+        const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+        if (actionEditor) {
+          this.setHtmlContent(actionEditor, step.action || '');
+        }
+        if (expectedResultEditor) {
+          this.setHtmlContent(expectedResultEditor, step.expectedResult || '');
+        }
+      });
+
+      const editorContainerElement = this.editorContainer?.nativeElement;
+      if (editorContainerElement) {
+        this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
+      }
+    });
+
+    setTimeout(() => {
+      this.postConditions.forEach((postCondition, index) => {
+        const actionEditor = this.getEditorByIndex(index, 'action');
+        const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+        if (actionEditor) {
+          this.setHtmlContent(actionEditor, postCondition.action || '');
+        }
+        if (expectedResultEditor) {
+          this.setHtmlContent(expectedResultEditor, postCondition.expectedResult || '');
+        }
+      });
+
+      const editorContainerElement = this.editorContainer?.nativeElement;
+      if (editorContainerElement) {
+        this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
+      }
+    });
   }
 
   toggleSidenav() {
@@ -184,7 +235,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   private reorderPreConditions() {
-    this.preconditions.forEach((step, index) => {
+    this.preConditions.forEach((step, index) => {
       step.id = index + 1;
     });
   }
@@ -214,13 +265,14 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
 
   addPreCondition() {
     const preCondition: TestCasePreCondition = {
-      id: this.preconditions.length + 1,
+      id: this.preConditions.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
     }
-    this.preconditions.push(preCondition);
+    this.preConditions.push(preCondition);
     this.updateAllSelectedPreconditions();
+    console.log(this.preConditions);
   }
 
   addPostCondition() {
@@ -259,18 +311,18 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   selectAllPreconditions(checked: boolean) {
-    this.preconditions.forEach(step => step.selected = checked);
+    this.preConditions.forEach(step => step.selected = checked);
     this.allSelectedPreConditions = checked;
   }
 
   updateAllSelectedPreconditions() {
-    const totalSelected = this.preconditions.filter(step => step.selected).length;
-    this.allSelectedPreConditions = totalSelected === this.preconditions.length;
-    this.indeterminatePreCondition = totalSelected > 0 && totalSelected < this.preconditions.length;
+    const totalSelected = this.preConditions.filter(step => step.selected).length;
+    this.allSelectedPreConditions = totalSelected === this.preConditions.length;
+    this.indeterminatePreCondition = totalSelected > 0 && totalSelected < this.preConditions.length;
   }
 
   deleteSelectedPreconditions() {
-    this.preconditions = this.preconditions.filter(step => !step.selected);
+    this.preConditions = this.preConditions.filter(step => !step.selected);
     this.reorderPreConditions();
     this.updateAllSelectedPreconditions();
     this.allSelectedPreConditions = false;
@@ -330,6 +382,27 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   //////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////
 
+  // Устанавливает активный редактор при его фокусировке
+
+
+
+  // Метод жизненного цикла Angular, вызывается после инициализации представления
+
+
+  show(){
+    console.log(this.preConditions);
+    this.add();
+  }
+
+  add(){
+    const precondition: TestCasePreCondition = {
+      id: this.counter,
+      selected: false,
+      action: '',
+      expectedResult: ''
+    }
+    this.preConditions.push(precondition);
+  }
   // Устанавливает активный редактор при его фокусировке
   setActiveEditor(event: FocusEvent) {
     this.activeEditor = event.target as HTMLElement;
@@ -646,6 +719,41 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
         button.classList.remove('active');
       }
     }
+  }
+
+  getHtmlContent(editor: HTMLElement): string {
+    return editor.innerHTML;
+  }
+
+  setHtmlContent(editor: HTMLElement, content: string): void {
+    if (editor) {
+      editor.innerHTML = content;
+    }
+  }
+
+  updateEditorPreConditionContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
+    if (editor) {
+      this.preConditions[index][field] = editor.innerHTML;
+    }
+  }
+
+  updateEditorStepContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
+    if (editor) {
+      this.steps[index][field] = editor.innerHTML;
+    }
+  }
+
+  updateEditorPostConditionContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
+    if (editor) {
+      this.postConditions[index][field] = editor.innerHTML;
+    }
+  }
+
+  getEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
+    if (!this.editorContainer) return null;
+    const editors = this.editorContainer.nativeElement.querySelectorAll('.editor');
+    const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
+    return editors[editorIndex] as HTMLElement || null;
   }
 
 }

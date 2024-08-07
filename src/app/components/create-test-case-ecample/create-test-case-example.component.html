@@ -90,22 +90,27 @@
               Предусловия
             </mat-checkbox>
           </div>
-          <div style="background-color: #7abb6c">
-            <div *ngFor="let step of preconditions" fxLayout="row">
-              <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedPreconditions()"
-                            fxFlex="6">{{ step.id }}
+          <div style="background-color: #7abb6c" #editorContainer>
+            <div *ngFor="let preCondition of preConditions; let i = index" class="editor-item" fxLayout="row">
+              <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
+                            fxFlex="6">{{ preCondition.id }}
               </mat-checkbox>
               <div class="steps-container" fxFlex="94">
-<!--                <div contenteditable="true" #editor class="editor" (focus)="setActiveEditor($event)"-->
-<!--                     [(ngModel)]="step.action" fxFlex="50" (input)="autoResize($event)"></div>-->
-<!--                <div contenteditable="true" #editor class="editor" (focus)="setActiveEditor($event)"-->
-<!--                     [(ngModel)]="step.expectedResult" fxFlex="50" (input)="autoResize($event)"></div>-->
-
-                <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="50" (input)="autoResize($event)" ></textarea>
-                            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="50" (input)="autoResize($event)"></textarea>
-
+                <div class="editor" #actionEditor
+                     contenteditable="true"
+                     fxFlex="50"
+                     (focus)="setActiveEditor($event)"
+                     (input)="autoResize($event)"
+                     (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')">
+                </div>
+                <div class="editor" #expectedResultEditor
+                     contenteditable="true"
+                     fxFlex="50"
+                     (focus)="setActiveEditor($event)"
+                     (input)="autoResize($event)"
+                     (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')">
+                </div>
               </div>
-
             </div>
             <div fxLayout="row" fxLayoutAlign="end center">
               <button mat-icon-button (click)="addPreCondition()">
@@ -126,18 +131,24 @@
             </mat-checkbox>
           </div>
           <div style="background-color: #7abb6c">
-            <div *ngFor="let step of steps" fxLayout="row">
+            <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
               <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">{{ step.id }}
               </mat-checkbox>
               <div class="steps-container" fxFlex="94">
-<!--                <div contenteditable="true" #editor class="editor" (focus)="setActiveEditor($event)"-->
-<!--                     [(ngModel)]="step.action" fxFlex="50" (input)="autoResize($event)"></div>-->
-<!--                <div contenteditable="true" #editor class="editor" (focus)="setActiveEditor($event)"-->
-<!--                     [(ngModel)]="step.expectedResult" fxFlex="50" (input)="autoResize($event)"></div>-->
-
-                            <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="50" (input)="autoResize($event)" ></textarea>
-                            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="50" (input)="autoResize($event)"></textarea>
-
+                <div class="editor" #actionEditor
+                     contenteditable="true"
+                     fxFlex="50"
+                     (focus)="setActiveEditor($event)"
+                     (input)="autoResize($event)"
+                     (blur)="updateEditorStepContent(actionEditor, i, 'action')">
+                </div>
+                <div class="editor" #expectedResultEditor
+                     contenteditable="true"
+                     fxFlex="50"
+                     (focus)="setActiveEditor($event)"
+                     (input)="autoResize($event)"
+                     (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')">
+                </div>
               </div>
             </div>
             <div fxLayout="row" fxLayoutAlign="end center">
@@ -159,22 +170,26 @@
             </mat-checkbox>
           </div>
           <div style="background-color: #7abb6c">
-            <div *ngFor="let step of postConditions" fxLayout="row">
-              <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedPostConditions()"
-                            fxFlex="6">{{ step.id }}
+            <div *ngFor="let postCondition of postConditions; let i = index" class="editor-item" fxLayout="row">
+              <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
+                            fxFlex="6">{{ postCondition.id }}
               </mat-checkbox>
               <div class="steps-container" fxFlex="94">
-                <div contenteditable="true" #editor class="editor" (focus)="setActiveEditor($event)"
-                     [(ngModel)]="step.action" fxFlex="50" (input)="autoResize($event)"></div>
-                <div contenteditable="true" #editor class="editor" (focus)="setActiveEditor($event)"
-                     [(ngModel)]="step.expectedResult"
+                <div class="editor" #actionEditor
+                     contenteditable="true"
                      fxFlex="50"
+                     (focus)="setActiveEditor($event)"
                      (input)="autoResize($event)"
-                ></div>
+                     (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')">
+                </div>
+                <div class="editor" #expectedResultEditor
+                     contenteditable="true"
+                     fxFlex="50"
+                     (focus)="setActiveEditor($event)"
+                     (input)="autoResize($event)"
+                     (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')">
+                </div>
 
-                <!--            <textarea [(ngModel)]="step.action" placeholder="Действие" fxFlex="50" (input)="autoResize($event)"></textarea>-->
-                <!--            <textarea [(ngModel)]="step.expectedResult" placeholder="Ожидаемый результат" fxFlex="50"-->
-                <!--                      (input)="autoResize($event)"></textarea>-->
               </div>
             </div>
             <div fxLayout="row" fxLayoutAlign="end center">
