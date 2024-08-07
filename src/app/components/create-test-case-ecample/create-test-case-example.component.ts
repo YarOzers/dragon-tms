@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, ElementRef, Renderer2, signal, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+  signal,
+  ViewChild
+} from '@angular/core';
 import {
   TestCase,
   TestCaseData,
@@ -44,15 +53,15 @@ import {MatInput} from "@angular/material/input";
   templateUrl: './create-test-case-example.component.html',
   styleUrls: [
     './create-test-case-example.component.css',
-  './editor.component.css'
+    './editor.component.css'
   ]
 })
-export class CreateTestCaseExampleComponent implements AfterViewInit{
+export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
   //////////////////////////////////////////////////////////////////
 
-  @ViewChild('editor', { static: true }) editor: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editor', {static: true}) editor: ElementRef<HTMLDivElement> | undefined;
   currentStyles: { [key: string]: boolean } = {
     bold: false,
     italic: false,
@@ -68,14 +77,15 @@ export class CreateTestCaseExampleComponent implements AfterViewInit{
     underline: false
   };
 
-  // ViewChild позволяет получить доступ к элементу DOM через Angular
+
 
   // Текущий активный редактор
   activeEditor: HTMLElement | null = null;
   // Сохраненный диапазон выделения текста
   private savedRange: Range | null = null;
 
-
+///////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////
   allSelectedSteps = false;
   allSelectedPreConditions = false;
   allSelectedPostConditions = false;
@@ -152,7 +162,13 @@ export class CreateTestCaseExampleComponent implements AfterViewInit{
     selected: null
   }
 
-  constructor(private renderer: Renderer2) {}
+  constructor(
+    private renderer: Renderer2,
+  ) {
+  }
+
+  ngOnInit() {
+  }
 
   ngAfterViewInit() {
     if (this.editor) {
@@ -162,9 +178,11 @@ export class CreateTestCaseExampleComponent implements AfterViewInit{
       this.renderer.listen(this.editor.nativeElement, 'keyup', () => this.updateButtonStyles());
     }
   }
+
   toggleSidenav() {
     this.sidenav.toggle();
   }
+
   private reorderPreConditions() {
     this.preconditions.forEach((step, index) => {
       step.id = index + 1;
@@ -182,6 +200,7 @@ export class CreateTestCaseExampleComponent implements AfterViewInit{
       step.id = index + 1;
     });
   }
+
   addStep() {
     const step: TestCaseStep = {
       id: this.steps.length + 1,
@@ -301,8 +320,8 @@ export class CreateTestCaseExampleComponent implements AfterViewInit{
   ]
 
   statuses = [
-    'ready' ,
-    'not ready' ,
+    'ready',
+    'not ready',
     'requires updating'
   ]
 

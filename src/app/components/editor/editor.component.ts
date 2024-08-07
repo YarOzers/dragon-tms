@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { NgForOf, NgIf } from "@angular/common";
 import { MatMiniFabButton } from "@angular/material/button";
+import {TestCasePreCondition} from "../../models/test-case";
 
 @Component({
   selector: 'app-editor', // Указывает на селектор компонента, который используется в HTML
@@ -14,6 +15,15 @@ import { MatMiniFabButton } from "@angular/material/button";
   styleUrls: ['./editor.component.css'] // Путь к файлу CSS-стилей компонента
 })
 export class EditorComponent implements AfterViewInit {
+  private preConditions: TestCasePreCondition[] = []
+
+  private preCondition: TestCasePreCondition = {
+    id: 1,
+    selected: false,
+    action: '',
+    expectedResult: ''
+  }
+
   // Массив редакторов, представляющий количество редакторов
   editors: number[] = [1, 2, 3];
   // Объект для отслеживания текущих примененных стилей

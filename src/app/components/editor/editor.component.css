@@ -29,6 +29,7 @@ button {
   border: 1px solid #ccc;
   padding: 10px;
   min-height: 100px;
+  min-width: 60px;
   margin-bottom: 10px;
 }
 
