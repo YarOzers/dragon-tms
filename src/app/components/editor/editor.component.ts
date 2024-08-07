@@ -134,7 +134,9 @@ export class EditorComponent implements AfterViewInit {
       this.toggleColor(value);
     } else if (style === 'bold' || style === 'italic') {
       this.toggleTextStyle(style);
-    }
+    }  else if (style === 'insertUnorderedList') {
+  this.insertUnorderedList();
+}
 
     this.restoreSelection(); // Восстановить выделение
     this.activeEditor.focus(); // Вернуть фокус на активный редактор
@@ -441,5 +443,82 @@ export class EditorComponent implements AfterViewInit {
     const editors = this.editorContainer.nativeElement.querySelectorAll('.editor');
     const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
     return editors[editorIndex] as HTMLElement || null;
+  }
+
+  insertUnorderedList() {
+    if (!this.activeEditor) return;
+
+    this.saveSelection();
+
+    if (this.savedRange) {
+      const selection = window.getSelection();
+      const node = selection?.anchorNode;
+      const parentNode = node?.parentElement;
+
+      // Проверка, если родительский элемент является списком
+      if (parentNode && parentNode.tagName === 'LI') {
+        // Если курсор находится внутри списка, перемещаем его за список
+        this.insertSpanAfterList(parentNode.closest('ul, ol')!);
+      } else {
+        const ul = document.createElement('ul');
+        const li = document.createElement('li');
+        li.innerHTML = '\u200B'; // Adding a zero-width space to focus on the new li
+        ul.appendChild(li);
+
+        this.savedRange.deleteContents();
+        this.savedRange.insertNode(ul);
+
+        this.savedRange.setStart(li, 0);
+        this.savedRange.setEnd(li, 0);
+        this.savedRange.collapse(true);
+
+        selection!.removeAllRanges();
+        selection!.addRange(this.savedRange);
+
+        this.activeEditor.focus();
+      }
+    }
+  }
+
+  handleEnterKeyInList(li: HTMLElement) {
+    this.renderer.listen(li, 'keydown', (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const newLi = document.createElement('li');
+        newLi.innerHTML = '\u200B'; // Adding a zero-width space to focus on the new li
+        li.parentElement!.insertBefore(newLi, li.nextSibling);
+
+        const range = document.createRange();
+        range.setStart(newLi, 0);
+        range.setEnd(newLi, 0);
+        range.collapse(true);
+
+        const selection = window.getSelection();
+        selection!.removeAllRanges();
+        selection!.addRange(range);
+      }
+    });
+  }
+
+  insertSpanAfterList(listElement: HTMLElement) {
+    if (!this.activeEditor) return;
+
+    const span = document.createElement('span');
+    span.innerHTML = '\u200B'; // Adding a zero-width space to focus on the new span
+
+    listElement.parentNode!.insertBefore(span, listElement.nextSibling);
+
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.setStart(span, 0);
+    range.setEnd(span, 0);
+    range.collapse(true);
+
+    selection!.removeAllRanges();
+    selection!.addRange(range);
+
+    // Ensure the editor is focused after the range is updated
+    this.activeEditor.focus();
   }
 }
