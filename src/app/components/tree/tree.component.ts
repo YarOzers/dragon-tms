@@ -309,7 +309,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
       maxHeight: '100%',
       data: {
         type: 'folder',
-        folderName: ''
+        folderId: folderId
       } // Можно передать данные в диалоговое окно
     });
 
