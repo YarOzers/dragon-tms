@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@ang
 import { NgForOf, NgIf } from "@angular/common";
 import { MatMiniFabButton } from "@angular/material/button";
 import {TestCasePreCondition} from "../../models/test-case";
+import {FormsModule} from "@angular/forms";
+import {ContentEditableValueAccessorDirective} from "./content-editable-value-accessor.directive";
 
 @Component({
   selector: 'app-editor', // Указывает на селектор компонента, который используется в HTML
@@ -9,14 +11,26 @@ import {TestCasePreCondition} from "../../models/test-case";
   imports: [
     NgForOf, // Директива, используемая для итерации по массиву и отображения его элементов
     NgIf, // Директива, используемая для условного отображения элементов
-    MatMiniFabButton // Компонент Angular Material для мини-кнопок FAB
+    MatMiniFabButton,
+    FormsModule,
+    ContentEditableValueAccessorDirective,
+    // Компонент Angular Material для мини-кнопок FAB
   ],
   templateUrl: './editor.component.html', // Путь к HTML-шаблону компонента
   styleUrls: ['./editor.component.css'] // Путь к файлу CSS-стилей компонента
 })
 export class EditorComponent implements AfterViewInit {
-  private preConditions: TestCasePreCondition[] = []
 
+  @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef<HTMLDivElement> | undefined;
+
+
+  preConditions: TestCasePreCondition[] = [
+    { id: 1, selected: false, action: '', expectedResult: '' },
+    { id: 2, selected: false, action: '', expectedResult: '' },
+    { id: 3, selected: false, action: '', expectedResult: '' }
+  ];
+
+  counter = this.preConditions.length +1;
   private preCondition: TestCasePreCondition = {
     id: 1,
     selected: false,
@@ -25,7 +39,7 @@ export class EditorComponent implements AfterViewInit {
   }
 
   // Массив редакторов, представляющий количество редакторов
-  editors: number[] = [1, 2, 3];
+
   // Объект для отслеживания текущих примененных стилей
   currentStyles: { [key: string]: boolean } = {
     bold: false,
@@ -53,14 +67,40 @@ export class EditorComponent implements AfterViewInit {
 
   // Метод жизненного цикла Angular, вызывается после инициализации представления
   ngAfterViewInit() {
-    if (this.editor) {
-      // Прослушивание событий 'input', 'click', 'keyup' для обновления стилей кнопок
-      this.renderer.listen(this.editor.nativeElement, 'input', () => this.updateButtonStyles());
-      this.renderer.listen(this.editor.nativeElement, 'click', () => this.updateButtonStyles());
-      this.renderer.listen(this.editor.nativeElement, 'keyup', () => this.updateButtonStyles());
-    }
+    setTimeout(() => { // Используем setTimeout для обеспечения выполнения кода после отрисовки представления
+      this.preConditions.forEach((preCondition, index) => {
+        const actionEditor = this.getEditorByIndex(index, 'action');
+        const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+        if (actionEditor) {
+          this.setHtmlContent(actionEditor, preCondition.action || '');
+        }
+        if (expectedResultEditor) {
+          this.setHtmlContent(expectedResultEditor, preCondition.expectedResult || '');
+        }
+      });
+
+      if (this.editor) {
+        this.renderer.listen(this.editor.nativeElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(this.editor.nativeElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(this.editor.nativeElement, 'keyup', () => this.updateButtonStyles());
+      }
+    });
   }
 
+  show(){
+    console.log(this.preConditions);
+    this.add();
+  }
+
+  add(){
+    const precondition: TestCasePreCondition = {
+      id: this.counter,
+      selected: false,
+      action: '',
+      expectedResult: ''
+    }
+    this.preConditions.push(precondition);
+  }
   // Устанавливает активный редактор при его фокусировке
   setActiveEditor(event: FocusEvent) {
     this.activeEditor = event.target as HTMLElement;
@@ -377,5 +417,27 @@ export class EditorComponent implements AfterViewInit {
         button.classList.remove('active');
       }
     }
+  }
+
+  getHtmlContent(editor: HTMLElement): string {
+    return editor.innerHTML;
+  }
+
+  setHtmlContent(editor: HTMLElement, content: string): void {
+    if (editor) {
+      editor.innerHTML = content;
+    }
+  }
+
+  updateEditorContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult') {
+    const content = this.getHtmlContent(editor);
+    this.preConditions[index][field] = content;
+  }
+
+  getEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
+    if (!this.editorContainer) return null;
+    const editors = this.editorContainer.nativeElement.querySelectorAll('.editor');
+    const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
+    return editors[editorIndex] as HTMLElement || null;
   }
 }

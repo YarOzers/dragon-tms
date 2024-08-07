@@ -13,7 +13,21 @@
     <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline', 'active-underline')" [class.active-underline]="currentClasses['underline']">U</button>
 
   </div>
-  <div contenteditable="true" #editor class="editor" *ngFor="let editor of editors" (focus)="setActiveEditor($event)">
+  <div class="editor-container" #editorContainer>
+    <div *ngFor="let preCondition of preConditions; let i = index" class="editor-item">
+      <div class="editor" #actionEditor
+           contenteditable="true"
+           (focus)="setActiveEditor($event)"
+           (blur)="updateEditorContent(actionEditor, i, 'action')">
+      </div>
+      <div class="editor" #expectedResultEditor
+           contenteditable="true"
+           (focus)="setActiveEditor($event)"
+           (blur)="updateEditorContent(expectedResultEditor, i, 'expectedResult')">
+      </div>
+    </div>
   </div>
 </div>
+
+<button (click)="show()">555555555</button>
 
