@@ -48,11 +48,15 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div>
-        <button mat-icon-button (click)="toggleSidenav()">
-          <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
-        </button>
-        <div class="toolbar">
+      <div fxLayout="row" class="toolbar-plus-btn">
+        <div fxFlex="7">
+          <button mat-icon-button (click)="toggleSidenav()">
+            <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
+          </button>
+        </div>
+
+
+        <div class="toolbar" fxFlex="93">
           <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')" [class.active]="currentStyles['bold']"><b>B</b>
           </button>
           <button mat-mini-fab (click)="toggleStyle('normal')"
@@ -90,12 +94,17 @@
               Предусловия
             </mat-checkbox>
           </div>
-          <div style="background-color: #7abb6c" #editorContainer>
-            <div *ngFor="let preCondition of preConditions; let i = index" class="editor-item" fxLayout="row">
+          <div #editorContainer>
+            <div *ngFor="let preCondition of preConditions; let i = index"
+
+                 class="editor-item"
+                 fxLayout="row">
               <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
-                            fxFlex="6">{{ preCondition.id }}
+                            fxFlex="6">
               </mat-checkbox>
-              <div class="steps-container" fxFlex="94">
+              <span fxFlex="3">{{ preCondition.id }}</span>
+              <div fxFlex="91" class="steps-container" [ngClass]="{'border-top': i === 0}">
+
                 <div class="editor" #actionEditor
                      contenteditable="true"
                      fxFlex="50"
@@ -130,11 +139,12 @@
               Шаги
             </mat-checkbox>
           </div>
-          <div style="background-color: #7abb6c">
+          <div>
             <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
-              <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">{{ step.id }}
+              <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
               </mat-checkbox>
-              <div class="steps-container" fxFlex="94">
+              <span fxFlex="3">{{ step.id }}</span>
+              <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                 <div class="editor" #actionEditor
                      contenteditable="true"
                      fxFlex="50"
@@ -169,12 +179,13 @@
               Постусловия
             </mat-checkbox>
           </div>
-          <div style="background-color: #7abb6c">
+          <div>
             <div *ngFor="let postCondition of postConditions; let i = index" class="editor-item" fxLayout="row">
               <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
-                            fxFlex="6">{{ postCondition.id }}
+                            fxFlex="6">
               </mat-checkbox>
-              <div class="steps-container" fxFlex="94">
+              <span fxFlex="3">{{ postCondition.id }}</span>
+              <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                 <div class="editor" #actionEditor
                      contenteditable="true"
                      fxFlex="50"

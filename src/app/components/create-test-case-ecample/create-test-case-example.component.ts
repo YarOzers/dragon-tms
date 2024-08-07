@@ -7,7 +7,7 @@ import {
   TestCaseStep
 } from "../../models/test-case";
 import {User} from "../../models/user";
-import {NgForOf} from "@angular/common";
+import {NgClass, NgForOf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -39,7 +39,8 @@ import {MatInput} from "@angular/material/input";
     MatOption,
     MatFormFieldModule,
     MatInput,
-    MatMiniFabButton
+    MatMiniFabButton,
+    NgClass
   ],
   templateUrl: './create-test-case-example.component.html',
   styleUrls: [

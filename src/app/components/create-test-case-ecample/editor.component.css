@@ -13,7 +13,6 @@ button {
 }
 
 .editor-container {
-  border: 1px solid #ccc;
   padding: 10px;
 }
 
@@ -26,8 +25,10 @@ button {
 }
 
 .editor {
-  border: 1px solid #ccc;
-  min-height: 40px;
+  border-radius: 0;
+  border: none;
+  border-left: #b9d6ea 1px solid;
+  border-bottom: #b9d6ea 1px solid;
 }
 
 button.active.btn_bold {
@@ -74,4 +75,8 @@ button.active.btn_black {
 
 .mat-mdc-mini-fab.active-underline{
   background-color: #5c2269;
+}
+
+.toolbar-plus-btn{
+  text-align: center;
 }
