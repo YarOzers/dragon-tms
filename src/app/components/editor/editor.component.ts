@@ -23,7 +23,6 @@ export class EditorComponent implements AfterViewInit {
 
   @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef<HTMLDivElement> | undefined;
 
-
   preConditions: TestCasePreCondition[] = [
     { id: 1, selected: false, action: '', expectedResult: '' },
     { id: 2, selected: false, action: '', expectedResult: '' },
@@ -57,7 +56,7 @@ export class EditorComponent implements AfterViewInit {
   };
 
   // ViewChild позволяет получить доступ к элементу DOM через Angular
-  @ViewChild('editor', { static: true }) editor: ElementRef<HTMLDivElement> | undefined;
+
   // Текущий активный редактор
   activeEditor: HTMLElement | null = null;
   // Сохраненный диапазон выделения текста
@@ -67,7 +66,7 @@ export class EditorComponent implements AfterViewInit {
 
   // Метод жизненного цикла Angular, вызывается после инициализации представления
   ngAfterViewInit() {
-    setTimeout(() => { // Используем setTimeout для обеспечения выполнения кода после отрисовки представления
+    setTimeout(() => {
       this.preConditions.forEach((preCondition, index) => {
         const actionEditor = this.getEditorByIndex(index, 'action');
         const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
@@ -79,10 +78,11 @@ export class EditorComponent implements AfterViewInit {
         }
       });
 
-      if (this.editor) {
-        this.renderer.listen(this.editor.nativeElement, 'input', () => this.updateButtonStyles());
-        this.renderer.listen(this.editor.nativeElement, 'click', () => this.updateButtonStyles());
-        this.renderer.listen(this.editor.nativeElement, 'keyup', () => this.updateButtonStyles());
+      const editorContainerElement = this.editorContainer?.nativeElement;
+      if (editorContainerElement) {
+        this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
       }
     });
   }
@@ -429,9 +429,11 @@ export class EditorComponent implements AfterViewInit {
     }
   }
 
-  updateEditorContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult') {
-    const content = this.getHtmlContent(editor);
-    this.preConditions[index][field] = content;
+  updateEditorContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
+    if (editor) {
+      const content = editor.innerHTML;
+      this.preConditions[index][field] = content;
+    }
   }
 
   getEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
