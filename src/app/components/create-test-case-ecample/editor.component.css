@@ -50,11 +50,19 @@ button.active.btn_li {
   background-color: #a1a1bd;
   text-decoration: underline;
 }
-
+button.btn_black{
+  background-color: #a29b9b;
+}
+button.btn_green{
+  background-color: #c2e0c8;
+}
 button.active.btn_green {
   background-color: #2f6b26;
 }
 
+button.btn_red{
+  background-color: #e8c0c0;
+}
 button.active.btn_red {
   background-color: #93000a;
 }
@@ -64,13 +72,13 @@ button.active.btn_black {
 }
 
 .mat-mdc-mini-fab {
-  width: 30px;
-  height: 30px;
+  /*width: 30px;*/
+  /*height: 30px;*/
   border-radius: 4px;
 }
 
 .highlight{
-  background-color: #0d3480;
+  background-color: rgba(255, 255, 0, 0.45);
 }
 
 .underline{
@@ -83,7 +91,12 @@ button.active.btn_black {
 }
 
 .toolbar-plus-btn{
-  text-align: center;
+  position: -webkit-sticky; /* Поддержка для Safari */
+  position: sticky;
+  top: 0; /* Приклеивает элемент к верхней части окна просмотра */
+  z-index: 1000; /* Убедитесь, что элемент находится выше других */
+  background: #fff; /* Фон для лучшей видимости (можете изменить по своему вкусу) */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавление тени для лучшего визуального эффекта */
 }
 
 .resizable {

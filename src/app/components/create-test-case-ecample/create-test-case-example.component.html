@@ -54,35 +54,45 @@
             <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
           </button>
         </div>
-
-
         <div class="toolbar" fxFlex="93">
-          <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')" [class.active]="currentStyles['bold']"><b>B</b>
-          </button>
-          <button mat-mini-fab (click)="toggleStyle('normal')"
-                  [class.active]="!currentStyles['bold'] && !currentStyles['italic'] && !currentStyles['underline']">N
-          </button>
-          <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')"
-                  [class.active]="currentStyles['italic']"><i>I</i></button>
-          <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')"
-                  [class.active]="currentStyles['color-red']">R
-          </button>
-          <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')"
-                  [class.active]="currentStyles['color-green']">G
-          </button>
-          <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')"
-                  [class.active]="currentStyles['color-black']">Bl
-          </button>
-          <button mat-mini-fab class="btn_li" (click)="toggleStyle('insertUnorderedList')" [class.active]="currentStyles['li']">Li</button>
-          <button mat-mini-fab (click)="insertImage()">🖼️</button>
-          <button mat-mini-fab (click)="triggerFileInput()">📂</button>
-          <button (click)="toggleStyle('pre')">Code</button>
-          <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')"
-                  [class.active-highlight]="currentClasses['highlight']">AС
+          <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')" [class.active]="currentStyles['bold']">
+            <mat-icon>format_bold</mat-icon>
           </button>
           <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline', 'active-underline')"
-                  [class.active-underline]="currentClasses['underline']">U
+                  [class.active-underline]="currentClasses['underline']">
+            <mat-icon> format_underlined</mat-icon>
           </button>
+          <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')"
+                  [class.active]="currentStyles['italic']">
+            <mat-icon> format_italic</mat-icon>
+          </button>
+          <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')"
+                  [class.active]="currentStyles['color-red']">
+            <mat-icon>format_color_text</mat-icon>
+          </button>
+          <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')"
+                  [class.active]="currentStyles['color-green']">
+            <mat-icon>format_color_text</mat-icon>
+          </button>
+          <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')"
+                  [class.active]="currentStyles['color-black']">
+            <mat-icon>format_color_text</mat-icon>
+          </button>
+          <button mat-mini-fab class="btn_li" (click)="toggleStyle('insertUnorderedList')"
+                  [class.active]="currentStyles['li']">
+            <mat-icon> format_list_bulleted</mat-icon>
+          </button>
+          <button mat-mini-fab (click)="insertImage()">
+            <mat-icon>image_search</mat-icon>
+          </button>
+          <button mat-mini-fab (click)="triggerFileInput()">
+            <mat-icon>add_photo_alternate</mat-icon>
+          </button>
+          <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')"
+                  [class.active-highlight]="currentClasses['highlight']">
+            <mat-icon> format_color_fill</mat-icon>
+          </button>
+
 
         </div>
       </div>
@@ -95,7 +105,7 @@
               Предусловия
             </mat-checkbox>
           </div>
-          <div #editorPreConditionContainer >
+          <div #editorPreConditionContainer>
             <div *ngFor="let preCondition of preConditions; let i = index"
 
                  class="editor-item"
