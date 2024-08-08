@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {
   TestCase,
   TestCaseData,
@@ -54,9 +54,11 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   @ViewChild('editorStepContainer', { static: true }) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('editorPostConditionContainer', { static: true }) editorPostConditionContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
+  @ViewChild('actionEditor') actionEditor!: ElementRef;
 
   //////////////////////////////////////////////////////////////////
-
+  elementWidth!: number;
+  private resizeObserver!: ResizeObserver;
 
 
 
@@ -276,6 +278,42 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     //     this.renderer.listen(editorContainerElement, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
     //   }
     // });
+    // Инициализация ResizeObserver для отслеживания изменений размеров элемента
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (let entry of entries) {
+        this.elementWidth = entry.contentRect.width;
+        console.log('Новая ширина элемента:', this.elementWidth);
+      }
+    });
+
+    if(this.actionEditor?.nativeElement){
+      this.resizeObserver.observe(this.actionEditor.nativeElement);
+    }
+    // Подписка на изменения размеров элемента
+
+
+    // Установка начального значения
+    this.updateElementWidth();
+  }
+
+  // Обработчик события изменения размера окна
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.updateElementWidth();
+  }
+
+  private updateElementWidth() {
+    if (this.actionEditor) {
+      this.elementWidth = this.actionEditor.nativeElement.offsetWidth;
+    }
+    console.log('Ширина элемента:', this.elementWidth);
+  }
+
+  ngOnDestroy() {
+    // Отписка от наблюдателя при уничтожении компонента
+    if (this.actionEditor) {
+      this.resizeObserver.unobserve(this.actionEditor.nativeElement);
+    }
   }
 
   addPasteEventListenerToPreConditionEditors(editors: any[]) {
@@ -973,27 +1011,113 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
       const reader = new FileReader();
 
       reader.onload = (e) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'resizable';
+        wrapper.contentEditable = 'false';
+        wrapper.style.maxWidth = String(this.actionEditor.nativeElement.width as number - 10);
+
         const img = document.createElement('img');
         img.src = e.target?.result as string;
-        img.style.maxWidth = '100%'; // Сделать изображение адаптивным
         img.alt = 'Uploaded image';
 
-        this.saveSelection(); // Сохранить текущее выделение текста
-        this.savedRange!.insertNode(img); // Вставить изображение на место каретки
-        this.savedRange!.setStartAfter(img);
-        this.savedRange!.collapse(true);
+        img.addEventListener('load', () => {
+          const imgRatio = img.naturalWidth / img.naturalHeight;
+          let imgWidth = img.naturalWidth;
+          let imgHeight = img.naturalHeight;
 
-        this.restoreSelection(); // Восстановить выделение
-        this.activeEditor!.focus(); // Вернуть фокус на активный редактор
-        this.updateButtonStyles(); // Обновить стили кнопок
+          const inputWidth = this.elementWidth as number - 10;
+          if (imgWidth > inputWidth) {
+            imgWidth = inputWidth;
+            imgHeight = imgWidth / imgRatio;
+          }
+
+          wrapper.style.width = `${imgWidth}px`;
+          wrapper.style.height = `${imgHeight}px`;
+
+          img.style.width = '100%';
+          img.style.height = '100%';
+          img.style.objectFit = 'contain';
+
+          wrapper.appendChild(img);
+
+          // Создаем span для каретки
+          const caretPositionSpan = document.createElement('span');
+          caretPositionSpan.innerHTML = '<br>';
+
+          this.saveSelection();
+          this.savedRange!.insertNode(wrapper);
+          this.savedRange!.insertNode(caretPositionSpan);
+          this.savedRange!.setStartAfter(caretPositionSpan);
+          this.savedRange!.collapse(true);
+
+          const range = document.createRange();
+          range.setStart(caretPositionSpan, 0);
+          range.setEnd(caretPositionSpan, 0);
+
+          const selection = window.getSelection();
+          if (selection) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
+
+          this.restoreSelection();
+          this.activeEditor!.focus();
+          this.updateButtonStyles();
+
+          this.addResizeFunctionality(wrapper, img, inputWidth);
+        });
       };
-
-      reader.readAsDataURL(file); // Чтение изображения как Data URL
+      reader.readAsDataURL(file);
     }
-// Сбросить значение инпута, чтобы одно и то же изображение можно было загрузить повторно
+
     input.value = '';
   }
 
+  addResizeFunctionality(wrapper: HTMLElement, img: HTMLImageElement, maxWidth: number) {
+    console.log('addResizeFunctionality');
+    const aspectRatio = img.naturalWidth / img.naturalHeight; // Соотношение сторон изображения
+
+    wrapper.style.resize = 'both'; // Разрешаем изменение размера как по ширине, так и по высоте
+    wrapper.style.overflow = 'hidden'; // Скрываем переполнение
+
+    const mouseMoveHandler = (event: MouseEvent) => {
+      const rect = wrapper.getBoundingClientRect();
+      let newWidth = rect.width + (event.clientX - rect.right);
+      let newHeight = rect.height + (event.clientY - rect.bottom);
+
+      // Сохраняем пропорции изображения
+      if (newWidth / aspectRatio >= newHeight) {
+        newHeight = newWidth / aspectRatio;
+      } else {
+        newWidth = newHeight * aspectRatio;
+      }
+
+      // Ограничиваем максимальную ширину div шириной инпута
+      newWidth = Math.min(newWidth, maxWidth);
+
+      // Устанавливаем новый размер wrapper
+      wrapper.style.width = `${newWidth}px`;
+      wrapper.style.height = `${newHeight}px`;
+
+      // Растягиваем изображение внутри wrapper с сохранением пропорций
+      img.style.width = '100%';
+      img.style.height = '100%';
+    };
+
+    const mouseUpHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    };
+
+    wrapper.addEventListener('mousedown', (event: MouseEvent) => {
+      if (event.target === wrapper) {
+        event.preventDefault();
+
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      }
+    });
+  }
 
 
 }

@@ -617,10 +617,28 @@ export class EditorComponent implements AfterViewInit {
         img.src = e.target?.result as string;
         img.alt = 'Uploaded image';
 
-        // Обеспечиваем растягивание изображения внутри div с сохранением пропорций
+        // Получаем ширину инпута (родительского элемента)
+        const inputWidth = this.activeEditor!.clientWidth;
+        console.log(inputWidth);
+
+        // Определяем размеры изображения
+        const imgRatio = img.naturalWidth / img.naturalHeight;
+        let imgWidth = img.naturalWidth;
+        let imgHeight = img.naturalHeight;
+
+        // Если изображение шире инпута, уменьшаем его до ширины инпута
+        if (imgWidth > inputWidth) {
+          imgWidth = inputWidth;
+          imgHeight = imgWidth / imgRatio;
+        }
+
+        wrapper.style.width = `${imgWidth}px`;
+        wrapper.style.height = `${imgHeight}px`;
+
+        // Устанавливаем размеры изображения в div с сохранением пропорций
         img.style.width = '100%';
         img.style.height = '100%';
-        img.style.objectFit = 'contain'; // Сохраняем пропорции изображения при изменении размера div
+        img.style.objectFit = 'contain'; // Сохраняем пропорции изображения
 
         wrapper.appendChild(img);
 
@@ -650,7 +668,7 @@ export class EditorComponent implements AfterViewInit {
         this.updateButtonStyles();
 
         // Добавляем возможность изменения размера div
-        this.addResizeFunctionality(wrapper, img);
+        this.addResizeFunctionality(wrapper, img, inputWidth);
       };
 
       reader.readAsDataURL(file);
@@ -659,7 +677,7 @@ export class EditorComponent implements AfterViewInit {
     input.value = '';
   }
 
-  addResizeFunctionality(wrapper: HTMLElement, img: HTMLImageElement) {
+  addResizeFunctionality(wrapper: HTMLElement, img: HTMLImageElement, maxWidth: number) {
     const aspectRatio = img.naturalWidth / img.naturalHeight; // Соотношение сторон изображения
 
     wrapper.style.resize = 'both'; // Разрешаем изменение размера как по ширине, так и по высоте
@@ -676,6 +694,9 @@ export class EditorComponent implements AfterViewInit {
       } else {
         newWidth = newHeight * aspectRatio;
       }
+
+      // Ограничиваем максимальную ширину div шириной инпута
+      newWidth = Math.min(newWidth, maxWidth);
 
       // Устанавливаем новый размер wrapper
       wrapper.style.width = `${newWidth}px`;
