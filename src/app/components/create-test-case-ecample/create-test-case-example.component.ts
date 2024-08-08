@@ -50,17 +50,15 @@ import {MatInput} from "@angular/material/input";
 })
 export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  @ViewChild('editorPreConditionContainer', { static: true }) editorPreConditionContainer: ElementRef<HTMLDivElement> | undefined;
-  @ViewChild('editorStepContainer', { static: true }) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
-  @ViewChild('editorPostConditionContainer', { static: true }) editorPostConditionContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editorPreConditionContainer', {static: true}) editorPreConditionContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editorStepContainer', {static: true}) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editorPostConditionContainer', {static: true}) editorPostConditionContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
   @ViewChild('actionEditor') actionEditor!: ElementRef;
 
   //////////////////////////////////////////////////////////////////
   elementWidth!: number;
   private resizeObserver!: ResizeObserver;
-
-
 
 
   // Массив редакторов, представляющий количество редакторов
@@ -137,7 +135,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   protected automationFlag: 'auto' | 'manual' | null = null;
   protected executionTime: string | null = '00:00';
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
-  counter = this.preConditions.length +1;
+  counter = this.preConditions.length + 1;
   private data: TestCaseData = {
     status: this.status,
     automationFlag: this.automationFlag,
@@ -286,7 +284,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
       }
     });
 
-    if(this.actionEditor?.nativeElement){
+    if (this.actionEditor?.nativeElement) {
       this.resizeObserver.observe(this.actionEditor.nativeElement);
     }
     // Подписка на изменения размеров элемента
@@ -357,6 +355,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   handlePaste(event: ClipboardEvent) {
     console.log('handle paste was executed!!!')
     event.preventDefault();
@@ -372,6 +371,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
       }
     }
   }
+
   toggleSidenav() {
     this.sidenav.toggle();
   }
@@ -527,16 +527,15 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   // Устанавливает активный редактор при его фокусировке
 
 
-
   // Метод жизненного цикла Angular, вызывается после инициализации представления
 
 
-  show(){
+  show() {
     console.log(this.preConditions);
     this.add();
   }
 
-  add(){
+  add() {
     const precondition: TestCasePreCondition = {
       id: this.counter,
       selected: false,
@@ -545,6 +544,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     }
     this.preConditions.push(precondition);
   }
+
   // Устанавливает активный редактор при его фокусировке
   setActiveEditor(event: FocusEvent) {
     this.activeEditor = event.target as HTMLElement;
@@ -578,7 +578,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
       this.toggleColor(value);
     } else if (style === 'bold' || style === 'italic') {
       this.toggleTextStyle(style);
-    }else if (style === 'insertUnorderedList') {
+    } else if (style === 'insertUnorderedList') {
       this.insertUnorderedList();
     }
 
@@ -899,18 +899,21 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
     return editors[editorIndex] as HTMLElement || null;
   }
+
   getStepEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
     if (!this.editorStepContainer) return null;
     const editors = this.editorStepContainer.nativeElement.querySelectorAll('.editor');
     const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
-    return editors[editorIndex] as HTMLElement || null;  }
+    return editors[editorIndex] as HTMLElement || null;
+  }
 
   getPostConditionEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
 
     if (!this.editorPostConditionContainer) return null;
     const editors = this.editorPostConditionContainer.nativeElement.querySelectorAll('.editor');
     const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
-    return editors[editorIndex] as HTMLElement || null;  }
+    return editors[editorIndex] as HTMLElement || null;
+  }
 
   insertUnorderedList() {
     if (!this.activeEditor) return;
@@ -1004,69 +1007,77 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   triggerFileInput() {
     this.fileInput?.nativeElement.click(); // Триггер для открытия диалогового окна выбора файла
   }
+
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
+
       const file = input.files[0];
       const reader = new FileReader();
 
       reader.onload = (e) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'resizable';
-        wrapper.contentEditable = 'false';
-        wrapper.style.maxWidth = String(this.actionEditor.nativeElement.width as number - 10);
+        wrapper.contentEditable = 'false'; // Запрещаем редактирование
 
         const img = document.createElement('img');
         img.src = e.target?.result as string;
         img.alt = 'Uploaded image';
 
-        img.addEventListener('load', () => {
-          const imgRatio = img.naturalWidth / img.naturalHeight;
-          let imgWidth = img.naturalWidth;
-          let imgHeight = img.naturalHeight;
+        // Получаем ширину инпута (родительского элемента)
+        const inputWidth = this.activeEditor!.clientWidth;
+        console.log(inputWidth);
 
-          const inputWidth = this.elementWidth as number - 10;
-          if (imgWidth > inputWidth) {
-            imgWidth = inputWidth;
-            imgHeight = imgWidth / imgRatio;
-          }
+        // Определяем размеры изображения
+        const imgRatio = img.naturalWidth / img.naturalHeight;
+        let imgWidth = img.naturalWidth;
+        let imgHeight = img.naturalHeight;
 
-          wrapper.style.width = `${imgWidth}px`;
-          wrapper.style.height = `${imgHeight}px`;
+        // Если изображение шире инпута, уменьшаем его до ширины инпута
+        if (imgWidth > inputWidth) {
+          imgWidth = inputWidth;
+          imgHeight = imgWidth / imgRatio;
+        }
 
-          img.style.width = '100%';
-          img.style.height = '100%';
-          img.style.objectFit = 'contain';
+        wrapper.style.width = `${imgWidth}px`;
+        wrapper.style.height = `${imgHeight}px`;
 
-          wrapper.appendChild(img);
+        // Устанавливаем размеры изображения в div с сохранением пропорций
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'contain'; // Сохраняем пропорции изображения
 
-          // Создаем span для каретки
-          const caretPositionSpan = document.createElement('span');
-          caretPositionSpan.innerHTML = '<br>';
+        wrapper.appendChild(img);
 
-          this.saveSelection();
-          this.savedRange!.insertNode(wrapper);
-          this.savedRange!.insertNode(caretPositionSpan);
-          this.savedRange!.setStartAfter(caretPositionSpan);
-          this.savedRange!.collapse(true);
+        // Создаем новый span под div для установки каретки
+        const caretPositionSpan = document.createElement('span');
+        caretPositionSpan.innerHTML = '<br>'; // создаем разрыв строки для видимости
 
-          const range = document.createRange();
-          range.setStart(caretPositionSpan, 0);
-          range.setEnd(caretPositionSpan, 0);
+        this.saveSelection();
+        this.savedRange!.insertNode(wrapper);
+        this.savedRange!.insertNode(caretPositionSpan);
+        this.savedRange!.setStartAfter(caretPositionSpan);
+        this.savedRange!.collapse(true);
 
-          const selection = window.getSelection();
-          if (selection) {
-            selection.removeAllRanges();
-            selection.addRange(range);
-          }
+        // Перемещаем каретку в span
+        const range = document.createRange();
+        range.setStart(caretPositionSpan, 0);
+        range.setEnd(caretPositionSpan, 0);
 
-          this.restoreSelection();
-          this.activeEditor!.focus();
-          this.updateButtonStyles();
+        const selection = window.getSelection();
+        if (selection) {
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
 
-          this.addResizeFunctionality(wrapper, img, inputWidth);
-        });
+        this.restoreSelection();
+        this.activeEditor!.focus();
+        this.updateButtonStyles();
+
+        // Добавляем возможность изменения размера div
+        this.addResizeFunctionality(wrapper, img, inputWidth);
       };
+
       reader.readAsDataURL(file);
     }
 
@@ -1074,7 +1085,6 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   addResizeFunctionality(wrapper: HTMLElement, img: HTMLImageElement, maxWidth: number) {
-    console.log('addResizeFunctionality');
     const aspectRatio = img.naturalWidth / img.naturalHeight; // Соотношение сторон изображения
 
     wrapper.style.resize = 'both'; // Разрешаем изменение размера как по ширине, так и по высоте
