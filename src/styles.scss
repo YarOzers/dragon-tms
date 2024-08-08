@@ -108,3 +108,40 @@ body {
 .active-underline{
   background-color: #6a7080;
 }
+
+
+
+
+.resizable {
+  display: inline-block;
+  position: relative;
+}
+
+.resizable img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.resizable .resize-handle {
+  content: '';
+  position: absolute;
+  min-width: 15px;
+  min-height: 15px;
+  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
+  right: 0;
+  bottom: 0;
+  cursor: se-resize; /* Курсор для изменения размера */
+  z-index: 1000; /* Поверх всех других элементов */
+}
+
+span.resize-handle {
+  position: absolute;
+  min-width: 15px;
+  min-height: 15px;
+  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
+  right: 0;
+  bottom: 0;
+  cursor: se-resize; /* Курсор для изменения размера */
+  z-index: 1000; /* Поверх всех других элементов */
+}

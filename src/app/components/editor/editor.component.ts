@@ -609,24 +609,70 @@ export class EditorComponent implements AfterViewInit {
       const reader = new FileReader();
 
       reader.onload = (e) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'resizable';
+
         const img = document.createElement('img');
         img.src = e.target?.result as string;
-        img.style.maxWidth = '100%'; // Сделать изображение адаптивным
         img.alt = 'Uploaded image';
 
-        this.saveSelection(); // Сохранить текущее выделение текста
-        this.savedRange!.insertNode(img); // Вставить изображение на место каретки
-        this.savedRange!.setStartAfter(img);
+        // Создаем элемент управления для изменения размера
+        const resizeHandle = document.createElement('span');
+        resizeHandle.className = 'resize-handle';
+
+        // Добавляем изображение и элемент управления в wrapper
+        wrapper.appendChild(img);
+        wrapper.appendChild(resizeHandle);
+
+        this.saveSelection();
+        this.savedRange!.insertNode(wrapper);
+        this.savedRange!.setStartAfter(wrapper);
         this.savedRange!.collapse(true);
 
-        this.restoreSelection(); // Восстановить выделение
-        this.activeEditor!.focus(); // Вернуть фокус на активный редактор
-        this.updateButtonStyles(); // Обновить стили кнопок
+        this.restoreSelection();
+        this.activeEditor!.focus();
+        this.updateButtonStyles();
+
+        this.addResizeFunctionality(wrapper); // Добавление функционала для изменения размера
       };
 
-      reader.readAsDataURL(file); // Чтение изображения как Data URL
+      reader.readAsDataURL(file);
     }
-// Сбросить значение инпута, чтобы одно и то же изображение можно было загрузить повторно
+
     input.value = '';
+  }
+
+  addResizeFunctionality(wrapper: HTMLElement) {
+    const resizeHandle = wrapper.querySelector('.resize-handle') as HTMLElement;
+
+    let startX: number;
+    let startY: number;
+    let startWidth: number;
+    let startHeight: number;
+
+    const img = wrapper.querySelector('img') as HTMLImageElement;
+
+    const mouseMoveHandler = (event: MouseEvent) => {
+      const newWidth = startWidth + (event.clientX - startX);
+      img.style.width = `${newWidth}px`;
+      img.style.height = 'auto'; // Сохранение пропорций
+    };
+
+    const mouseUpHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler);
+      document.removeEventListener('mouseup', mouseUpHandler);
+    };
+
+    resizeHandle.addEventListener('mousedown', (event: MouseEvent) => {
+      event.preventDefault();
+
+      startX = event.clientX;
+      startY = event.clientY;
+      startWidth = img.clientWidth;
+      startHeight = img.clientHeight;
+
+      document.addEventListener('mousemove', mouseMoveHandler);
+      document.addEventListener('mouseup', mouseUpHandler);
+    });
   }
 }
