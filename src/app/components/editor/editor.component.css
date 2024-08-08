@@ -81,33 +81,13 @@ button.active.btn_black {
 
 .resizable {
   display: inline-block;
-  position: relative;
+  resize: both; /* Позволяет изменять размер и по ширине, и по высоте */
+  overflow: auto; /* Чтобы содержимое могло "переливаться" при изменении размера */
+  border: 1px solid #ccc; /* Границы, чтобы было видно, что div можно изменять */
+  padding: 5px;
 }
 
 .resizable img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-.resizable .resize-handle {
-  position: absolute;
-  min-width: 15px;
-  min-height: 15px;
-  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
-  right: 0;
-  bottom: 0;
-  cursor: se-resize; /* Курсор для изменения размера */
-  z-index: 1000; /* Поверх всех других элементов */
-}
-
-span.resize-handle {
-  position: absolute;
-  min-width: 15px;
-  min-height: 15px;
-  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
-  right: 0;
-  bottom: 0;
-  cursor: se-resize; /* Курсор для изменения размера */
-  z-index: 1000; /* Поверх всех других элементов */
+  max-width: 100%; /* Изображение будет подстраиваться под размер родителя */
+  height: auto; /* Сохраняем пропорции */
 }

@@ -611,29 +611,46 @@ export class EditorComponent implements AfterViewInit {
       reader.onload = (e) => {
         const wrapper = document.createElement('div');
         wrapper.className = 'resizable';
+        wrapper.contentEditable = 'false'; // Запрещаем редактирование
 
         const img = document.createElement('img');
         img.src = e.target?.result as string;
         img.alt = 'Uploaded image';
 
-        // Создаем элемент управления для изменения размера
-        const resizeHandle = document.createElement('span');
-        resizeHandle.className = 'resize-handle';
+        // Обеспечиваем растягивание изображения внутри div с сохранением пропорций
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'contain'; // Сохраняем пропорции изображения при изменении размера div
 
-        // Добавляем изображение и элемент управления в wrapper
         wrapper.appendChild(img);
-        wrapper.appendChild(resizeHandle);
+
+        // Создаем новый span под div для установки каретки
+        const caretPositionSpan = document.createElement('span');
+        caretPositionSpan.innerHTML = '<br>'; // создаем разрыв строки для видимости
 
         this.saveSelection();
         this.savedRange!.insertNode(wrapper);
-        this.savedRange!.setStartAfter(wrapper);
+        this.savedRange!.insertNode(caretPositionSpan);
+        this.savedRange!.setStartAfter(caretPositionSpan);
         this.savedRange!.collapse(true);
+
+        // Перемещаем каретку в span
+        const range = document.createRange();
+        range.setStart(caretPositionSpan, 0);
+        range.setEnd(caretPositionSpan, 0);
+
+        const selection = window.getSelection();
+        if (selection) {
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
 
         this.restoreSelection();
         this.activeEditor!.focus();
         this.updateButtonStyles();
 
-        this.addResizeFunctionality(wrapper); // Добавление функционала для изменения размера
+        // Добавляем возможность изменения размера div
+        this.addResizeFunctionality(wrapper, img);
       };
 
       reader.readAsDataURL(file);
@@ -642,20 +659,31 @@ export class EditorComponent implements AfterViewInit {
     input.value = '';
   }
 
-  addResizeFunctionality(wrapper: HTMLElement) {
-    const resizeHandle = wrapper.querySelector('.resize-handle') as HTMLElement;
+  addResizeFunctionality(wrapper: HTMLElement, img: HTMLImageElement) {
+    const aspectRatio = img.naturalWidth / img.naturalHeight; // Соотношение сторон изображения
 
-    let startX: number;
-    let startY: number;
-    let startWidth: number;
-    let startHeight: number;
-
-    const img = wrapper.querySelector('img') as HTMLImageElement;
+    wrapper.style.resize = 'both'; // Разрешаем изменение размера как по ширине, так и по высоте
+    wrapper.style.overflow = 'hidden'; // Скрываем переполнение
 
     const mouseMoveHandler = (event: MouseEvent) => {
-      const newWidth = startWidth + (event.clientX - startX);
-      img.style.width = `${newWidth}px`;
-      img.style.height = 'auto'; // Сохранение пропорций
+      const rect = wrapper.getBoundingClientRect();
+      let newWidth = rect.width + (event.clientX - rect.right);
+      let newHeight = rect.height + (event.clientY - rect.bottom);
+
+      // Сохраняем пропорции изображения
+      if (newWidth / aspectRatio >= newHeight) {
+        newHeight = newWidth / aspectRatio;
+      } else {
+        newWidth = newHeight * aspectRatio;
+      }
+
+      // Устанавливаем новый размер wrapper
+      wrapper.style.width = `${newWidth}px`;
+      wrapper.style.height = `${newHeight}px`;
+
+      // Растягиваем изображение внутри wrapper с сохранением пропорций
+      img.style.width = '100%';
+      img.style.height = '100%';
     };
 
     const mouseUpHandler = () => {
@@ -663,16 +691,14 @@ export class EditorComponent implements AfterViewInit {
       document.removeEventListener('mouseup', mouseUpHandler);
     };
 
-    resizeHandle.addEventListener('mousedown', (event: MouseEvent) => {
-      event.preventDefault();
+    wrapper.addEventListener('mousedown', (event: MouseEvent) => {
+      if (event.target === wrapper) {
+        event.preventDefault();
 
-      startX = event.clientX;
-      startY = event.clientY;
-      startWidth = img.clientWidth;
-      startHeight = img.clientHeight;
-
-      document.addEventListener('mousemove', mouseMoveHandler);
-      document.addEventListener('mouseup', mouseUpHandler);
+        document.addEventListener('mousemove', mouseMoveHandler);
+        document.addEventListener('mouseup', mouseUpHandler);
+      }
     });
   }
+
 }
