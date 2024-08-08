@@ -459,15 +459,26 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   autoResize(event: Event, secondEditor: HTMLElement) {
-    console.log('autoResize===============================================')
     const target = event.target as HTMLElement;
 
-    // Обновляем высоту измененного элемента
-    target.style.height = 'auto';
-    target.style.height = `${target.scrollHeight}px`;
+    // Используем requestAnimationFrame для отложенного пересчета размеров
+    requestAnimationFrame(() => {
+      // Сбрасываем высоту перед обновлением
+      target.style.height = 'auto';
 
-    // Выравниваем высоту двух соседних элементов
-    this.equalizeTwoEditorsHeight(target, secondEditor);
+      // Обновляем высоту измененного элемента
+      target.style.height = `${target.scrollHeight}px`;
+
+      // Выравниваем высоту двух соседних элементов
+      this.equalizeTwoEditorsHeight(target, secondEditor);
+
+      // Принудительное обновление размеров родительского контейнера
+      const parentContainer = target.closest('.steps-container') as HTMLElement;
+      if (parentContainer) {
+        parentContainer.style.height = 'auto';
+        parentContainer.style.height = `${Math.max(parentContainer.scrollHeight, target.scrollHeight)}px`;
+      }
+    });
   }
 
   selectAllPreconditions(checked: boolean) {
@@ -542,17 +553,16 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   //////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////
 
-equalizeTwoEditorsHeight(editor1: HTMLElement, editor2: HTMLElement) {
-    // Сбрасываем высоту обоих элементов, чтобы вычислить новую высоту
-    editor1.style.height = 'auto';
-    editor2.style.height = 'auto';
+  equalizeTwoEditorsHeight(editor1: HTMLElement, editor2: HTMLElement) {
+    requestAnimationFrame(() => {
+      editor1.style.height = 'auto';
+      editor2.style.height = 'auto';
 
-    // Вычисляем максимальную высоту среди двух элементов
-    const maxHeight = Math.max(editor1.scrollHeight, editor2.scrollHeight);
+      const maxHeight = Math.max(editor1.scrollHeight, editor2.scrollHeight);
 
-    // Устанавливаем одинаковую высоту для обоих элементов
-    editor1.style.height = `${maxHeight}px`;
-    editor2.style.height = `${maxHeight}px`;
+      editor1.style.height = `${maxHeight}px`;
+      editor2.style.height = `${maxHeight}px`;
+    });
   }
   show() {
     console.log(this.preConditions);
@@ -1042,6 +1052,8 @@ equalizeTwoEditorsHeight(editor1: HTMLElement, editor2: HTMLElement) {
 
       reader.onload = (e) => {
         const wrapper = document.createElement('div');
+        wrapper.style.minHeight = '200px';
+        wrapper.style.minWidth = '200px';
         wrapper.className = 'resizable';
         wrapper.contentEditable = 'false'; // Запрещаем редактирование
 
