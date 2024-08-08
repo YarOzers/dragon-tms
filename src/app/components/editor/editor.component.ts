@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { NgForOf, NgIf } from "@angular/common";
-import { MatMiniFabButton } from "@angular/material/button";
+import {AfterViewInit, Component, ElementRef, Renderer2, ViewChild} from '@angular/core';
+import {NgForOf, NgIf} from "@angular/common";
+import {MatMiniFabButton} from "@angular/material/button";
 import {TestCasePreCondition} from "../../models/test-case";
 import {FormsModule} from "@angular/forms";
 import {ContentEditableValueAccessorDirective} from "./content-editable-value-accessor.directive";
@@ -21,15 +21,16 @@ import {ContentEditableValueAccessorDirective} from "./content-editable-value-ac
 })
 export class EditorComponent implements AfterViewInit {
 
-  @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editorContainer', {static: true}) editorContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
 
   preConditions: TestCasePreCondition[] = [
-    { id: 1, selected: false, action: '', expectedResult: '' },
-    { id: 2, selected: false, action: '', expectedResult: '' },
-    { id: 3, selected: false, action: '', expectedResult: '' }
+    {id: 1, selected: false, action: '', expectedResult: ''},
+    {id: 2, selected: false, action: '', expectedResult: ''},
+    {id: 3, selected: false, action: '', expectedResult: ''}
   ];
 
-  counter = this.preConditions.length +1;
+  counter = this.preConditions.length + 1;
   private preCondition: TestCasePreCondition = {
     id: 1,
     selected: false,
@@ -62,7 +63,8 @@ export class EditorComponent implements AfterViewInit {
   // Сохраненный диапазон выделения текста
   private savedRange: Range | null = null;
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2) {
+  }
 
   // Метод жизненного цикла Angular, вызывается после инициализации представления
   ngAfterViewInit() {
@@ -87,12 +89,12 @@ export class EditorComponent implements AfterViewInit {
     });
   }
 
-  show(){
+  show() {
     console.log(this.preConditions);
     this.add();
   }
 
-  add(){
+  add() {
     const precondition: TestCasePreCondition = {
       id: this.counter,
       selected: false,
@@ -101,6 +103,7 @@ export class EditorComponent implements AfterViewInit {
     }
     this.preConditions.push(precondition);
   }
+
   // Устанавливает активный редактор при его фокусировке
   setActiveEditor(event: FocusEvent) {
     this.activeEditor = event.target as HTMLElement;
@@ -134,9 +137,9 @@ export class EditorComponent implements AfterViewInit {
       this.toggleColor(value);
     } else if (style === 'bold' || style === 'italic') {
       this.toggleTextStyle(style);
-    }  else if (style === 'insertUnorderedList') {
-  this.insertUnorderedList();
-}
+    } else if (style === 'insertUnorderedList') {
+      this.insertUnorderedList();
+    }
 
     this.restoreSelection(); // Восстановить выделение
     this.activeEditor.focus(); // Вернуть фокус на активный редактор
@@ -388,7 +391,7 @@ export class EditorComponent implements AfterViewInit {
   }
 
   // Вставка изображения по URL
-  insertImage() {
+  insertImageFromUrl() {
     const url = prompt('Enter image URL', '');
     if (url) {
       document.execCommand('insertImage', false, url);
@@ -520,5 +523,110 @@ export class EditorComponent implements AfterViewInit {
 
     // Ensure the editor is focused after the range is updated
     this.activeEditor.focus();
+  }
+
+  insertImage() {
+    if (!this.activeEditor) return;
+
+    const url = prompt('Enter image URL', '');
+    if (url) {
+      this.saveSelection(); // Сохранить текущее выделение текста
+
+      // Вставить изображение на позицию каретки
+      const img = document.createElement('img');
+      img.src = url;
+      img.style.maxWidth = '100%'; // Сделать изображение адаптивным
+      img.alt = 'User provided image';
+
+      this.savedRange!.insertNode(img); // Вставить изображение на место каретки
+      this.savedRange!.setStartAfter(img);
+      this.savedRange!.collapse(true);
+
+      this.restoreSelection(); // Восстановить выделение
+      this.activeEditor!.focus(); // Вернуть фокус на активный редактор
+      this.updateButtonStyles(); // Обновить стили кнопок
+    }
+  }
+
+  handleDrop(event: DragEvent) {
+    event.preventDefault();
+    const dataTransfer = event.dataTransfer;
+    if (dataTransfer && dataTransfer.files && dataTransfer.files[0]) {
+      const file = dataTransfer.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.maxWidth = '100%';
+        this.insertImageIntoEditor(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  insertImageIntoEditor(image: HTMLImageElement) {
+    const selection = window.getSelection();
+    if (selection) {
+      if (!selection.rangeCount) return;
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(image);
+      selection.collapseToEnd();
+    }
+
+  }
+
+  handleDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  // Функция для обработки выбранного файла
+  handleFileInput(event: Event, index: number, type: string) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = '100%';
+          this.insertImageIntoEditor(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  }
+
+  triggerFileInput() {
+    this.fileInput?.nativeElement.click(); // Триггер для открытия диалогового окна выбора файла
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.src = e.target?.result as string;
+        img.style.maxWidth = '100%'; // Сделать изображение адаптивным
+        img.alt = 'Uploaded image';
+
+        this.saveSelection(); // Сохранить текущее выделение текста
+        this.savedRange!.insertNode(img); // Вставить изображение на место каретки
+        this.savedRange!.setStartAfter(img);
+        this.savedRange!.collapse(true);
+
+        this.restoreSelection(); // Восстановить выделение
+        this.activeEditor!.focus(); // Вернуть фокус на активный редактор
+        this.updateButtonStyles(); // Обновить стили кнопок
+      };
+
+      reader.readAsDataURL(file); // Чтение изображения как Data URL
+    }
+// Сбросить значение инпута, чтобы одно и то же изображение можно было загрузить повторно
+    input.value = '';
   }
 }

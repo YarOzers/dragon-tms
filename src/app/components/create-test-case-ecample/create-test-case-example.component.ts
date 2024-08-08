@@ -53,6 +53,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   @ViewChild('editorPreConditionContainer', { static: true }) editorPreConditionContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('editorStepContainer', { static: true }) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('editorPostConditionContainer', { static: true }) editorPostConditionContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
 
   //////////////////////////////////////////////////////////////////
 
@@ -929,6 +930,71 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     // Ensure the editor is focused after the range is updated
     this.activeEditor.focus();
   }
+
+  handleDrop(event: DragEvent) {
+    event.preventDefault();
+    const dataTransfer = event.dataTransfer;
+    if (dataTransfer && dataTransfer.files && dataTransfer.files[0]) {
+      const file = dataTransfer.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.style.maxWidth = '100%';
+        this.insertImageIntoEditor(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  insertImageIntoEditor(image: HTMLImageElement) {
+    const selection = window.getSelection();
+    if (selection) {
+      if (!selection.rangeCount) return;
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(image);
+      selection.collapseToEnd();
+    }
+
+  }
+
+  handleDragOver(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  triggerFileInput() {
+    this.fileInput?.nativeElement.click(); // Триггер для открытия диалогового окна выбора файла
+  }
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const img = document.createElement('img');
+        img.src = e.target?.result as string;
+        img.style.maxWidth = '100%'; // Сделать изображение адаптивным
+        img.alt = 'Uploaded image';
+
+        this.saveSelection(); // Сохранить текущее выделение текста
+        this.savedRange!.insertNode(img); // Вставить изображение на место каретки
+        this.savedRange!.setStartAfter(img);
+        this.savedRange!.collapse(true);
+
+        this.restoreSelection(); // Восстановить выделение
+        this.activeEditor!.focus(); // Вернуть фокус на активный редактор
+        this.updateButtonStyles(); // Обновить стили кнопок
+      };
+
+      reader.readAsDataURL(file); // Чтение изображения как Data URL
+    }
+// Сбросить значение инпута, чтобы одно и то же изображение можно было загрузить повторно
+    input.value = '';
+  }
+
+
 
 }
 
