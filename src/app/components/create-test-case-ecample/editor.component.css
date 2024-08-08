@@ -40,6 +40,7 @@ mat-sidenav-content {
 
 /* Делаем step-container прокручиваемым */
 .step-container {
+  display: flex;
   flex-grow: 1; /* Заставляем контейнер занимать все оставшееся пространство */
   overflow-y: auto; /* Включаем вертикальную прокрутку */
 }
@@ -63,6 +64,7 @@ mat-sidenav-content {
 }
 
 .editor {
+  flex: 1;
   border-radius: 0;
   border: none;
   border-left: #b9d6ea 1px solid;

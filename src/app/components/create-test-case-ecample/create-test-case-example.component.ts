@@ -357,17 +357,29 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   handlePaste(event: ClipboardEvent) {
-    console.log('handle paste was executed!!!')
-    event.preventDefault();
-    const text = event.clipboardData?.getData('text/plain');
-    if (text && document.activeElement) {
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount > 0) {
-        const range = selection.getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(document.createTextNode(text));
-        selection.removeAllRanges();
-        selection.addRange(range);
+    console.log('handle paste was executed!!!');
+
+    // Сохраняем исходное поведение вставки, если текст воспринимается как код
+    if (event.clipboardData?.types.includes('text/plain')) {
+      event.preventDefault();
+
+      const text = event.clipboardData.getData('text/plain');
+      if (text && document.activeElement) {
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+          const range = selection.getRangeAt(0);
+          range.deleteContents();
+
+          // Вставляем текст как обычный текстовый узел
+          const textNode = document.createTextNode(text);
+          range.insertNode(textNode);
+
+          // Перемещаем курсор за вставленный текст
+          range.setStartAfter(textNode);
+          range.setEndAfter(textNode);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
       }
     }
   }
@@ -446,10 +458,16 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     this.indeterminateSteps = totalSelected > 0 && totalSelected < this.steps.length;
   }
 
-  autoResize(event: Event) {
-    const target = event.target as HTMLTextAreaElement;
+  autoResize(event: Event, secondEditor: HTMLElement) {
+    console.log('autoResize===============================================')
+    const target = event.target as HTMLElement;
+
+    // Обновляем высоту измененного элемента
     target.style.height = 'auto';
-    target.style.height = target.scrollHeight + 'px';
+    target.style.height = `${target.scrollHeight}px`;
+
+    // Выравниваем высоту двух соседних элементов
+    this.equalizeTwoEditorsHeight(target, secondEditor);
   }
 
   selectAllPreconditions(checked: boolean) {
@@ -524,16 +542,23 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   //////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////
 
-  // Устанавливает активный редактор при его фокусировке
+equalizeTwoEditorsHeight(editor1: HTMLElement, editor2: HTMLElement) {
+    // Сбрасываем высоту обоих элементов, чтобы вычислить новую высоту
+    editor1.style.height = 'auto';
+    editor2.style.height = 'auto';
 
+    // Вычисляем максимальную высоту среди двух элементов
+    const maxHeight = Math.max(editor1.scrollHeight, editor2.scrollHeight);
 
-  // Метод жизненного цикла Angular, вызывается после инициализации представления
-
-
+    // Устанавливаем одинаковую высоту для обоих элементов
+    editor1.style.height = `${maxHeight}px`;
+    editor2.style.height = `${maxHeight}px`;
+  }
   show() {
     console.log(this.preConditions);
     this.add();
   }
+
 
   add() {
     const precondition: TestCasePreCondition = {
