@@ -73,7 +73,7 @@
           <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')"
                   [class.active]="currentStyles['color-black']">Bl
           </button>
-          <button (click)="toggleStyle('insertUnorderedList')">• List</button>
+          <button mat-mini-fab class="btn_li" (click)="toggleStyle('insertUnorderedList')" [class.active]="currentStyles['li']">Li</button>
           <button (click)="insertImage()">Image</button>
           <button (click)="toggleStyle('pre')">Code</button>
           <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')"

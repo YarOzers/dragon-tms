@@ -29,7 +29,6 @@ button {
   border: none;
   border-left: #b9d6ea 1px solid;
   border-bottom: #b9d6ea 1px solid;
-  overflow: auto;
 }
 
 button.active.btn_bold {
@@ -43,6 +42,11 @@ button.active.btn_italic {
 }
 
 button.active.btn_underline {
+  background-color: #a1a1bd;
+  text-decoration: underline;
+}
+
+button.active.btn_li {
   background-color: #a1a1bd;
   text-decoration: underline;
 }
