@@ -29,6 +29,7 @@ button {
   border: none;
   border-left: #b9d6ea 1px solid;
   border-bottom: #b9d6ea 1px solid;
+  overflow: auto;
 }
 
 button.active.btn_bold {

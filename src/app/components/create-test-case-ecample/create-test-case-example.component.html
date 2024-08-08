@@ -94,7 +94,7 @@
               Предусловия
             </mat-checkbox>
           </div>
-          <div #editorContainer>
+          <div #editorPreConditionContainer >
             <div *ngFor="let preCondition of preConditions; let i = index"
 
                  class="editor-item"
@@ -139,7 +139,7 @@
               Шаги
             </mat-checkbox>
           </div>
-          <div>
+          <div #editorStepContainer>
             <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
               <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
               </mat-checkbox>
@@ -179,7 +179,7 @@
               Постусловия
             </mat-checkbox>
           </div>
-          <div>
+          <div #editorPostConditionContainer>
             <div *ngFor="let postCondition of postConditions; let i = index" class="editor-item" fxLayout="row">
               <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
                             fxFlex="6">

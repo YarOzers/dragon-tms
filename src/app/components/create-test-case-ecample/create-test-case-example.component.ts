@@ -50,7 +50,9 @@ import {MatInput} from "@angular/material/input";
 })
 export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
-  @ViewChild('editorContainer', { static: true }) editorContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editorPreConditionContainer', { static: true }) editorPreConditionContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editorStepContainer', { static: true }) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
+  @ViewChild('editorPostConditionContainer', { static: true }) editorPostConditionContainer: ElementRef<HTMLDivElement> | undefined;
 
   //////////////////////////////////////////////////////////////////
 
@@ -173,8 +175,8 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     setTimeout(() => {
       this.preConditions.forEach((preCondition, index) => {
-        const actionEditor = this.getEditorByIndex(index, 'action');
-        const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+        const actionEditor = this.getEditorPreConditionByIndex(index, 'action');
+        const expectedResultEditor = this.getEditorPreConditionByIndex(index, 'expectedResult');
         if (actionEditor) {
           this.setHtmlContent(actionEditor, preCondition.action || '');
         }
@@ -182,18 +184,11 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
           this.setHtmlContent(expectedResultEditor, preCondition.expectedResult || '');
         }
       });
+      this.addPasteEventListenerToPreConditionEditors(this.preConditions);
 
-      const editorContainerElement = this.editorContainer?.nativeElement;
-      if (editorContainerElement) {
-        this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
-        this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
-        this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
-      }
-    });
-    setTimeout(() => {
       this.steps.forEach((step, index) => {
-        const actionEditor = this.getEditorByIndex(index, 'action');
-        const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+        const actionEditor = this.getStepEditorByIndex(index, 'action');
+        const expectedResultEditor = this.getStepEditorByIndex(index, 'expectedResult');
         if (actionEditor) {
           this.setHtmlContent(actionEditor, step.action || '');
         }
@@ -201,19 +196,10 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
           this.setHtmlContent(expectedResultEditor, step.expectedResult || '');
         }
       });
-
-      const editorContainerElement = this.editorContainer?.nativeElement;
-      if (editorContainerElement) {
-        this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
-        this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
-        this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
-      }
-    });
-
-    setTimeout(() => {
+      this.addPasteEventListenerToStepEditors(this.steps);
       this.postConditions.forEach((postCondition, index) => {
-        const actionEditor = this.getEditorByIndex(index, 'action');
-        const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+        const actionEditor = this.getPostConditionEditorByIndex(index, 'action');
+        const expectedResultEditor = this.getPostConditionEditorByIndex(index, 'expectedResult');
         if (actionEditor) {
           this.setHtmlContent(actionEditor, postCondition.action || '');
         }
@@ -221,16 +207,132 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
           this.setHtmlContent(expectedResultEditor, postCondition.expectedResult || '');
         }
       });
+      this.addPasteEventListenerToPostConditionEditors(this.postConditions);
 
-      const editorContainerElement = this.editorContainer?.nativeElement;
-      if (editorContainerElement) {
-        this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
-        this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
-        this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
+      const editorContainerPreConditionElement = this.editorPreConditionContainer?.nativeElement;
+      if (editorContainerPreConditionElement) {
+        this.renderer.listen(editorContainerPreConditionElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerPreConditionElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerPreConditionElement, 'keyup', () => this.updateButtonStyles());
+
+      }
+
+      const editorContainerStepElement = this.editorPreConditionContainer?.nativeElement;
+      if (editorContainerStepElement) {
+        this.renderer.listen(editorContainerStepElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerStepElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerStepElement, 'keyup', () => this.updateButtonStyles());
+
+      }
+
+      const editorContainerPostConditionElement = this.editorPreConditionContainer?.nativeElement;
+      if (editorContainerPostConditionElement) {
+        this.renderer.listen(editorContainerPostConditionElement, 'input', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerPostConditionElement, 'click', () => this.updateButtonStyles());
+        this.renderer.listen(editorContainerPostConditionElement, 'keyup', () => this.updateButtonStyles());
+
+      }
+    });
+
+    // setTimeout(() => {
+    //   this.steps.forEach((step, index) => {
+    //     const actionEditor = this.getEditorByIndex(index, 'action');
+    //     const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+    //     if (actionEditor) {
+    //       this.setHtmlContent(actionEditor, step.action || '');
+    //     }
+    //     if (expectedResultEditor) {
+    //       this.setHtmlContent(expectedResultEditor, step.expectedResult || '');
+    //     }
+    //   });
+    //
+    //   const editorContainerElement = this.editorContainer?.nativeElement;
+    //   if (editorContainerElement) {
+    //     this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
+    //     this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
+    //     this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
+    //     this.renderer.listen(editorContainerElement, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
+    //   }
+    // });
+    //
+    // setTimeout(() => {
+    //   this.postConditions.forEach((postCondition, index) => {
+    //     const actionEditor = this.getEditorByIndex(index, 'action');
+    //     const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
+    //     if (actionEditor) {
+    //       this.setHtmlContent(actionEditor, postCondition.action || '');
+    //     }
+    //     if (expectedResultEditor) {
+    //       this.setHtmlContent(expectedResultEditor, postCondition.expectedResult || '');
+    //     }
+    //   });
+    //
+    //   const editorContainerElement = this.editorContainer?.nativeElement;
+    //   if (editorContainerElement) {
+    //     this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
+    //     this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
+    //     this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
+    //     this.renderer.listen(editorContainerElement, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
+    //   }
+    // });
+  }
+
+  addPasteEventListenerToPreConditionEditors(editors: any[]) {
+    console.log('addPaseEventListener')
+    editors.forEach((editor, index) => {
+      const actionEditor = this.getEditorPreConditionByIndex(index, 'action');
+      const expectedResultEditor = this.getEditorPreConditionByIndex(index, 'expectedResult');
+      if (actionEditor) {
+        this.renderer.listen(actionEditor, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
+      }
+      if (expectedResultEditor) {
+        this.renderer.listen(expectedResultEditor, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
       }
     });
   }
 
+  addPasteEventListenerToStepEditors(editors: any[]) {
+    console.log('addPaseEventListener')
+    editors.forEach((editor, index) => {
+      const actionEditor = this.getStepEditorByIndex(index, 'action');
+      const expectedResultEditor = this.getStepEditorByIndex(index, 'expectedResult');
+      if (actionEditor) {
+        this.renderer.listen(actionEditor, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
+      }
+      if (expectedResultEditor) {
+        this.renderer.listen(expectedResultEditor, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
+      }
+    });
+  }
+
+  addPasteEventListenerToPostConditionEditors(editors: any[]) {
+    console.log('addPaseEventListener')
+    editors.forEach((editor, index) => {
+      const actionEditor = this.getPostConditionEditorByIndex(index, 'action');
+      const expectedResultEditor = this.getPostConditionEditorByIndex(index, 'expectedResult');
+      if (actionEditor) {
+        this.renderer.listen(actionEditor, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
+      }
+      if (expectedResultEditor) {
+        this.renderer.listen(expectedResultEditor, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
+      }
+    });
+  }
+  handlePaste(event: ClipboardEvent) {
+    console.log('handle paste was executed!!!')
+    event.preventDefault();
+    const text = event.clipboardData?.getData('text/plain');
+    if (text && document.activeElement) {
+      const selection = window.getSelection();
+      if (selection && selection.rangeCount > 0) {
+        const range = selection.getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(document.createTextNode(text));
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
+    }
+  }
   toggleSidenav() {
     this.sidenav.toggle();
   }
@@ -437,6 +539,8 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
       this.toggleColor(value);
     } else if (style === 'bold' || style === 'italic') {
       this.toggleTextStyle(style);
+    }else if (style === 'insertUnorderedList') {
+      this.insertUnorderedList();
     }
 
     this.restoreSelection(); // Восстановить выделение
@@ -750,11 +854,80 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
-    if (!this.editorContainer) return null;
-    const editors = this.editorContainer.nativeElement.querySelectorAll('.editor');
+  getEditorPreConditionByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
+    if (!this.editorPreConditionContainer) return null;
+    const editors = this.editorPreConditionContainer.nativeElement.querySelectorAll('.editor');
     const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
     return editors[editorIndex] as HTMLElement || null;
+  }
+  getStepEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
+    if (!this.editorStepContainer) return null;
+    const editors = this.editorStepContainer.nativeElement.querySelectorAll('.editor');
+    const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
+    return editors[editorIndex] as HTMLElement || null;  }
+
+  getPostConditionEditorByIndex(index: number, field: 'action' | 'expectedResult'): HTMLElement | null {
+
+    if (!this.editorPostConditionContainer) return null;
+    const editors = this.editorPostConditionContainer.nativeElement.querySelectorAll('.editor');
+    const editorIndex = field === 'action' ? index * 2 : index * 2 + 1;
+    return editors[editorIndex] as HTMLElement || null;  }
+
+  insertUnorderedList() {
+    if (!this.activeEditor) return;
+
+    this.saveSelection();
+
+    if (this.savedRange) {
+      const selection = window.getSelection();
+      const node = selection?.anchorNode;
+      const parentNode = node?.parentElement;
+
+      // Проверка, если родительский элемент является списком
+      if (parentNode && parentNode.tagName === 'LI') {
+        // Если курсор находится внутри списка, перемещаем его за список
+        this.insertSpanAfterList(parentNode.closest('ul, ol')!);
+      } else {
+        const ul = document.createElement('ul');
+        const li = document.createElement('li');
+        li.innerHTML = '\u200B'; // Adding a zero-width space to focus on the new li
+        ul.appendChild(li);
+
+        this.savedRange.deleteContents();
+        this.savedRange.insertNode(ul);
+
+        this.savedRange.setStart(li, 0);
+        this.savedRange.setEnd(li, 0);
+        this.savedRange.collapse(true);
+
+        selection!.removeAllRanges();
+        selection!.addRange(this.savedRange);
+
+        this.activeEditor.focus();
+      }
+    }
+  }
+
+  insertSpanAfterList(listElement: Element) {
+    if (!this.activeEditor) return;
+
+    const span = document.createElement('span');
+    span.innerHTML = '\u200B'; // Adding a zero-width space to focus on the new span
+
+    listElement.parentNode!.insertBefore(span, listElement.nextSibling);
+
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.setStart(span, 0);
+    range.setEnd(span, 0);
+    range.collapse(true);
+
+    selection!.removeAllRanges();
+    selection!.addRange(range);
+
+    // Ensure the editor is focused after the range is updated
+    this.activeEditor.focus();
   }
 
 }

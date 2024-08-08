@@ -500,7 +500,7 @@ export class EditorComponent implements AfterViewInit {
     });
   }
 
-  insertSpanAfterList(listElement: HTMLElement) {
+  insertSpanAfterList(listElement: Element) {
     if (!this.activeEditor) return;
 
     const span = document.createElement('span');
