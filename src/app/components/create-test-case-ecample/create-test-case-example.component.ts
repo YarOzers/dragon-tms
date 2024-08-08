@@ -315,7 +315,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   addPasteEventListenerToPreConditionEditors(editors: any[]) {
-    console.log('addPaseEventListener')
+    console.log('addPasteEventListener')
     editors.forEach((editor, index) => {
       const actionEditor = this.getEditorPreConditionByIndex(index, 'action');
       const expectedResultEditor = this.getEditorPreConditionByIndex(index, 'expectedResult');
@@ -329,7 +329,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   addPasteEventListenerToStepEditors(editors: any[]) {
-    console.log('addPaseEventListener')
+    console.log('addPasteEventListener')
     editors.forEach((editor, index) => {
       const actionEditor = this.getStepEditorByIndex(index, 'action');
       const expectedResultEditor = this.getStepEditorByIndex(index, 'expectedResult');
@@ -343,7 +343,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   }
 
   addPasteEventListenerToPostConditionEditors(editors: any[]) {
-    console.log('addPaseEventListener')
+    console.log('addPasteEventListener')
     editors.forEach((editor, index) => {
       const actionEditor = this.getPostConditionEditorByIndex(index, 'action');
       const expectedResultEditor = this.getPostConditionEditorByIndex(index, 'expectedResult');

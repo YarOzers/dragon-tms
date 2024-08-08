@@ -1,9 +1,47 @@
+.header{
+  margin-right: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 button {
   padding: 0;
   font: inherit;
   color: inherit;
   background-color: transparent;
   cursor: pointer;
+}
+
+/* Обеспечиваем, чтобы .sidenav-container учитывал динамические размеры */
+.sidenav-container {
+  position: fixed;
+  top: 60px; /* Высота header */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Для вертикального выравнивания */
+}
+/* Динамические размеры для содержимого */
+mat-sidenav-content {
+  flex-grow: 1; /* Заставляем этот блок занимать оставшееся место */
+  overflow: hidden; /* Отключаем прокрутку для всего контента, кроме step-container */
+  display: flex;
+  flex-direction: column; /* Вертикальное выравнивание элементов */
+}
+/* Фиксируем toolbar, чтобы он не перекрывался */
+.toolbar-plus-btn {
+  flex-shrink: 0; /* Запрещаем этому блоку сжиматься */
+  z-index: 1001; /* Поверх всего, что внутри mat-sidenav-content */
+}
+
+/* Делаем step-container прокручиваемым */
+.step-container {
+  flex-grow: 1; /* Заставляем контейнер занимать все оставшееся пространство */
+  overflow-y: auto; /* Включаем вертикальную прокрутку */
 }
 
 .btn_container {
@@ -17,7 +55,7 @@ button {
 }
 
 .toolbar {
-  margin-bottom: 10px;
+
 }
 
 .toolbar button {
@@ -29,6 +67,7 @@ button {
   border: none;
   border-left: #b9d6ea 1px solid;
   border-bottom: #b9d6ea 1px solid;
+  padding: 4px;
 }
 
 button.active.btn_bold {
@@ -91,12 +130,7 @@ button.active.btn_black {
 }
 
 .toolbar-plus-btn{
-  position: -webkit-sticky; /* Поддержка для Safari */
-  position: sticky;
-  top: 0; /* Приклеивает элемент к верхней части окна просмотра */
-  z-index: 1000; /* Убедитесь, что элемент находится выше других */
-  background: #fff; /* Фон для лучшей видимости (можете изменить по своему вкусу) */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Добавление тени для лучшего визуального эффекта */
+margin-bottom: 1rem;
 }
 
 .resizable {
