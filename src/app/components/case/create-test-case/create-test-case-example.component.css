@@ -1,0 +1,98 @@
+.sidenav-container {
+  height: 100%;
+  width: 100%;
+}
+
+.mat-sidenav-container {
+  height: 100%;
+}
+
+.mat-sidenav {
+  width: 250px;
+}
+
+span{
+  text-align: center;
+  padding: 10px;
+}
+
+input{
+  height: 40px;
+}
+
+.steps{
+  margin: 1rem;
+}
+.header{
+  margin: 1rem;
+}
+
+mat-checkbox{
+  text-align: center;
+}
+
+textarea{
+  border-radius: 0;
+  border: none;
+  border-left: #b9d6ea 1px solid;
+  border-bottom: #b9d6ea 1px solid;
+
+}
+.steps-container{
+  border-right: #b9d6ea 1px solid;
+}
+
+.border-top{
+  border-top: #b9d6ea 1px solid;
+}
+
+
+/* Фиксируем header */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Контейнер для всего содержимого, чтобы учитывать фиксированный header */
+.sidenav-container {
+  position: fixed;
+  top: 60px; /* Высота header */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden; /* Отключаем прокрутку для всего контейнера */
+}
+
+/* Контейнер для прокручиваемого контента */
+.step-container {
+  height: 100%;
+  overflow-y: auto; /* Включаем вертикальную прокрутку */
+  padding-top: 16px; /* Если нужно отступить контент от верха */
+}
+
+/* Задаем фиксированное положение боковой панели */
+mat-sidenav {
+  position: fixed;
+  top: 60px; /* Высота header */
+  bottom: 0;
+  height: calc(100% - 60px); /* Учитываем высоту header */
+}
+
+/* Обрабатываем материнский контейнер для контента, чтобы учитывать фиксированный header */
+mat-sidenav-content {
+  position: relative;
+  margin-top: 60px; /* Высота header */
+  height: calc(100% - 60px);
+  overflow: hidden; /* Отключаем прокрутку для всего контента, кроме step-container */
+}
+
+.mat-drawer-content.mat-sidenav-content{
+  margin-top: 1rem;
+}
+
+mat-sidenav{
+  margin-top: 1rem;
+}
