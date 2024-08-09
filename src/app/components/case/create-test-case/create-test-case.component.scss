@@ -20,6 +20,9 @@
 .mat-mdc-dialog-actions,mdc-dialog__actions{
   margin: 0;
   padding: 0;
+  z-index: 1002;
+  background-color: #dbe1ff;
+  width: 100vw;
 }
 
 .cdk-overlay-pane{
@@ -32,3 +35,7 @@
   border-radius: 5px;
 }
 
+.mdc-button__label{
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

@@ -5,6 +5,7 @@
       <div fxLayout="row" fxLayoutAlign="center-center">
         <span fxFlex="6">{{ testCase.id }}</span>
         <input type="text" fxFlex="91" [(ngModel)]="name">
+        <button (click)="showName()">123213213</button>
       </div>
     </div>
     <div>
@@ -284,7 +285,10 @@
   </div>
 
 </div>
-<div mat-dialog-actions >
-  <button mat-flat-button (click)="save()"  class="save-btn">Сохранить</button>
-  <button mat-button (click)="closeMatDialog()"  class="close-btn">Отмена</button>
+<div>
+  <div mat-dialog-actions >
+    <button mat-flat-button (click)="save()"  class="save-btn">Сохранить</button>
+    <button mat-button (click)="closeMatDialog()"  class="close-btn">Отмена</button>
+  </div>
 </div>
+

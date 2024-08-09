@@ -315,8 +315,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined && result !== '') {
-        console.log('RESULT from dialog: ',result);
-
+        console.log('RESULT from dialog: ', result);
+        this.projectService.addTestCase(this.projectId!, folderId, result);
 
       } else {
         console.log("Ошибка при сохранении тест кейса!!!")

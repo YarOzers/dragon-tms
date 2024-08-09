@@ -1,7 +1,7 @@
-.sidenav-container {
-  height: 100%;
-  width: 100%;
-}
+/*.sidenav-container {*/
+/*  height: 100%;*/
+/*  width: 100%;*/
+/*}*/
 
 .mat-sidenav-container {
   height: 100%;
@@ -60,7 +60,7 @@ textarea{
 .sidenav-container {
   position: fixed;
   top: 60px; /* Высота header */
-  bottom: 0;
+  bottom: 75px;
   left: 0;
   width: 100%;
   overflow: hidden; /* Отключаем прокрутку для всего контейнера */
@@ -68,9 +68,9 @@ textarea{
 
 /* Контейнер для прокручиваемого контента */
 .step-container {
-  height: 100%;
   overflow-y: auto; /* Включаем вертикальную прокрутку */
-  padding-top: 16px; /* Если нужно отступить контент от верха */
+  padding-top: 1rem; /* Если нужно отступить контент от верха */
+  padding-bottom: 150px;
 }
 
 /* Задаем фиксированное положение боковой панели */
@@ -78,14 +78,14 @@ mat-sidenav {
   position: fixed;
   top: 60px; /* Высота header */
   bottom: 0;
-  height: calc(100% - 60px); /* Учитываем высоту header */
+  height: calc(100% - 135px ); /* Учитываем высоту header */
 }
 
 /* Обрабатываем материнский контейнер для контента, чтобы учитывать фиксированный header */
 mat-sidenav-content {
   position: relative;
   margin-top: 60px; /* Высота header */
-  height: calc(100% - 60px);
+  height: calc(100% - 135px);
   overflow: hidden; /* Отключаем прокрутку для всего контента, кроме step-container */
 }
 

@@ -34,7 +34,7 @@ import {
 @Component({
   selector: 'app-create-test-case',
   standalone: true,
-  host: {style:'--mdc-dialog-container-shape: 0px'},
+  host: {style: '--mdc-dialog-container-shape: 0px'},
   imports: [
     FlexModule,
     MatButton,
@@ -67,7 +67,7 @@ import {
     './editor.component.css'
   ]
 })
-export class CreateTestCaseComponent implements AfterViewInit, OnDestroy{
+export class CreateTestCaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('editorPreConditionContainer', {static: true}) editorPreConditionContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('editorStepContainer', {static: true}) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
@@ -585,6 +585,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy{
       editor2.style.height = `${maxHeight}px`;
     });
   }
+
   show() {
     console.log(this.preConditions);
     this.add();
@@ -1188,14 +1189,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy{
   }
 
 
-
-
-
-
-
-
-
-
   ////////////              DIALOG               >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
 
 
@@ -1204,13 +1197,16 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy{
   }
 
   save() {
-
-      this.dialogRef.close('43759235');
+    this.testCase.name = this.name;
+    this.data.name = this.name;
+    this.dialogRef.close(this.testCase);
 
   }
 
 
-
-
   protected readonly prompt = prompt;
+
+  showName() {
+    console.log(this.name);
+  }
 }

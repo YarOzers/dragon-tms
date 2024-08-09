@@ -19,7 +19,8 @@ button {
 .sidenav-container {
   position: fixed;
   top: 60px; /* Высота header */
-  bottom: 0;
+  bottom: 75px;
+  margin-bottom: 75px;
   left: 0;
   width: 100%;
   display: flex;
