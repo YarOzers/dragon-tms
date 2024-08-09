@@ -154,6 +154,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy {
   protected automationFlag: 'auto' | 'manual' | null = null;
   protected executionTime: string | null = '00:00';
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
+  protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
   counter = this.preConditions.length + 1;
   private data: TestCaseData = {
     status: this.status,
@@ -1199,6 +1200,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy {
   save() {
     this.testCase.name = this.name;
     this.data.name = this.name;
+    this.data.type = this.type;
+    this.data.expectedExecutionTime = this.executionTime;
+    this.data.status = this.status;
+    this.data.priority = this.priority;
     this.dialogRef.close(this.testCase);
 
   }

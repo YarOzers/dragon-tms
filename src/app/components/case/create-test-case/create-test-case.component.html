@@ -22,7 +22,7 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Приоритет</mat-label>
-              <mat-select [(ngModel)]="type" name="priority">
+              <mat-select [(ngModel)]="priority" name="priority">
                 @for (priority of typesOfPriority; track priority) {
                   <mat-option [value]="priority">{{ priority }}</mat-option>
                 }
