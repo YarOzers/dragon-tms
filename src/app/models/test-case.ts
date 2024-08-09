@@ -36,6 +36,7 @@ export interface testCaseResult {
   author: User;
   executedTime: string;
   result: 'awaits' | 'in_process' | 'successfully' | 'failed' | 'blocked';
+  testPlanId? : string;
 }
 
 export interface TestCaseStep {
