@@ -256,6 +256,7 @@ export class ProjectService {
     }
 
     if (project) {
+      console.log('project: ',project);
       const addFolderRecursively = (folders: Folder[]): boolean => {
 
         for (const folder of folders) {
@@ -339,7 +340,8 @@ export class ProjectService {
   }
 
   addTestCase(projectId: number, folderId: number, testCase: TestCase): void {
-    const project = this._projects.find(p => p.id === projectId);
+    const project = this._projects.find(p => p.id === +projectId);
+    console.log('PROJECT:   ' , project);
 
     if (!project) {
       console.error(`Project with ID ${projectId} not found.`);

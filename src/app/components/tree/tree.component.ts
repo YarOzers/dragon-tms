@@ -272,7 +272,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
         console.log('Id папки: ', folderId)
 
 
-        this.projectService.addFolder(this.projectId, folderId, result)
+        this.projectService.addFolder(this.projectId, folderId, result);
+        this.ngOnInit();
       } else {
         console.log("Введите имя папки!!!")
       }
@@ -299,7 +300,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openDialogToCreateTestCase(folderId: number): void {
+  openDialogToCreateTestCase(folderId: number, folderName: string): void {
 
     const dialogRef = this.dialog.open(CreateTestCaseComponent, {
 
@@ -313,10 +314,13 @@ export class TreeComponent implements OnInit, AfterViewInit {
       } // Можно передать данные в диалоговое окно
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined && result !== '') {
-        console.log('RESULT from dialog: ', result);
-        this.projectService.addTestCase(this.projectId!, folderId, result);
+    dialogRef.afterClosed().subscribe(testCase => {
+      if (testCase !== undefined && testCase !== '') {
+        testCase.data.folderId = folderId;
+        testCase.data.folderName = folderName;
+        console.log('RESULT from dialog: ', testCase);
+        this.projectService.addTestCase(this.projectId!, folderId, testCase);
+        this.ngOnInit();
 
       } else {
         console.log("Ошибка при сохранении тест кейса!!!")
