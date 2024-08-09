@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {NgIf, NgStyle} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
 import {TreeComponent} from "../../tree/tree.component";
@@ -22,6 +22,8 @@ import {Router} from "@angular/router";
 import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {DialogComponent} from "../../dialog/dialog.component";
+import {TestCase} from "../../../models/test-case";
+import {CreateTestCaseComponent} from "../create-test-case/create-test-case.component";
 
 
 @Component({
@@ -51,17 +53,13 @@ import {DialogComponent} from "../../dialog/dialog.component";
   templateUrl: './list-test-case.component.html',
   styleUrl: './list-test-case.component.scss'
 })
-export class ListTestCaseComponent {
+export class ListTestCaseComponent implements OnInit,AfterViewInit{
   displayedColumns: string[] = ['id', 'name'];
-  private projectTableData: Project[] = [];
-  dataSource: MatTableDataSource<Project> = new MatTableDataSource(this.projectTableData);
+  private testCaseTableData: TestCase[] = [];
+  dataSource: MatTableDataSource<TestCase> = new MatTableDataSource(this.testCaseTableData);
   isLoading = true;
   protected projectName = '';
   private projectId  = 0;
-  private project: Project = {
-    id: 0,
-    name: ''
-  };
 
   constructor(
     private projectService: ProjectService,
@@ -77,29 +75,25 @@ export class ListTestCaseComponent {
 
   ngOnInit(): void {
 
-    this.projectService.getProjects().subscribe({
+    this.projectService.getAllProjectTestCases(this.projectId).subscribe({
       next: (projects) => {
-        console.log('projects: ', projects)
-        this.projectId = projects.length +1;
-        console.log('PROJECTID: ',this.projectId);
-        this.projectTableData = projects;
-        this.dataSource.data = this.projectTableData;
+
         this.isLoading = false;
       }, error: (err) => {
-        console.log("Ошибка при загрузке проектов: ", err);
+        console.log("Ошибка при загрузке тест кейсов: ", err);
         this.isLoading = false;
       }, complete() {
       }
     })
-    console.log(this.projectTableData);
+    console.log(this.testCaseTableData);
     console.log(this.dataSource.data);
   }
 
 
   getData() {
-    console.log('tableData: ', this.projectTableData);
+    console.log('tableData: ', this.testCaseTableData);
     console.log('datasource: ', this.dataSource.data);
-    this.dataSource.data = this.projectTableData;
+    this.dataSource.data = this.testCaseTableData;
   }
 
   ngAfterViewInit() {
@@ -122,44 +116,32 @@ export class ListTestCaseComponent {
 
   }
 
-  addProject(projectName: string) {
-    this.project = {
-      id: this.projectId,
-      name: projectName,
-      folder: [],
-      testPlan: [],
-      users: []
-    }
-    this.projectService.createProject(this.project);
-    this.isLoading = true;
-    this.ngOnInit();
 
-  }
+  openTestCaseDialog(testCaseId: number): void {
 
+    const dialogRef = this.dialog.open(CreateTestCaseComponent, {
 
-  openDialog(): void {
-
-    const dialogRef = this.dialog.open(DialogComponent, {
-
-      width: 'auto',
+      width: '100%',
+      height: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
       data: {
         type: 'project',
-        projectName: ''
+        testCaseId: testCaseId
       } // Можно передать данные в диалоговое окно
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if(result !== undefined && result !== ''){
-        this.addProject(result);
+        console.log('result from dialog: ', result);
       }else {
-        console.log("Введите имя проекта!!!")
+        console.log("Введите имя проекта!!!");
       }
     });
   }
 
-  navigateToProject(row: any) {
-    this.headerService.showButtons(true);
-    this.routerParamsService.setProjectId(row.id);
-    this.router.navigate([`/project-detail/${row.id}`]);
+  getTestCasesFromTree(event: any) {
+    this.testCaseTableData = [...event];
+    this.dataSource.data = this.testCaseTableData;
   }
 }

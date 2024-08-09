@@ -411,4 +411,140 @@ export class ProjectService {
   }
 
 
+  getAllProjectTestCases(projectId: number): Observable<TestCase[]> {
+    const project = this._projects.find(p => p.id === projectId);
+    let allTestCases: TestCase[] = [];
+
+    if (project && project.testPlan) {
+      const collectTestCasesRecursively = (folders: Folder[]): void => {
+        for (const folder of folders) {
+          if (folder.testCases) {
+            allTestCases = allTestCases.concat(folder.testCases);
+          }
+          if (folder.folders) {
+            collectTestCasesRecursively(folder.folders);
+          }
+        }
+      };
+
+      for (const testPlan of project.testPlan) {
+        collectTestCasesRecursively(testPlan.folders);
+      }
+    }
+
+    return of(allTestCases).pipe(delay(500)); // Симуляция задержки
+  }
+  getTestCasesInFolder(projectId: number, folderId: number): Observable<TestCase[]> {
+    const project = this._projects.find(p => p.id === projectId);
+
+    if (project && project.testPlan) {
+      const collectTestCasesRecursively = (folders: Folder[]): TestCase[] => {
+        let testCases: TestCase[] = [];
+
+        for (const folder of folders) {
+          // Если находим папку с нужным ID, добавляем её тест-кейсы
+          if (folder.id === folderId) {
+            testCases = testCases.concat(folder.testCases);
+
+            // Рекурсивно собираем тест-кейсы из всех вложенных папок
+            const gatherNestedTestCases = (nestedFolders: Folder[]) => {
+              for (const nestedFolder of nestedFolders) {
+                testCases = testCases.concat(nestedFolder.testCases);
+                if (nestedFolder.folders) {
+                  gatherNestedTestCases(nestedFolder.folders);
+                }
+              }
+            };
+
+            if (folder.folders) {
+              gatherNestedTestCases(folder.folders);
+            }
+
+            break; // Останавливаем цикл, т.к. нужная папка найдена
+          } else if (folder.folders) {
+            // Продолжаем поиск в вложенных папках
+            testCases = testCases.concat(collectTestCasesRecursively(folder.folders));
+          }
+        }
+
+        return testCases;
+      };
+
+      for (const testPlan of project.testPlan) {
+        const testCases = collectTestCasesRecursively(testPlan.folders);
+        if (testCases.length) {
+          return of(testCases).pipe(delay(500)); // Симуляция задержки
+        }
+      }
+    }
+
+    return of([]).pipe(delay(500)); // Возвращаем пустой массив, если папка не найдена
+  }
+
+
+
+
+
+
+  // getTestCasesInFolder(projectId: number, folderId: number): Observable<TestCase[]> {
+  //   const project = this._projects.find(p => p.id === projectId);
+  //
+  //   if (project && project.testPlan) {
+  //     const findTestCasesInFolderRecursively = (folders: Folder[]): TestCase[] => {
+  //       for (const folder of folders) {
+  //         if (folder.id === folderId) {
+  //           return folder.testCases || [];
+  //         }
+  //         if (folder.folders) {
+  //           const found = findTestCasesInFolderRecursively(folder.folders);
+  //           if (found.length) {
+  //             return found;
+  //           }
+  //         }
+  //       }
+  //       return [];
+  //     };
+  //
+  //     for (const testPlan of project.testPlan) {
+  //       const testCases = findTestCasesInFolderRecursively(testPlan.folders);
+  //       if (testCases.length) {
+  //         return of(testCases).pipe(delay(500)); // Симуляция задержки
+  //       }
+  //     }
+  //   }
+  //
+  //   return of([]).pipe(delay(500)); // Возвращаем пустой массив, если папка не найдена
+  // }
+
+  getTestCaseById(projectId: number, testCaseId: number): Observable<TestCase | undefined> {
+    const project = this._projects.find(p => p.id === projectId);
+
+    if (project && project.testPlan) {
+      const findTestCaseByIdRecursively = (folders: Folder[]): TestCase | undefined => {
+        for (const folder of folders) {
+          const testCase = folder.testCases?.find(tc => tc.id === testCaseId);
+          if (testCase) {
+            return testCase;
+          }
+          if (folder.folders) {
+            const found = findTestCaseByIdRecursively(folder.folders);
+            if (found) {
+              return found;
+            }
+          }
+        }
+        return undefined;
+      };
+
+      for (const testPlan of project.testPlan) {
+        const testCase = findTestCaseByIdRecursively(testPlan.folders);
+        if (testCase) {
+          return of(testCase).pipe(delay(500)); // Симуляция задержки
+        }
+      }
+    }
+
+    return of(undefined).pipe(delay(500)); // Возвращаем undefined, если тест-кейс не найден
+  }
+
 }

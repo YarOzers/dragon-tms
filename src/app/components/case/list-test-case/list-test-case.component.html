@@ -1,15 +1,16 @@
 <as-split unit="percent" direction="horizontal" gutterSize="10">
   <as-split-area [size]="40">
     <div class="column left">
-      <app-tree></app-tree>
+      <app-tree (testCasesFromTree)="getTestCasesFromTree($event)"></app-tree>
     </div>
   </as-split-area>
 
                                   <!--  Table-->
 
   <as-split-area [size]="60">
+    <button (click)="getData()">getData</button>
     <div class="column right">
-      <h3>Projects:</h3>
+      <h3>Test Cases:</h3>
       <div class="table-container" >
         <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
                class="table">
@@ -33,13 +34,14 @@
           </div>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="navigateToProject(row)"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openTestCaseDialog(row.id)"></tr>
         </table>
         <div *ngIf="isLoading" class="progress-bar-container">
           <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
       </div>
-      <button  mat-flat-button (click)="openDialog()">Добавить проект</button>
     </div>
   </as-split-area>
 </as-split>
+
+

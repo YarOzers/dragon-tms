@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {
   CdkDrag,
   CdkDragDrop,
@@ -42,6 +42,8 @@ import {CreateTestCaseComponent} from "../case/create-test-case/create-test-case
 })
 export class TreeComponent implements OnInit, AfterViewInit {
   private projectId: number | null = 0;
+  private testCases: TestCase[] = [];
+  @Output() testCasesFromTree = new EventEmitter<any>();
 
   constructor(
     private projectService: ProjectService,
@@ -69,6 +71,13 @@ export class TreeComponent implements OnInit, AfterViewInit {
       }
       console.log('TEST_CASE_DATA: ', this.TEST_CASE_DATA);
     });
+  }
+
+  sentTestCasesFromTree() {
+    if (this.testCasesFromTree) {
+      this.testCasesFromTree.emit(this.testCases)
+    }
+
   }
 
   ngAfterViewInit(): void {
@@ -320,12 +329,31 @@ export class TreeComponent implements OnInit, AfterViewInit {
         testCase.data.folderName = folderName;
         console.log('RESULT from dialog: ', testCase);
         this.projectService.addTestCase(this.projectId!, folderId, testCase);
+        this.getTestCases(folderId);
         this.ngOnInit();
+
 
       } else {
         console.log("Ошибка при сохранении тест кейса!!!")
       }
     });
+  }
+
+  getTestCases(folderId: number) {
+    console.log('getTestCases WAs executed, folderId: ', folderId )
+    if (this.projectId) {
+      console.log('projectId: ', this.projectId);
+      this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
+        next: (testCases) => {
+          console.log('TestCases: ', testCases)
+          this.testCases = testCases;
+          this.sentTestCasesFromTree();
+        },
+        error: (err) => {
+          console.error(`Ошибка при загрузке тест кейсов папки ${folderId}.`)
+        }
+      })
+    }
   }
 }
 

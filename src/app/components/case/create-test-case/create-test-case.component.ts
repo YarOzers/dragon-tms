@@ -4,7 +4,7 @@ import {
   ElementRef,
   HostListener,
   Inject,
-  OnDestroy,
+  OnDestroy, OnInit,
   Renderer2,
   ViewChild
 } from '@angular/core';
@@ -27,9 +27,10 @@ import {
   TestCase,
   TestCaseData,
   TestCasePostCondition,
-  TestCasePreCondition,
+  TestCasePreCondition, testCaseResult,
   TestCaseStep
 } from "../../../models/test-case";
+import {ProjectService} from "../../../services/project.service";
 
 @Component({
   selector: 'app-create-test-case',
@@ -67,7 +68,7 @@ import {
     './editor.component.css'
   ]
 })
-export class CreateTestCaseComponent implements AfterViewInit, OnDestroy {
+export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('editorPreConditionContainer', {static: true}) editorPreConditionContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('editorStepContainer', {static: true}) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
@@ -148,13 +149,15 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy {
   protected postConditions: TestCasePostCondition[] = [this.postCondition];
   private testCaseId = 1;
   private folderName = '';
-  private folderId: null = null;
+  private folderId: number | null = null;
   protected typeOfTest: string | null = null;
   protected type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null = null;
   protected automationFlag: 'auto' | 'manual' | null = null;
   protected executionTime: string | null = '00:00';
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
   protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
+  private new: boolean = true;
+  private results: testCaseResult[] | null | undefined = [];
   counter = this.preConditions.length + 1;
   private data: TestCaseData = {
     status: this.status,
@@ -178,21 +181,45 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy {
     folder: this.folderName,
     type: this.typeOf,
     author: this.user,
-    data: [this.data],
+    data: [],
     loading: null,
     new: true,
-    results: null,
+    results: this.results,
     selected: null
   }
+
 
   constructor(
     private renderer: Renderer2,
     private dialogRef: MatDialogRef<CreateTestCaseComponent>,
-    @Inject(MAT_DIALOG_DATA) public dataDialog: any
+    @Inject(MAT_DIALOG_DATA) public dataDialog: any,
+    private projectService: ProjectService
   ) {
   }
 
   ngOnInit() {
+    if (this.dataDialog.testCaseId) {
+      this.projectService.getTestCaseById(this.dataDialog.projectId, this.dataDialog.testCaseId).subscribe(testCase => {
+          if (testCase) {
+            this.setFields(testCase)
+          }
+
+        }
+      )
+    }
+  }
+
+  setFields(testCase: TestCase) {
+    const index = testCase.data.length
+    this.testCaseId = testCase.id;
+    this.name = testCase.name;
+    this.typeOf = testCase.type;
+    this.folderName = testCase.folder;
+    this.folderId = testCase.folderId;
+    this.user = testCase.author;
+    this.new = false;
+    this.results = testCase.results;
+    this.data = testCase.data[index];
   }
 
   ngAfterViewInit() {
@@ -1199,11 +1226,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy {
 
   save() {
     this.testCase.name = this.name;
-    this.data.name = this.name;
-    this.data.type = this.type;
-    this.data.expectedExecutionTime = this.executionTime;
-    this.data.status = this.status;
-    this.data.priority = this.priority;
+    this.data.version = this.testCase.data.length + 1;
+    this.testCase.data.push(this.data);
     this.dialogRef.close(this.testCase);
 
   }
