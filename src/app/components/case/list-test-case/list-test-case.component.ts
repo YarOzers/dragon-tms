@@ -130,7 +130,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
       data: {
         type: 'project',
         testCaseId: testCaseId,
-        projectId: this.projectId
+        projectId: this.projectId,
+        isNew: false
       } // Можно передать данные в диалоговое окно
     });
 

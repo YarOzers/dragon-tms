@@ -187,6 +187,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     results: this.results,
     selected: null
   }
+  private initTestCase: any = null;
 
 
   constructor(
@@ -198,12 +199,15 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   ngOnInit() {
-
+    this.new = this.dataDialog.isNew;
+    console.log('this.new:', this.new);
   }
 
   setFields(testCase: TestCase) {
+
     const index = testCase.data.length - 1;
     console.log('index: ', index);
+    console.log('STEP_ITEMS: ', testCase.data[index].stepItems)
     this.testCaseId = testCase.id;
     this.name = testCase.name;
     this.typeOf = testCase.type;
@@ -213,21 +217,50 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.new = false;
     this.results = testCase.results;
     this.data = testCase.data[index];
-    if(testCase.data[index].stepItems){
+    console.log('stepItems: ', testCase.data[index].stepItems)
+    if (testCase.data[index].stepItems) {
+
       this.steps = testCase.data[index].stepItems;
     }
-    if (testCase.data[index].preConditionItems){
+    if (testCase.data[index].preConditionItems) {
       this.preConditions = testCase.data[index].preConditionItems;
     }
-    if(testCase.data[index].postConditionItems){
+    if (testCase.data[index].postConditionItems) {
       this.postConditions = testCase.data[index].postConditionItems;
     }
     console.log('preConditions:::::::::', testCase.data[index].preConditionItems);
   }
 
   ngAfterViewInit() {
+    if (!this.new) {
+      this.projectService.getTestCaseById(+this.dataDialog.projectId, +this.dataDialog.testCaseId).subscribe({
+          next: (testCase) => {
+            console.log('testCase in setFields::: ', testCase)
+            if (testCase) {
+              this.initTestCase = testCase;
+              if (testCase) {
+                console.log('initTestCase: : ', this.initTestCase);
+                this.setFields(this.initTestCase);
+                this.initEditors();
+              }
+            }
+          }, error: (err) => {
+            console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
+          }
+        }
+      )
+    }
 
+    if(this.new){
+      this.initEditors();
+    }
+
+
+  }
+
+  initEditors(){
     setTimeout(() => {
+      console.log('preConditions in setTimeout: ', this.preConditions);
       this.preConditions.forEach((preCondition, index) => {
         const actionEditor = this.getEditorPreConditionByIndex(index, 'action');
         const expectedResultEditor = this.getEditorPreConditionByIndex(index, 'expectedResult');
@@ -288,7 +321,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       }
     });
 
-
     // Инициализация ResizeObserver для отслеживания изменений размеров элемента
     this.resizeObserver = new ResizeObserver(entries => {
       for (let entry of entries) {
@@ -303,21 +335,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     // Подписка на изменения размеров элемента
     console.log('dataDialog.testCaseId: ', this.dataDialog.testCaseId);
     console.log('projectId:::', this.dataDialog.projectId);
-    if (this.dataDialog.testCaseId) {
-      this.projectService.getTestCaseById(+this.dataDialog.projectId, +this.dataDialog.testCaseId).subscribe(testCase => {
-          console.log('testCase in ngOnInit::: ', testCase)
-          if (testCase) {
-            this.setFields(testCase);
-            console.log("PreConditions::::", this.preConditions);
-          }
-
-        }
-      )
-    }
 
     // Установка начального значения
     this.updateElementWidth();
-
   }
 
   // Обработчик события изменения размера окна
