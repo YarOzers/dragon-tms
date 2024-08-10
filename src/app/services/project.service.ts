@@ -96,6 +96,7 @@ export class ProjectService {
     },
 
   ];
+  private testCaseIdCounter: number = 0;
 
 
   constructor() {
@@ -304,8 +305,9 @@ export class ProjectService {
   }
 
   addTestCase(projectId: number, folderId: number, testCase: TestCase): void {
+    this.testCaseIdCounter +=1;
+    testCase.id = this.testCaseIdCounter;
     const project = this._projects.find(p => p.id === +projectId);
-    console.log('PROJECT:   ' , project);
 
     if (!project) {
       console.error(`Project with ID ${projectId} not found.`);

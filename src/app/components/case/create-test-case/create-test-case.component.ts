@@ -147,7 +147,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected steps: TestCaseStep[] = [this.step];
   protected preConditions: TestCasePreCondition[] = [this.preCondition];
   protected postConditions: TestCasePostCondition[] = [this.postCondition];
-  private testCaseId = 1;
+  private testCaseId = 0;
   private folderName = '';
   private folderId: number | null = null;
   protected typeOfTest: string | null = null;
@@ -252,6 +252,11 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
 
     if(this.new){
+      this.projectService.getAllProjectTestCases(this.dataDialog.projectId).subscribe({
+        next:(testCases)=>{
+
+        }
+      })
       this.initEditors();
     }
 
@@ -1222,6 +1227,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   save() {
+    if(this.new){
+      this.testCase.id = this.testCaseId;
+    }
     this.testCase.name = this.name;
     this.data.version = this.testCase.data.length + 1;
     this.testCase.data.push(this.data);
