@@ -198,19 +198,12 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   ngOnInit() {
-    if (this.dataDialog.testCaseId) {
-      this.projectService.getTestCaseById(this.dataDialog.projectId, this.dataDialog.testCaseId).subscribe(testCase => {
-          if (testCase) {
-            this.setFields(testCase)
-          }
 
-        }
-      )
-    }
   }
 
   setFields(testCase: TestCase) {
-    const index = testCase.data.length
+    const index = testCase.data.length - 1;
+    console.log('index: ', index);
     this.testCaseId = testCase.id;
     this.name = testCase.name;
     this.typeOf = testCase.type;
@@ -220,9 +213,20 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.new = false;
     this.results = testCase.results;
     this.data = testCase.data[index];
+    if(testCase.data[index].stepItems){
+      this.steps = testCase.data[index].stepItems;
+    }
+    if (testCase.data[index].preConditionItems){
+      this.preConditions = testCase.data[index].preConditionItems;
+    }
+    if(testCase.data[index].postConditionItems){
+      this.postConditions = testCase.data[index].postConditionItems;
+    }
+    console.log('preConditions:::::::::', testCase.data[index].preConditionItems);
   }
 
   ngAfterViewInit() {
+
     setTimeout(() => {
       this.preConditions.forEach((preCondition, index) => {
         const actionEditor = this.getEditorPreConditionByIndex(index, 'action');
@@ -284,47 +288,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       }
     });
 
-    // setTimeout(() => {
-    //   this.steps.forEach((step, index) => {
-    //     const actionEditor = this.getEditorByIndex(index, 'action');
-    //     const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
-    //     if (actionEditor) {
-    //       this.setHtmlContent(actionEditor, step.action || '');
-    //     }
-    //     if (expectedResultEditor) {
-    //       this.setHtmlContent(expectedResultEditor, step.expectedResult || '');
-    //     }
-    //   });
-    //
-    //   const editorContainerElement = this.editorContainer?.nativeElement;
-    //   if (editorContainerElement) {
-    //     this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
-    //     this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
-    //     this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
-    //     this.renderer.listen(editorContainerElement, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
-    //   }
-    // });
-    //
-    // setTimeout(() => {
-    //   this.postConditions.forEach((postCondition, index) => {
-    //     const actionEditor = this.getEditorByIndex(index, 'action');
-    //     const expectedResultEditor = this.getEditorByIndex(index, 'expectedResult');
-    //     if (actionEditor) {
-    //       this.setHtmlContent(actionEditor, postCondition.action || '');
-    //     }
-    //     if (expectedResultEditor) {
-    //       this.setHtmlContent(expectedResultEditor, postCondition.expectedResult || '');
-    //     }
-    //   });
-    //
-    //   const editorContainerElement = this.editorContainer?.nativeElement;
-    //   if (editorContainerElement) {
-    //     this.renderer.listen(editorContainerElement, 'input', () => this.updateButtonStyles());
-    //     this.renderer.listen(editorContainerElement, 'click', () => this.updateButtonStyles());
-    //     this.renderer.listen(editorContainerElement, 'keyup', () => this.updateButtonStyles());
-    //     this.renderer.listen(editorContainerElement, 'paste', (event: ClipboardEvent) => this.handlePaste(event));
-    //   }
-    // });
+
     // Инициализация ResizeObserver для отслеживания изменений размеров элемента
     this.resizeObserver = new ResizeObserver(entries => {
       for (let entry of entries) {
@@ -337,10 +301,23 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       this.resizeObserver.observe(this.actionEditor.nativeElement);
     }
     // Подписка на изменения размеров элемента
+    console.log('dataDialog.testCaseId: ', this.dataDialog.testCaseId);
+    console.log('projectId:::', this.dataDialog.projectId);
+    if (this.dataDialog.testCaseId) {
+      this.projectService.getTestCaseById(+this.dataDialog.projectId, +this.dataDialog.testCaseId).subscribe(testCase => {
+          console.log('testCase in ngOnInit::: ', testCase)
+          if (testCase) {
+            this.setFields(testCase);
+            console.log("PreConditions::::", this.preConditions);
+          }
 
+        }
+      )
+    }
 
     // Установка начального значения
     this.updateElementWidth();
+
   }
 
   // Обработчик события изменения размера окна
@@ -1237,5 +1214,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   showName() {
     console.log(this.name);
+  }
+
+  getData() {
+    console.log('preConditions---------------->', this.preConditions);
   }
 }

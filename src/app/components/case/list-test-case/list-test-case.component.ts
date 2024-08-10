@@ -53,13 +53,13 @@ import {CreateTestCaseComponent} from "../create-test-case/create-test-case.comp
   templateUrl: './list-test-case.component.html',
   styleUrl: './list-test-case.component.scss'
 })
-export class ListTestCaseComponent implements OnInit,AfterViewInit{
+export class ListTestCaseComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'name'];
   private testCaseTableData: TestCase[] = [];
   dataSource: MatTableDataSource<TestCase> = new MatTableDataSource(this.testCaseTableData);
   isLoading = true;
   protected projectName = '';
-  private projectId  = 0;
+  private projectId = 0;
 
   constructor(
     private projectService: ProjectService,
@@ -74,7 +74,9 @@ export class ListTestCaseComponent implements OnInit,AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-
+    this.routerParamsService.projectId$.subscribe(projectId => {
+      this.projectId = Number(projectId);
+    })
     this.projectService.getAllProjectTestCases(this.projectId).subscribe({
       next: (projects) => {
 
@@ -127,14 +129,15 @@ export class ListTestCaseComponent implements OnInit,AfterViewInit{
       maxHeight: '100%',
       data: {
         type: 'project',
-        testCaseId: testCaseId
+        testCaseId: testCaseId,
+        projectId: this.projectId
       } // Можно передать данные в диалоговое окно
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result !== undefined && result !== ''){
+      if (result !== undefined && result !== '') {
         console.log('result from dialog: ', result);
-      }else {
+      } else {
         console.log("Введите имя проекта!!!");
       }
     });
