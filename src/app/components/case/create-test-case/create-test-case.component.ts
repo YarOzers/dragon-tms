@@ -4,7 +4,8 @@ import {
   ElementRef,
   HostListener,
   Inject,
-  OnDestroy, OnInit,
+  OnDestroy,
+  OnInit,
   Renderer2,
   ViewChild
 } from '@angular/core';
@@ -15,8 +16,6 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgClass, NgForOf, NgIf, NgSwitchCase} from "@angular/common";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DialogComponent} from "../../dialog/dialog.component";
-import {style} from "@angular/animations";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
 import {MatOption} from "@angular/material/core";
@@ -27,7 +26,8 @@ import {
   TestCase,
   TestCaseData,
   TestCasePostCondition,
-  TestCasePreCondition, testCaseResult,
+  TestCasePreCondition,
+  testCaseResult,
   TestCaseStep
 } from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
@@ -156,10 +156,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected executionTime: string | null = '00:00';
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
   protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
-  private new: boolean = true;
+  protected new: boolean = true;
   private results: testCaseResult[] | null | undefined = [];
   counter = this.preConditions.length + 1;
-  private data: TestCaseData = {
+  protected data: TestCaseData = {
     status: this.status,
     automationFlag: this.automationFlag,
     changesAuthor: this.user,
@@ -177,6 +177,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected testCase: TestCase = {
     id: this.testCaseId,
     name: this.name,
+    lastDataIndex: 0,
     folderId: this.folderId,
     folder: this.folderName,
     type: this.typeOf,
@@ -1227,12 +1228,15 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   save() {
+    console.log('test-case in save: ',this.testCase);
+    console.log('test-case data in save: ',this.data);
     if(this.new){
       this.testCase.id = this.testCaseId;
+      this.testCase.data.push(this.data);
     }
     this.testCase.name = this.name;
-    this.data.version = this.testCase.data.length + 1;
-    this.testCase.data.push(this.data);
+    this.testCase.lastDataIndex = this.testCase.data.length -1;
+    console.log('lastDAtaIndex in save: ', this.testCase.lastDataIndex);
     this.dialogRef.close(this.testCase);
 
   }

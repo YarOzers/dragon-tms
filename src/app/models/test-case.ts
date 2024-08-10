@@ -9,6 +9,7 @@ export interface TestCase {
   type: 'testCase' | 'checkList'
   author: User;
   data: TestCaseData[],
+  lastDataIndex?: number,
   loading: boolean | null;
   new: boolean;
   results?: testCaseResult[] | null;

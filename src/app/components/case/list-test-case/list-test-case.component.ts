@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {NgIf, NgStyle} from "@angular/common";
+import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
 import {TreeComponent} from "../../tree/tree.component";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {
   MatCell,
   MatCellDef,
@@ -24,6 +24,15 @@ import {RouterParamsService} from "../../../services/router-params.service";
 import {DialogComponent} from "../../dialog/dialog.component";
 import {TestCase} from "../../../models/test-case";
 import {CreateTestCaseComponent} from "../create-test-case/create-test-case.component";
+import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatOption, MatSelect} from "@angular/material/select";
+import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
+import {MatIcon} from "@angular/material/icon";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {SelectionModel} from "@angular/cdk/collections";
+import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
+import {FormsModule} from "@angular/forms";
+import {FlexModule} from "@angular/flex-layout";
 
 
 @Component({
@@ -48,18 +57,40 @@ import {CreateTestCaseComponent} from "../create-test-case/create-test-case.comp
     MatSortHeader,
     MatTable,
     NgIf,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatFormField,
+    MatSelect,
+    MatOption,
+    NgForOf,
+    MatCheckbox,
+    MatIcon,
+    MatIconButton,
+    MatProgressSpinner,
+    MatLabel,
+    MatMenu,
+    FormsModule,
+    MatMenuTrigger,
+    FlexModule
   ],
   templateUrl: './list-test-case.component.html',
   styleUrl: './list-test-case.component.scss'
 })
 export class ListTestCaseComponent implements OnInit, AfterViewInit {
-  displayedColumns: string[] = ['id', 'name'];
+  allColumns = ['select', 'run', 'id', 'name', 'type'];
+  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
+  displayedColumnsSelection: { [key: string]: boolean } = {
+    select: true,
+    id: true,
+    name: true,
+    type: true
+  };
+  selection = new SelectionModel<any>(true, []);
   private testCaseTableData: TestCase[] = [];
   dataSource: MatTableDataSource<TestCase> = new MatTableDataSource(this.testCaseTableData);
   isLoading = true;
   protected projectName = '';
   private projectId = 0;
+  dataIndex: any;
 
   constructor(
     private projectService: ProjectService,
@@ -72,6 +103,37 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   }
 
   @ViewChild(MatSort) sort!: MatSort;
+
+  // Toggle selection for all rows
+  toggleAll(event: MatCheckboxChange) {
+    if (event.checked) {
+      this.selection.select(...this.dataSource.data);
+    } else {
+      this.selection.clear();
+    }
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  toggleSelection(element: any) {
+
+    this.selection.toggle(element);
+  }
+
+  runTestCase(element: any, event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+    }
+    element.isRunning = true;
+    // Симуляция выполнения
+    setTimeout(() => {
+      element.isRunning = false;
+    }, 3000);
+  }
 
   ngOnInit(): void {
     this.routerParamsService.projectId$.subscribe(projectId => {
@@ -147,5 +209,12 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   getTestCasesFromTree(event: any) {
     this.testCaseTableData = [...event];
     this.dataSource.data = this.testCaseTableData;
+  }
+
+  runSelectedAutoTests() {
+    const selectedAutoTests = this.selection.selected.filter(test => test.type === 'auto');
+    selectedAutoTests.forEach(test => {
+      this.runTestCase(test);
+    });
   }
 }
