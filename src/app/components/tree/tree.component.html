@@ -1,25 +1,28 @@
-<div cdkDropListGroup>
-  <div *ngFor="let folder of TEST_CASE_DATA">
-    <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>
-  </div>
+<mat-progress-bar *ngIf="!dataLoading" mode="indeterminate"></mat-progress-bar>
+<div *ngIf="dataLoading">
+  <div cdkDropListGroup>
+    <div *ngFor="let folder of TEST_CASE_DATA">
+      <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>
+    </div>
 
-  <ng-template #folderTemplate let-folder="folder">
-    <div [ngClass]="{'nested-folder': folder.parentFolderId}">
-      <div cdkDropList
-           [cdkDropListData]="folder.folders"
-           (cdkDropListDropped)="onDrop($event, 'folder', folder.id)"
-           (click)="getTestCases(folder.id)"
-           class="folder-header">
-        <button mat-icon-button (click)="toggleFolder(folder, $event)">
-          <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
-        </button><mat-icon>folder_open</mat-icon>
-        <span class="folder-name" cdkDrag [cdkDragData]="folder">{{ folder.name }}</span>
-        <span class="folder-btn-menu">&nbsp;
+    <ng-template #folderTemplate let-folder="folder">
+      <div [ngClass]="{'nested-folder': folder.parentFolderId}">
+        <div cdkDropList
+             [cdkDropListData]="folder.folders"
+             (cdkDropListDropped)="onDrop($event, 'folder', folder.id)"
+             (click)="getTestCases(folder.id)"
+             class="folder-header">
+          <button mat-icon-button (click)="toggleFolder(folder, $event)">
+            <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
+          </button>
+          <mat-icon>folder_open</mat-icon>
+          <span class="folder-name" cdkDrag [cdkDragData]="folder">{{ folder.name }}</span>
+          <span class="folder-btn-menu">&nbsp;
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
   <mat-icon>more_vert</mat-icon>
 </button>
 <mat-menu #menu="matMenu">
-  <button mat-menu-item (click)="openDialogToCreateTestCase(folder.id, folder.name)" >
+  <button mat-menu-item (click)="openDialogToCreateTestCase(folder.id, folder.name)">
     <mat-icon>playlist_add</mat-icon>
     <span>Добавить тест кейс</span>
   </button>
@@ -27,9 +30,9 @@
     <mat-icon>add</mat-icon>
     <span>Добавить папку</span>
   </button>
-  <button  mat-menu-item
-           (click)="openDialogToDeleteFolder(folder.id)"
-           [disabled]="folder.id === 0">
+  <button mat-menu-item
+          (click)="openDialogToDeleteFolder(folder.id)"
+          [disabled]="folder.id === 0">
     <mat-icon>delete_outline</mat-icon>
     <span>Удалить папку</span>
   </button>
@@ -39,26 +42,29 @@
   </button>
 </mat-menu>
         </span>
-      </div>
-      <div *ngIf="folder.expanded">
-        <div *ngFor="let subFolder of folder.folders"
-             cdkDrag [cdkDragData]="subFolder"
+        </div>
+        <div *ngIf="folder.expanded">
+          <div *ngFor="let subFolder of folder.folders"
+               cdkDrag [cdkDragData]="subFolder"
 
-             cdkDragDisabled="true"
-             class="subfolder">
-          <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }" ></ng-container>
+               cdkDragDisabled="true"
+               class="subfolder">
+            <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>
+          </div>
+        </div>
+        <div *ngIf="folder.expanded" cdkDropList
+             [cdkDropListData]="testCasesMap[folder.name]"
+             (cdkDropListDropped)="onDrop($event, 'testCase', folder.name)"
+             class="test-case-list">
+
+          <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag [cdkDragData]="testCase">
+            <div class="test-case-item">
+              <mat-icon>subject</mat-icon>
+              {{ testCase.name }}
+            </div>
+          </div>
         </div>
       </div>
-      <div *ngIf="folder.expanded" cdkDropList
-           [cdkDropListData]="testCasesMap[folder.name]"
-           (cdkDropListDropped)="onDrop($event, 'testCase', folder.name)"
-           class="test-case-list" >
-
-        <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag [cdkDragData]="testCase">
-          <div class="test-case-item"><mat-icon>subject</mat-icon>{{ testCase.name }}</div>
-        </div>
-      </div>
-    </div>
-  </ng-template>
+    </ng-template>
+  </div>
 </div>
-

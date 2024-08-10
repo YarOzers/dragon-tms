@@ -18,6 +18,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {DialogComponent} from "../dialog/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {CreateTestCaseComponent} from "../case/create-test-case/create-test-case.component";
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 
 @Component({
@@ -35,12 +36,14 @@ import {CreateTestCaseComponent} from "../case/create-test-case/create-test-case
     NgIf,
     MatMenuTrigger,
     MatMenu,
-    MatMenuItem
+    MatMenuItem,
+    MatProgressBar
   ],
   templateUrl: './tree.component.html',
   styleUrl: './tree.component.scss'
 })
 export class TreeComponent implements OnInit, AfterViewInit {
+  dataLoading: boolean = false;
   private projectId: number | null = 0;
   private testCases: TestCase[] = [];
   @Output() testCasesFromTree = new EventEmitter<any>();
@@ -59,7 +62,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   testCasesMap: { [key: string]: TestCase[] } = {};
 
+
   ngOnInit(): void {
+    this.dataLoading = false;
     this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
       console.log('getProjectFolders: ', folders);
       if (folders) {
@@ -70,6 +75,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
         }
       }
       console.log('TEST_CASE_DATA: ', this.TEST_CASE_DATA);
+      this.dataLoading = true;
     });
   }
 

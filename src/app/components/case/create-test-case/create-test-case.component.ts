@@ -31,6 +31,7 @@ import {
   TestCaseStep
 } from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
+import {MatProgressBar} from "@angular/material/progress-bar";
 
 @Component({
   selector: 'app-create-test-case',
@@ -59,7 +60,8 @@ import {ProjectService} from "../../../services/project.service";
     MatSidenav,
     MatSidenavContainer,
     MatSidenavContent,
-    NgClass
+    NgClass,
+    MatProgressBar
   ],
   templateUrl: './create-test-case.component.html',
   styleUrls: [
@@ -75,6 +77,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   @ViewChild('editorPostConditionContainer', {static: true}) editorPostConditionContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
   @ViewChild('actionEditor') actionEditor!: ElementRef;
+
+  loadingData: boolean = false;
 
   //////////////////////////////////////////////////////////////////
   elementWidth!: number;
@@ -200,6 +204,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   ngOnInit() {
+    this.loadingData = false;
     this.new = this.dataDialog.isNew;
     console.log('this.new:', this.new);
   }
@@ -243,6 +248,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
                 console.log('initTestCase: : ', this.initTestCase);
                 this.setFields(this.initTestCase);
                 this.initEditors();
+                this.loadingData = true;
               }
             }
           }, error: (err) => {
@@ -253,6 +259,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
 
     if(this.new){
+      this.loadingData = true;
       this.projectService.getAllProjectTestCases(this.dataDialog.projectId).subscribe({
         next:(testCases)=>{
 
@@ -1243,6 +1250,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
 
   protected readonly prompt = prompt;
+
 
   showName() {
     console.log(this.name);
