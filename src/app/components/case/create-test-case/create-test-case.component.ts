@@ -147,7 +147,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected steps: TestCaseStep[] = [this.step];
   protected preConditions: TestCasePreCondition[] = [this.preCondition];
   protected postConditions: TestCasePostCondition[] = [this.postCondition];
-  private testCaseId = 0;
+  protected testCaseId = 0;
   private folderName = '';
   private folderId: number | null = null;
   protected typeOfTest: string | null = null;

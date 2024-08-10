@@ -4,7 +4,10 @@
     <div class="header">
       <div  fxLayout="row" fxLayoutAlign="center-center">
         <div *ngIf="!new" fxFlex="6">
-          <ng-template><span >{{ testCase.id }}</span></ng-template><span fxFlex="6">{{ testCase.id }}</span>
+          <span fxFlex="6">{{ this.testCaseId }}</span>
+        </div>
+        <div *ngIf="new" fxFlex="6">
+          <span fxFlex="6"></span>
         </div>
         <input type="text" fxFlex="91" [(ngModel)]="name">
       </div>
