@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MatButton} from "@angular/material/button";
 import {
   MatCell,
@@ -49,7 +49,7 @@ import {RouterParamsService} from "../../../services/router-params.service";
   templateUrl: './list-test-plan.component.html',
   styleUrl: './list-test-plan.component.scss'
 })
-export class ListTestPlanComponent {
+export class ListTestPlanComponent implements AfterViewInit{
   projectId: any;
   displayedColumns: string[] = ['id', 'name'];
   private testPlanTableData: TestPlan[] = [];
@@ -108,13 +108,6 @@ export class ListTestPlanComponent {
     })
     console.log(this.testPlanTableData);
     console.log(this.dataSource.data);
-  }
-
-
-  getData() {
-    console.log('tableData: ', this.testPlanTableData);
-    console.log('datasource: ', this.dataSource.data);
-    this.dataSource.data = this.testPlanTableData;
   }
 
   ngAfterViewInit() {

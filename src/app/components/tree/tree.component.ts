@@ -19,6 +19,7 @@ import {DialogComponent} from "../dialog/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {CreateTestCaseComponent} from "../case/create-test-case/create-test-case.component";
 import {MatProgressBar} from "@angular/material/progress-bar";
+import {DialogTestPlanListComponent} from "../plan/dialog-test-plan-list/dialog-test-plan-list.component";
 
 
 @Component({
@@ -362,6 +363,27 @@ export class TreeComponent implements OnInit, AfterViewInit {
       })
     }
   }
+
+  openDialogToAddFolderInTestPlan(folderId: number) {
+      const dialogRef = this.dialog.open(DialogTestPlanListComponent, {
+
+        width: '70%',
+        height: '70%',
+        maxWidth: '70%',
+        maxHeight: '70%',
+        data: {
+          type: 'folder',
+
+        } // Можно передать данные в диалоговое окно
+      });
+
+      dialogRef.afterClosed().subscribe(testPlanId => {
+        if(testPlanId && folderId && this.projectId){
+          this.projectService.addFolderToTestPlan(this.projectId, testPlanId,folderId)
+        }
+
+      });
+    }
 }
 
 
