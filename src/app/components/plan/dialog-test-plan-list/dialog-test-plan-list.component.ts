@@ -5,7 +5,7 @@ import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatHeaderCell,
+  MatHeaderCell, MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableDataSource
@@ -35,7 +35,8 @@ import {RouterParamsService} from "../../../services/router-params.service";
     MatSort,
     MatSortHeader,
     MatTable,
-    NgIf
+    NgIf,
+    MatHeaderCellDef
   ],
   templateUrl: './dialog-test-plan-list.component.html',
   styleUrl: './dialog-test-plan-list.component.css'
@@ -65,7 +66,9 @@ export class DialogTestPlanListComponent implements OnInit, AfterViewInit{
     private projectService: ProjectService,
     private routerParamsService: RouterParamsService
   ) {
-    this.projectId = this.routerParamsService.projectId$;
+  this.routerParamsService.projectId$.subscribe(projectId =>{
+    this.projectId = projectId;
+  });
   }
 
   closeMatDialog(testPlanId: number) {
@@ -79,12 +82,11 @@ export class DialogTestPlanListComponent implements OnInit, AfterViewInit{
 
     this.projectService.getTestPlans(+this.projectId).subscribe({
       next: (testPlans) => {
-        console.log('from testPlanComponent, testPlans: ', testPlans,)
+        console.log('from testPlanDialog, testPlans: ', testPlans,)
         console.log('projectID: ', this.projectId,)
         if (testPlans){
 
           this.dataSource.data = [...testPlans]
-          this.testPlanId = testPlans.length +1;
         }
         this.isLoading = false;
       }, error: (err) => {

@@ -288,7 +288,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
         console.log('Id папки: ', folderId)
 
 
-        this.projectService.addFolder(this.projectId, folderId, result);
+        this.projectService.addFolder(Number(this.projectId), folderId, result);
         this.ngOnInit();
       } else {
         console.log("Введите имя папки!!!")
@@ -365,6 +365,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   openDialogToAddFolderInTestPlan(folderId: number) {
+    console.log('openDialog was executed!!!, folderId:: ', folderId);
       const dialogRef = this.dialog.open(DialogTestPlanListComponent, {
 
         width: '70%',
@@ -379,7 +380,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
       dialogRef.afterClosed().subscribe(testPlanId => {
         if(testPlanId && folderId && this.projectId){
-          this.projectService.addFolderToTestPlan(this.projectId, testPlanId,folderId)
+          this.projectService.addFolderToTestPlan(Number(this.projectId), testPlanId,folderId).subscribe(folder=>{
+            console.log(`Папка ${folder.name} была добавлена в тест план ${testPlanId}`)
+          })
         }
 
       });
