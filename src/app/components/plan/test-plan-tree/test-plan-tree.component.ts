@@ -46,6 +46,7 @@ export class TestPlanTreeComponent {
   private projectId: number | null = 0;
   private testCases: TestCase[] = [];
   @Output() testCasesFromTestPlanTree = new EventEmitter<any>();
+  private testPlanId: number | null = null;
 
   constructor(
     private projectService: ProjectService,
@@ -54,7 +55,10 @@ export class TestPlanTreeComponent {
   ) {
     this.routerParamsService.projectId$.subscribe(id => {
       this.projectId = id;
-    })
+    });
+    this.routerParamsService.testPlanId$.subscribe(testPlanId =>{
+      this.testPlanId = testPlanId;
+    });
   }
 
   protected TEST_CASE_DATA: Folder[] | null = [];
@@ -63,8 +67,11 @@ export class TestPlanTreeComponent {
 
 
   ngOnInit(): void {
+
     this.dataLoading = false;
-    this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
+    console.log('ProjectId::', this.projectId);
+    console.log('TestPlanId::', this.testPlanId);
+    this.projectService.getTestPlanFolders(Number(this.projectId), Number(this.testPlanId)).subscribe(folders => {
       console.log('getProjectFolders: ', folders);
       if (folders) {
         this.TEST_CASE_DATA = [...folders];
@@ -347,9 +354,9 @@ export class TestPlanTreeComponent {
 
   getTestCases(folderId: number) {
     console.log('getTestCases WAs executed, folderId: ', folderId )
-    if (this.projectId) {
+    if (this.projectId && this.testPlanId) {
       console.log('projectId: ', this.projectId);
-      this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
+      this.projectService.getTestCasesInTestPlanFolder(+this.projectId,this.testPlanId, folderId).subscribe({
         next: (testCases) => {
           console.log('TestCases: ', testCases)
           this.testCases = testCases;
@@ -359,6 +366,8 @@ export class TestPlanTreeComponent {
           console.error(`Ошибка при загрузке тест кейсов папки ${folderId}.`)
         }
       })
+    }else {
+      console.error(`В проекте ${this.testPlanId} не найдена папка с id ${this.testPlanId}`)
     }
   }
 }

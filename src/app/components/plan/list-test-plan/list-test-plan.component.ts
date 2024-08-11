@@ -56,7 +56,7 @@ export class ListTestPlanComponent {
   dataSource: MatTableDataSource<TestPlan> = new MatTableDataSource(this.testPlanTableData);
   isLoading = true;
   protected projectName = '';
-  private testPlanId = this.testPlanTableData.length;
+  private testPlanId = 0;
   private testPlan: TestPlan = {
     id: 0,
     name: '',
@@ -176,9 +176,11 @@ export class ListTestPlanComponent {
     });
   }
 
-  navigateToProject(row: any) {
+  navigateToProject( testPlanId: number) {
+    this.testPlanId = testPlanId;
     this.headerService.showButtons(true);
     this.routerParamsService.setProjectId(this.projectId);
+    this.routerParamsService.setTestPlanId(Number(this.testPlanId));
     this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
   }
 }

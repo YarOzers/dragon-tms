@@ -82,7 +82,7 @@ export class ProjectService {
         testCaseCount: 0,
         status: 'await',
         qas: [],
-        folders: [this.root_folder]
+        folders: [this.folder1]
       }],
       createdDate: this.getCurrentDateTimeString()
     },
@@ -186,11 +186,9 @@ export class ProjectService {
   getProjectFolders(projectId: number | null): Observable<Folder[]> {
     const project = this._projects.find(p => p.id === projectId);
     if (project) {
-      if (project.testPlan) {
-        const folders = project.testPlan.flatMap(testPlan => testPlan.folders);
-        folders.forEach(folder => {
-        });
-        return of(folders).pipe(delay(500)); // Симуляция задержки
+      if (project.folder) {
+
+        return of(project.folder).pipe(delay(500)); // Симуляция задержки
       }
     }
     return of([]).pipe(delay(500)); // Возвращаем пустой массив, если проект не найден или нет testPlan
@@ -221,7 +219,7 @@ export class ProjectService {
     }
 
     if (project) {
-      console.log('project: ',project);
+      console.log('project: ', project);
       const addFolderRecursively = (folders: Folder[]): boolean => {
 
         for (const folder of folders) {
@@ -261,8 +259,8 @@ export class ProjectService {
     return of(project?.folder).pipe(delay(500)); // Return the updated project with a simulated delay
   }
 
-  private removeFolderRecursively(folders: Folder[] | undefined, folderId: number): boolean  {
-    if(!folders){
+  private removeFolderRecursively(folders: Folder[] | undefined, folderId: number): boolean {
+    if (!folders) {
       return false;
     }
     for (let i = 0; i < folders.length; i++) {
@@ -305,7 +303,7 @@ export class ProjectService {
   }
 
   addTestCase(projectId: number, folderId: number, testCase: TestCase): void {
-    this.testCaseIdCounter +=1;
+    this.testCaseIdCounter += 1;
     testCase.id = this.testCaseIdCounter;
     const project = this._projects.find(p => p.id === +projectId);
 
@@ -400,6 +398,7 @@ export class ProjectService {
 
     return of(allTestCases).pipe(delay(500)); // Симуляция задержки
   }
+
   getTestCasesInFolder(projectId: number, folderId: number): Observable<TestCase[]> {
     const project = this._projects.find(p => p.id === projectId);
 
@@ -555,6 +554,77 @@ export class ProjectService {
     return of(testCases).pipe(delay(500)); // Симуляция задержки
   }
 
+  getTestPlanFolders(projectId: number | null, testPlanId: number | null): Observable<Folder[]> {
+    if (projectId === null || testPlanId === null) {
+      return of([]).pipe(delay(500)); // Возвращаем пустой массив, если projectId или testPlanId не указаны
+    }
 
+    const project = this._projects.find(p => p.id === projectId);
+
+    if (!project) {
+      console.error(`Project with ID ${projectId} not found.`);
+      return of([]).pipe(delay(500)); // Возвращаем пустой массив, если проект не найден
+    }
+
+    const testPlan = project.testPlan?.find(tp => tp.id === testPlanId);
+
+    if (!testPlan) {
+      console.error(`Test plan with ID ${testPlanId} not found.`);
+      return of([]).pipe(delay(500)); // Возвращаем пустой массив, если тест-план не найден
+    }
+
+    return of(testPlan.folders).pipe(delay(500)); // Возвращаем папки тест-плана с симуляцией задержки
+  }
+
+  getTestCasesInTestPlanFolder(projectId: number, testPlanId: number, folderId: number): Observable<TestCase[]> {
+    const project = this._projects.find(p => p.id === projectId);
+
+    if (!project || !project.testPlan) {
+      console.error(`Project with ID ${projectId} or Test Plan with ID ${testPlanId} not found.`);
+      return of([]).pipe(delay(500)); // Возвращаем пустой массив, если проект или тест-план не найдены
+    }
+
+    const testPlan = project.testPlan.find(tp => tp.id === testPlanId);
+
+    if (!testPlan) {
+      console.error(`Test Plan with ID ${testPlanId} not found in project with ID ${projectId}.`);
+      return of([]).pipe(delay(500)); // Возвращаем пустой массив, если тест-план не найден
+    }
+
+    const findFolderById = (folders: Folder[], id: number): Folder | null => {
+      for (const folder of folders) {
+        if (folder.id === id) {
+          return folder;
+        }
+        if (folder.folders) {
+          const foundFolder = findFolderById(folder.folders, id);
+          if (foundFolder) {
+            return foundFolder;
+          }
+        }
+      }
+      return null;
+    };
+
+    const collectTestCasesRecursively = (folder: Folder): TestCase[] => {
+      let testCases = [...folder.testCases];
+
+      for (const nestedFolder of folder.folders || []) {
+        testCases = testCases.concat(collectTestCasesRecursively(nestedFolder));
+      }
+
+      return testCases;
+    };
+
+    const targetFolder = findFolderById(testPlan.folders, folderId);
+
+    if (targetFolder) {
+      const testCases = collectTestCasesRecursively(targetFolder);
+      return of(testCases).pipe(delay(500)); // Возвращаем все найденные тест-кейсы с симуляцией задержки
+    }
+
+    console.error(`Folder with ID ${folderId} not found in Test Plan with ID ${testPlanId}.`);
+    return of([]).pipe(delay(500)); // Возвращаем пустой массив, если папка не найдена
+  }
 
 }
