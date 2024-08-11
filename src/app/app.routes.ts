@@ -4,6 +4,7 @@ import {MainContainerComponent} from "./components/main-container/main-container
 import {DetailProjectComponent} from "./components/project/detail-project/detail-project.component";
 import {CreateTestPlanComponent} from "./components/plan/create-test-plan/create-test-plan.component";
 import {ListTestCaseComponent} from "./components/case/list-test-case/list-test-case.component";
+import {ExecuteTestPlanComponent} from "./components/plan/execute-test-plan/execute-test-plan.component";
 
 export const routes: Routes = [
   {
@@ -11,7 +12,7 @@ export const routes: Routes = [
     children: [
       {path: '', component: ListProjectComponent},
       {path: 'project-detail/:projectId', component: DetailProjectComponent},
-      {path: 'project-detail/:projectId/test-plan-create/:testPlanId', component: CreateTestPlanComponent},
+      {path: 'project-detail/:projectId/test-plan-create/:testPlanId', component: ExecuteTestPlanComponent},
       {path: 'project-detail/:projectId/testcases', component: ListTestCaseComponent}
     ]
   }

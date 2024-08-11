@@ -1,83 +1,71 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {NgForOf, NgIf, NgStyle} from "@angular/common";
-import {SplitAreaComponent, SplitComponent} from "angular-split";
-import {TreeComponent} from "../../tree/tree.component";
+import {Component, ViewChild} from '@angular/core';
+import {FlexModule} from "@angular/flex-layout";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
+  MatHeaderCell, MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable,
-  MatTableDataSource
+  MatRow, MatRowDef, MatTable, MatTableDataSource
 } from "@angular/material/table";
+import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
+import {MatIcon} from "@angular/material/icon";
+import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader, Sort} from "@angular/material/sort";
+import {NgForOf, NgIf} from "@angular/common";
+import {SplitAreaComponent, SplitComponent} from "angular-split";
+import {TreeComponent} from "../../tree/tree.component";
+import {SelectionModel} from "@angular/cdk/collections";
+import {TestCase} from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
-import {TestCase} from "../../../models/test-case";
-import {CreateTestCaseComponent} from "../create-test-case/create-test-case.component";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
-import {MatIcon} from "@angular/material/icon";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
-import {SelectionModel} from "@angular/cdk/collections";
-import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
+import {CreateTestCaseComponent} from "../../case/create-test-case/create-test-case.component";
 import {FormsModule} from "@angular/forms";
-import {FlexModule} from "@angular/flex-layout";
-
 
 @Component({
-  selector: 'app-list-test-case',
+  selector: 'app-execute-test-plan',
   standalone: true,
   imports: [
-    NgStyle,
-    SplitComponent,
-    SplitAreaComponent,
-    TreeComponent,
+    FlexModule,
     MatButton,
     MatCell,
     MatCellDef,
+    MatCheckbox,
     MatColumnDef,
     MatHeaderCell,
     MatHeaderRow,
     MatHeaderRowDef,
+    MatIcon,
+    MatIconButton,
+    MatMenu,
     MatProgressBar,
+    MatProgressSpinner,
     MatRow,
     MatRowDef,
     MatSort,
     MatSortHeader,
     MatTable,
-    NgIf,
-    MatHeaderCellDef,
-    MatFormField,
-    MatSelect,
-    MatOption,
     NgForOf,
-    MatCheckbox,
-    MatIcon,
-    MatIconButton,
-    MatProgressSpinner,
-    MatLabel,
-    MatMenu,
+    NgIf,
+    SplitAreaComponent,
+    SplitComponent,
+    TreeComponent,
     FormsModule,
     MatMenuTrigger,
-    FlexModule
+    MatHeaderCellDef
   ],
-  templateUrl: './list-test-case.component.html',
-  styleUrl: './list-test-case.component.scss'
+  templateUrl: './execute-test-plan.component.html',
+  styleUrl: './execute-test-plan.component.css'
 })
-export class ListTestCaseComponent implements OnInit, AfterViewInit {
+export class ExecuteTestPlanComponent {
   allColumns = ['select', 'run', 'id', 'name', 'type'];
   displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
   displayedColumnsSelection: { [key: string]: boolean } = {

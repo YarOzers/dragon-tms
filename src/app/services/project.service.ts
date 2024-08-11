@@ -481,5 +481,80 @@ export class ProjectService {
     return of(testCase).pipe(delay(500)); // Возвращаем найденный тест-кейс или undefined с задержкой
   }
 
+  addFolderToTestPlan(projectId: number, testPlanId: number, folder: Folder): Observable<Folder> {
+    const project = this._projects.find(p => p.id === projectId);
+    if (!project) {
+      throw new Error(`Project with ID ${projectId} not found.`);
+    }
+
+    const testPlan = project.testPlan?.find(tp => tp.id === testPlanId);
+    if (!testPlan) {
+      throw new Error(`Test plan with ID ${testPlanId} not found.`);
+    }
+
+    const folderExists = (folders: Folder[], folderId: number): boolean => {
+      for (const existingFolder of folders) {
+        if (existingFolder.id === folderId) {
+          return true;
+        }
+        if (existingFolder.folders && folderExists(existingFolder.folders, folderId)) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (folderExists(testPlan.folders, folder.id)) {
+      throw new Error(`Folder with ID ${folder.id} already exists in the test plan.`);
+    }
+
+    testPlan.folders.push(folder);
+    return of(folder).pipe(delay(500)); // Симуляция задержки
+  }
+
+
+  addTestCasesToTestPlanFolder(projectId: number, testPlanId: number, folderId: number, testCases: TestCase[]): Observable<TestCase[]> {
+    const project = this._projects.find(p => p.id === projectId);
+    if (!project) {
+      throw new Error(`Project with ID ${projectId} not found.`);
+    }
+
+    const testPlan = project.testPlan?.find(tp => tp.id === testPlanId);
+    if (!testPlan) {
+      throw new Error(`Test plan with ID ${testPlanId} not found.`);
+    }
+
+    const findFolderRecursively = (folders: Folder[], folderId: number): Folder | undefined => {
+      for (const folder of folders) {
+        if (folder.id === folderId) {
+          return folder;
+        }
+        if (folder.folders) {
+          const foundFolder = findFolderRecursively(folder.folders, folderId);
+          if (foundFolder) {
+            return foundFolder;
+          }
+        }
+      }
+      return undefined;
+    };
+
+    const folder = findFolderRecursively(testPlan.folders, folderId);
+    if (!folder) {
+      throw new Error(`Folder with ID ${folderId} not found in test plan.`);
+    }
+
+    const existingTestCaseIds = new Set(folder.testCases.map(tc => tc.id));
+    const duplicateTestCases = testCases.filter(tc => existingTestCaseIds.has(tc.id));
+
+    if (duplicateTestCases.length > 0) {
+      throw new Error(`Test case(s) with ID(s) ${duplicateTestCases.map(tc => tc.id).join(', ')} already exist in the folder.`);
+    }
+
+    folder.testCases.push(...testCases);
+    return of(testCases).pipe(delay(500)); // Симуляция задержки
+  }
+
+
 
 }
