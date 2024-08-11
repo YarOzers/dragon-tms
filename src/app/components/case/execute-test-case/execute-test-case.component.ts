@@ -20,7 +20,7 @@ import {MatOption} from "@angular/material/core";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatSelect} from "@angular/material/select";
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from "@angular/material/sidenav";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {User} from "../../../models/user";
 import {
   TestCase,
@@ -55,12 +55,13 @@ import {ProjectService} from "../../../services/project.service";
     MatSidenavContainer,
     MatSidenavContent,
     NgForOf,
-    NgIf
+    NgIf,
+    NgClass
   ],
   templateUrl: './execute-test-case.component.html',
   styleUrls: [
     './execute-test-case.component.scss',
-    './create-test-case-example.component.css,',
+    './create-test-case-example.component.css',
     './editor.component.css'
   ]
 })

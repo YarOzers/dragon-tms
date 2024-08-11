@@ -1,6 +1,6 @@
 <div mat-dialog-content>
   <p>Test plans:</p>
-  <div class="table-container">
+  <div class="table-container" >
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
            class="table">
       <!-- Position Column -->
@@ -23,10 +23,16 @@
       </div>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="closeMatDialog(row.id)"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selectTestPlan(row.id)"></tr>
       <div *ngIf="isLoading" class="progress-bar-container">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>
     </table>
   </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="closeMatDialog()" class="close-btn" style="margin: 0 1rem 0 1rem; padding: 1rem">
+    Отмена
+  </button>
 </div>

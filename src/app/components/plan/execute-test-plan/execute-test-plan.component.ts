@@ -30,6 +30,7 @@ import {RouterParamsService} from "../../../services/router-params.service";
 import {CreateTestCaseComponent} from "../../case/create-test-case/create-test-case.component";
 import {FormsModule} from "@angular/forms";
 import {TestPlanTreeComponent} from "../test-plan-tree/test-plan-tree.component";
+import {ExecuteTestCaseComponent} from "../../case/execute-test-case/execute-test-case.component";
 
 @Component({
   selector: 'app-execute-test-plan',
@@ -175,7 +176,7 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit{
 
   openTestCaseDialog(testCaseId: number): void {
 
-    const dialogRef = this.dialog.open(CreateTestCaseComponent, {
+    const dialogRef = this.dialog.open(ExecuteTestCaseComponent, {
 
       width: '100%',
       height: '100%',

@@ -368,10 +368,10 @@ export class TreeComponent implements OnInit, AfterViewInit {
     console.log('openDialog was executed!!!, folderId:: ', folderId);
       const dialogRef = this.dialog.open(DialogTestPlanListComponent, {
 
-        width: '70%',
-        height: '70%',
-        maxWidth: '70%',
-        maxHeight: '70%',
+        width: '100%',
+        height: '100%',
+        maxWidth: '100%',
+        maxHeight: '100%',
         data: {
           type: 'folder',
 

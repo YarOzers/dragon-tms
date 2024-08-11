@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogContent, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef} from "@angular/material/dialog";
 import {DialogComponent} from "../../dialog/dialog.component";
 import {
   MatCell,
@@ -17,6 +17,8 @@ import {TestPlan} from "../../../models/test-plan";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {ProjectService} from "../../../services/project.service";
 import {RouterParamsService} from "../../../services/router-params.service";
+import {FlexModule} from "@angular/flex-layout";
+import {MatButton} from "@angular/material/button";
 
 @Component({
   selector: 'app-dialog-test-plan-list',
@@ -36,7 +38,10 @@ import {RouterParamsService} from "../../../services/router-params.service";
     MatSortHeader,
     MatTable,
     NgIf,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    FlexModule,
+    MatButton,
+    MatDialogActions
   ],
   templateUrl: './dialog-test-plan-list.component.html',
   styleUrl: './dialog-test-plan-list.component.css'
@@ -66,19 +71,23 @@ export class DialogTestPlanListComponent implements OnInit, AfterViewInit{
     private projectService: ProjectService,
     private routerParamsService: RouterParamsService
   ) {
-  this.routerParamsService.projectId$.subscribe(projectId =>{
-    this.projectId = projectId;
-  });
+
   }
 
-  closeMatDialog(testPlanId: number) {
+  selectTestPlan(testPlanId: number) {
     this.dialogRef.close(testPlanId);
+  }
+
+  closeMatDialog(){
+    this.dialogRef.close()
   }
 
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-
+    this.routerParamsService.projectId$.subscribe(projectId =>{
+      this.projectId = projectId;
+    });
 
     this.projectService.getTestPlans(+this.projectId).subscribe({
       next: (testPlans) => {

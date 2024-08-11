@@ -128,3 +128,10 @@ body {
 .mat-flat-button{
   padding: 1rem;
 }
+
+
+////    TABLE
+.mat-mdc-row.mdc-data-table__row.cdk-row.ng-star-inserted:hover{
+  background-color: #eaedff;
+}
+
