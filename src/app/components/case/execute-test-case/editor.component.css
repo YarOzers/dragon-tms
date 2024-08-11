@@ -1,0 +1,169 @@
+.header{
+  margin-right: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+button {
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* Обеспечиваем, чтобы .sidenav-container учитывал динамические размеры */
+.sidenav-container {
+  position: fixed;
+  top: 60px; /* Высота header */
+  bottom: 75px;
+  margin-bottom: 75px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Для вертикального выравнивания */
+}
+/* Динамические размеры для содержимого */
+mat-sidenav-content {
+  flex-grow: 1; /* Заставляем этот блок занимать оставшееся место */
+  overflow: hidden; /* Отключаем прокрутку для всего контента, кроме step-container */
+  display: flex;
+  flex-direction: column; /* Вертикальное выравнивание элементов */
+}
+/* Фиксируем toolbar, чтобы он не перекрывался */
+.toolbar-plus-btn {
+  flex-shrink: 0; /* Запрещаем этому блоку сжиматься */
+  z-index: 1001; /* Поверх всего, что внутри mat-sidenav-content */
+}
+
+/* Делаем step-container прокручиваемым */
+.step-container {
+  display: flex;
+  flex-grow: 1; /* Заставляем контейнер занимать все оставшееся пространство */
+  overflow-y: auto; /* Включаем вертикальную прокрутку */
+}
+
+.btn_container {
+  min-width: 15px;
+  min-height: 15px;
+  border: solid black 1px;
+}
+
+.editor-container {
+  padding: 10px;
+}
+
+.toolbar {
+
+}
+
+.toolbar button {
+  margin-right: 5px;
+}
+
+.editor {
+  flex: 1;
+  border-radius: 0;
+  border: none;
+  border-left: #b9d6ea 1px solid;
+  border-bottom: #b9d6ea 1px solid;
+  padding: 4px;
+}
+
+button.active.btn_bold {
+  background-color: #a1a1bd;
+  font-weight: bold;
+}
+
+button.active.btn_italic {
+  background-color: #a1a1bd;
+  font-style: italic;
+}
+
+button.active.btn_underline {
+  background-color: #a1a1bd;
+  text-decoration: underline;
+}
+
+button.active.btn_li {
+  background-color: #a1a1bd;
+  text-decoration: underline;
+}
+button.btn_black{
+  background-color: #a29b9b;
+}
+button.btn_green{
+  background-color: #c2e0c8;
+}
+button.active.btn_green {
+  background-color: #2f6b26;
+}
+
+button.btn_red{
+  background-color: #e8c0c0;
+}
+button.active.btn_red {
+  background-color: #93000a;
+}
+
+button.active.btn_black {
+  background-color: #2a2727;
+}
+
+.mat-mdc-mini-fab {
+  /*width: 30px;*/
+  /*height: 30px;*/
+  border-radius: 4px;
+}
+
+.highlight{
+  background-color: rgba(255, 255, 0, 0.45);
+}
+
+.underline{
+  background-color: #5c2269;
+}
+
+
+.mat-mdc-mini-fab.active-underline{
+  background-color: #5c2269;
+}
+
+.toolbar-plus-btn{
+margin-bottom: 1rem;
+}
+
+.resizable {
+  display: inline-block;
+  position: relative;
+}
+
+.resizable img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.resizable .resize-handle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
+  right: 0;
+  bottom: 0;
+  cursor: se-resize; /* Курсор для изменения размера */
+  z-index: 10; /* Поверх всех других элементов */
+}
+.resize-handle {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
+  right: 0;
+  bottom: 0;
+  cursor: se-resize; /* Курсор для изменения размера */
+  z-index: 10; /* Поверх всех других элементов */
+}

@@ -1,1 +1,289 @@
-<p>execute-test-case works!</p>
+<mat-progress-bar mode="indeterminate"></mat-progress-bar>
+<div class="dialog-container">
+  <div mat-dialog-content class="dialog-content">
+
+    <div class="header">
+      <div fxLayout="row" fxLayoutAlign="center-center">
+        <div *ngIf="!new" fxFlex="6">
+          <span fxFlex="6">{{ this.testCaseId }}</span>
+        </div>
+        <div *ngIf="new" fxFlex="6">
+          <span fxFlex="6"></span>
+        </div>
+        <input type="text" fxFlex="91" [(ngModel)]="name">
+      </div>
+    </div>
+    <div>
+      <mat-sidenav-container class="sidenav-container" fxFlex>
+        <mat-sidenav #sidenav mode="side" opened>
+          <form>
+            <mat-form-field>
+              <mat-label>Вид тестирования</mat-label>
+              <mat-select [(ngModel)]="data.type" name="type">
+                @for (type of typesOfTests; track type) {
+                  <mat-option [value]="type">{{ type }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Приоритет</mat-label>
+              <mat-select [(ngModel)]="data.priority" name="priority">
+                @for (priority of typesOfPriority; track priority) {
+                  <mat-option [value]="priority">{{ priority }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Признак автоматизации</mat-label>
+              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag">
+                @for (auto of automationFlags; track auto) {
+                  <mat-option [value]="auto">{{ auto }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Время выполнения</mat-label>
+              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Готовность</mat-label>
+              <mat-select [(ngModel)]="data.status" name="status">
+                @for (status of statuses; track status) {
+                  <mat-option [value]="status">{{ status }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+          <div fxLayout="row" class="toolbar-plus-btn">
+            <div fxFlex="7">
+              <button mat-icon-button (click)="toggleSidenav()">
+                <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
+              </button>
+            </div>
+            <div class="toolbar" fxFlex="93">
+              <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')"
+                      [class.active]="currentStyles['bold']">
+                <mat-icon>format_bold</mat-icon>
+              </button>
+              <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline', 'active-underline')"
+                      [class.active-underline]="currentClasses['underline']">
+                <mat-icon> format_underlined</mat-icon>
+              </button>
+              <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')"
+                      [class.active]="currentStyles['italic']">
+                <mat-icon> format_italic</mat-icon>
+              </button>
+              <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')"
+                      [class.active]="currentStyles['color-red']">
+                <mat-icon>format_color_text</mat-icon>
+              </button>
+              <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')"
+                      [class.active]="currentStyles['color-green']">
+                <mat-icon>format_color_text</mat-icon>
+              </button>
+              <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')"
+                      [class.active]="currentStyles['color-black']">
+                <mat-icon>format_color_text</mat-icon>
+              </button>
+              <button mat-mini-fab class="btn_li" (click)="toggleStyle('insertUnorderedList')"
+                      [class.active]="currentStyles['li']">
+                <mat-icon> format_list_bulleted</mat-icon>
+              </button>
+              <button mat-mini-fab (click)="insertImage()">
+                <mat-icon>image_search</mat-icon>
+              </button>
+              <button mat-mini-fab (click)="triggerFileInput()">
+                <mat-icon>add_photo_alternate</mat-icon>
+              </button>
+              <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')"
+                      [class.active-highlight]="currentClasses['highlight']">
+                <mat-icon> format_color_fill</mat-icon>
+              </button>
+
+
+            </div>
+          </div>
+
+          <div class="step-container" fxLayout="column">
+            <div class="steps">
+              <div>
+                <mat-checkbox [(ngModel)]="allSelectedPreConditions" [indeterminate]="indeterminatePreCondition"
+                              (change)="selectAllPreconditions($event.checked)">
+                  Предусловия
+                </mat-checkbox>
+              </div>
+              <div #editorPreConditionContainer>
+                <div *ngFor="let preCondition of preConditions; let i = index"
+
+                     class="editor-item"
+                     fxLayout="row">
+                  <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
+                                fxFlex="6">
+                  </mat-checkbox>
+                  <span fxFlex="3">{{ preCondition.id }}</span>
+                  <div fxFlex="91" class="steps-container" [ngClass]="{'border-top': i === 0}">
+
+                    <div class="editor" #actionEditor
+                         contenteditable="true"
+                         fxFlex="50"
+                         (focus)="setActiveEditor($event)"
+                         (input)="autoResize($event, expectedResultEditor)"
+                         (paste)="autoResize($event, expectedResultEditor)"
+                         (focusin)="autoResize($event, expectedResultEditor)"
+                         (resize)="autoResize($event, expectedResultEditor)"
+                         (mouseup)="autoResize($event, expectedResultEditor)"
+                         (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
+                         (drop)="handleDrop($event)"
+                         (dragover)="handleDragOver($event)"
+                    >
+                    </div>
+                    <input type="file" #fileInput accept="image/*" style="display: none;"
+                           (change)="onFileSelected($event)">
+                    <div class="editor" #expectedResultEditor
+                         contenteditable="true"
+                         fxFlex="50"
+                         (focus)="setActiveEditor($event)"
+                         (input)="autoResize($event, actionEditor)"
+                         (paste)="autoResize($event, actionEditor)"
+                         (focusin)="autoResize($event, actionEditor)"
+                         (resize)="autoResize($event, actionEditor)"
+                         (mouseup)="autoResize($event, actionEditor)"
+                         (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
+                         (drop)="handleDrop($event)"
+                         (dragover)="handleDragOver($event)"
+                    >
+                    </div>
+                    <input type="file" #fileInput accept="image/*" style="display: none;"
+                           (change)="onFileSelected($event)">
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end center">
+                  <button mat-icon-button (click)="addPreCondition()">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="deleteSelectedPreconditions()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="steps">
+              <div>
+                <mat-checkbox [(ngModel)]="allSelectedSteps" [indeterminate]="indeterminateSteps"
+                              (change)="selectAllSteps($event.checked)">
+                  Шаги
+                </mat-checkbox>
+              </div>
+              <div #editorStepContainer>
+                <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
+                  <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
+                  </mat-checkbox>
+                  <span fxFlex="3">{{ step.id }}</span>
+                  <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
+                    <div class="editor" #actionEditor
+                         contenteditable="true"
+                         fxFlex="50"
+                         (focus)="setActiveEditor($event)"
+                         (input)="autoResize($event, expectedResultEditor)"
+                         (paste)="autoResize($event, expectedResultEditor)"
+                         (blur)="updateEditorStepContent(actionEditor, i, 'action')"
+                         (drop)="handleDrop($event)"
+                         (dragover)="handleDragOver($event)">
+                    </div>
+                    <input type="file" #fileInput accept="image/*" style="display: none;"
+                           (change)="onFileSelected($event)">
+                    <div class="editor" #expectedResultEditor
+                         contenteditable="true"
+                         fxFlex="50"
+                         (focus)="setActiveEditor($event)"
+                         (input)="autoResize($event, actionEditor)"
+                         (paste)="autoResize($event, actionEditor)"
+                         (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
+                         (drop)="handleDrop($event)"
+                         (dragover)="handleDragOver($event)">
+                    </div>
+                    <input type="file" #fileInput accept="image/*" style="display: none;"
+                           (change)="onFileSelected($event)">
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end center">
+                  <button mat-icon-button (click)="addStep()">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="deleteSelectedSteps()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="steps">
+              <div>
+                <mat-checkbox [(ngModel)]="allSelectedPostConditions" [indeterminate]="indeterminatePostCondition"
+                              (change)="selectAllPostConditions($event.checked)">
+                  Постусловия
+                </mat-checkbox>
+              </div>
+              <div #editorPostConditionContainer>
+                <div *ngFor="let postCondition of postConditions; let i = index" class="editor-item" fxLayout="row">
+                  <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
+                                fxFlex="6">
+                  </mat-checkbox>
+                  <span fxFlex="3">{{ postCondition.id }}</span>
+                  <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
+                    <div class="editor" #actionEditor
+                         contenteditable="true"
+                         fxFlex="50"
+                         (focus)="setActiveEditor($event)"
+                         (input)="autoResize($event, expectedResultEditor)"
+                         (paste)="autoResize($event, expectedResultEditor)"
+                         (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
+                         (drop)="handleDrop($event)"
+                         (dragover)="handleDragOver($event)">
+                    </div>
+                    <input type="file" #fileInput accept="image/*" style="display: none;"
+                           (change)="onFileSelected($event)">
+                    <div class="editor" #expectedResultEditor
+                         contenteditable="true"
+                         fxFlex="50"
+                         (focus)="setActiveEditor($event)"
+                         (input)="autoResize($event, actionEditor)"
+                         (paste)="autoResize($event, actionEditor)"
+                         (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
+                         (drop)="handleDrop($event)"
+                         (dragover)="handleDragOver($event)">
+                    </div>
+                    <input type="file" #fileInput accept="image/*" style="display: none;"
+                           (change)="onFileSelected($event)">
+
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayoutAlign="end center">
+                  <button mat-icon-button (click)="addPostCondition()">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                  <button mat-icon-button (click)="deleteSelectedPostConditions()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem">Сохранить</button>
+  <button mat-button (click)="closeMatDialog()" class="close-btn" style="margin: 0 1rem 0 1rem; padding: 1rem">
+    Отмена
+  </button>
+</div>
+
+
+

@@ -82,7 +82,7 @@ export class ProjectService {
         testCaseCount: 0,
         status: 'await',
         qas: [],
-        folders: this.TEST_CASE_DATA
+        folders: [this.root_folder]
       }],
       createdDate: this.getCurrentDateTimeString()
     },

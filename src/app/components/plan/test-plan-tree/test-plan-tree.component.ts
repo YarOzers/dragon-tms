@@ -9,9 +9,9 @@ import {
 } from "@angular/cdk/drag-drop";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
-import {MatMenu, MatMenuItem} from "@angular/material/menu";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
-import {NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {TestCase} from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
 import {RouterParamsService} from "../../../services/router-params.service";
@@ -23,27 +23,29 @@ import {CreateTestCaseComponent} from "../../case/create-test-case/create-test-c
 @Component({
   selector: 'app-test-plan-tree',
   standalone: true,
-    imports: [
-        CdkDrag,
-        CdkDropList,
-        CdkDropListGroup,
-        MatIcon,
-        MatIconButton,
-        MatMenu,
-        MatMenuItem,
-        MatProgressBar,
-        NgForOf,
-        NgIf,
-        NgTemplateOutlet
-    ],
+  imports: [
+    CdkDrag,
+    CdkDropList,
+    CdkDropListGroup,
+    MatIcon,
+    MatIconButton,
+    MatMenu,
+    MatMenuItem,
+    MatProgressBar,
+    NgForOf,
+    NgIf,
+    NgTemplateOutlet,
+    NgClass,
+    MatMenuTrigger
+  ],
   templateUrl: './test-plan-tree.component.html',
-  styleUrl: './test-plan-tree.component.css'
+  styleUrl: './test-plan-tree.component.scss'
 })
 export class TestPlanTreeComponent {
   dataLoading: boolean = false;
   private projectId: number | null = 0;
   private testCases: TestCase[] = [];
-  @Output() testCasesFromTree = new EventEmitter<any>();
+  @Output() testCasesFromTestPlanTree = new EventEmitter<any>();
 
   constructor(
     private projectService: ProjectService,
@@ -77,8 +79,8 @@ export class TestPlanTreeComponent {
   }
 
   sentTestCasesFromTree() {
-    if (this.testCasesFromTree) {
-      this.testCasesFromTree.emit(this.testCases)
+    if (this.testCasesFromTestPlanTree) {
+      this.testCasesFromTestPlanTree.emit(this.testCases)
     }
 
   }

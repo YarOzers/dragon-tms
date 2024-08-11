@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FlexModule} from "@angular/flex-layout";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {
@@ -29,6 +29,7 @@ import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {CreateTestCaseComponent} from "../../case/create-test-case/create-test-case.component";
 import {FormsModule} from "@angular/forms";
+import {TestPlanTreeComponent} from "../test-plan-tree/test-plan-tree.component";
 
 @Component({
   selector: 'app-execute-test-plan',
@@ -60,12 +61,13 @@ import {FormsModule} from "@angular/forms";
     TreeComponent,
     FormsModule,
     MatMenuTrigger,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    TestPlanTreeComponent
   ],
   templateUrl: './execute-test-plan.component.html',
   styleUrl: './execute-test-plan.component.css'
 })
-export class ExecuteTestPlanComponent {
+export class ExecuteTestPlanComponent implements OnInit, AfterViewInit{
   allColumns = ['select', 'run', 'id', 'name', 'type'];
   displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
   displayedColumnsSelection: { [key: string]: boolean } = {
