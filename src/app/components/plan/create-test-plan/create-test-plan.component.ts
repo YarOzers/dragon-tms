@@ -34,6 +34,7 @@ import {CreateTestCaseComponent} from "../../case/create-test-case/create-test-c
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
+import {CreateTestPlanTreeComponent} from "./create-test-plan-tree/create-test-plan-tree.component";
 
 @Component({
   selector: 'app-create-test-plan',
@@ -73,7 +74,8 @@ import {MatInput} from "@angular/material/input";
     MatInput,
     MatLabel,
     NgSwitchCase,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CreateTestPlanTreeComponent
   ],
   templateUrl: './create-test-plan.component.html',
   styleUrl: './create-test-plan.component.scss'
