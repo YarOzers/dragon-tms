@@ -44,7 +44,7 @@ import {MatButton} from "@angular/material/button";
     MatDialogActions
   ],
   templateUrl: './dialog-test-plan-list.component.html',
-  styleUrl: './dialog-test-plan-list.component.css'
+  styleUrl: './dialog-test-plan-list.component.scss'
 })
 export class DialogTestPlanListComponent implements OnInit, AfterViewInit{
   projectId: any;
