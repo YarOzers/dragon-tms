@@ -1,3 +1,4 @@
+<button mat-button (click)="getSelectedIds()">button</button>
 <mat-progress-bar *ngIf="!dataLoading" mode="indeterminate"></mat-progress-bar>
 <div *ngIf="dataLoading">
   <div cdkDropListGroup>
@@ -7,14 +8,18 @@
 
     <ng-template #folderTemplate let-folder="folder">
       <div [ngClass]="{'nested-folder': folder.parentFolderId}">
-        <div
-             (click)="getTestCases(folder.id)"
-             class="folder-header">
+        <div class="folder-header">
           <button mat-icon-button (click)="toggleFolder(folder, $event)">
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
           <mat-icon>folder_open</mat-icon>
           <span class="folder-name">{{ folder.name }}</span>
+          <!-- Чекбокс для папки -->
+          <mat-checkbox
+            [indeterminate]="isFolderIndeterminate(folder)"
+            [checked]="isFolderChecked(folder)"
+            (change)="toggleFolderCheckbox(folder, $event)">
+          </mat-checkbox>
         </div>
         <div *ngIf="folder.expanded">
           <div *ngFor="let subFolder of folder.folders"
@@ -25,15 +30,17 @@
         <div *ngIf="folder.expanded" cdkDropList
              class="test-case-list">
 
-          <div *ngFor="let testCase of testCasesMap[folder.name]">
-            <div class="test-case-item">
-              <mat-icon>subject</mat-icon>
-              {{ testCase.name }}
-            </div>
+          <div *ngFor="let testCase of testCasesMap[folder.name]" class="test-case-item">
+            <mat-icon>subject</mat-icon>
+            {{ testCase.name }}
+            <!-- Чекбокс для тест-кейса -->
+            <mat-checkbox
+              [checked]="isTestCaseChecked(testCase)"
+              (change)="toggleTestCaseCheckbox(folder, testCase, $event)">
+            </mat-checkbox>
           </div>
         </div>
       </div>
     </ng-template>
   </div>
 </div>
-

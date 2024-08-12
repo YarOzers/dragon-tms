@@ -5,10 +5,11 @@ import {RouterParamsService} from "../../../../services/router-params.service";
 import {Folder} from "../../../../models/folder";
 import {CdkDrag, CdkDropList, CdkDropListGroup} from "@angular/cdk/drag-drop";
 import {MatIcon} from "@angular/material/icon";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
+import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-create-test-plan-tree',
@@ -26,7 +27,9 @@ import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
     NgIf,
     NgTemplateOutlet,
     NgClass,
-    MatMenuTrigger
+    MatMenuTrigger,
+    MatCheckbox,
+    MatButton
   ],
   templateUrl: './create-test-plan-tree.component.html',
   styleUrl: './create-test-plan-tree.component.css'
@@ -38,6 +41,10 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   @Output() testCasesFromTree = new EventEmitter<any>();
   protected TEST_CASE_DATA: Folder[] | null = [];
   testCasesMap: { [key: string]: TestCase[] } = {};
+
+  // Хранение состояния чекбоксов
+  selectedFolders: Set<number> = new Set();
+  selectedTestCases: Set<number> = new Set();
 
   constructor(
     private projectService: ProjectService,
@@ -51,7 +58,6 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.dataLoading = false;
     this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
-      console.log('getProjectFolders: ', folders);
       if (folders) {
         this.TEST_CASE_DATA = [...folders];
         this.generateTestCaseArrays();
@@ -59,7 +65,6 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
           this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
         }
       }
-      console.log('TEST_CASE_DATA: ', this.TEST_CASE_DATA);
       this.dataLoading = true;
     });
   }
@@ -68,41 +73,23 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     if (this.testCasesFromTree) {
       this.testCasesFromTree.emit(this.testCases)
     }
-
   }
 
-  ngAfterViewInit(): void {
-
-  }
+  ngAfterViewInit(): void {}
 
   private generateTestCaseArrays() {
-    console.log('GenerateTestCaseArray :', this.TEST_CASE_DATA);
     if (this.TEST_CASE_DATA) {
       this.TEST_CASE_DATA.forEach(folder => {
         this.addTestCasesToMap(folder);
       });
     }
-    console.log('Test Cases Map after generation:', this.testCasesMap);
   }
 
   private addTestCasesToMap(folder: Folder) {
-    console.log('addTestCaseToMap folder: ', folder);
     if (folder.name) {
-      console.log('folder.name: ', folder.name);
       this.testCasesMap[folder.name] = folder.testCases!;
-      console.log('testCaseMap: ', this.testCasesMap);
       if (folder.folders) {
         folder.folders.forEach(subFolder => this.addTestCasesToMap(subFolder));
-        console.log('afterAdding Test cases to map: ', this.testCasesMap);
-      }
-    }
-  }
-
-  private syncFolderTestCases(folder: Folder) {
-    if (folder.name) {
-      folder.testCases = this.testCasesMap[folder.name];
-      if (folder.folders) {
-        folder.folders.forEach(subFolder => this.syncFolderTestCases(subFolder));
       }
     }
   }
@@ -113,12 +100,9 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   getTestCases(folderId: number) {
-    console.log('getTestCases WAs executed, folderId: ', folderId )
     if (this.projectId) {
-      console.log('projectId: ', this.projectId);
       this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
         next: (testCases) => {
-          console.log('TestCases: ', testCases)
           this.testCases = testCases;
           this.sentTestCasesFromTree();
         },
@@ -129,4 +113,72 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // Функции для обработки состояния чекбоксов
+  isFolderChecked(folder: Folder): boolean {
+    return this.areAllTestCasesChecked(folder) && this.areAllSubFoldersChecked(folder);
+  }
+
+  isFolderIndeterminate(folder: Folder): boolean {
+    const someCasesChecked = this.areSomeTestCasesChecked(folder);
+    const someFoldersChecked = this.areSomeSubFoldersChecked(folder);
+    return (someCasesChecked || someFoldersChecked) && !this.isFolderChecked(folder);
+  }
+
+  areAllTestCasesChecked(folder: Folder): boolean {
+    return this.testCasesMap[folder.name]?.every(tc => this.selectedTestCases.has(tc.id)) ?? false;
+  }
+
+  areSomeTestCasesChecked(folder: Folder): boolean {
+    return this.testCasesMap[folder.name]?.some(tc => this.selectedTestCases.has(tc.id)) ?? false;
+  }
+
+  areAllSubFoldersChecked(folder: Folder): boolean {
+    return folder.folders?.every(subFolder => this.isFolderChecked(subFolder)) ?? false;
+  }
+
+  areSomeSubFoldersChecked(folder: Folder): boolean {
+    return folder.folders?.some(subFolder => this.isFolderChecked(subFolder) || this.isFolderIndeterminate(subFolder)) ?? false;
+  }
+
+  toggleFolderCheckbox(folder: Folder, event: MatCheckboxChange) {
+    if (event.checked) {
+      this.selectFolderAndContents(folder);
+    } else {
+      this.deselectFolderAndContents(folder);
+    }
+  }
+
+  toggleTestCaseCheckbox(folder: Folder, testCase: TestCase, event: MatCheckboxChange) {
+    if (event.checked) {
+      this.selectedTestCases.add(testCase.id);
+    } else {
+      this.selectedTestCases.delete(testCase.id);
+    }
+  }
+
+  selectFolderAndContents(folder: Folder) {
+    this.selectedFolders.add(folder.id);
+    this.testCasesMap[folder.name]?.forEach(tc => this.selectedTestCases.add(tc.id));
+    folder.folders?.forEach(subFolder => this.selectFolderAndContents(subFolder));
+  }
+
+  deselectFolderAndContents(folder: Folder) {
+    this.selectedFolders.delete(folder.id);
+    this.testCasesMap[folder.name]?.forEach(tc => this.selectedTestCases.delete(tc.id));
+    folder.folders?.forEach(subFolder => this.deselectFolderAndContents(subFolder));
+  }
+
+  getSelectedIds() {
+    console.log("This selected foldersIds::", Array.from(this.selectedFolders));
+    console.log("This selected testCaseIds::", Array.from(this.selectedTestCases));
+    return {
+      folders: Array.from(this.selectedFolders),
+      testCases: Array.from(this.selectedTestCases)
+    };
+  }
+
+  isTestCaseChecked(testCase: TestCase): boolean {
+    return this.selectedTestCases.has(testCase.id);
+  }
 }
+
