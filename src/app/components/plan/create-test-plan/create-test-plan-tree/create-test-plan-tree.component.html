@@ -16,8 +16,9 @@
           <span class="folder-name">{{ folder.name }}</span>
           <!-- Чекбокс для папки -->
           <mat-checkbox
-            [indeterminate]="isFolderIndeterminate(folder)"
-            [checked]="isFolderChecked(folder)"
+            [indeterminate]="!isFolderCheckboxDisabled(folder) && isFolderIndeterminate(folder)"
+            [checked]="!isFolderCheckboxDisabled(folder) && isFolderChecked(folder)"
+            [disabled]="isFolderCheckboxDisabled(folder)"
             (change)="toggleFolderCheckbox(folder, $event)">
           </mat-checkbox>
         </div>

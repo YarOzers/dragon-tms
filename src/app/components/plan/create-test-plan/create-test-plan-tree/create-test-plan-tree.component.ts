@@ -115,13 +115,26 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
 
   // Функции для обработки состояния чекбоксов
   isFolderChecked(folder: Folder): boolean {
-    return this.areAllTestCasesChecked(folder) && this.areAllSubFoldersChecked(folder);
+    return this.areAllTestCasesChecked(folder) &&
+      ((folder.folders?? []).filter(subFolder => !this.isFolderCheckboxDisabled(subFolder)).every(subFolder => this.isFolderChecked(subFolder)) ?? false);
   }
 
   isFolderIndeterminate(folder: Folder): boolean {
     const someCasesChecked = this.areSomeTestCasesChecked(folder);
-    const someFoldersChecked = this.areSomeSubFoldersChecked(folder);
+    const someFoldersChecked = ((folder.folders?? []).filter(subFolder => !this.isFolderCheckboxDisabled(subFolder)).some(subFolder => this.isFolderChecked(subFolder) || this.isFolderIndeterminate(subFolder)) ?? false);
     return (someCasesChecked || someFoldersChecked) && !this.isFolderChecked(folder);
+  }
+
+  isFolderCheckboxDisabled(folder: Folder): boolean {
+    // Чекбокс блокируется, если в папке и всех её дочерних папках нет тест-кейсов
+    return !this.hasTestCasesOrSubFoldersWithTestCases(folder);
+  }
+
+  private hasTestCasesOrSubFoldersWithTestCases(folder: Folder): boolean {
+    if (this.testCasesMap[folder.name]?.length > 0) {
+      return true;
+    }
+    return folder.folders?.some(subFolder => this.hasTestCasesOrSubFoldersWithTestCases(subFolder)) ?? false;
   }
 
   areAllTestCasesChecked(folder: Folder): boolean {
@@ -133,7 +146,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   areAllSubFoldersChecked(folder: Folder): boolean {
-    return folder.folders?.every(subFolder => this.isFolderChecked(subFolder)) ?? false;
+    return ((folder.folders?? []).every(subFolder => this.isFolderChecked(subFolder)) ?? false);
   }
 
   areSomeSubFoldersChecked(folder: Folder): boolean {
