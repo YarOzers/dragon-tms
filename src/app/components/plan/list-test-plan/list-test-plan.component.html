@@ -22,13 +22,13 @@
     </div>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="navigateToProject(row.id)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="navigateToTestPlan(row.id)"></tr>
   </table>
   <div *ngIf="isLoading" class="progress-bar-container">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 </div>
-<button  mat-flat-button (click)="openDialog()">Добавить тест план</button>
+<button  mat-flat-button (click)="openCreateTestPlanDialog()">Добавить тест план</button>
 
 
 

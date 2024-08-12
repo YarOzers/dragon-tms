@@ -25,6 +25,8 @@ import {DialogComponent} from "../../dialog/dialog.component";
 import {TestPlan} from "../../../models/test-plan";
 import {TestPlanService} from "../../../services/test-plan.service";
 import {RouterParamsService} from "../../../services/router-params.service";
+import {DialogTestPlanListComponent} from "../dialog-test-plan-list/dialog-test-plan-list.component";
+import {CreateTestPlanComponent} from "../create-test-plan/create-test-plan.component";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -169,11 +171,30 @@ export class ListTestPlanComponent implements AfterViewInit{
     });
   }
 
-  navigateToProject( testPlanId: number) {
+  navigateToTestPlan(testPlanId: number) {
     this.testPlanId = testPlanId;
     this.headerService.showButtons(true);
     this.routerParamsService.setProjectId(this.projectId);
     this.routerParamsService.setTestPlanId(Number(this.testPlanId));
     this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
+  }
+
+  openCreateTestPlanDialog() {
+    const dialogRef = this.dialog.open(CreateTestPlanComponent, {
+
+      width: '100%',
+      height: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      data: {
+        projectId: this.projectId,
+
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(testPlanId => {
+
+
+    });
   }
 }
