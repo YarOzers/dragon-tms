@@ -114,14 +114,19 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
 // Проверка состояния чекбоксов
+  // Определяем, отмечена ли папка (все элементы внутри папки отмечены)
   isFolderChecked(folder: Folder): boolean {
-    return folder.selected || false;
+    const allTestCasesChecked = this.areAllTestCasesChecked(folder);
+    const allFoldersChecked = (folder.folders ?? []).every(subFolder => this.isFolderChecked(subFolder));
+    return allTestCasesChecked && allFoldersChecked;
   }
 
+  // Определяем, находится ли папка в промежуточном состоянии (отмечены только некоторые элементы внутри папки)
   isFolderIndeterminate(folder: Folder): boolean {
-    const someCasesChecked = this.areSomeTestCasesChecked(folder);
-    const someFoldersChecked = (folder.folders ?? []).some(subFolder => this.isFolderChecked(subFolder) || this.isFolderIndeterminate(subFolder));
-    return (someCasesChecked || someFoldersChecked) && !this.isFolderChecked(folder);
+    const someTestCasesChecked = this.areSomeTestCasesChecked(folder);
+    const someFoldersIndeterminate = (folder.folders ?? []).some(subFolder => this.isFolderIndeterminate(subFolder));
+    const someFoldersChecked = (folder.folders ?? []).some(subFolder => this.isFolderChecked(subFolder));
+    return (someTestCasesChecked || someFoldersChecked || someFoldersIndeterminate) && !this.isFolderChecked(folder);
   }
 
   isFolderCheckboxDisabled(folder: Folder): boolean {
@@ -136,24 +141,52 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     return folder.folders?.some(subFolder => this.hasTestCasesOrSubFoldersWithTestCases(subFolder)) ?? false;
   }
 
+  // Проверяем, выбраны ли все тест-кейсы в папке
   areAllTestCasesChecked(folder: Folder): boolean {
-    return this.testCasesMap[folder.name]?.every(tc => tc.selected) ?? false;
+    return this.testCasesMap[folder.name]?.every(tc => tc.selected === true) ?? false;
   }
 
+  // Проверяем, выбраны ли некоторые тест-кейсы в папке
   areSomeTestCasesChecked(folder: Folder): boolean {
-    return this.testCasesMap[folder.name]?.some(tc => tc.selected) ?? false;
+    return this.testCasesMap[folder.name]?.some(tc => tc.selected === true) ?? false;
   }
+
 
 // Изменение состояния чекбоксов
+  // Изменение состояния чекбоксов папок
   toggleFolderCheckbox(folder: Folder, event: MatCheckboxChange) {
-    if (folder.selected === null) {
-      folder.selected = true; // Все выбрано
-    } else if (folder.selected) {
-      folder.selected = false; // Ничего не выбрано
-    } else {
-      folder.selected = null; // Частично выбрано
+    const newValue = event.checked ? true : (this.isFolderIndeterminate(folder) ? null : false);
+
+    // Обновляем состояние папки и всех вложенных объектов
+    this.selectOrDeselectFolderAndContents(folder, newValue);
+    // Синхронизируем состояние родительских папок (если есть) после изменения состояния
+    this.updateParentFoldersState(folder);
+  }
+
+  // Обновляем состояние родительских папок на основе состояний дочерних
+  updateParentFoldersState(folder: Folder) {
+    const parentFolder = this.findParentFolder(this.TEST_CASE_DATA!, folder);
+    if (parentFolder) {
+      const allSelected = this.isFolderChecked(parentFolder);
+      const indeterminate = this.isFolderIndeterminate(parentFolder);
+
+      parentFolder.selected = allSelected ? true : (indeterminate ? null : false);
+      this.updateParentFoldersState(parentFolder);
     }
-    this.selectOrDeselectFolderAndContents(folder, folder.selected);
+  }
+
+  // Поиск родительской папки для данной папки
+  private findParentFolder(folders: Folder[], targetFolder: Folder): Folder | null {
+    for (const folder of folders) {
+      if ((folder.folders ?? []).some(subFolder => subFolder.id === targetFolder.id)) {
+        return folder;
+      }
+      const foundParent = this.findParentFolder(folder.folders ?? [], targetFolder);
+      if (foundParent) {
+        return foundParent;
+      }
+    }
+    return null;
   }
 
   toggleTestCaseCheckbox(folder: Folder, testCase: TestCase, event: MatCheckboxChange) {
@@ -161,10 +194,8 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     this.syncTreeSelectionWithPartialSelection();
   }
 
+  // Рекурсивно обновляем состояние всех дочерних элементов (папок и тест-кейсов)
   selectOrDeselectFolderAndContents(folder: Folder, select: boolean | null) {
-    if (select === null) {
-      return; // Не изменяем состояния, если select null
-    }
     folder.selected = select;
     this.testCasesMap[folder.name]?.forEach(tc => tc.selected = select);
     folder.folders?.forEach(subFolder => this.selectOrDeselectFolderAndContents(subFolder, select));

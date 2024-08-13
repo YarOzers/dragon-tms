@@ -59,7 +59,131 @@ export class ProjectService {
   private root_folder: Folder = {
     id: 0,
     name: 'root_folder',
-    testCases: [],
+    testCases: [{
+      "id": 1,
+      "name": "asd",
+      "lastDataIndex": 0,
+      "folderId": 0,
+      "folder": "root_folder",
+      "type": "testCase",
+      "author": {
+        "id": 1,
+        "role": "admin",
+        "name": "Ярослав Андреевич",
+        "rights": "super"
+      },
+      "data": [
+        {
+          "status": "ready",
+          "automationFlag": "auto",
+          "changesAuthor": {
+            "id": 1,
+            "role": "admin",
+            "name": "Ярослав Андреевич",
+            "rights": "super"
+          },
+          "createdTime": null,
+          "executionTime": "11:01",
+          "expectedExecutionTime": "00:00",
+          "name": "",
+          "preConditionItems": [
+            {
+              "id": 1,
+              "selected": false,
+              "action": "sdf",
+              "expectedResult": "sdf"
+            }
+          ],
+          "stepItems": [
+            {
+              "id": 1,
+              "selected": false,
+              "action": "sdf",
+              "expectedResult": "sdf"
+            }
+          ],
+          "postConditionItems": [
+            {
+              "id": 1,
+              "selected": false,
+              "action": "sdf",
+              "expectedResult": "sdf"
+            }
+          ],
+          "priority": "Highest",
+          "type": "functional",
+          "version": 1
+        }
+      ],
+      "loading": null,
+      "new": true,
+      "results": [],
+      "selected": null,
+      "automationFlag": "auto",
+      "isRunning": false
+    },
+      {
+        "id": 1,
+        "name": "ggg",
+        "lastDataIndex": 0,
+        "folderId": 0,
+        "folder": "root_folder",
+        "type": "testCase",
+        "author": {
+          "id": 1,
+          "role": "admin",
+          "name": "Ярослав Андреевич",
+          "rights": "super"
+        },
+        "data": [
+          {
+            "status": "ready",
+            "automationFlag": "auto",
+            "changesAuthor": {
+              "id": 1,
+              "role": "admin",
+              "name": "Ярослав Андреевич",
+              "rights": "super"
+            },
+            "createdTime": null,
+            "executionTime": "11:01",
+            "expectedExecutionTime": "00:00",
+            "name": "",
+            "preConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "dsf",
+                "expectedResult": "sdf"
+              }
+            ],
+            "stepItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "sdf",
+                "expectedResult": "sdf"
+              }
+            ],
+            "postConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "sdf",
+                "expectedResult": "sdf"
+              }
+            ],
+            "priority": "Highest",
+            "type": "functional",
+            "version": 1
+          }
+        ],
+        "loading": null,
+        "new": true,
+        "results": [],
+        "selected": null,
+        "automationFlag": "auto"
+      }],
     folders: [this.folder1, this.folder2, this.folder3],
     type: 'folder'
   };
