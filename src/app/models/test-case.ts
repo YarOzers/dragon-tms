@@ -6,7 +6,8 @@ export interface TestCase {
   name: string;
   folderId: number | null;
   folder: string;
-  type: 'testCase' | 'checkList'
+  type: 'testCase' | 'checkList';
+  automationFlag? : 'auto' | 'manual' | null
   author: User;
   data: TestCaseData[],
   lastDataIndex?: number,
@@ -14,6 +15,7 @@ export interface TestCase {
   new: boolean;
   results?: testCaseResult[] | null;
   selected: boolean | null;
+  isRunning?: boolean;
 }
 
 export interface TestCaseData {

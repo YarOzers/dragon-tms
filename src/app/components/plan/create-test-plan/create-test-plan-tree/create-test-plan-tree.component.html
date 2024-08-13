@@ -36,7 +36,7 @@
             {{ testCase.name }}
             <!-- Чекбокс для тест-кейса -->
             <mat-checkbox
-              [checked]="isTestCaseChecked(testCase)"
+              [(ngModel)]="testCase.selected"
               (change)="toggleTestCaseCheckbox(folder, testCase, $event)">
             </mat-checkbox>
           </div>

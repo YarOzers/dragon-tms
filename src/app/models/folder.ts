@@ -8,4 +8,5 @@ export interface Folder {
   testCases: TestCase[];
   expanded?: boolean;
   type: 'folder';
+  selected? : boolean | null;
 }

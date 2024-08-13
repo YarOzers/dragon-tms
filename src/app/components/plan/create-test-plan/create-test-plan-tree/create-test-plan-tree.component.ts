@@ -10,6 +10,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-create-test-plan-tree',
@@ -29,7 +30,8 @@ import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
     NgClass,
     MatMenuTrigger,
     MatCheckbox,
-    MatButton
+    MatButton,
+    FormsModule
   ],
   templateUrl: './create-test-plan-tree.component.html',
   styleUrl: './create-test-plan-tree.component.css'
@@ -42,9 +44,6 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   protected TEST_CASE_DATA: Folder[] | null = [];
   testCasesMap: { [key: string]: TestCase[] } = {};
 
-  // Хранение состояния чекбоксов
-  selectedFolders: Set<number> = new Set();
-  selectedTestCases: Set<number> = new Set();
 
   constructor(
     private projectService: ProjectService,
@@ -114,14 +113,14 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     }
   }
 
+// Проверка состояния чекбоксов
   isFolderChecked(folder: Folder): boolean {
-    return this.areAllTestCasesChecked(folder) &&
-      ((folder.folders?? []).filter(subFolder => !this.isFolderCheckboxDisabled(subFolder)).every(subFolder => this.isFolderChecked(subFolder)) ?? false);
+    return folder.selected || false;
   }
 
   isFolderIndeterminate(folder: Folder): boolean {
     const someCasesChecked = this.areSomeTestCasesChecked(folder);
-    const someFoldersChecked = ((folder.folders?? []).filter(subFolder => !this.isFolderCheckboxDisabled(subFolder)).some(subFolder => this.isFolderChecked(subFolder) || this.isFolderIndeterminate(subFolder)) ?? false);
+    const someFoldersChecked = (folder.folders ?? []).some(subFolder => this.isFolderChecked(subFolder) || this.isFolderIndeterminate(subFolder));
     return (someCasesChecked || someFoldersChecked) && !this.isFolderChecked(folder);
   }
 
@@ -138,66 +137,40 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   areAllTestCasesChecked(folder: Folder): boolean {
-    return this.testCasesMap[folder.name]?.every(tc => this.selectedTestCases.has(tc.id)) ?? false;
+    return this.testCasesMap[folder.name]?.every(tc => tc.selected) ?? false;
   }
 
   areSomeTestCasesChecked(folder: Folder): boolean {
-    return this.testCasesMap[folder.name]?.some(tc => this.selectedTestCases.has(tc.id)) ?? false;
+    return this.testCasesMap[folder.name]?.some(tc => tc.selected) ?? false;
   }
 
+// Изменение состояния чекбоксов
   toggleFolderCheckbox(folder: Folder, event: MatCheckboxChange) {
-    if (event.checked) {
-      this.selectFolderAndContents(folder);
-    } else {
-      this.deselectFolderAndContents(folder);
-    }
-    this.syncTreeSelectionWithPartialSelection();
+    folder.selected = event.checked;
+    this.selectOrDeselectFolderAndContents(folder, event.checked);
   }
 
   toggleTestCaseCheckbox(folder: Folder, testCase: TestCase, event: MatCheckboxChange) {
-    if (event.checked) {
-      this.selectedTestCases.add(testCase.id);
-    } else {
-      this.selectedTestCases.delete(testCase.id);
-    }
+    testCase.selected = event.checked;
     this.syncTreeSelectionWithPartialSelection();
   }
 
-  selectFolderAndContents(folder: Folder) {
-    this.selectedFolders.add(folder.id);
-    this.testCasesMap[folder.name]?.forEach(tc => this.selectedTestCases.add(tc.id));
-    folder.folders?.forEach(subFolder => this.selectFolderAndContents(subFolder));
+  selectOrDeselectFolderAndContents(folder: Folder, select: boolean) {
+    folder.selected = select;
+    this.testCasesMap[folder.name]?.forEach(tc => tc.selected = select);
+    folder.folders?.forEach(subFolder => this.selectOrDeselectFolderAndContents(subFolder, select));
   }
 
-  deselectFolderAndContents(folder: Folder) {
-    this.selectedFolders.delete(folder.id);
-    this.testCasesMap[folder.name]?.forEach(tc => this.selectedTestCases.delete(tc.id));
-    folder.folders?.forEach(subFolder => this.deselectFolderAndContents(subFolder));
-  }
 
   getSelectedIds() {
-    console.log("This selected foldersIds::", Array.from(this.selectedFolders));
-    console.log("This selected testCaseIds::", Array.from(this.selectedTestCases));
+    const selectedFolders = this.TEST_CASE_DATA?.filter(folder => folder.selected).map(folder => folder.id) || [];
+    const selectedTestCases = Object.values(this.testCasesMap).flat().filter(tc => tc.selected).map(tc => tc.id) || [];
+    console.log("Selected foldersIds:", selectedFolders);
+    console.log("Selected testCaseIds:", selectedTestCases);
     return {
-      folders: Array.from(this.selectedFolders),
-      testCases: Array.from(this.selectedTestCases)
+      folders: selectedFolders,
+      testCases: selectedTestCases
     };
-  }
-
-  isTestCaseChecked(testCase: TestCase): boolean {
-    return this.selectedTestCases.has(testCase.id);
-  }
-
-  updateSelectedTestCases(selectedTestCases: TestCase[]) {
-    this.selectedTestCases.clear();
-    this.selectedFolders.clear();
-    selectedTestCases.forEach(testCase => {
-      this.selectedTestCases.add(testCase.id);
-      const folderContainingTestCase = this.findFolderContainingTestCase(testCase);
-      if (folderContainingTestCase) {
-        this.selectedFolders.add(folderContainingTestCase.id);
-      }
-    });
   }
 
   private findFolderContainingTestCase(testCase: TestCase): Folder | null {
@@ -225,14 +198,9 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
 
   syncTreeSelectionWithPartialSelection() {
     this.TEST_CASE_DATA?.forEach(folder => {
-      if (this.areSomeTestCasesChecked(folder) || this.areAllTestCasesChecked(folder)) {
-        this.selectedFolders.add(folder.id);
-      }
+      folder.selected = this.areAllTestCasesChecked(folder) || this.areSomeTestCasesChecked(folder);
     });
   }
 
-  syncTreeWithTable(selectedTestCases: TestCase[]) {
-    this.updateSelectedTestCases(selectedTestCases);
-  }
 }
 

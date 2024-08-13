@@ -83,6 +83,7 @@ import {CreateTestPlanTreeComponent} from "./create-test-plan-tree/create-test-p
 export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   @ViewChild(CreateTestPlanTreeComponent) treeComponent!: CreateTestPlanTreeComponent;
   @ViewChild(MatSort) sort!: MatSort;
+
   allColumns = ['select', 'run', 'id', 'name', 'type'];
   displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
   displayedColumnsSelection: { [key: string]: boolean } = {
@@ -91,14 +92,14 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     name: true,
     type: true
   };
+
   testPlanName: string = '';
-  selection = new SelectionModel<any>(true, []);
+  selection = new SelectionModel<TestCase>(true, []);
   private testCaseTableData: TestCase[] = [];
   dataSource: MatTableDataSource<TestCase> = new MatTableDataSource(this.testCaseTableData);
   isLoading = true;
   protected projectName = '';
   private projectId = 0;
-  dataIndex: any;
 
   constructor(
     private dialogRef: MatDialogRef<CreateTestPlanComponent>,
@@ -109,7 +110,29 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     private router: Router,
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.routerParamsService.projectId$.subscribe((projectId) => {
+      this.projectId = Number(projectId);
+    });
+
+    this.projectService.getAllProjectTestCases(this.projectId).subscribe({
+      next: (projects) => {
+        // Обработка загруженных данных
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.log('Ошибка при загрузке тест кейсов: ', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.syncTreeSelection();
+    this.treeComponent.syncTreeSelectionWithPartialSelection();
   }
 
   toggleAll(event: MatCheckboxChange) {
@@ -118,7 +141,6 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     } else {
       this.selection.clear();
     }
-    this.treeComponent.syncTreeWithTable(this.selection.selected);
   }
 
   isAllSelected() {
@@ -127,7 +149,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     return numSelected === numRows;
   }
 
-  toggleSelection(element: any) {
+  toggleSelection(element: TestCase) {
     this.selection.toggle(element);
     this.syncTreeSelection();
     this.treeComponent.syncTreeSelectionWithPartialSelection();
@@ -135,58 +157,28 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   syncTreeSelection() {
     const selectedTestCases = this.selection.selected;
-    this.treeComponent.updateSelectedTestCases(selectedTestCases);
+    // Обновить дерево с учетом выбранных тестов
   }
 
-  runTestCase(element: any, event?: MouseEvent) {
+  runTestCase(element: TestCase, event?: MouseEvent) {
     if (event) {
       event.stopPropagation();
     }
     element.isRunning = true;
-    // Симуляция выполнения
     setTimeout(() => {
       element.isRunning = false;
     }, 3000);
   }
 
-  ngOnInit(): void {
-    this.routerParamsService.projectId$.subscribe(projectId => {
-      this.projectId = Number(projectId);
-    })
-    this.projectService.getAllProjectTestCases(this.projectId).subscribe({
-      next: (projects) => {
-
-        this.isLoading = false;
-      }, error: (err) => {
-        console.log("Ошибка при загрузке тест кейсов: ", err);
-        this.isLoading = false;
-      }, complete() {
-      }
-    })
-    console.log(this.testCaseTableData);
-    console.log(this.dataSource.data);
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    console.log(this.dataSource.data);
-    this.syncTreeSelection();
-    this.treeComponent.syncTreeSelectionWithPartialSelection(); // синхронизация состояния дерева
-  }
-
   announceSortChange(sortState: Sort) {
-
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
-
   }
 
-
   openTestCaseDialog(testCaseId: number): void {
-
     const dialogRef = this.dialog.open(CreateTestCaseComponent, {
       width: '100%',
       height: '100%',
@@ -194,33 +186,33 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
       maxHeight: '100%',
       data: {
         type: 'project',
-        testCaseId: testCaseId,
+        testCaseId,
         projectId: this.projectId,
         isNew: false
-      } // Можно передать данные в диалоговое окно
+      }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result !== undefined && result !== '') {
-        console.log('result from dialog: ', result);
+        console.log('Result from dialog: ', result);
       } else {
-        console.log("Введите имя проекта!!!");
+        console.log('Введите имя проекта!!!');
       }
     });
   }
 
-  getTestCasesFromTree(event: any) {
+  getTestCasesFromTree(event: TestCase[]) {
     this.testCaseTableData = [...event];
     this.dataSource.data = this.testCaseTableData;
     this.selection.clear();
-    event.forEach((testCase: TestCase) => {
+    event.forEach((testCase) => {
       this.selection.select(testCase);
     });
   }
 
   runSelectedAutoTests() {
-    const selectedAutoTests = this.selection.selected.filter(test => test.type === 'auto');
-    selectedAutoTests.forEach(test => {
+    const selectedAutoTests = this.selection.selected.filter((test) => test.automationFlag === 'auto');
+    selectedAutoTests.forEach((test) => {
       this.runTestCase(test);
     });
   }
@@ -230,6 +222,6 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   save() {
-
+    // Логика сохранения
   }
 }
