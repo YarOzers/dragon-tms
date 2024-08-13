@@ -183,9 +183,72 @@ export class ProjectService {
         "results": [],
         "selected": null,
         "automationFlag": "auto"
+      },
+      {
+        "id": 3,
+        "name": "cxv",
+        "lastDataIndex": 0,
+        "folderId": 0,
+        "folder": "root_folder",
+        "type": "testCase",
+        "author": {
+          "id": 1,
+          "role": "admin",
+          "name": "Ярослав Андреевич",
+          "rights": "super"
+        },
+        "data": [
+          {
+            "status": "ready",
+            "automationFlag": "auto",
+            "changesAuthor": {
+              "id": 1,
+              "role": "admin",
+              "name": "Ярослав Андреевич",
+              "rights": "super"
+            },
+            "createdTime": null,
+            "executionTime": "23:35",
+            "expectedExecutionTime": "00:00",
+            "name": "",
+            "preConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "xcv"
+              }
+            ],
+            "stepItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "xcv"
+              }
+            ],
+            "postConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "cxv"
+              }
+            ],
+            "priority": "Highest",
+            "type": "functional",
+            "version": 1
+          }
+        ],
+        "loading": null,
+        "new": true,
+        "results": [],
+        "selected": null,
+        "automationFlag": "auto"
       }],
     folders: [this.folder1, this.folder2, this.folder3],
-    type: 'folder'
+    type: 'folder',
+    selected: false
   };
 
   protected TEST_CASE_DATA: Folder[] = [this.root_folder];
@@ -795,6 +858,7 @@ return of([]).pipe(delay(500) );
     console.error(`Folder with ID ${folderId} not found in Test Plan with ID ${testPlanId}.`);
     return of([]).pipe(delay(500)); // Возвращаем пустой массив, если папка не найдена
   }
+
 
   // getTestCasesInTestPlanFolder(projectId: number, folderId: number): Observable<TestCase[]> {
   //   const project = this._projects.find(p => p.id === projectId);

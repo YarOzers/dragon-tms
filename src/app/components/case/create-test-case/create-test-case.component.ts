@@ -32,6 +32,7 @@ import {
 } from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
 import {MatProgressBar} from "@angular/material/progress-bar";
+import {RouterParamsService} from "../../../services/router-params.service";
 
 @Component({
   selector: 'app-create-test-case',
@@ -192,17 +193,25 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     selected: null
   }
   private initTestCase: any = null;
+  private projectId: number | null = null;
 
 
   constructor(
     private renderer: Renderer2,
     private dialogRef: MatDialogRef<CreateTestCaseComponent>,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private routerParamsService: RouterParamsService
   ) {
   }
 
   ngOnInit() {
+    this.routerParamsService.projectId$.subscribe(projectId => {
+      this.projectId = projectId;
+      this.projectService.getAllProjectTestCases(Number(this.projectId)).subscribe(testCases => {
+        this.testCase.id = testCases.length + 1;
+      })
+    });
 
     this.new = this.dataDialog.isNew;
     this.folderId = this.dataDialog.folderId;
@@ -258,10 +267,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       )
     }
 
-    if(this.new){
+    if (this.new) {
 
       this.projectService.getAllProjectTestCases(this.dataDialog.projectId).subscribe({
-        next:(testCases)=>{
+        next: (testCases) => {
 
         }
       })
@@ -271,7 +280,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   }
 
-  initEditors(){
+  initEditors() {
     setTimeout(() => {
       console.log('preConditions in setTimeout: ', this.preConditions);
       this.preConditions.forEach((preCondition, index) => {
@@ -1235,9 +1244,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   save() {
-    console.log('test-case in save: ',this.testCase);
-    console.log('test-case data in save: ',this.data);
-    if(this.new){
+    console.log('test-case in save: ', this.testCase);
+    console.log('test-case data in save: ', this.data);
+    if (this.new) {
       this.testCase.id = this.testCaseId;
       this.testCase.folderId = this.folderId;
       this.testCase.folder = this.folderName;
@@ -1245,7 +1254,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       this.testCase.automationFlag = this.data.automationFlag;
     }
     this.testCase.name = this.name;
-    this.testCase.lastDataIndex = this.testCase.data.length -1;
+    this.testCase.lastDataIndex = this.testCase.data.length - 1;
     console.log('lastDAtaIndex in save: ', this.testCase.lastDataIndex);
     this.dialogRef.close(this.testCase);
 

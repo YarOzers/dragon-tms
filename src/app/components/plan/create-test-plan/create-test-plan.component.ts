@@ -83,7 +83,7 @@ import {CreateTestPlanTreeComponent} from "./create-test-plan-tree/create-test-p
 export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   @ViewChild(CreateTestPlanTreeComponent) treeComponent!: CreateTestPlanTreeComponent;
   @ViewChild(MatSort) sort!: MatSort;
-
+  private syncScheduled = false;
   allColumns = ['select', 'run', 'id', 'name', 'type'];
   displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
   displayedColumnsSelection: { [key: string]: boolean } = {
@@ -137,6 +137,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   toggleAll(event: MatCheckboxChange) {
     const isChecked = event.checked;
+    console.log(`toggleAll: isChecked = ${isChecked}`);
 
     if (isChecked) {
       this.dataSource.data.forEach(row => this.selection.select(row));
@@ -144,9 +145,12 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
       this.selection.clear();
     }
 
+    console.log(`toggleAll: selection = ${JSON.stringify(this.selection.selected.map(tc => tc.id))}`);
+
     this.syncTreeSelection();
     this.treeComponent.syncTreeSelectionWithPartialSelection();
   }
+
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -156,29 +160,62 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   toggleSelection(element: TestCase) {
     this.selection.toggle(element);
-    this.syncTreeSelection();
-    this.treeComponent.syncTreeSelectionWithPartialSelection();
+    console.log(`toggleSelection: toggled TestCase ID = ${element.id}, selected = ${element.selected}`);
+
+    // Вместо вызова syncTreeSelection здесь
+    this.scheduleSyncTreeSelection();
+
     this.updateToggleAllCheckboxState();
   }
 
+  private scheduleSyncTreeSelection() {
+    if (!this.syncScheduled) {
+      this.syncScheduled = true;
+      setTimeout(() => {
+        this.syncTreeSelection();
+        this.treeComponent.syncTreeSelectionWithPartialSelection();
+        this.syncScheduled = false;
+      }, 0);
+    }
+  }
+
+
   updateToggleAllCheckboxState() {
     const isChecked = this.isAllSelected();
+    console.log(`updateToggleAllCheckboxState: isAllSelected = ${isChecked}`);
+
     this.treeComponent.updateCheckboxForFolder(this.treeComponent.selectedFolder, isChecked ? true : null);
   }
 
   syncTreeSelection() {
-    const selectedTestCases = this.selection.selected;
+    const selectedTestCases = this.selection.selected.map(tc => tc.id);
+    console.log(`syncTreeSelection: selectedTestCases = ${JSON.stringify(selectedTestCases)}`);
 
-    // Синхронизация состояния тест-кейсов в дереве
     this.treeComponent.TEST_CASE_DATA?.forEach(folder => {
-      folder.selected = selectedTestCases.some(tc => this.isTestCaseInFolder(tc, folder));
-      folder.testCases.forEach(testCase => {
-        testCase.selected = selectedTestCases.includes(testCase);
-      });
-    });
+      folder.selected = folder.testCases.every(tc => selectedTestCases.includes(tc.id));
+      console.log(`syncTreeSelection: folder ${folder.name} selected = ${folder.selected}`);
 
-    this.treeComponent.syncTreeSelectionWithPartialSelection();
+      folder.testCases.forEach(testCase => {
+        testCase.selected = selectedTestCases.includes(testCase.id);
+        console.log(`syncTreeSelection: TestCase ${testCase.id} selected = ${testCase.selected}`);
+      });
+
+      this.updateParentFoldersState(folder); // Обновление состояния родительских папок
+    });
   }
+
+  private updateParentFoldersState(folder: Folder) {
+    const parentFolder = this.treeComponent.findParentFolder(this.treeComponent.TEST_CASE_DATA!, folder);
+    if (parentFolder) {
+      const allSelected = this.treeComponent.isFolderChecked(parentFolder);
+      const indeterminate = this.treeComponent.isFolderIndeterminate(parentFolder);
+
+      parentFolder.selected = allSelected ? true : (indeterminate ? null : false);
+
+      this.updateParentFoldersState(parentFolder); // Рекурсивное обновление родительских папок
+    }
+  }
+
 
   runTestCase(element: TestCase, event?: MouseEvent) {
     if (event) {

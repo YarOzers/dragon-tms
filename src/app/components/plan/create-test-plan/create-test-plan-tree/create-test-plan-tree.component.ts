@@ -64,8 +64,32 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
         if (this.TEST_CASE_DATA) {
           this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
         }
+        this.initializeTreeSelection(this.TEST_CASE_DATA);
       }
       this.dataLoading = true;
+    });
+  }
+
+  initializeTreeSelection(folders: Folder[]): void {
+    folders.forEach(folder => {
+      this.deselectFolderAndContents(folder);
+    });
+    console.log('Tree initialized. All selections set to false.');
+  }
+
+  private deselectFolderAndContents(folder: Folder): void {
+    folder.selected = false;
+    console.log(`Folder ${folder.name} deselected.`);
+
+    // Устанавливаем значение `selected` для всех тест-кейсов в папке
+    folder.testCases.forEach(testCase => {
+      testCase.selected = false;
+      console.log(`TestCase ${testCase.id} in Folder ${folder.name} deselected.`);
+    });
+
+    // Рекурсивно обрабатываем вложенные папки
+    folder.folders?.forEach(subFolder => {
+      this.deselectFolderAndContents(subFolder);
     });
   }
 
@@ -101,17 +125,22 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
 
   getTestCases(folderId: number) {
     this.selectedFolder = this.findFolderById(folderId, this.TEST_CASE_DATA!);
-    console.log('getGEtstCases')
     if (this.projectId) {
       this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
         next: (testCases) => {
+          testCases.forEach(newTestCase => {
+            const existingTestCase = this.testCases.find(tc => tc.id === newTestCase.id);
+            if (existingTestCase) {
+              newTestCase.selected = existingTestCase.selected;
+            }
+          });
           this.testCases = testCases;
           this.sentTestCasesFromTree();
         },
         error: (err) => {
           console.error(`Ошибка при загрузке тест кейсов папки ${folderId}.`)
         }
-      })
+      });
     }
   }
 
@@ -143,6 +172,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     const allFoldersChecked = (folder.folders ?? []).every(subFolder => this.isFolderChecked(subFolder));
     return allTestCasesChecked && allFoldersChecked;
   }
+
 
   // Определяем, находится ли папка в промежуточном состоянии (отмечены только некоторые элементы внутри папки)
   isFolderIndeterminate(folder: Folder): boolean {
@@ -199,7 +229,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   // Поиск родительской папки для данной папки
-  private findParentFolder(folders: Folder[], targetFolder: Folder): Folder | null {
+  findParentFolder(folders: Folder[], targetFolder: Folder): Folder | null {
     for (const folder of folders) {
       if ((folder.folders ?? []).some(subFolder => subFolder.id === targetFolder.id)) {
         return folder;
@@ -226,14 +256,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
 
 
   getSelectedIds() {
-    const selectedFolders = this.TEST_CASE_DATA?.filter(folder => folder.selected).map(folder => folder.id) || [];
-    const selectedTestCases = Object.values(this.testCasesMap).flat().filter(tc => tc.selected).map(tc => tc.id) || [];
-    console.log("Selected foldersIds:", selectedFolders);
-    console.log("Selected testCaseIds:", selectedTestCases);
-    return {
-      folders: selectedFolders,
-      testCases: selectedTestCases
-    };
+console.log(this.TEST_CASE_DATA)
   }
 
   private findFolderContainingTestCase(testCase: TestCase): Folder | null {
@@ -262,11 +285,27 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   syncTreeSelectionWithPartialSelection() {
     this.TEST_CASE_DATA?.forEach(folder => {
       const allSelected = this.areAllTestCasesChecked(folder);
-      const indeterminate = this.areSomeTestCasesChecked(folder) || (folder.folders ?? []).some(subFolder => subFolder.selected === true || subFolder.selected === null);
+      const indeterminate = this.areSomeTestCasesChecked(folder) ||
+        (folder.folders ?? []).some(subFolder => subFolder.selected === true || subFolder.selected === null);
 
-      folder.selected = allSelected ? true : (indeterminate ? null : false);
+      // Если все выбраны, устанавливаем selected = true
+      if (allSelected) {
+        folder.selected = true;
+      }
+      // Если есть промежуточное состояние, устанавливаем null
+      else if (indeterminate) {
+        folder.selected = null;
+      }
+      // Если ничего не выбрано, устанавливаем false
+      else {
+        folder.selected = false;
+      }
+
+      console.log(`syncTreeSelectionWithPartialSelection: folder ${folder.name} selected = ${folder.selected}, indeterminate = ${indeterminate}`);
     });
   }
+
+
 
 }
 
