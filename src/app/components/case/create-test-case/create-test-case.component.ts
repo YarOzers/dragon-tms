@@ -1238,6 +1238,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     if(this.new){
       this.testCase.id = this.testCaseId;
       this.testCase.data.push(this.data);
+      this.testCase.automationFlag = this.data.automationFlag;
     }
     this.testCase.name = this.name;
     this.testCase.lastDataIndex = this.testCase.data.length -1;
