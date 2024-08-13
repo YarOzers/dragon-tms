@@ -8,7 +8,7 @@
 
     <ng-template #folderTemplate let-folder="folder">
       <div [ngClass]="{'nested-folder': folder.parentFolderId}">
-        <div class="folder-header">
+        <div class="folder-header" (click)="getTestCases(folder.id)">
           <button mat-icon-button (click)="toggleFolder(folder, $event)">
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>

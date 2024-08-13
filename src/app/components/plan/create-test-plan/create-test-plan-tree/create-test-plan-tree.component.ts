@@ -100,6 +100,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   getTestCases(folderId: number) {
+    console.log('getGEtstCases')
     if (this.projectId) {
       this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
         next: (testCases) => {
@@ -113,7 +114,6 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Функции для обработки состояния чекбоксов
   isFolderChecked(folder: Folder): boolean {
     return this.areAllTestCasesChecked(folder) &&
       ((folder.folders?? []).filter(subFolder => !this.isFolderCheckboxDisabled(subFolder)).every(subFolder => this.isFolderChecked(subFolder)) ?? false);
@@ -145,20 +145,13 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     return this.testCasesMap[folder.name]?.some(tc => this.selectedTestCases.has(tc.id)) ?? false;
   }
 
-  areAllSubFoldersChecked(folder: Folder): boolean {
-    return ((folder.folders?? []).every(subFolder => this.isFolderChecked(subFolder)) ?? false);
-  }
-
-  areSomeSubFoldersChecked(folder: Folder): boolean {
-    return folder.folders?.some(subFolder => this.isFolderChecked(subFolder) || this.isFolderIndeterminate(subFolder)) ?? false;
-  }
-
   toggleFolderCheckbox(folder: Folder, event: MatCheckboxChange) {
     if (event.checked) {
       this.selectFolderAndContents(folder);
     } else {
       this.deselectFolderAndContents(folder);
     }
+    this.syncTreeSelectionWithPartialSelection();
   }
 
   toggleTestCaseCheckbox(folder: Folder, testCase: TestCase, event: MatCheckboxChange) {
@@ -167,6 +160,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     } else {
       this.selectedTestCases.delete(testCase.id);
     }
+    this.syncTreeSelectionWithPartialSelection();
   }
 
   selectFolderAndContents(folder: Folder) {
@@ -192,6 +186,53 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
 
   isTestCaseChecked(testCase: TestCase): boolean {
     return this.selectedTestCases.has(testCase.id);
+  }
+
+  updateSelectedTestCases(selectedTestCases: TestCase[]) {
+    this.selectedTestCases.clear();
+    this.selectedFolders.clear();
+    selectedTestCases.forEach(testCase => {
+      this.selectedTestCases.add(testCase.id);
+      const folderContainingTestCase = this.findFolderContainingTestCase(testCase);
+      if (folderContainingTestCase) {
+        this.selectedFolders.add(folderContainingTestCase.id);
+      }
+    });
+  }
+
+  private findFolderContainingTestCase(testCase: TestCase): Folder | null {
+    for (const folderName in this.testCasesMap) {
+      const testCasesInFolder = this.testCasesMap[folderName];
+      if (testCasesInFolder.some(tc => tc.id === testCase.id)) {
+        return this.findFolderByName(folderName, this.TEST_CASE_DATA!);
+      }
+    }
+    return null;
+  }
+
+  private findFolderByName(folderName: string, folders: Folder[]): Folder | null {
+    for (const folder of folders) {
+      if (folder.name === folderName) {
+        return folder;
+      }
+      const foundInSubFolder = this.findFolderByName(folderName, folder.folders || []);
+      if (foundInSubFolder) {
+        return foundInSubFolder;
+      }
+    }
+    return null;
+  }
+
+  syncTreeSelectionWithPartialSelection() {
+    this.TEST_CASE_DATA?.forEach(folder => {
+      if (this.areSomeTestCasesChecked(folder) || this.areAllTestCasesChecked(folder)) {
+        this.selectedFolders.add(folder.id);
+      }
+    });
+  }
+
+  syncTreeWithTable(selectedTestCases: TestCase[]) {
+    this.updateSelectedTestCases(selectedTestCases);
   }
 }
 

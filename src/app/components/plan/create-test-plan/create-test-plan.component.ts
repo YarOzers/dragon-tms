@@ -81,6 +81,8 @@ import {CreateTestPlanTreeComponent} from "./create-test-plan-tree/create-test-p
   styleUrl: './create-test-plan.component.scss'
 })
 export class CreateTestPlanComponent implements OnInit, AfterViewInit {
+  @ViewChild(CreateTestPlanTreeComponent) treeComponent!: CreateTestPlanTreeComponent;
+  @ViewChild(MatSort) sort!: MatSort;
   allColumns = ['select', 'run', 'id', 'name', 'type'];
   displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
   displayedColumnsSelection: { [key: string]: boolean } = {
@@ -110,16 +112,13 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   ) {
   }
 
-  @ViewChild(MatSort) sort!: MatSort;
-
-  // Toggle selection for all rows
-
   toggleAll(event: MatCheckboxChange) {
     if (event.checked) {
       this.selection.select(...this.dataSource.data);
     } else {
       this.selection.clear();
     }
+    this.treeComponent.syncTreeWithTable(this.selection.selected);
   }
 
   isAllSelected() {
@@ -129,8 +128,14 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   toggleSelection(element: any) {
-
     this.selection.toggle(element);
+    this.syncTreeSelection();
+    this.treeComponent.syncTreeSelectionWithPartialSelection();
+  }
+
+  syncTreeSelection() {
+    const selectedTestCases = this.selection.selected;
+    this.treeComponent.updateSelectedTestCases(selectedTestCases);
   }
 
   runTestCase(element: any, event?: MouseEvent) {
@@ -162,25 +167,15 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     console.log(this.dataSource.data);
   }
 
-
-  getData() {
-    console.log('tableData: ', this.testCaseTableData);
-    console.log('datasource: ', this.dataSource.data);
-    this.dataSource.data = this.testCaseTableData;
-  }
-
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    console.log(this.dataSource.data)
-
+    console.log(this.dataSource.data);
+    this.syncTreeSelection();
+    this.treeComponent.syncTreeSelectionWithPartialSelection(); // синхронизация состояния дерева
   }
 
-  /** Announce the change in sort state for assistive technology. */
   announceSortChange(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
+
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
@@ -193,7 +188,6 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   openTestCaseDialog(testCaseId: number): void {
 
     const dialogRef = this.dialog.open(CreateTestCaseComponent, {
-
       width: '100%',
       height: '100%',
       maxWidth: '100%',
@@ -218,6 +212,10 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   getTestCasesFromTree(event: any) {
     this.testCaseTableData = [...event];
     this.dataSource.data = this.testCaseTableData;
+    this.selection.clear();
+    event.forEach((testCase: TestCase) => {
+      this.selection.select(testCase);
+    });
   }
 
   runSelectedAutoTests() {
@@ -232,7 +230,6 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   save() {
-
 
   }
 }
