@@ -317,6 +317,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   openDialogToCreateTestCase(folderId: number, folderName: string): void {
+    console.log('FolderId ::', folderId);
+    console.log('FolderName ::', folderName);
 
     const dialogRef = this.dialog.open(CreateTestCaseComponent, {
 
@@ -327,6 +329,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
       data: {
         type: 'folder',
         folderId: folderId,
+        folderName: folderName,
         isNew: true
       } // Можно передать данные в диалоговое окно
     });
@@ -364,8 +367,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  openDialogToAddFolderInTestPlan(folderId: number) {
+  openDialogToAddFolderInTestPlan(folderId: number , folderName: string) {
     console.log('openDialog was executed!!!, folderId:: ', folderId);
+    console.log('openDialog was executed!!!, folderId:: ', folderName);
       const dialogRef = this.dialog.open(DialogTestPlanListComponent, {
 
         width: '100%',
@@ -374,6 +378,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
         maxHeight: '100%',
         data: {
           type: 'folder',
+          folderId: folderId,
+          folderName: folderName
 
         } // Можно передать данные в диалоговое окно
       });

@@ -146,8 +146,14 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
 
 // Изменение состояния чекбоксов
   toggleFolderCheckbox(folder: Folder, event: MatCheckboxChange) {
-    folder.selected = event.checked;
-    this.selectOrDeselectFolderAndContents(folder, event.checked);
+    if (folder.selected === null) {
+      folder.selected = true; // Все выбрано
+    } else if (folder.selected) {
+      folder.selected = false; // Ничего не выбрано
+    } else {
+      folder.selected = null; // Частично выбрано
+    }
+    this.selectOrDeselectFolderAndContents(folder, folder.selected);
   }
 
   toggleTestCaseCheckbox(folder: Folder, testCase: TestCase, event: MatCheckboxChange) {
@@ -155,7 +161,10 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     this.syncTreeSelectionWithPartialSelection();
   }
 
-  selectOrDeselectFolderAndContents(folder: Folder, select: boolean) {
+  selectOrDeselectFolderAndContents(folder: Folder, select: boolean | null) {
+    if (select === null) {
+      return; // Не изменяем состояния, если select null
+    }
     folder.selected = select;
     this.testCasesMap[folder.name]?.forEach(tc => tc.selected = select);
     folder.folders?.forEach(subFolder => this.selectOrDeselectFolderAndContents(subFolder, select));

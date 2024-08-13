@@ -205,6 +205,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   ngOnInit() {
 
     this.new = this.dataDialog.isNew;
+    this.folderId = this.dataDialog.folderId;
+    this.folderName = this.dataDialog.folderName;
     console.log('this.new:', this.new);
   }
 
@@ -1237,6 +1239,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     console.log('test-case data in save: ',this.data);
     if(this.new){
       this.testCase.id = this.testCaseId;
+      this.testCase.folderId = this.folderId;
+      this.testCase.folder = this.folderName;
       this.testCase.data.push(this.data);
       this.testCase.automationFlag = this.data.automationFlag;
     }

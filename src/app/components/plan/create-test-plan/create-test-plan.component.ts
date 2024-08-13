@@ -219,6 +219,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     event.forEach((testCase) => {
       this.selection.select(testCase);
     });
+
   }
 
   runSelectedAutoTests() {
