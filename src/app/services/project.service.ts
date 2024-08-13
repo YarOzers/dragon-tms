@@ -123,14 +123,14 @@ export class ProjectService {
       "isRunning": false
     },
       {
-        "id": 1,
+        "id": 2,
         "name": "ggg",
         "lastDataIndex": 0,
         "folderId": 0,
         "folder": "root_folder",
         "type": "testCase",
         "author": {
-          "id": 1,
+          "id": 2,
           "role": "admin",
           "name": "Ярослав Андреевич",
           "rights": "super"

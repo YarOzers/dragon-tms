@@ -37,11 +37,12 @@ import {FormsModule} from "@angular/forms";
   styleUrl: './create-test-plan-tree.component.css'
 })
 export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
+  selectedFolder: Folder | null = null;
   dataLoading: boolean = false;
   private projectId: number | null = 0;
   private testCases: TestCase[] = [];
   @Output() testCasesFromTree = new EventEmitter<any>();
-  protected TEST_CASE_DATA: Folder[] | null = [];
+  public TEST_CASE_DATA: Folder[] | null = [];
   testCasesMap: { [key: string]: TestCase[] } = {};
 
 
@@ -99,6 +100,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   getTestCases(folderId: number) {
+    this.selectedFolder = this.findFolderById(folderId, this.TEST_CASE_DATA!);
     console.log('getGEtstCases')
     if (this.projectId) {
       this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
@@ -110,6 +112,27 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
           console.error(`Ошибка при загрузке тест кейсов папки ${folderId}.`)
         }
       })
+    }
+  }
+
+  private findFolderById(id: number, folders: Folder[]): Folder | null {
+    for (const folder of folders) {
+      if (folder.id === id) {
+        return folder;
+      }
+      const found = this.findFolderById(id, folder.folders || []);
+      if (found) {
+        return found;
+      }
+    }
+    return null;
+  }
+
+  updateCheckboxForFolder(folder: Folder | null, isChecked: boolean | null) {
+    if (folder) {
+      folder.selected = isChecked;
+      folder.testCases.forEach(testCase => testCase.selected = isChecked);
+      folder.folders?.forEach(subFolder => this.updateCheckboxForFolder(subFolder, isChecked));
     }
   }
 
@@ -237,9 +260,11 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   syncTreeSelectionWithPartialSelection() {
-    console.log('syncTreeSelectionWithPartialSelection was executed');
     this.TEST_CASE_DATA?.forEach(folder => {
-      folder.selected = this.areAllTestCasesChecked(folder) || this.areSomeTestCasesChecked(folder);
+      const allSelected = this.areAllTestCasesChecked(folder);
+      const indeterminate = this.areSomeTestCasesChecked(folder) || (folder.folders ?? []).some(subFolder => subFolder.selected === true || subFolder.selected === null);
+
+      folder.selected = allSelected ? true : (indeterminate ? null : false);
     });
   }
 

@@ -136,45 +136,48 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   toggleAll(event: MatCheckboxChange) {
-    console.log('toggleAll event::' , event);
-    if (event.checked) {
+    const isChecked = event.checked;
+
+    if (isChecked) {
       this.dataSource.data.forEach(row => this.selection.select(row));
     } else {
       this.selection.clear();
     }
+
     this.syncTreeSelection();
     this.treeComponent.syncTreeSelectionWithPartialSelection();
   }
 
   isAllSelected() {
-    console.log("isAllSelected was executed ")
-    console.log('this.selection:: ', this.selection.selected);
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
-    console.log('numRoes:: ', numRows);
     return numSelected === numRows;
   }
 
   toggleSelection(element: TestCase) {
-    console.log('toggleSelection element:: ', element);
     this.selection.toggle(element);
     this.syncTreeSelection();
     this.treeComponent.syncTreeSelectionWithPartialSelection();
-    this.updateToggleAllCheckboxState(); // Новая строка
+    this.updateToggleAllCheckboxState();
   }
 
   updateToggleAllCheckboxState() {
-    const allSelected = this.isAllSelected();
-    if (allSelected && !this.selection.hasValue()) {
-      this.selection.select(...this.dataSource.data);
-    }
+    const isChecked = this.isAllSelected();
+    this.treeComponent.updateCheckboxForFolder(this.treeComponent.selectedFolder, isChecked ? true : null);
   }
 
   syncTreeSelection() {
-    console.log('syncTreeSelection was executed');
     const selectedTestCases = this.selection.selected;
-    // Логика синхронизации с деревом
-    this.treeComponent.syncTreeSelectionWithPartialSelection(); // Важно обновить метод в дереве
+
+    // Синхронизация состояния тест-кейсов в дереве
+    this.treeComponent.TEST_CASE_DATA?.forEach(folder => {
+      folder.selected = selectedTestCases.some(tc => this.isTestCaseInFolder(tc, folder));
+      folder.testCases.forEach(testCase => {
+        testCase.selected = selectedTestCases.includes(testCase);
+      });
+    });
+
+    this.treeComponent.syncTreeSelectionWithPartialSelection();
   }
 
   runTestCase(element: TestCase, event?: MouseEvent) {
@@ -219,13 +222,16 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   getTestCasesFromTree(event: TestCase[]) {
-    this.testCaseTableData = [...event];
-    this.dataSource.data = this.testCaseTableData;
+    this.dataSource.data = event;
     this.selection.clear();
-    event.forEach((testCase) => {
-      this.selection.select(testCase);
+
+    event.forEach(testCase => {
+      if (testCase.selected) {
+        this.selection.select(testCase);
+      }
     });
 
+    this.updateToggleAllCheckboxState();
   }
 
   runSelectedAutoTests() {
@@ -233,6 +239,13 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     selectedAutoTests.forEach((test) => {
       this.runTestCase(test);
     });
+  }
+
+  private isTestCaseInFolder(testCase: TestCase, folder: Folder): boolean {
+    if (folder.testCases.includes(testCase)) {
+      return true;
+    }
+    return (folder.folders ?? []).some(subFolder => this.isTestCaseInFolder(testCase, subFolder));
   }
 
   closeMatDialog() {
