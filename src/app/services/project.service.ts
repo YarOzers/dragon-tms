@@ -13,7 +13,68 @@ export class ProjectService {
     id: 5,
     parentFolderId: 4,
     name: 'folder 5',
-    testCases: [],
+    testCases: [{
+      "id": 5,
+      "name": "cxv",
+      "lastDataIndex": 0,
+      "folderId": 0,
+      "folder": "root_folder",
+      "type": "testCase",
+      "author": {
+        "id": 1,
+        "role": "admin",
+        "name": "Ярослав Андреевич",
+        "rights": "super"
+      },
+      "data": [
+        {
+          "status": "ready",
+          "automationFlag": "auto",
+          "changesAuthor": {
+            "id": 1,
+            "role": "admin",
+            "name": "Ярослав Андреевич",
+            "rights": "super"
+          },
+          "createdTime": null,
+          "executionTime": "23:35",
+          "expectedExecutionTime": "00:00",
+          "name": "",
+          "preConditionItems": [
+            {
+              "id": 1,
+              "selected": false,
+              "action": "xcv",
+              "expectedResult": "xcv"
+            }
+          ],
+          "stepItems": [
+            {
+              "id": 1,
+              "selected": false,
+              "action": "xcv",
+              "expectedResult": "xcv"
+            }
+          ],
+          "postConditionItems": [
+            {
+              "id": 1,
+              "selected": false,
+              "action": "xcv",
+              "expectedResult": "cxv"
+            }
+          ],
+          "priority": "Highest",
+          "type": "functional",
+          "version": 1
+        }
+      ],
+      "loading": null,
+      "new": true,
+      "results": [],
+      "selected": null,
+      "automationFlag": "auto"
+    }],
     type: 'folder'
   };
   private folder4: Folder = {
@@ -186,6 +247,68 @@ export class ProjectService {
       },
       {
         "id": 3,
+        "name": "cxv",
+        "lastDataIndex": 0,
+        "folderId": 0,
+        "folder": "root_folder",
+        "type": "testCase",
+        "author": {
+          "id": 1,
+          "role": "admin",
+          "name": "Ярослав Андреевич",
+          "rights": "super"
+        },
+        "data": [
+          {
+            "status": "ready",
+            "automationFlag": "auto",
+            "changesAuthor": {
+              "id": 1,
+              "role": "admin",
+              "name": "Ярослав Андреевич",
+              "rights": "super"
+            },
+            "createdTime": null,
+            "executionTime": "23:35",
+            "expectedExecutionTime": "00:00",
+            "name": "",
+            "preConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "xcv"
+              }
+            ],
+            "stepItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "xcv"
+              }
+            ],
+            "postConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "cxv"
+              }
+            ],
+            "priority": "Highest",
+            "type": "functional",
+            "version": 1
+          }
+        ],
+        "loading": null,
+        "new": true,
+        "results": [],
+        "selected": null,
+        "automationFlag": "auto"
+      },
+      {
+        "id": 4,
         "name": "cxv",
         "lastDataIndex": 0,
         "folderId": 0,

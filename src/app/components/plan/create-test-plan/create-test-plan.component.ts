@@ -155,7 +155,14 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+
+    if (numSelected === numRows) {
+      return true;
+    } else if (numSelected > 0 && numSelected < numRows) {
+      return null;  // частично выбранные элементы
+    } else {
+      return false;
+    }
   }
 
   toggleSelection(element: TestCase) {
@@ -181,10 +188,12 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
 
   updateToggleAllCheckboxState() {
-    const isChecked = this.isAllSelected();
-    console.log(`updateToggleAllCheckboxState: isAllSelected = ${isChecked}`);
+    const allSelectedState = this.isAllSelected();
 
-    this.treeComponent.updateCheckboxForFolder(this.treeComponent.selectedFolder, isChecked ? true : null);
+    // Учитываем состояние "null" для частично выделенных элементов
+    const folderSelectedState = allSelectedState === true ? true : (allSelectedState === null ? null : false);
+
+    this.treeComponent.updateCheckboxForFolder(this.treeComponent.selectedFolder, folderSelectedState);
   }
 
   syncTreeSelection() {
