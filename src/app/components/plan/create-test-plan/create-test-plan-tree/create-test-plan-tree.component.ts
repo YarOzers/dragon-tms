@@ -206,6 +206,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   syncTreeSelectionWithPartialSelection() {
+    console.log('syncTreeSelectionWithPartialSelection was executed');
     this.TEST_CASE_DATA?.forEach(folder => {
       folder.selected = this.areAllTestCasesChecked(folder) || this.areSomeTestCasesChecked(folder);
     });

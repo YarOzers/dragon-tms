@@ -67,7 +67,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.dataLoading = false;
     this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
-      console.log('getProjectFolders: ', folders);
       if (folders) {
         this.TEST_CASE_DATA = [...folders];
         this.generateTestCaseArrays();
@@ -75,7 +74,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
           this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
         }
       }
-      console.log('TEST_CASE_DATA: ', this.TEST_CASE_DATA);
       this.dataLoading = true;
     });
   }
@@ -92,24 +90,18 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   private generateTestCaseArrays() {
-    console.log('GenerateTestCaseArray :', this.TEST_CASE_DATA);
     if (this.TEST_CASE_DATA) {
       this.TEST_CASE_DATA.forEach(folder => {
         this.addTestCasesToMap(folder);
       });
     }
-    console.log('Test Cases Map after generation:', this.testCasesMap);
   }
 
   private addTestCasesToMap(folder: Folder) {
-    console.log('addTestCaseToMap folder: ', folder);
     if (folder.name) {
-      console.log('folder.name: ', folder.name);
       this.testCasesMap[folder.name] = folder.testCases!;
-      console.log('testCaseMap: ', this.testCasesMap);
       if (folder.folders) {
         folder.folders.forEach(subFolder => this.addTestCasesToMap(subFolder));
-        console.log('afterAdding Test cases to map: ', this.testCasesMap);
       }
     }
   }
@@ -120,7 +112,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
         this.syncFolderTestCases(folder);
       });
     }
-    console.log('Updated TEST_CASE_DATA:', this.TEST_CASE_DATA);
   }
 
   private syncFolderTestCases(folder: Folder) {
@@ -158,7 +149,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   moveFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number) {
     if (event.item.data.id === 0) {
-      console.log("ОШИБКА: Нельзя переместить корневую папку!!!")
       return;
     }
     console.log('eventFolderId: ', event.item.data.id);
@@ -198,7 +188,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
       }
       targetFolder.folders.push(sourceFolder);
 
-      console.log('TEST_CASE_DATA after moveFolder: ', this.TEST_CASE_DATA);
     }
   }
 
@@ -215,7 +204,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
   checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number): void {
     const sourceFolderId = event.item.data.id;
     if (sourceFolderId === targetFolderId) {
-      console.log("Нельзя переместиться в ту же папку");
       return
     }
     const findFolderById = (folders: Folder[] | null, id: number): Folder | undefined => {
@@ -309,7 +297,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log("from delFolder in dialog :", result);
         this.projectService.deleteFolder(this.projectId, id).subscribe(folders => {
         });
       }

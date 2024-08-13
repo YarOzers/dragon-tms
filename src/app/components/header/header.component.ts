@@ -58,10 +58,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
-      console.log("сюда заходит?")
       this.checkActiveRoute();
     });
-    console.log("сюда заходит,,,,,,,,,,,,,,?")
     this.checkActiveRoute();
 
   }
@@ -77,7 +75,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   goHome() {
-    console.log('Go home was clicked!!!')
     this.router.navigate([''])
   }
 

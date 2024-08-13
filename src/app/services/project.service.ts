@@ -172,9 +172,7 @@ export class ProjectService {
 
     if (project) {
       if (project.testPlan) {
-        project.testPlan.push(testPlan);
-        console.log('projects----------------------------------------: ', this._projects)
-      }
+        project.testPlan.push(testPlan);}
       return of(testPlan).pipe(delay(500)); // Симуляция задержки
     } else {
       return of(null).pipe(delay(500)); // Возвращаем null, если проект не найден

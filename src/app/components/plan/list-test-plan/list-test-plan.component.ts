@@ -86,7 +86,6 @@ export class ListTestPlanComponent implements AfterViewInit{
 
   ngOnInit(): void {
     this.activeRouter.paramMap.subscribe(params =>{
-      console.log('params id: ',params.get('projectId'))
       if (params.get('projectId')){
         this.projectId = params.get('projectId');
       }
@@ -94,8 +93,6 @@ export class ListTestPlanComponent implements AfterViewInit{
 
     this.projectService.getTestPlans(+this.projectId).subscribe({
       next: (testPlans) => {
-        console.log('from testPlanComponent, testPlans: ', testPlans,)
-        console.log('projectID: ', this.projectId,)
         if (testPlans){
 
           this.dataSource.data = [...testPlans]
@@ -103,7 +100,7 @@ export class ListTestPlanComponent implements AfterViewInit{
         }
         this.isLoading = false;
       }, error: (err) => {
-        console.log("Ошибка при загрузке проектов: ", err);
+        console.error("Ошибка при загрузке проектов: ", err);
         this.isLoading = false;
       }, complete() {
       }

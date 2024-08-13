@@ -136,6 +136,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   toggleAll(event: MatCheckboxChange) {
+    console.log('toggleAll event::' , event);
     if (event.checked) {
       this.dataSource.data.forEach(row => this.selection.select(row));
     } else {
@@ -146,12 +147,16 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   isAllSelected() {
+    console.log("isAllSelected was executed ")
+    console.log('this.selection:: ', this.selection.selected);
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
+    console.log('numRoes:: ', numRows);
     return numSelected === numRows;
   }
 
   toggleSelection(element: TestCase) {
+    console.log('toggleSelection element:: ', element);
     this.selection.toggle(element);
     this.syncTreeSelection();
     this.treeComponent.syncTreeSelectionWithPartialSelection();
@@ -166,6 +171,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   syncTreeSelection() {
+    console.log('syncTreeSelection was executed');
     const selectedTestCases = this.selection.selected;
     // Логика синхронизации с деревом
     this.treeComponent.syncTreeSelectionWithPartialSelection(); // Важно обновить метод в дереве

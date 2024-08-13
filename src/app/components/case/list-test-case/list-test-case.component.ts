@@ -156,12 +156,6 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   }
 
 
-  getData() {
-    console.log('tableData: ', this.testCaseTableData);
-    console.log('datasource: ', this.dataSource.data);
-    this.dataSource.data = this.testCaseTableData;
-  }
-
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     console.log(this.dataSource.data)
