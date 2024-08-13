@@ -68,13 +68,33 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
       }
       this.dataLoading = true;
     });
+    if (this.TEST_CASE_DATA){
+      this.initializeFolderSelection(this.TEST_CASE_DATA);
+    }
+
   }
 
   initializeTreeSelection(folders: Folder[]): void {
     folders.forEach(folder => {
-      this.deselectFolderAndContents(folder);
+      this.deselectFolderAndContents(folder); // Устанавливаем selected = false для всех папок и тест-кейсов
+      folder.selected = false; // Принудительная установка состояния корневой папки
     });
     console.log('Tree initialized. All selections set to false.');
+  }
+
+  initializeFolderSelection(folders: Folder[]): void {
+    folders.forEach(folder => {
+      if (this.isFolderEmptyAndDisabled(folder)) {
+        folder.selected = false;
+      }
+      if (folder.folders && folder.folders.length > 0) {
+        this.initializeFolderSelection(folder.folders); // Рекурсивно проверяем подпапки
+      }
+    });
+  }
+
+  isFolderEmptyAndDisabled(folder: Folder): boolean {
+    return this.isFolderCheckboxDisabled(folder) && (!folder.folders || folder.folders.length === 0);
   }
 
   private deselectFolderAndContents(folder: Folder): void {

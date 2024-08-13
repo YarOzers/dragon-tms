@@ -18,6 +18,7 @@
           <mat-checkbox
             [indeterminate]="!isFolderCheckboxDisabled(folder) && isFolderIndeterminate(folder)"
             [checked]="!isFolderCheckboxDisabled(folder) && isFolderChecked(folder)"
+            [disabled]="isFolderCheckboxDisabled(folder)"
             (change)="toggleFolderCheckbox(folder, $event)">
           </mat-checkbox>
         </div>
