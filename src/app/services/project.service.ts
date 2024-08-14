@@ -17,8 +17,8 @@ export class ProjectService {
       "id": 5,
       "name": "cxv",
       "lastDataIndex": 0,
-      "folderId": 0,
-      "folder": "root_folder",
+      "folderId": 5,
+      "folder": "folder 5",
       "type": "testCase",
       "author": {
         "id": 1,

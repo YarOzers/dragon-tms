@@ -17,7 +17,7 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
-import {MatCheckbox} from "@angular/material/checkbox";
+import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
@@ -219,49 +219,35 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     });
   }
 
-updateFolderSelection(folders: Folder[], selectedTestCases: TestCase[]): Folder[] {
+  updateFoldersWithSelection(testCases: TestCase[], folders: Folder[]): Folder[] {
     const updateFolder = (folder: Folder): Folder => {
-      // Обновляем тест-кейсы в папке
-      const updatedTestCases = folder.testCases.map(testCase => {
-        const selectedTestCase = selectedTestCases.find(tc => tc.id === testCase.id);
-        return {
-          ...testCase,
-          selected: selectedTestCase ? selectedTestCase.selected : testCase.selected,
-        };
-      });
+      const updatedTestCases = testCases.filter(testCase => testCase.folderId === folder.id);
 
-      // Рекурсивно обновляем вложенные папки, если они существуют
       const updatedSubFolders = folder.folders
         ? folder.folders.map(updateFolder)
         : [];
 
-      // Определяем, должен ли флаг selected для текущей папки быть установлен
-      const folderSelected = updatedTestCases.every(tc => tc.selected) && updatedSubFolders.every(f => f.selected);
-
-      // Возвращаем обновленную папку
       return {
         ...folder,
-        testCases: updatedTestCases,
+        testCases: updatedTestCases.map(tc => ({
+          ...tc,
+          selected: tc.selected // обновляем значение selected
+        })),
         folders: updatedSubFolders,
-        selected: folderSelected,
       };
     };
 
-    // Обновляем и возвращаем всю структуру папок
     return folders.map(updateFolder);
   }
 
-  filterSelectedFolders(folders: Folder[]): Folder[] {
+  filterSelectedFolders(testCases: TestCase[], folders: Folder[]): Folder[] {
     const filterFolder = (folder: Folder): Folder | null => {
-      // Фильтруем тест-кейсы, оставляя только те, которые отмечены
-      const selectedTestCases = folder.testCases.filter(testCase => testCase.selected);
+      const selectedTestCases = testCases.filter(testCase => testCase.folderId === folder.id && testCase.selected);
 
-      // Рекурсивно фильтруем вложенные папки
       const selectedSubFolders = folder.folders
         ? folder.folders.map(filterFolder).filter(f => f !== null) as Folder[]
         : [];
 
-      // Если есть отмеченные тест-кейсы или вложенные папки, добавляем текущую папку
       if (selectedTestCases.length > 0 || selectedSubFolders.length > 0) {
         return {
           ...folder,
@@ -270,12 +256,22 @@ updateFolderSelection(folders: Folder[], selectedTestCases: TestCase[]): Folder[
         };
       }
 
-      // Если ни один элемент в папке не отмечен, возвращаем null
       return null;
     };
 
-    // Обрабатываем корневые папки
     return folders.map(filterFolder).filter(f => f !== null) as Folder[];
+  }
+
+  onCheckboxChange(testCase: TestCase, event: MatCheckboxChange) {
+    // Обновляем значение selected для текущего теста
+    testCase.selected = event.checked;
+
+    // Обновляем состояние в dataSource
+    const updatedData = this.dataSource.data.map(tc => tc.id === testCase.id ? { ...tc, selected: event.checked } : tc);
+    this.dataSource.data = updatedData;
+
+    // Рекурсивно обновляем состояние папок, чтобы отразить изменения
+    this.folders = this.updateFoldersWithSelection(updatedData, this.folders);
   }
 
 
@@ -288,6 +284,9 @@ updateFolderSelection(folders: Folder[], selectedTestCases: TestCase[]): Folder[
   }
 
   showData() {
-
+    const updatedFolders = this.updateFoldersWithSelection(this.dataSource.data, this.folders);
+    const selectedFolders = this.filterSelectedFolders(this.dataSource.data, this.folders);
+    console.log('updateSelectedFolders: ',updatedFolders)
+    console.log('SelectedFolders: ',selectedFolders)
   }
 }

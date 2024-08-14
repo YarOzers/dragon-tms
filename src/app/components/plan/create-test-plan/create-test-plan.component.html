@@ -1,4 +1,4 @@
-<button (click)="showData()"></button>
+<button (click)="showData()">showData</button>
 
 
 <div fxFlex="column">
@@ -48,8 +48,8 @@
                     <td mat-cell *matCellDef="let element">
                       <mat-checkbox
                         (click)="$event.stopPropagation()"
-                        (change)="$event ? selection.toggle(element) : null"
-                        [checked]="selection.isSelected(element)">
+                        (change)="onCheckboxChange(element, $event)"
+                        [checked]="element.selected">
                       </mat-checkbox>
                     </td>
                   </ng-container>
