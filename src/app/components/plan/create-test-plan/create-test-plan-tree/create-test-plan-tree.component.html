@@ -1,4 +1,4 @@
-<button mat-button (click)="getSelectedIds()">button</button>
+<button (click)="showTestCaseData()">123</button>
 <mat-progress-bar *ngIf="!dataLoading" mode="indeterminate"></mat-progress-bar>
 <div *ngIf="dataLoading">
   <div cdkDropListGroup>
@@ -14,13 +14,7 @@
           </button>
           <mat-icon>folder_open</mat-icon>
           <span class="folder-name">{{ folder.name }}</span>
-          <!-- Чекбокс для папки -->
-          <mat-checkbox
-            [indeterminate]="!isFolderCheckboxDisabled(folder) && isFolderIndeterminate(folder)"
-            [checked]="!isFolderCheckboxDisabled(folder) && isFolderChecked(folder)"
-            [disabled]="isFolderCheckboxDisabled(folder)"
-            (change)="toggleFolderCheckbox(folder, $event)">
-          </mat-checkbox>
+
         </div>
         <div *ngIf="folder.expanded">
           <div *ngFor="let subFolder of folder.folders"
@@ -34,11 +28,6 @@
           <div *ngFor="let testCase of testCasesMap[folder.name]" class="test-case-item">
             <mat-icon>subject</mat-icon>
             {{ testCase.name }}
-            <!-- Чекбокс для тест-кейса -->
-            <mat-checkbox
-              [(ngModel)]="testCase.selected"
-              (change)="toggleTestCaseCheckbox(folder, testCase, $event)">
-            </mat-checkbox>
           </div>
         </div>
       </div>

@@ -1,22 +1,23 @@
 import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {ProjectService} from "../../../services/project.service";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {RouterParamsService} from "../../../services/router-params.service";
-import {TestPlan} from "../../../models/test-plan";
-import {User} from "../../../models/user";
-import {Folder} from "../../../models/folder";
 import {FlexModule} from "@angular/flex-layout";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {
   MatCell,
   MatCellDef,
   MatColumnDef,
-  MatHeaderCell, MatHeaderCellDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
-  MatRow, MatRowDef, MatTable, MatTableDataSource
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatTableDataSource
 } from "@angular/material/table";
-import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
+import {MatCheckbox} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
@@ -35,6 +36,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {CreateTestPlanTreeComponent} from "./create-test-plan-tree/create-test-plan-tree.component";
+import {Folder} from "../../../models/folder";
 
 @Component({
   selector: 'app-create-test-plan',
@@ -100,6 +102,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   isLoading = true;
   protected projectName = '';
   private projectId = 0;
+  private folders: Folder[] = [];
 
   constructor(
     private dialogRef: MatDialogRef<CreateTestPlanComponent>,
@@ -110,7 +113,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     private router: Router,
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.routerParamsService.projectId$.subscribe((projectId) => {
@@ -131,100 +135,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    this.syncTreeSelection();
-    this.treeComponent.syncTreeSelectionWithPartialSelection();
   }
-
-  toggleAll(event: MatCheckboxChange) {
-    const isChecked = event.checked;
-    console.log(`toggleAll: isChecked = ${isChecked}`);
-
-    if (isChecked) {
-      this.dataSource.data.forEach(row => this.selection.select(row));
-    } else {
-      this.selection.clear();
-    }
-
-    console.log(`toggleAll: selection = ${JSON.stringify(this.selection.selected.map(tc => tc.id))}`);
-
-    this.syncTreeSelection();
-    this.treeComponent.syncTreeSelectionWithPartialSelection();
-  }
-
-
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-
-    if (numSelected === numRows) {
-      return true;
-    } else if (numSelected > 0 && numSelected < numRows) {
-      return null;  // частично выбранные элементы
-    } else {
-      return false;
-    }
-  }
-
-  toggleSelection(element: TestCase) {
-    this.selection.toggle(element);
-    console.log(`toggleSelection: toggled TestCase ID = ${element.id}, selected = ${element.selected}`);
-
-    // Вместо вызова syncTreeSelection здесь
-    this.scheduleSyncTreeSelection();
-
-    this.updateToggleAllCheckboxState();
-  }
-
-  private scheduleSyncTreeSelection() {
-    if (!this.syncScheduled) {
-      this.syncScheduled = true;
-      setTimeout(() => {
-        this.syncTreeSelection();
-        this.treeComponent.syncTreeSelectionWithPartialSelection();
-        this.syncScheduled = false;
-      }, 0);
-    }
-  }
-
-
-  updateToggleAllCheckboxState() {
-    const allSelectedState = this.isAllSelected();
-
-    // Учитываем состояние "null" для частично выделенных элементов
-    const folderSelectedState = allSelectedState === true ? true : (allSelectedState === null ? null : false);
-
-    this.treeComponent.updateCheckboxForFolder(this.treeComponent.selectedFolder, folderSelectedState);
-  }
-
-  syncTreeSelection() {
-    const selectedTestCases = this.selection.selected.map(tc => tc.id);
-    console.log(`syncTreeSelection: selectedTestCases = ${JSON.stringify(selectedTestCases)}`);
-
-    this.treeComponent.TEST_CASE_DATA?.forEach(folder => {
-      folder.selected = folder.testCases.every(tc => selectedTestCases.includes(tc.id));
-      console.log(`syncTreeSelection: folder ${folder.name} selected = ${folder.selected}`);
-
-      folder.testCases.forEach(testCase => {
-        testCase.selected = selectedTestCases.includes(testCase.id);
-        console.log(`syncTreeSelection: TestCase ${testCase.id} selected = ${testCase.selected}`);
-      });
-
-      this.updateParentFoldersState(folder); // Обновление состояния родительских папок
-    });
-  }
-
-  private updateParentFoldersState(folder: Folder) {
-    const parentFolder = this.treeComponent.findParentFolder(this.treeComponent.TEST_CASE_DATA!, folder);
-    if (parentFolder) {
-      const allSelected = this.treeComponent.isFolderChecked(parentFolder);
-      const indeterminate = this.treeComponent.isFolderIndeterminate(parentFolder);
-
-      parentFolder.selected = allSelected ? true : (indeterminate ? null : false);
-
-      this.updateParentFoldersState(parentFolder); // Рекурсивное обновление родительских папок
-    }
-  }
-
 
   runTestCase(element: TestCase, event?: MouseEvent) {
     if (event) {
@@ -267,17 +178,38 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getTestCasesFromTree(event: TestCase[]) {
-    this.dataSource.data = event;
-    this.selection.clear();
+  // получение массива папок
+  getTestCasesFromTree(event: Folder[]) {
+    this.folders = event;
+    this.testCaseTableData = this.getAllTestCases(this.folders);
+    this.dataSource.data = this.testCaseTableData;
+  }
 
-    event.forEach(testCase => {
-      if (testCase.selected) {
-        this.selection.select(testCase);
+  getAllTestCases(folders: Folder[]): TestCase[] {
+    let testCases: TestCase[] = [];
+
+    folders.forEach(folder => {
+      if (folder.testCases && folder.testCases.length > 0) {
+        testCases = [...testCases, ...folder.testCases];
+      }
+      if (folder.folders && folder.folders.length > 0) {
+        testCases = [...testCases, ...this.getAllTestCases(folder.folders)];
       }
     });
 
-    this.updateToggleAllCheckboxState();
+    return testCases;
+  }
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
   runSelectedAutoTests() {
@@ -287,12 +219,65 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private isTestCaseInFolder(testCase: TestCase, folder: Folder): boolean {
-    if (folder.testCases.includes(testCase)) {
-      return true;
-    }
-    return (folder.folders ?? []).some(subFolder => this.isTestCaseInFolder(testCase, subFolder));
+updateFolderSelection(folders: Folder[], selectedTestCases: TestCase[]): Folder[] {
+    const updateFolder = (folder: Folder): Folder => {
+      // Обновляем тест-кейсы в папке
+      const updatedTestCases = folder.testCases.map(testCase => {
+        const selectedTestCase = selectedTestCases.find(tc => tc.id === testCase.id);
+        return {
+          ...testCase,
+          selected: selectedTestCase ? selectedTestCase.selected : testCase.selected,
+        };
+      });
+
+      // Рекурсивно обновляем вложенные папки, если они существуют
+      const updatedSubFolders = folder.folders
+        ? folder.folders.map(updateFolder)
+        : [];
+
+      // Определяем, должен ли флаг selected для текущей папки быть установлен
+      const folderSelected = updatedTestCases.every(tc => tc.selected) && updatedSubFolders.every(f => f.selected);
+
+      // Возвращаем обновленную папку
+      return {
+        ...folder,
+        testCases: updatedTestCases,
+        folders: updatedSubFolders,
+        selected: folderSelected,
+      };
+    };
+
+    // Обновляем и возвращаем всю структуру папок
+    return folders.map(updateFolder);
   }
+
+  filterSelectedFolders(folders: Folder[]): Folder[] {
+    const filterFolder = (folder: Folder): Folder | null => {
+      // Фильтруем тест-кейсы, оставляя только те, которые отмечены
+      const selectedTestCases = folder.testCases.filter(testCase => testCase.selected);
+
+      // Рекурсивно фильтруем вложенные папки
+      const selectedSubFolders = folder.folders
+        ? folder.folders.map(filterFolder).filter(f => f !== null) as Folder[]
+        : [];
+
+      // Если есть отмеченные тест-кейсы или вложенные папки, добавляем текущую папку
+      if (selectedTestCases.length > 0 || selectedSubFolders.length > 0) {
+        return {
+          ...folder,
+          testCases: selectedTestCases,
+          folders: selectedSubFolders,
+        };
+      }
+
+      // Если ни один элемент в папке не отмечен, возвращаем null
+      return null;
+    };
+
+    // Обрабатываем корневые папки
+    return folders.map(filterFolder).filter(f => f !== null) as Folder[];
+  }
+
 
   closeMatDialog() {
     this.dialogRef.close();
@@ -300,5 +285,9 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   save() {
     // Логика сохранения
+  }
+
+  showData() {
+
   }
 }
