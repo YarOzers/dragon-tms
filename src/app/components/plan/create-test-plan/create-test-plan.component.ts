@@ -206,10 +206,17 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     return numSelected === numRows;
   }
 
+  // Обработчик для основного чекбокса
   masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      this.dataSource.data.forEach(row => row.selected = false);
+    } else {
+      this.dataSource.data.forEach(row => {
+        this.selection.select(row);
+        row.selected = true;
+      });
+    }
   }
 
   runSelectedAutoTests() {
@@ -262,16 +269,14 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     return folders.map(filterFolder).filter(f => f !== null) as Folder[];
   }
 
-  onCheckboxChange(testCase: TestCase, event: MatCheckboxChange) {
-    // Обновляем значение selected для текущего теста
-    testCase.selected = event.checked;
-
-    // Обновляем состояние в dataSource
-    const updatedData = this.dataSource.data.map(tc => tc.id === testCase.id ? { ...tc, selected: event.checked } : tc);
-    this.dataSource.data = updatedData;
-
-    // Рекурсивно обновляем состояние папок, чтобы отразить изменения
-    this.folders = this.updateFoldersWithSelection(updatedData, this.folders);
+  // Обработчик для каждого отдельного чекбокса
+  onCheckboxChange(row: any, event: any) {
+    row.selected = event.checked;
+    if (event.checked) {
+      this.selection.select(row);
+    } else {
+      this.selection.deselect(row);
+    }
   }
 
 
