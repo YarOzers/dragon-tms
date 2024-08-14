@@ -73,9 +73,9 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
 
-  sentTestCasesFromTree() {
+  sentTestCasesFromTree(folders: Folder[]) {
     if (this.testCasesFromTree) {
-      this.testCasesFromTree.emit(this.TEST_CASE_DATA)
+      this.testCasesFromTree.emit(folders)
     }
   }
 
@@ -105,24 +105,33 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   getTestCases(folderId: number) {
-    if (this.projectId) {
-      this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
-        next: (testCases) => {
-          testCases.forEach(newTestCase => {
-            const existingTestCase = this.testCases.find(tc => tc.id === newTestCase.id);
-            if (existingTestCase) {
-              newTestCase.selected = existingTestCase.selected;
-            }
-          });
-          this.testCases = testCases;
-          this.sentTestCasesFromTree();
-        },
-        error: (err) => {
-          console.error(`Ошибка при загрузке тест кейсов папки ${folderId}.`)
-        }
-      });
+    if (this.projectId  && this.TEST_CASE_DATA) {
+    const folder =  this.findFolderById(folderId, this.TEST_CASE_DATA);
+    if(folder){
+      const folderArray: Folder[] = [folder];
+      this.sentTestCasesFromTree(folderArray);
+    }
+
+
     }
   }
+  findFolderById(folderId: number, folders: Folder[]): Folder | null {
+    for (const folder of folders) {
+      if (folder.id === folderId) {
+        return folder;
+      }
+
+      if (folder.folders && folder.folders.length > 0) {
+        const foundFolder = this.findFolderById(folderId, folder.folders);
+        if (foundFolder) {
+          return foundFolder;
+        }
+      }
+    }
+
+    return null;
+  }
+
 
   showTestCaseData(){
     console.log(this.TEST_CASE_DATA);

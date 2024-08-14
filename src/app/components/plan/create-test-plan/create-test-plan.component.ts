@@ -180,6 +180,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   // получение массива папок
   getTestCasesFromTree(event: Folder[]) {
+    console.log('EVENT::', event)
     this.folders = event;
     this.testCaseTableData = this.getAllTestCases(this.folders);
     this.dataSource.data = this.testCaseTableData;
