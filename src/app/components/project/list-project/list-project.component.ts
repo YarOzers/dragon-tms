@@ -69,8 +69,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
       }, complete() {
       }
     })
-    console.log(this.projectTableData);
-    console.log(this.dataSource.data);
+
   }
 
 
@@ -82,7 +81,6 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    console.log(this.dataSource.data)
 
   }
 

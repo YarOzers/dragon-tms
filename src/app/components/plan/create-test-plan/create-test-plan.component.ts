@@ -17,7 +17,7 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
-import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
+import {MatCheckbox} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
@@ -37,6 +37,7 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {CreateTestPlanTreeComponent} from "./create-test-plan-tree/create-test-plan-tree.component";
 import {Folder} from "../../../models/folder";
+import {TestPlan} from "../../../models/test-plan";
 
 @Component({
   selector: 'app-create-test-plan',
@@ -103,7 +104,17 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   protected projectName = '';
   private projectId = 0;
   private folders: Folder[] = [];
-
+  private testPlanId: number = 2;
+  protected testPlan: TestPlan = {
+    author: "",
+    id: this.testPlanId,
+    name: this.testPlanName,
+    createdDate: '',
+    testCaseCount: 0,
+    status: 'await',
+    qas: [],
+    folders: []
+  }
   constructor(
     private dialogRef: MatDialogRef<CreateTestPlanComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -119,7 +130,11 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.routerParamsService.projectId$.subscribe((projectId) => {
       this.projectId = Number(projectId);
+
     });
+    if(!this.data.isNew){
+      this.testPlan = this.data.testPlan;
+    }
 
     this.projectService.getAllProjectTestCases(this.projectId).subscribe({
       next: (projects) => {
@@ -131,10 +146,12 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
         this.isLoading = false;
       }
     });
+
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+
   }
 
   runTestCase(element: TestCase, event?: MouseEvent) {
@@ -286,7 +303,13 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   save() {
-    // Логика сохранения
+    console.log('1 this.testPlan:::', this.testPlan)
+    this.testPlan.folders = this.updateFoldersWithSelection(this.dataSource.data, this.folders);
+    console.log('2 this.testPlan:::', this.testPlan)
+    this.projectService.updateTestPlan(this.projectId, this.testPlan);
+    this.testPlanId = this.testPlanId + 1;
+    this.dialogRef.close(this.testPlan);
+
   }
 
   showData() {

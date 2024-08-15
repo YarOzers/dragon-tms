@@ -49,7 +49,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    console.log(this.router.url)
     this.headerService.showButtons$.subscribe(show => {
       this.showProjectButtons = show;
     });

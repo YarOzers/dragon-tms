@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {
   MatCell,
   MatCellDef,
@@ -27,6 +27,8 @@ import {TestPlanService} from "../../../services/test-plan.service";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {DialogTestPlanListComponent} from "../dialog-test-plan-list/dialog-test-plan-list.component";
 import {CreateTestPlanComponent} from "../create-test-plan/create-test-plan.component";
+import {MatIcon} from "@angular/material/icon";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -46,14 +48,19 @@ import {CreateTestPlanComponent} from "../create-test-plan/create-test-plan.comp
     MatSortHeader,
     MatTable,
     NgIf,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    MatIcon,
+    MatIconButton,
+    MatMenuTrigger,
+    MatMenu,
+    MatMenuItem
   ],
   templateUrl: './list-test-plan.component.html',
   styleUrl: './list-test-plan.component.scss'
 })
 export class ListTestPlanComponent implements AfterViewInit{
   projectId: any;
-  displayedColumns: string[] = ['id', 'name'];
+  displayedColumns: string[] = ['id', 'name', 'menu'];
   private testPlanTableData: TestPlan[] = [];
   dataSource: MatTableDataSource<TestPlan> = new MatTableDataSource(this.testPlanTableData);
   isLoading = true;
@@ -105,14 +112,10 @@ export class ListTestPlanComponent implements AfterViewInit{
       }, complete() {
       }
     })
-    console.log(this.testPlanTableData);
-    console.log(this.dataSource.data);
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
-    console.log(this.dataSource.data)
-
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -176,6 +179,36 @@ export class ListTestPlanComponent implements AfterViewInit{
     this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
   }
 
+  opedExecuteTestPlanDialog(testPlanId: number){
+    let testPlan: TestPlan;
+    this.projectService.getTestPlanById(Number(this.projectId),Number(testPlanId)).subscribe(tp=>{
+      testPlan = tp;
+      console.log('testPlan*** : ', testPlan);
+      const dialogRef = this.dialog.open(CreateTestPlanComponent, {
+
+
+        width: '100%',
+        height: '100%',
+        maxWidth: '100%',
+        maxHeight: '100%',
+        data: {
+          projectId: this.projectId,
+          testPlanId: testPlanId,
+          isNew: false,
+          testPlan: testPlan
+
+        } // Можно передать данные в диалоговое окно
+      });
+
+      dialogRef.afterClosed().subscribe(testPlan => {
+        console.log('testPlan in dialog::', testPlan)
+        this.projectService.updateTestPlan(this.projectId, testPlan);
+        this.ngOnInit();
+      });
+    });
+
+  }
+
   openCreateTestPlanDialog() {
     const dialogRef = this.dialog.open(CreateTestPlanComponent, {
 
@@ -185,13 +218,15 @@ export class ListTestPlanComponent implements AfterViewInit{
       maxHeight: '100%',
       data: {
         projectId: this.projectId,
+        isNew: true
 
       } // Можно передать данные в диалоговое окно
     });
 
-    dialogRef.afterClosed().subscribe(testPlanId => {
-
-
+    dialogRef.afterClosed().subscribe(testPlan => {
+      console.log('testPlan in dialog::', testPlan)
+      this.projectService.updateTestPlan(this.projectId, testPlan);
+      this.ngOnInit();
     });
   }
 }

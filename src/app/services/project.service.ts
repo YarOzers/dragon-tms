@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Project} from "../models/project";
-import {delay, Observable, of} from "rxjs";
+import {delay, map, Observable, of} from "rxjs";
 import {TestCase} from "../models/test-case";
 import {Folder} from "../models/folder";
+import {TestPlan} from "../models/test-plan";
 
 @Injectable({
   providedIn: 'root'
@@ -482,7 +483,8 @@ export class ProjectService {
 
     if (project) {
       if (project.testPlan) {
-        project.testPlan.push(testPlan);}
+        project.testPlan.push(testPlan);
+      }
       return of(testPlan).pipe(delay(500)); // Симуляция задержки
     } else {
       return of(null).pipe(delay(500)); // Возвращаем null, если проект не найден
@@ -637,7 +639,7 @@ export class ProjectService {
     };
 
     // Добавляем тест-кейс в нужную папку проекта
-    if(project.folder){
+    if (project.folder) {
       if (addTestCaseRecursively(project.folder)) {
         console.log(`Test case added to folder ID ${folderId} in project ID ${projectId}.`);
       } else {
@@ -753,15 +755,12 @@ export class ProjectService {
     };
 
     // Проверяем папки в проекте
-    if (project.folder){
+    if (project.folder) {
       const testCases = collectTestCasesRecursively(project.folder);
       return of(testCases).pipe(delay(500)); // Возвращаем найденные тест-кейсы с симуляцией задержки
     }
-return of([]).pipe(delay(500) );
+    return of([]).pipe(delay(500));
   }
-
-
-
 
 
   getTestCaseById(projectId: number, testCaseId: number): Observable<TestCase | undefined> {
@@ -982,52 +981,84 @@ return of([]).pipe(delay(500) );
     return of([]).pipe(delay(500)); // Возвращаем пустой массив, если папка не найдена
   }
 
+  // Функция для обновления или добавления тестплана в проект
+  updateTestPlan(projectId: number, testPlan: TestPlan): Observable<TestPlan | null> {
+    console.log("updateTestPlan, testPlan:: ", testPlan);
+    const project = this._projects.find(p => p.id === projectId);
 
-  // getTestCasesInTestPlanFolder(projectId: number, folderId: number): Observable<TestCase[]> {
-  //   const project = this._projects.find(p => p.id === projectId);
-  //
-  //   if (project && project.testPlan) {
-  //     const collectTestCasesRecursively = (folders: Folder[]): TestCase[] => {
-  //       let testCases: TestCase[] = [];
-  //
-  //       for (const folder of folders) {
-  //         // Если находим папку с нужным ID, добавляем её тест-кейсы
-  //         if (folder.id === folderId) {
-  //           testCases = testCases.concat(folder.testCases);
-  //
-  //           // Рекурсивно собираем тест-кейсы из всех вложенных папок
-  //           const gatherNestedTestCases = (nestedFolders: Folder[]) => {
-  //             for (const nestedFolder of nestedFolders) {
-  //               testCases = testCases.concat(nestedFolder.testCases);
-  //               if (nestedFolder.folders) {
-  //                 gatherNestedTestCases(nestedFolder.folders);
-  //               }
-  //             }
-  //           };
-  //
-  //           if (folder.folders) {
-  //             gatherNestedTestCases(folder.folders);
-  //           }
-  //
-  //           break; // Останавливаем цикл, т.к. нужная папка найдена
-  //         } else if (folder.folders) {
-  //           // Продолжаем поиск в вложенных папках
-  //           testCases = testCases.concat(collectTestCasesRecursively(folder.folders));
-  //         }
-  //       }
-  //
-  //       return testCases;
-  //     };
-  //
-  //     for (const testPlan of project.testPlan) {
-  //       const testCases = collectTestCasesRecursively(testPlan.folders);
-  //       if (testCases.length) {
-  //         return of(testCases).pipe(delay(500)); // Симуляция задержки
-  //       }
-  //     }
-  //   }
-  //
-  //   return of([]).pipe(delay(500)); // Возвращаем пустой массив, если папка не найдена
-  // }
+    if (project && project.testPlan) {
+      const existingTestPlanIndex = project.testPlan.findIndex(tp => tp.id === testPlan.id);
+      if (existingTestPlanIndex !== -1) {
+
+        // Если тестплан с таким id уже существует, заменяем его
+        project.testPlan[existingTestPlanIndex] = testPlan;
+        console.log('Замена тест плана!!!!  ', project.testPlan);
+        console.log('Замена тест плана!!!!  ', this._projects);
+      } else {
+        // Если тестплан с таким id не существует, добавляем новый
+        project.testPlan.push(testPlan);
+        console.log('Добавление нового тест-плана project.testPlan::   ', project.testPlan);
+        console.log('Добавление нового тест-плана this._projects::   ', this._projects);
+      }
+      return of(testPlan).pipe(delay(500)); // Симуляция задержки
+    } else {
+      return of(null).pipe(delay(500)); // Возвращаем null, если проект не найден
+    }
+  }
+
+  // Примерный метод для получения данных
+  getFolders(projectId: string, testPlanId: string): Observable<Folder[]> {
+    // Здесь должен быть запрос к API, возвращающий Observable<Folder[]>
+    // Пример:
+    // return this.http.get<Folder[]>(`/api/projects/${projectId}/testPlans/${testPlanId}/folders`);
+
+    // Для примера вернем mock-данные:
+    const folders: Folder[] = [
+      // Структура папок
+    ];
+
+    return of(folders);
+  }
+
+// Метод для фильтрации папок
+  getSelectedFolders(projectId: number, testPlanId: number): Observable<Folder[]> {
+    // Находим нужный проект и тест-план
+    const project = this._projects.find(p => p.id === projectId);
+    if (project?.testPlan) {
+      const testPlan = project?.testPlan.find(tp => tp.id === testPlanId);
+      // Если проект или тест-план не найдены, возвращаем пустой массив
+      if (!testPlan) {
+        return of([]); // Возвращаем пустой Observable массива
+      }
+      // Фильтруем папки
+      const filteredFolders = this.filterFolders(testPlan.folders);
+
+      // Возвращаем результат как Observable
+      return of(filteredFolders);
+    } else {
+      return of([]); // Возвращаем пустой Observable массива
+    }
+  }
+
+  // Рекурсивная функция для фильтрации папок
+  private filterFolders(folders: Folder[]): Folder[] {
+    return folders
+      .map(folder => {
+        // Фильтруем тест-кейсы, оставляя только те, у которых selected == true
+        const filteredTestCases = folder.testCases.filter(testCase => testCase.selected);
+
+        // Рекурсивно фильтруем подпапки
+        const filteredSubFolders = folder.folders ? this.filterFolders(folder.folders) : [];
+
+        // Возвращаем папку, если у нее есть выбранные тест-кейсы или подпапки
+        return {
+          ...folder,
+          testCases: filteredTestCases,
+          folders: filteredSubFolders
+        };
+      })
+      // Удаляем папки, если у них нет выбранных тест-кейсов и подпапок
+      .filter(folder => folder.testCases.length > 0 || (folder.folders && folder.folders.length > 0));
+  }
 
 }
