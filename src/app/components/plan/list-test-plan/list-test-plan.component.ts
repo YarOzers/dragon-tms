@@ -179,7 +179,7 @@ export class ListTestPlanComponent implements AfterViewInit{
     this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
   }
 
-  opedExecuteTestPlanDialog(testPlanId: number){
+  opedEditTestPlanDialog(testPlanId: number){
     let testPlan: TestPlan;
     this.projectService.getTestPlanById(Number(this.projectId),Number(testPlanId)).subscribe(tp=>{
       testPlan = tp;
