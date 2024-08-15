@@ -8,3 +8,9 @@
   margin-left: 0.5rem;
   margin-right: 0.5rem;
 }
+
+.mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
+  background-color: #89a0b9; /* Синий цвет фона для активной кнопки */
+  color: white;
+  /* Добавьте другие стили для активной кнопки, если необходимо */
+}

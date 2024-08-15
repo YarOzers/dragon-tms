@@ -11,9 +11,9 @@ export const routes: Routes = [
     path: '', component: MainContainerComponent,
     children: [
       {path: '', component: ListProjectComponent},
-      {path: 'project-detail/:projectId', component: DetailProjectComponent, canActivate: [redirectGuard]},
-      {path: 'project-detail/:projectId/testplan/:testPlanId', component: ExecuteTestPlanComponent, canActivate: [redirectGuard]},
-      {path: 'project-detail/:projectId/testcases', component: ListTestCaseComponent, canActivate: [redirectGuard]}
+      {path: 'project/:projectId', component: DetailProjectComponent, canActivate: [redirectGuard]},
+      {path: 'project/:projectId/testplan/:testPlanId', component: ExecuteTestPlanComponent, canActivate: [redirectGuard]},
+      {path: 'project/:projectId/testcases', component: ListTestCaseComponent, canActivate: [redirectGuard]}
     ]
   }
 ];

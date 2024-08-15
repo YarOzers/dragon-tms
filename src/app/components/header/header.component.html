@@ -6,8 +6,14 @@
   </div>
   <div fxFlex="90">
     <div *ngIf="showProjectButtons">
-      <button mat-flat-button (click)="goToTestPlans()">Тест планы</button>
-      <button mat-flat-button (click)="goToTestCases()">Тест кейсы</button>
+      <button mat-flat-button (click)="goToTestCases()"
+              [class.active-button]="activeButton != 'testCases'"
+      >Тест кейсы
+      </button>
+      <button mat-flat-button (click)="goToTestPlans()"
+              [class.active-button]="activeButton != 'testPlans'"
+      >Тест планы
+      </button>
     </div>
   </div>
   <div fxFlex="5">

@@ -25,6 +25,7 @@ import {RouterParamsService} from "../../services/router-params.service";
 export class HeaderComponent implements OnInit, AfterViewInit {
   @Output() notifyMain: EventEmitter<void> = new EventEmitter<void>();
   matIcon: string = 'wb_sunny';
+  activeButton: string = 'testCases'; // По умолчанию активна кнопка 'Тест кейсы'
 
   // Method to toggle the icon
   showProjectButtons: boolean = false;
@@ -66,7 +67,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   checkActiveRoute() {
     const url = this.router.url;
     // Update the condition based on your route configuration
-    if (url.includes('project-detail')) {
+    if (url.includes('project')) {
       this.headerService.showButtons(true);
     } else {
       this.headerService.showButtons(false);
@@ -81,13 +82,15 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   goToTestPlans() {
+    this.activeButton = 'testPlans';
     this.routeParamsService.projectId$.subscribe(id => {
       this.projectId = id;
     });
-    this.router.navigate([`project-detail/${this.projectId}`])
+    this.router.navigate([`project/${this.projectId}`], {state: {go: true}})
   }
 
   goToTestCases() {
-    this.router.navigate([`project-detail/${this.projectId}/testcases`])
+    this.activeButton = 'testCases';
+    this.router.navigate([`project/${this.projectId}/testcases`], {state: {go: true}})
   }
 }

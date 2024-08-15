@@ -136,7 +136,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   navigateToProject(row: any) {
     this.headerService.showButtons(true);
     this.routerParamsService.setProjectId(row.id);
-    this.router.navigate([`/project-detail/${row.id}`],
+    this.router.navigate(['project', this.projectId,'testcases'],
       {
         state: {go: true}
       });

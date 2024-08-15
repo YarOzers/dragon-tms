@@ -165,7 +165,7 @@ export class ListTestPlanComponent implements AfterViewInit{
     dialogRef.afterClosed().subscribe(result => {
       if(result !== undefined && result !== ''){
         this.addTestPlan(result);
-        this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
+        this.router.navigate([`/project/${this.projectId}/test-plan-create/${this.projectId}`]);
       }else {
         console.log("Введите имя тест плана!!!")
       }
@@ -177,7 +177,7 @@ export class ListTestPlanComponent implements AfterViewInit{
     this.headerService.showButtons(true);
     this.routerParamsService.setProjectId(this.projectId);
     this.routerParamsService.setTestPlanId(Number(this.testPlanId));
-    this.router.navigate([`/project-detail/${this.projectId}/test-plan-create/${this.projectId}`]);
+    this.router.navigate([`/project/${this.projectId}/test-plan-create/${this.projectId}`]);
   }
 
   opedEditTestPlanDialog(testPlanId: number){
@@ -260,7 +260,7 @@ export class ListTestPlanComponent implements AfterViewInit{
 
 
   executeTestPlan(testPlanId: number) {
-    this.router.navigate(['project-detail', this.projectId,'testplan',testPlanId],
+    this.router.navigate(['project', this.projectId,'testplan',testPlanId],
       {
         state: {go: true}
       });
