@@ -1,108 +1,104 @@
-888888888888888888888888888888
-<as-split unit="percent" direction="horizontal" gutterSize="10">
-  <as-split-area [size]="40">
-    <div class="column left">
-      <app-execute-test-plan-tree (testCasesFromTestPlanTree)="getTestCasesFromTree($event)"></app-execute-test-plan-tree>
-    </div>
-  </as-split-area>
-
-  <!-- Table -->
-  <as-split-area [size]="60">
-    <div class="column right">
-      <h3>Test Cases:</h3>
-      <div class="table-container">
-        <div class="table-container" fxLayout="column" fxLayoutGap="10px">
-          <div fxFlex="row" fxLayoutAlign="start-center">
-            <!-- Иконка-кнопка для открытия меню выбора колонок -->
-            <button mat-icon-button [matMenuTriggerFor]="columnsMenu">
-              <mat-icon>view_column</mat-icon>
-            </button>
-            <!-- Меню для выбора колонок -->
-            <mat-menu #columnsMenu="matMenu">
-              <mat-checkbox *ngFor="let column of allColumns"
-                            [(ngModel)]="displayedColumnsSelection[column]">
-                {{ column }}
-              </mat-checkbox>
-            </mat-menu>
-
-            <!-- Кнопка для запуска всех отмеченных автотестов -->
-            <button mat-raised-button color="primary" (click)="runSelectedAutoTests()">
-              Run
-            </button>
-          </div>
-
-          <div fxFlex="1 1 auto">
-            <div>
-              <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
-                     class="table">
-
-                <!-- Checkbox Column -->
-                <ng-container matColumnDef="select">
-                  <th mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox (change)="toggleAll($event)" [checked]="isAllSelected()"></mat-checkbox>
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    <mat-checkbox (change)="(toggleSelection(element))"
-                                  (click)="$event.stopPropagation()"
-                                  [checked]="selection.isSelected(element)"></mat-checkbox>
-                  </td>
-                </ng-container>
-
-                <!-- Position Column -->
-                <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
-                    id
-                  </th>
-                  <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
-                </ng-container>
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-                    name
-                  </th>
-                  <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
-                </ng-container>
-
-                <!-- Type Column -->
-                <ng-container matColumnDef="type">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
-                    type
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    {{ element.data[element.lastDataIndex].automationFlag }}
-                  </td>
-                </ng-container>
-                <!-- RUN Column -->
-                <ng-container matColumnDef="run">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by type">
-                    type
-                  </th>
-                  <td mat-cell *matCellDef="let element">
-                    <button *ngIf="element.data[element.lastDataIndex].automationFlag === 'auto'" mat-icon-button
-                            color="primary" (click)="runTestCase(element,$event)" [disabled]="element.isRunning">
-                      <mat-icon *ngIf="!element.isRunning">play_arrow</mat-icon>
-                      <mat-progress-spinner *ngIf="element.isRunning" mode="indeterminate"
-                                            diameter="20"></mat-progress-spinner>
-                    </button>
-                  </td>
-                </ng-container>
-
-                <!-- Header and Rows -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openTestCaseDialog(row.id)"></tr>
-              </table>
-            </div>
+<button (click)="showData()">showData</button>
 
 
-            <div *ngIf="isLoading" class="progress-bar-container">
-              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+<div fxFlex="column">
+  <div>
+    <input type="text" [(ngModel)]="testPlan.name" fxFlex="100" class="test-plan-input">
+  </div>
+  <div class="dialog-content" fxLayoutAlign="center center">
+    <as-split unit="percent" direction="horizontal" gutterSize="10" class="left-column-container">
+      <as-split-area [size]="40">
+        <div class="column left">
+          <app-execute-test-plan-tree (testCasesFromTree)="getTestCasesFromTree($event)"></app-execute-test-plan-tree>
+        </div>
+      </as-split-area>
+
+      <as-split-area [size]="60">
+        <div class="column right">
+          <h3>Test Cases:</h3>
+          <div class="table-container">
+            <div class="table-container" fxLayout="column" fxLayoutGap="10px">
+              <div fxLayoutAlign="start-center" fxFlex="none">
+                <button mat-icon-button [matMenuTriggerFor]="columnsMenu">
+                  <mat-icon>view_column</mat-icon>
+                </button>
+                <mat-menu #columnsMenu="matMenu">
+                  <mat-checkbox *ngFor="let column of allColumns" [(ngModel)]="displayedColumnsSelection[column]">
+                    {{ column }}
+                  </mat-checkbox>
+                </mat-menu>
+
+                <button mat-raised-button color="primary" (click)="runSelectedAutoTests()">
+                  Run
+                </button>
+              </div>
+
+              <div fxFlex="1 1 auto">
+                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+                       class="table">
+                  <!-- Checkbox Column -->
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox
+                        [checked]="isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        (change)="$event ? masterToggle() : null">
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                      <mat-checkbox
+                        (click)="$event.stopPropagation()"
+                        (change)="onCheckboxChange(element, $event)"
+                        [checked]="element.selected">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>id</th>
+                    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+                  </ng-container>
+
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                  </ng-container>
+
+                  <!-- Type Column -->
+                  <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>type</th>
+                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                  </ng-container>
+
+                  <!-- Run Column -->
+                  <ng-container matColumnDef="run">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>run</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button *ngIf="element.type === 'auto'" mat-icon-button color="primary"
+                              (click)="runTestCase(element,$event)" [disabled]="element.isRunning">
+                        <mat-icon *ngIf="!element.isRunning">play_arrow</mat-icon>
+                        <mat-progress-spinner *ngIf="element.isRunning" mode="indeterminate"
+                                              diameter="20"></mat-progress-spinner>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <!-- Header and Rows -->
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                      (click)="executeTestCaseDialog(row.id)"></tr>
+                </table>
+
+                <div *ngIf="isLoading" class="progress-bar-container">
+                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </as-split-area>
-</as-split>
-
+      </as-split-area>
+    </as-split>
+  </div>
 

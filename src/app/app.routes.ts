@@ -12,7 +12,7 @@ export const routes: Routes = [
     children: [
       {path: '', component: ListProjectComponent},
       {path: 'project-detail/:projectId', component: DetailProjectComponent},
-      {path: 'project-detail/:projectId/test-plan-create/:testPlanId', component: ExecuteTestPlanComponent},
+      {path: 'project-detail/:projectId/testplan/:testPlanId', component: ExecuteTestPlanComponent},
       {path: 'project-detail/:projectId/testcases', component: ListTestCaseComponent}
     ]
   }

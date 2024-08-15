@@ -29,6 +29,7 @@ import {DialogTestPlanListComponent} from "../dialog-test-plan-list/dialog-test-
 import {CreateTestPlanComponent} from "../create-test-plan/create-test-plan.component";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {ExecuteTestPlanComponent} from "../execute-test-plan/execute-test-plan.component";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -224,9 +225,41 @@ export class ListTestPlanComponent implements AfterViewInit{
     });
 
     dialogRef.afterClosed().subscribe(testPlan => {
-      console.log('testPlan in dialog::', testPlan)
-      this.projectService.updateTestPlan(this.projectId, testPlan);
       this.ngOnInit();
     });
+  }
+
+  // openExecuteTestPlanDialog(testPlanId: number) {
+  //   let testPlan: TestPlan;
+  //   this.projectService.getTestPlanById(Number(this.projectId),Number(testPlanId)).subscribe(tp=>{
+  //     testPlan = tp;
+  //     console.log('testPlan*** : ', testPlan);
+  //     const dialogRef = this.dialog.open(ExecuteTestPlanComponent, {
+  //
+  //
+  //       width: '100%',
+  //       height: '100%',
+  //       maxWidth: '100%',
+  //       maxHeight: '100%',
+  //       data: {
+  //         projectId: this.projectId,
+  //         testPlanId: testPlanId,
+  //         isNew: false,
+  //         testPlan: testPlan
+  //
+  //       } // Можно передать данные в диалоговое окно
+  //     });
+  //
+  //     dialogRef.afterClosed().subscribe(testPlan => {
+  //       console.log('testPlan in dialog::', testPlan)
+  //       this.projectService.updateTestPlan(this.projectId, testPlan);
+  //       this.ngOnInit();
+  //     });
+  //   });
+  // }
+
+
+  executeTestPlan(testPlanId: number) {
+    this.router.navigate(['project-detail', this.projectId,'testplan',testPlanId])
   }
 }

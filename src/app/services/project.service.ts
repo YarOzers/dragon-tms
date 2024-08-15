@@ -506,6 +506,7 @@ export class ProjectService {
 
   // GET: получение определенного тест-плана по id
   getTestPlanById(projectId: number, testPlanId: number): Observable<any | undefined> {
+    console.log(`projectId:: ${projectId}, testPlanId:: ${testPlanId}`)
     const project = this._projects.find(p => p.id === projectId);
     if (project) {
       if (project.testPlan) {
@@ -1026,8 +1027,10 @@ export class ProjectService {
     const project = this._projects.find(p => p.id === projectId);
     if (project?.testPlan) {
       const testPlan = project?.testPlan.find(tp => tp.id === testPlanId);
+
       // Если проект или тест-план не найдены, возвращаем пустой массив
       if (!testPlan) {
+        console.error(`TestPlan with id ${testPlanId} не найден`)
         return of([]); // Возвращаем пустой Observable массива
       }
       // Фильтруем папки
