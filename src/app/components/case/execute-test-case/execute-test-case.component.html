@@ -10,7 +10,7 @@
         <div *ngIf="new" fxFlex="6">
           <span fxFlex="6"></span>
         </div>
-        <input type="text" fxFlex="91" [(ngModel)]="name" disabled >
+        <input type="text" fxFlex="91" [(ngModel)]="name" disabled>
       </div>
     </div>
     <div>
@@ -19,7 +19,7 @@
           <form>
             <mat-form-field>
               <mat-label>Результат</mat-label>
-              <mat-select [(ngModel)]="selectedResult" name="type" >
+              <mat-select [(ngModel)]="selectedResult" name="type">
                 @for (type of result; track type) {
                   <mat-option [value]="type">{{ type }}</mat-option>
                 }
@@ -29,35 +29,35 @@
               <mat-card-header>
                 <mat-card-title>Вид тестирования</mat-card-title>
               </mat-card-header>
-              <mat-card-content>{{data.type}}</mat-card-content>
+              <mat-card-content>{{ data.type }}</mat-card-content>
             </mat-card>
 
             <mat-card appearance="outlined" class="card">
               <mat-card-header>
                 <mat-card-title>Приоритет</mat-card-title>
               </mat-card-header>
-              <mat-card-content>{{data.priority}}</mat-card-content>
+              <mat-card-content>{{ data.priority }}</mat-card-content>
             </mat-card>
 
             <mat-card appearance="outlined" class="card">
               <mat-card-header>
                 <mat-card-title>Признак автоматизации</mat-card-title>
               </mat-card-header>
-              <mat-card-content>{{data.automationFlag}}</mat-card-content>
+              <mat-card-content>{{ data.automationFlag }}</mat-card-content>
             </mat-card>
 
             <mat-card appearance="outlined" class="card">
               <mat-card-header>
                 <mat-card-title>Время на выполнение</mat-card-title>
               </mat-card-header>
-              <mat-card-content>{{data.executionTime}}</mat-card-content>
+              <mat-card-content>{{ data.executionTime }}</mat-card-content>
             </mat-card>
 
             <mat-card appearance="outlined" class="card">
               <mat-card-header>
                 <mat-card-title>Готовность</mat-card-title>
               </mat-card-header>
-              <mat-card-content>{{data.status}}</mat-card-content>
+              <mat-card-content>{{ data.status }}</mat-card-content>
             </mat-card>
 
           </form>
@@ -136,7 +136,12 @@
                 </mat-checkbox>
               </div>
               <div #editorStepContainer>
-                <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
+                <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row"
+                     [ngClass]="{
+       'top-radius': i === 0,
+       'bottom-radius': i === steps.length - 1
+     }"
+     >
                   <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
                   </mat-checkbox>
                   <span fxFlex="3">{{ step.id }}</span>
