@@ -31,6 +31,7 @@ import {CreateTestCaseComponent} from "../../case/create-test-case/create-test-c
 import {FormsModule} from "@angular/forms";
 import {TestPlanTreeComponent} from "../test-plan-tree/test-plan-tree.component";
 import {ExecuteTestCaseComponent} from "../../case/execute-test-case/execute-test-case.component";
+import {ExecuteTestPlanTreeComponent} from "./execute-test-plan-tree/execute-test-plan-tree.component";
 
 @Component({
   selector: 'app-execute-test-plan',
@@ -63,7 +64,8 @@ import {ExecuteTestCaseComponent} from "../../case/execute-test-case/execute-tes
     FormsModule,
     MatMenuTrigger,
     MatHeaderCellDef,
-    TestPlanTreeComponent
+    TestPlanTreeComponent,
+    ExecuteTestPlanTreeComponent
   ],
   templateUrl: './execute-test-plan.component.html',
   styleUrl: './execute-test-plan.component.css'
