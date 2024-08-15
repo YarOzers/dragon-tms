@@ -36,9 +36,9 @@ export interface TestCaseData {
 
 export interface testCaseResult {
   id: number;
-  author: User;
-  executedTime: string;
-  result: 'awaits' | 'in_process' | 'successfully' | 'failed' | 'blocked';
+  author?: User;
+  executedTime?: string;
+  result: 'awaits' | 'in_process' | 'successfully' | 'failed' | 'blocked' | null;
   testPlanId? : string;
 }
 

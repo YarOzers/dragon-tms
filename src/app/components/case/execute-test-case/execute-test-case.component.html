@@ -18,6 +18,14 @@
         <mat-sidenav #sidenav mode="side" opened>
           <form>
             <mat-form-field>
+              <mat-label>Вид результат</mat-label>
+              <mat-select [(ngModel)]="selectedResult" name="type">
+                @for (type of result; track type) {
+                  <mat-option [value]="type">{{ type }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
               <mat-label>Вид тестирования</mat-label>
               <mat-select [(ngModel)]="data.type" name="type">
                 @for (type of typesOfTests; track type) {

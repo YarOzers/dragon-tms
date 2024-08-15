@@ -65,7 +65,7 @@ import {ProjectService} from "../../../services/project.service";
     './editor.component.css'
   ]
 })
-export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnInit{
+export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnInit {
   @ViewChild('sidenav') sidenav!: MatSidenav;
   @ViewChild('editorPreConditionContainer', {static: true}) editorPreConditionContainer: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('editorStepContainer', {static: true}) editorStepContainer: ElementRef<HTMLDivElement> | undefined;
@@ -155,7 +155,12 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
   protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
   protected new: boolean = true;
-  private results: testCaseResult[] | null | undefined = [];
+  protected selectedResult: 'awaits' | 'in_process' | 'successfully' | 'failed' | 'blocked' = 'in_process';
+  protected results: testCaseResult[] | null | undefined = [{
+    id: 1,
+    result: this.selectedResult
+  }
+  ];
   counter = this.preConditions.length + 1;
   protected data: TestCaseData = {
     status: this.status,
@@ -571,6 +576,13 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
 
 //   Sidenav ===========================================================
+  result = [
+    'awaits',
+    'in_process',
+    'successfully',
+    'failed',
+    'blocked'
+  ]
 
   typesOfTests = [
     'functional',
