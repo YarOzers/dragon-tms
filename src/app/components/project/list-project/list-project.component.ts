@@ -37,7 +37,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<Project> = new MatTableDataSource(this.projectTableData);
   isLoading = true;
   protected projectName = '';
-  private projectId  = 0;
+  private projectId = 0;
   private project: Project = {
     id: 0,
     name: ''
@@ -59,7 +59,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
     this.projectService.getProjects().subscribe({
       next: (projects) => {
-        this.projectId = projects.length +1;
+        this.projectId = projects.length + 1;
         this.projectTableData = projects;
         this.dataSource.data = this.projectTableData;
         this.isLoading = false;
@@ -125,9 +125,9 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result !== undefined && result !== ''){
+      if (result !== undefined && result !== '') {
         this.addProject(result);
-      }else {
+      } else {
         console.log("Введите имя проекта!!!")
       }
     });
@@ -136,6 +136,9 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   navigateToProject(row: any) {
     this.headerService.showButtons(true);
     this.routerParamsService.setProjectId(row.id);
-    this.router.navigate([`/project-detail/${row.id}`]);
+    this.router.navigate([`/project-detail/${row.id}`],
+      {
+        state: {go: true}
+      });
   }
 }

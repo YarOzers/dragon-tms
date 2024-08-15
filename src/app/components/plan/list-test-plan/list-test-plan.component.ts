@@ -260,6 +260,9 @@ export class ListTestPlanComponent implements AfterViewInit{
 
 
   executeTestPlan(testPlanId: number) {
-    this.router.navigate(['project-detail', this.projectId,'testplan',testPlanId])
+    this.router.navigate(['project-detail', this.projectId,'testplan',testPlanId],
+      {
+        state: {go: true}
+      });
   }
 }
