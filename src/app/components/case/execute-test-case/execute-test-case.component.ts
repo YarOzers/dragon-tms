@@ -31,6 +31,7 @@ import {
   TestCaseStep
 } from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
+import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 
 @Component({
   selector: 'app-execute-test-case',
@@ -56,7 +57,11 @@ import {ProjectService} from "../../../services/project.service";
     MatSidenavContent,
     NgForOf,
     NgIf,
-    NgClass
+    NgClass,
+    MatCard,
+    MatCardContent,
+    MatCardHeader,
+    MatCardModule
   ],
   templateUrl: './execute-test-case.component.html',
   styleUrls: [
@@ -77,6 +82,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   //////////////////////////////////////////////////////////////////
   elementWidth!: number;
   private resizeObserver!: ResizeObserver;
+  isDisabled = true;
 
 
   // Массив редакторов, представляющий количество редакторов

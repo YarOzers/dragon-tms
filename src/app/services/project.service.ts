@@ -94,7 +94,68 @@ export class ProjectService {
     parentFolderId: 0,
     folders: [this.folder4],
     testCases: [
-      // this.testCase1, this.testCase2
+      {
+        "id": 5,
+        "name": "cxv",
+        "lastDataIndex": 0,
+        "folderId": 1,
+        "folder": "folder 1",
+        "type": "testCase",
+        "author": {
+          "id": 1,
+          "role": "admin",
+          "name": "Ярослав Андреевич",
+          "rights": "super"
+        },
+        "data": [
+          {
+            "status": "ready",
+            "automationFlag": "auto",
+            "changesAuthor": {
+              "id": 1,
+              "role": "admin",
+              "name": "Ярослав Андреевич",
+              "rights": "super"
+            },
+            "createdTime": null,
+            "executionTime": "23:35",
+            "expectedExecutionTime": "00:00",
+            "name": "",
+            "preConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "xcv"
+              }
+            ],
+            "stepItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "xcv"
+              }
+            ],
+            "postConditionItems": [
+              {
+                "id": 1,
+                "selected": false,
+                "action": "xcv",
+                "expectedResult": "cxv"
+              }
+            ],
+            "priority": "Highest",
+            "type": "functional",
+            "version": 1
+          }
+        ],
+        "loading": null,
+        "new": true,
+        "results": [],
+        "selected": true,
+        "automationFlag": "auto"
+      }
     ],
     type: 'folder'
   };

@@ -10,7 +10,7 @@
         <div *ngIf="new" fxFlex="6">
           <span fxFlex="6"></span>
         </div>
-        <input type="text" fxFlex="91" [(ngModel)]="name">
+        <input type="text" fxFlex="91" [(ngModel)]="name" disabled >
       </div>
     </div>
     <div>
@@ -18,49 +18,48 @@
         <mat-sidenav #sidenav mode="side" opened>
           <form>
             <mat-form-field>
-              <mat-label>Вид результат</mat-label>
-              <mat-select [(ngModel)]="selectedResult" name="type">
+              <mat-label>Результат</mat-label>
+              <mat-select [(ngModel)]="selectedResult" name="type" >
                 @for (type of result; track type) {
                   <mat-option [value]="type">{{ type }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
-            <mat-form-field>
-              <mat-label>Вид тестирования</mat-label>
-              <mat-select [(ngModel)]="data.type" name="type">
-                @for (type of typesOfTests; track type) {
-                  <mat-option [value]="type">{{ type }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Приоритет</mat-label>
-              <mat-select [(ngModel)]="data.priority" name="priority">
-                @for (priority of typesOfPriority; track priority) {
-                  <mat-option [value]="priority">{{ priority }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Признак автоматизации</mat-label>
-              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag">
-                @for (auto of automationFlags; track auto) {
-                  <mat-option [value]="auto">{{ auto }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Время выполнения</mat-label>
-              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time">
-            </mat-form-field>
-            <mat-form-field>
-              <mat-label>Готовность</mat-label>
-              <mat-select [(ngModel)]="data.status" name="status">
-                @for (status of statuses; track status) {
-                  <mat-option [value]="status">{{ status }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+            <mat-card appearance="outlined" class="card">
+              <mat-card-header>
+                <mat-card-title>Вид тестирования</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>{{data.type}}</mat-card-content>
+            </mat-card>
+
+            <mat-card appearance="outlined" class="card">
+              <mat-card-header>
+                <mat-card-title>Приоритет</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>{{data.priority}}</mat-card-content>
+            </mat-card>
+
+            <mat-card appearance="outlined" class="card">
+              <mat-card-header>
+                <mat-card-title>Признак автоматизации</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>{{data.automationFlag}}</mat-card-content>
+            </mat-card>
+
+            <mat-card appearance="outlined" class="card">
+              <mat-card-header>
+                <mat-card-title>Время на выполнение</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>{{data.executionTime}}</mat-card-content>
+            </mat-card>
+
+            <mat-card appearance="outlined" class="card">
+              <mat-card-header>
+                <mat-card-title>Готовность</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>{{data.status}}</mat-card-content>
+            </mat-card>
+
           </form>
         </mat-sidenav>
 
@@ -70,48 +69,6 @@
               <button mat-icon-button (click)="toggleSidenav()">
                 <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
               </button>
-            </div>
-            <div class="toolbar" fxFlex="93">
-              <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')"
-                      [class.active]="currentStyles['bold']">
-                <mat-icon>format_bold</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline', 'active-underline')"
-                      [class.active-underline]="currentClasses['underline']">
-                <mat-icon> format_underlined</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')"
-                      [class.active]="currentStyles['italic']">
-                <mat-icon> format_italic</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')"
-                      [class.active]="currentStyles['color-red']">
-                <mat-icon>format_color_text</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')"
-                      [class.active]="currentStyles['color-green']">
-                <mat-icon>format_color_text</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')"
-                      [class.active]="currentStyles['color-black']">
-                <mat-icon>format_color_text</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_li" (click)="toggleStyle('insertUnorderedList')"
-                      [class.active]="currentStyles['li']">
-                <mat-icon> format_list_bulleted</mat-icon>
-              </button>
-              <button mat-mini-fab (click)="insertImage()">
-                <mat-icon>image_search</mat-icon>
-              </button>
-              <button mat-mini-fab (click)="triggerFileInput()">
-                <mat-icon>add_photo_alternate</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')"
-                      [class.active-highlight]="currentClasses['highlight']">
-                <mat-icon> format_color_fill</mat-icon>
-              </button>
-
-
             </div>
           </div>
 
@@ -135,7 +92,7 @@
                   <div fxFlex="91" class="steps-container" [ngClass]="{'border-top': i === 0}">
 
                     <div class="editor" #actionEditor
-                         contenteditable="true"
+                         contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
                          (input)="autoResize($event, expectedResultEditor)"
@@ -151,7 +108,7 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                     <div class="editor" #expectedResultEditor
-                         contenteditable="true"
+                         contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
                          (input)="autoResize($event, actionEditor)"
@@ -167,14 +124,6 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                   </div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addPreCondition()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteSelectedPreconditions()">
-                    <mat-icon>delete</mat-icon>
-                  </button>
                 </div>
               </div>
             </div>
@@ -193,7 +142,7 @@
                   <span fxFlex="3">{{ step.id }}</span>
                   <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                     <div class="editor" #actionEditor
-                         contenteditable="true"
+                         contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
                          (input)="autoResize($event, expectedResultEditor)"
@@ -205,7 +154,7 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                     <div class="editor" #expectedResultEditor
-                         contenteditable="true"
+                         contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
                          (input)="autoResize($event, actionEditor)"
@@ -217,14 +166,6 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                   </div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addStep()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteSelectedSteps()">
-                    <mat-icon>delete</mat-icon>
-                  </button>
                 </div>
               </div>
             </div>
@@ -244,7 +185,7 @@
                   <span fxFlex="3">{{ postCondition.id }}</span>
                   <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                     <div class="editor" #actionEditor
-                         contenteditable="true"
+                         contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
                          (input)="autoResize($event, expectedResultEditor)"
@@ -256,7 +197,7 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                     <div class="editor" #expectedResultEditor
-                         contenteditable="true"
+                         contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
                          (input)="autoResize($event, actionEditor)"
@@ -269,14 +210,6 @@
                            (change)="onFileSelected($event)">
 
                   </div>
-                </div>
-                <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addPostCondition()">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteSelectedPostConditions()">
-                    <mat-icon>delete</mat-icon>
-                  </button>
                 </div>
               </div>
             </div>

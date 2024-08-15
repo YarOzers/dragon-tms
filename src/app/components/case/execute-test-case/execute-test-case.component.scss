@@ -36,4 +36,21 @@
   padding: 1rem;
 }
 
+.card{
+  max-width: 80%;
+  margin: 0.3rem;
+}
+
+mat-card-header{
+  font-size: small;
+  padding: 0.4rem 0.4rem 0 1rem;
+  text-align: center;
+}
+
+mat-card-content.mat-mdc-card-content{
+  font-weight: bolder;
+  padding: 0.4rem 0.4rem 0.4rem 1rem;
+  color: #6a7080;
+}
+
 
