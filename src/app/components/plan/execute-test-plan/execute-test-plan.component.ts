@@ -290,7 +290,8 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
         console.log('Введите имя проекта!!!');
       }
     });
-
-
+  }
+  updateDisplayedColumns() {
+    this.displayedColumns = Object.keys(this.displayedColumnsSelection).filter(column => this.displayedColumnsSelection[column]);
   }
 }

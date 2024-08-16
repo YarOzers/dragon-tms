@@ -84,7 +84,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
     select: true,
     id: true,
     name: true,
-    type: true
+    type: true,
+    run: true
   };
   selection = new SelectionModel<any>(true, []);
   private testCaseTableData: TestCase[] = [];
@@ -212,5 +213,9 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
     selectedAutoTests.forEach(test => {
       this.runTestCase(test);
     });
+  }
+
+  updateDisplayedColumns() {
+    this.displayedColumns = Object.keys(this.displayedColumnsSelection).filter(column => this.displayedColumnsSelection[column]);
   }
 }

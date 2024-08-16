@@ -23,7 +23,8 @@
                   <mat-icon>view_column</mat-icon>
                 </button>
                 <mat-menu #columnsMenu="matMenu">
-                  <mat-checkbox *ngFor="let column of allColumns" [(ngModel)]="displayedColumnsSelection[column]">
+                  <mat-checkbox *ngFor="let column of allColumns" [(ngModel)]="displayedColumnsSelection[column]"
+                                (change)="updateDisplayedColumns()">
                     {{ column }}
                   </mat-checkbox>
                 </mat-menu>

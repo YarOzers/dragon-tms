@@ -19,7 +19,8 @@
             <!-- Меню для выбора колонок -->
             <mat-menu #columnsMenu="matMenu">
               <mat-checkbox *ngFor="let column of allColumns"
-                            [(ngModel)]="displayedColumnsSelection[column]">
+                            [(ngModel)]="displayedColumnsSelection[column]"
+                            (change)="updateDisplayedColumns()">
                 {{ column }}
               </mat-checkbox>
             </mat-menu>

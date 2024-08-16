@@ -318,4 +318,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     console.log('updateSelectedFolders: ',updatedFolders)
     console.log('SelectedFolders: ',selectedFolders)
   }
+
+  updateDisplayedColumns() {
+    this.displayedColumns = Object.keys(this.displayedColumnsSelection).filter(column => this.displayedColumnsSelection[column]);
+  }
 }
