@@ -5,12 +5,12 @@ export interface TestCase {
   id: number;
   name: string;
   folderId: number | null;
-  folder: string;
+  folderName: string;
   type: 'testCase' | 'checkList';
   automationFlag? : 'auto' | 'manual' | null
   author: User;
-  data: TestCaseData[],
-  lastDataIndex?: number,
+  data: TestCaseData[];
+  lastDataIndex?: number;
   loading: boolean | null;
   new: boolean;
   results?: testCaseResult[] | null;
@@ -19,6 +19,7 @@ export interface TestCase {
 }
 
 export interface TestCaseData {
+  id?: number; // нужно добавить везде
   automationFlag: 'auto' | 'manual' | null
   changesAuthor: User;
   createdTime: string | null;

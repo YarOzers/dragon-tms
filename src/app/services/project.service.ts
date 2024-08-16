@@ -1,14 +1,18 @@
 import {Injectable} from '@angular/core';
-import {Project} from "../models/project";
+import {Project, ProjectDTO} from "../models/project";
 import {delay, map, Observable, of} from "rxjs";
 import {TestCase} from "../models/test-case";
 import {Folder} from "../models/folder";
 import {TestPlan} from "../models/test-plan";
+import {environment} from "../environment";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
+
+  private apiUrl = environment.apiUrl;
 
   private folder5: Folder = {
     id: 5,
@@ -19,7 +23,7 @@ export class ProjectService {
       "name": "cxv",
       "lastDataIndex": 0,
       "folderId": 5,
-      "folder": "folder 5",
+      "folderName": "folder 5",
       "type": "testCase",
       "author": {
         "id": 1,
@@ -99,7 +103,7 @@ export class ProjectService {
         "name": "cxv",
         "lastDataIndex": 0,
         "folderId": 1,
-        "folder": "folder 1",
+        "folderName": "folder 1",
         "type": "testCase",
         "author": {
           "id": 1,
@@ -187,7 +191,7 @@ export class ProjectService {
       "name": "asd",
       "lastDataIndex": 0,
       "folderId": 0,
-      "folder": "root_folder",
+      "folderName": "root_folder",
       "type": "testCase",
       "author": {
         "id": 1,
@@ -250,7 +254,7 @@ export class ProjectService {
         "name": "ggg",
         "lastDataIndex": 0,
         "folderId": 0,
-        "folder": "root_folder",
+        "folderName": "root_folder",
         "type": "testCase",
         "author": {
           "id": 2,
@@ -312,7 +316,7 @@ export class ProjectService {
         "name": "cxv",
         "lastDataIndex": 0,
         "folderId": 0,
-        "folder": "root_folder",
+        "folderName": "root_folder",
         "type": "testCase",
         "author": {
           "id": 1,
@@ -374,7 +378,7 @@ export class ProjectService {
         "name": "cxv",
         "lastDataIndex": 0,
         "folderId": 0,
-        "folder": "root_folder",
+        "folderName": "root_folder",
         "type": "testCase",
         "author": {
           "id": 1,
@@ -471,7 +475,7 @@ export class ProjectService {
   private testCaseIdCounter: number = 0;
 
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
   //получение текущей даты и времени
@@ -488,17 +492,17 @@ export class ProjectService {
   }
 
   // GET: получение всех проектов
-  getProjects(): Observable<Project[]> {
-    return of(this._projects).pipe(delay(500)); // Симуляция задержки
-  }
+  // getProjects(): Observable<Project[]> {
+  //   return of(this._projects).pipe(delay(500)); // Симуляция задержки
+  // }
 
   // POST: создание нового проекта
-  createProject(project: Project): Observable<Project> {
-    project.createdDate = this.getCurrentDateTimeString();
-    this._projects.push(project);
-
-    return of(project).pipe(delay(500)); // Симуляция задержки
-  }
+  // createProject(project: Project): Observable<Project> {
+  //   project.createdDate = this.getCurrentDateTimeString();
+  //   this._projects.push(project);
+  //
+  //   return of(project).pipe(delay(500)); // Симуляция задержки
+  // }
 
   // PUT: обновление существующего проекта
   updateProject(project: Project): Observable<Project> {
@@ -1123,6 +1127,23 @@ export class ProjectService {
       })
       // Удаляем папки, если у них нет выбранных тест-кейсов и подпапок
       .filter(folder => folder.testCases.length > 0 || (folder.folders && folder.folders.length > 0));
+  }
+
+
+  //   С бекендом
+  getProjects(): Observable<Project[]> {
+
+    const project = this.http.get<Project[]>(`${this.apiUrl}/projects`);
+    console.log("getProjects::", project)
+    return project;
+  }
+
+  getProjectById(id: number): Observable<Project> {
+    return this.http.get<Project>(`${this.apiUrl}/projects/${id}`);
+  }
+
+  createProject(projectDTO: ProjectDTO): Observable<Project> {
+    return this.http.post<Project>(`${this.apiUrl}/projects`, projectDTO);
   }
 
 }

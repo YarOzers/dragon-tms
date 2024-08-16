@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Project} from "../../../models/project";
+import {Project, ProjectDTO} from "../../../models/project";
 import {ProjectService} from "../../../services/project.service";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatSort, MatSortModule, Sort} from "@angular/material/sort";
@@ -13,6 +13,7 @@ import {DialogComponent} from "../../dialog/dialog.component";
 import {Router} from "@angular/router";
 import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
+import {HttpClientModule, HttpClientXsrfModule} from "@angular/common/http";
 
 @Component({
   selector: 'app-list-project',
@@ -25,7 +26,8 @@ import {RouterParamsService} from "../../../services/router-params.service";
     FormsModule,
     MatButton,
     DialogComponent,
-    CommonModule
+    CommonModule,
+    HttpClientModule
   ],
   templateUrl: './list-project.component.html',
   styleUrl: './list-project.component.scss'
@@ -59,7 +61,9 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
     this.projectService.getProjects().subscribe({
       next: (projects) => {
-        this.projectId = projects.length + 1;
+        if(projects){
+
+        }
         this.projectTableData = projects;
         this.dataSource.data = this.projectTableData;
         this.isLoading = false;
@@ -99,16 +103,19 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   }
 
   addProject(projectName: string) {
-    this.project = {
-      id: this.projectId,
+    console.log(projectName);
+    const project: ProjectDTO = {
       name: projectName,
-      folder: [],
-      testPlan: [],
-      users: []
+      authorId: 1
+
     }
-    this.projectService.createProject(this.project);
-    this.isLoading = true;
-    this.ngOnInit();
+
+    this.projectService.createProject(project).subscribe(proj=>{
+      this.dataSource.data.push(proj);
+      this.isLoading = true;
+      this.ngOnInit();
+    });
+
 
   }
 

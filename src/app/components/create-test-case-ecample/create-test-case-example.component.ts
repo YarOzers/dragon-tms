@@ -155,7 +155,7 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     id: this.testCaseId,
     name: this.name,
     folderId: this.folderId,
-    folder: this.folderName,
+    folderName: this.folderName,
     type: this.typeOf,
     author: this.user,
     data: [this.data],

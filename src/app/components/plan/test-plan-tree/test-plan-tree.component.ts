@@ -150,7 +150,7 @@ export class TestPlanTreeComponent {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       const testCase = event.previousContainer.data[event.previousIndex];
-      testCase.folder = targetFolderName;
+      testCase.folderName = targetFolderName;
       transferArrayItem(
         event.previousContainer.data,
         event.container.data,

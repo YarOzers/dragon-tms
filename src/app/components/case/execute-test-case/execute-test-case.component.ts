@@ -189,7 +189,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     name: this.name,
     lastDataIndex: 0,
     folderId: this.folderId,
-    folder: this.folderName,
+    folderName: this.folderName,
     type: this.typeOf,
     author: this.user,
     data: [],
@@ -223,7 +223,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     this.testCaseId = testCase.id;
     this.name = testCase.name;
     this.typeOf = testCase.type;
-    this.folderName = testCase.folder;
+    this.folderName = testCase.folderName;
     this.folderId = testCase.folderId;
     this.user = testCase.author;
     this.new = false;

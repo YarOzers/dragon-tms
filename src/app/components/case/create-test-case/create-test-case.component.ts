@@ -183,7 +183,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     name: this.name,
     lastDataIndex: 0,
     folderId: this.folderId,
-    folder: this.folderName,
+    folderName: this.folderName,
     type: this.typeOf,
     author: this.user,
     data: [],
@@ -227,7 +227,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.testCaseId = testCase.id;
     this.name = testCase.name;
     this.typeOf = testCase.type;
-    this.folderName = testCase.folder;
+    this.folderName = testCase.folderName;
     this.folderId = testCase.folderId;
     this.user = testCase.author;
     this.new = false;
@@ -1249,7 +1249,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     if (this.new) {
       this.testCase.id = this.testCaseId;
       this.testCase.folderId = this.folderId;
-      this.testCase.folder = this.folderName;
+      this.testCase.folderName = this.folderName;
       this.testCase.data.push(this.data);
       this.testCase.automationFlag = this.data.automationFlag;
     }
