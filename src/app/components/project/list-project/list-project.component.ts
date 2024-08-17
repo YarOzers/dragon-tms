@@ -69,11 +69,12 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     this.projectService.getProjects().subscribe({
       next: (projects) => {
         if(projects){
-
+          console.log(projects);
+          this.projectTableData = projects;
+          this.dataSource.data = this.projectTableData;
+          this.isLoading = false;
         }
-        this.projectTableData = projects;
-        this.dataSource.data = this.projectTableData;
-        this.isLoading = false;
+
       }, error: (err) => {
         console.log("Ошибка при загрузке проектов: ", err);
         this.isLoading = false;

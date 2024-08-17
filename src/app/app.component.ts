@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 
-import {TreeComponent} from "./components/tree/tree.component";
+import {TreeComponent} from "./components/case/list-test-case/tree/tree.component";
 import {ListProjectComponent} from "./components/project/list-project/list-project.component";
 import {ExampleComponent} from "./lessons/example/example.component";
 import {ParentComponent} from "./lessons/parent/parent.component";

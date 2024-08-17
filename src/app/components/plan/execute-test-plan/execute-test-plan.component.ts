@@ -22,7 +22,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader, Sort} from "@angular/material/sort";
 import {NgForOf, NgIf} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
-import {TreeComponent} from "../../tree/tree.component";
+import {TreeComponent} from "../../case/list-test-case/tree/tree.component";
 import {SelectionModel} from "@angular/cdk/collections";
 import {TestCase} from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";

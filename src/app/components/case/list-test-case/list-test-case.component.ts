@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
-import {TreeComponent} from "../../tree/tree.component";
+import {TreeComponent} from "./tree/tree.component";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {
   MatCell,

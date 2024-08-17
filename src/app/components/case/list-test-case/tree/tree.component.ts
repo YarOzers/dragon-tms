@@ -7,19 +7,21 @@ import {
   moveItemInArray,
   transferArrayItem
 } from "@angular/cdk/drag-drop";
-import {Folder} from "../../models/folder";
-import {TestCase} from "../../models/test-case";
+import {Folder} from "../../../../models/folder";
+import {TestCase} from "../../../../models/test-case";
 import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
-import {ProjectService} from "../../services/project.service";
-import {RouterParamsService} from "../../services/router-params.service";
+import {ProjectService} from "../../../../services/project.service";
+import {RouterParamsService} from "../../../../services/router-params.service";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {DialogComponent} from "../dialog/dialog.component";
+import {DialogComponent} from "../../../dialog/dialog.component";
 import {MatDialog} from "@angular/material/dialog";
-import {CreateTestCaseComponent} from "../case/create-test-case/create-test-case.component";
+import {CreateTestCaseComponent} from "../../create-test-case/create-test-case.component";
 import {MatProgressBar} from "@angular/material/progress-bar";
-import {DialogTestPlanListComponent} from "../plan/dialog-test-plan-list/dialog-test-plan-list.component";
+import {DialogTestPlanListComponent} from "../../../plan/dialog-test-plan-list/dialog-test-plan-list.component";
+import {FolderService} from "../../../../services/folder.service";
+import {TestCaseService} from "../../../../services/test-case.service";
 
 
 @Component({
@@ -51,6 +53,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   constructor(
     private projectService: ProjectService,
+    private folderService: FolderService,
+    private testCaseService: TestCaseService,
     private routerParamsService: RouterParamsService,
     private dialog: MatDialog
   ) {
@@ -66,7 +70,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataLoading = false;
-    this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
+    this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
       if (folders) {
         this.TEST_CASE_DATA = [...folders];
         this.generateTestCaseArrays();
@@ -340,8 +344,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
   getTestCases(folderId: number) {
     console.log('getTestCases WAs executed, folderId: ', folderId )
     if (this.projectId) {
-      console.log('projectId: ', this.projectId);
-      this.projectService.getTestCasesInFolder(+this.projectId, folderId).subscribe({
+      this.testCaseService.getTestCasesInFolder(folderId).subscribe({
         next: (testCases) => {
           console.log('TestCases: ', testCases)
           this.testCases = testCases;
