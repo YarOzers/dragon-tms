@@ -7,6 +7,8 @@ import {NgIf} from "@angular/common";
 import {HeaderService} from "../../services/header.service";
 import {filter} from "rxjs";
 import {RouterParamsService} from "../../services/router-params.service";
+import {User, UserDTO} from "../../models/user";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-header',
@@ -30,12 +32,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   // Method to toggle the icon
   showProjectButtons: boolean = false;
   private projectId: number | null = null;
+  private userDTO: UserDTO = {
+    id: 1, name: 'Yaroslav', rights: 2, role: 1
+  };
 
   constructor(
     private headerService: HeaderService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private routeParamsService: RouterParamsService
+    private routeParamsService: RouterParamsService,
+    private userService: UserService
   ) {
   }
 
@@ -53,6 +59,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.headerService.showButtons$.subscribe(show => {
       this.showProjectButtons = show;
     });
+
+    this.userService.createUser(this.userDTO).subscribe(user=>{
+      console.log("User was created:", this.userDTO)
+    })
 
     // Subscribe to router events to check for active route changes
     this.router.events.pipe(

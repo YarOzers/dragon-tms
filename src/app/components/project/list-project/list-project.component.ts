@@ -7,13 +7,15 @@ import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {CommonModule, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatDialog} from "@angular/material/dialog";
 import {DialogComponent} from "../../dialog/dialog.component";
 import {Router} from "@angular/router";
 import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {HttpClientModule, HttpClientXsrfModule} from "@angular/common/http";
+import {MatIcon} from "@angular/material/icon";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-list-project',
@@ -27,14 +29,19 @@ import {HttpClientModule, HttpClientXsrfModule} from "@angular/common/http";
     MatButton,
     DialogComponent,
     CommonModule,
-    HttpClientModule
+    HttpClientModule,
+    MatIcon,
+    MatIconButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger
   ],
   templateUrl: './list-project.component.html',
   styleUrl: './list-project.component.scss'
 })
 export class ListProjectComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['id', 'name'];
+  displayedColumns: string[] = ['id', 'name', 'menu'];
   private projectTableData: Project[] = [];
   dataSource: MatTableDataSource<Project> = new MatTableDataSource(this.projectTableData);
   isLoading = true;
@@ -147,5 +154,17 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
       {
         state: {go: true}
       });
+  }
+
+  deleteProject(id: number) {
+    this.projectService.deleteProject(id).subscribe(id=>{
+      console.log(`Проект с id ${id} удален!`)
+      this.projectService.getProjects().subscribe(projects=>{
+        this.dataSource.data = projects;
+      })
+      }
+
+    )
+
   }
 }

@@ -513,11 +513,7 @@ export class ProjectService {
     return of(project).pipe(delay(500)); // Симуляция задержки
   }
 
-  // DELETE: удаление проекта
-  deleteProject(id: number): Observable<void> {
-    this._projects = this._projects.filter(project => project.id !== id);
-    return of(undefined).pipe(delay(500)); // Симуляция задержки
-  }
+
 
   // Геттер для получения проектов
   get projects(): Project[] {
@@ -1144,6 +1140,12 @@ export class ProjectService {
 
   createProject(projectDTO: ProjectDTO): Observable<Project> {
     return this.http.post<Project>(`${this.apiUrl}/projects`, projectDTO);
+  }
+
+  // DELETE: удаление проекта
+  deleteProject(id: number): Observable<void> {
+   return  this.http.delete<void>(`${this.apiUrl}/projects/${id}`)
+
   }
 
 }
