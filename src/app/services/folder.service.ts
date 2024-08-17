@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Folder} from "../models/folder";
+import {Folder, FolderDTO} from "../models/folder";
 import {environment} from "../environment";
 import {TestCase} from "../models/test-case";
 
@@ -22,7 +22,10 @@ export class FolderService {
     folders.subscribe()
     return folders;
 
+  }
 
+  addChildFolder(parentFolderId: number, folder: FolderDTO): Observable<Folder>{
+    return this.http.post<Folder>(`${this.apiUrl}/${parentFolderId}/child`,folder);
   }
 
 

@@ -10,3 +10,14 @@ export interface Folder {
   type: 'folder';
   selected? : boolean | null;
 }
+export interface FolderDTO {
+  name: string;
+  projectId: number | null;
+  parentFolderId?: number;
+  folders?: Folder[];
+  testCases?: TestCase[];
+  expanded?: boolean;
+  type?: 'folder';
+  selected? : boolean | null;
+}
+

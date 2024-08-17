@@ -7,7 +7,7 @@ import {
   moveItemInArray,
   transferArrayItem
 } from "@angular/cdk/drag-drop";
-import {Folder} from "../../../../models/folder";
+import {Folder, FolderDTO} from "../../../../models/folder";
 import {TestCase} from "../../../../models/test-case";
 import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {MatIconButton} from "@angular/material/button";
@@ -269,7 +269,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
       width: 'auto',
       data: {
         type: 'folder',
-        folderName: ''
+        folderName: '',
+        folderId: folderId
       } // Можно передать данные в диалоговое окно
     });
 
@@ -278,9 +279,13 @@ export class TreeComponent implements OnInit, AfterViewInit {
         console.log('полученное имя из формы: ', result)
         console.log('Id проекта: ', this.projectId)
         console.log('Id папки: ', folderId)
+        const folder: FolderDTO = {
+          name: result,
+          type: "folder",
+          projectId: this.projectId
+        }
 
-
-        this.projectService.addFolder(Number(this.projectId), folderId, result);
+        this.folderService.addChildFolder(folderId, folder);
         this.ngOnInit();
       } else {
         console.log("Введите имя папки!!!")
@@ -342,7 +347,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   getTestCases(folderId: number) {
-    console.log('getTestCases WAs executed, folderId: ', folderId )
+    console.log('getTestCases WAs executed, folderId: ', folderId)
     if (this.projectId) {
       this.testCaseService.getTestCasesInFolder(folderId).subscribe({
         next: (testCases) => {
@@ -357,32 +362,32 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  openDialogToAddFolderInTestPlan(folderId: number , folderName: string) {
+  openDialogToAddFolderInTestPlan(folderId: number, folderName: string) {
     console.log('openDialog was executed!!!, folderId:: ', folderId);
     console.log('openDialog was executed!!!, folderId:: ', folderName);
-      const dialogRef = this.dialog.open(DialogTestPlanListComponent, {
+    const dialogRef = this.dialog.open(DialogTestPlanListComponent, {
 
-        width: '100%',
-        height: '100%',
-        maxWidth: '100%',
-        maxHeight: '100%',
-        data: {
-          type: 'folder',
-          folderId: folderId,
-          folderName: folderName
+      width: '100%',
+      height: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      data: {
+        type: 'folder',
+        folderId: folderId,
+        folderName: folderName
 
-        } // Можно передать данные в диалоговое окно
-      });
+      } // Можно передать данные в диалоговое окно
+    });
 
-      dialogRef.afterClosed().subscribe(testPlanId => {
-        if(testPlanId && folderId && this.projectId){
-          this.projectService.addFolderToTestPlan(Number(this.projectId), testPlanId,folderId).subscribe(folder=>{
-            console.log(`Папка ${folder.name} была добавлена в тест план ${testPlanId}`)
-          })
-        }
+    dialogRef.afterClosed().subscribe(testPlanId => {
+      if (testPlanId && folderId && this.projectId) {
+        this.projectService.addFolderToTestPlan(Number(this.projectId), testPlanId, folderId).subscribe(folder => {
+          console.log(`Папка ${folder.name} была добавлена в тест план ${testPlanId}`)
+        })
+      }
 
-      });
-    }
+    });
+  }
 }
 
 
