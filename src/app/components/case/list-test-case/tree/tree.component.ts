@@ -263,6 +263,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   openDialogToAddFolder(folderId: number): void {
+    console.log("FolderId::::", folderId);
 
     const dialogRef = this.dialog.open(DialogComponent, {
 
@@ -279,14 +280,20 @@ export class TreeComponent implements OnInit, AfterViewInit {
         console.log('полученное имя из формы: ', result)
         console.log('Id проекта: ', this.projectId)
         console.log('Id папки: ', folderId)
-        const folder: FolderDTO = {
-          name: result,
-          type: "folder",
-          projectId: this.projectId
+        const folder: any = {
+          name: result as string,
+          type: 1,
+          projectId: Number(this.projectId)
         }
-
-        this.folderService.addChildFolder(folderId, folder);
+        console.log(`Folder, parentFolderId ${folderId} , folderDto:: ${folder}`);
+        console.log(folder as string);
+        this.folderService.addChildFolder(folderId, folder).subscribe(
+          folder=>{
+            console.log(`Folder, parentFolderId ${folderId} , folder:: ${folder}`);
+          }
+        );
         this.ngOnInit();
+
       } else {
         console.log("Введите имя папки!!!")
       }

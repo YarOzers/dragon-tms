@@ -17,7 +17,7 @@ export interface FolderDTO {
   folders?: Folder[];
   testCases?: TestCase[];
   expanded?: boolean;
-  type?: 'folder';
+  type?: number;
   selected? : boolean | null;
 }
 

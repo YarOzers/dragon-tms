@@ -25,7 +25,8 @@ export class FolderService {
   }
 
   addChildFolder(parentFolderId: number, folder: FolderDTO): Observable<Folder>{
-    return this.http.post<Folder>(`${this.apiUrl}/${parentFolderId}/child`,folder);
+    console.log("addChildFolder was executed")
+    return this.http.post<Folder>(`${this.apiUrl}/folders/${parentFolderId}/child`,folder);
   }
 
 
