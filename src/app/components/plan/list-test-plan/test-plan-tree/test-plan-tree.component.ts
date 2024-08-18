@@ -12,13 +12,13 @@ import {MatIconButton} from "@angular/material/button";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
-import {TestCase} from "../../../models/test-case";
-import {ProjectService} from "../../../services/project.service";
-import {RouterParamsService} from "../../../services/router-params.service";
+import {TestCase} from "../../../../models/test-case";
+import {ProjectService} from "../../../../services/project.service";
+import {RouterParamsService} from "../../../../services/router-params.service";
 import {MatDialog} from "@angular/material/dialog";
-import {Folder} from "../../../models/folder";
-import {DialogComponent} from "../../dialog/dialog.component";
-import {CreateTestCaseComponent} from "../../case/create-test-case/create-test-case.component";
+import {Folder} from "../../../../models/folder";
+import {DialogComponent} from "../../../dialog/dialog.component";
+import {CreateTestCaseComponent} from "../../../case/create-test-case/create-test-case.component";
 
 @Component({
   selector: 'app-test-plan-tree',

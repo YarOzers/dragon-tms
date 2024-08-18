@@ -152,7 +152,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   protected steps: TestCaseStep[] = [this.step];
   protected preConditions: TestCasePreCondition[] = [this.preCondition];
   protected postConditions: TestCasePostCondition[] = [this.postCondition];
-  protected testCaseId = 0;
+  protected testCaseId = null;
   private folderName = '';
   private folderId: number | null = null;
   protected typeOfTest: string | null = null;
@@ -220,7 +220,9 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     const index = testCase.data.length - 1;
     console.log('index: ', index);
     console.log('STEP_ITEMS: ', testCase.data[index].stepItems)
-    this.testCaseId = testCase.id;
+    if(testCase.id){
+      this.testCaseId = testCase.id;
+    }
     this.name = testCase.name;
     this.typeOf = testCase.type;
     this.folderName = testCase.folderName;

@@ -330,10 +330,10 @@ export class TreeComponent implements OnInit, AfterViewInit {
       maxWidth: '100%',
       maxHeight: '100%',
       data: {
-        type: 'folder',
         folderId: folderId,
         folderName: folderName,
-        isNew: true
+        isNew: true,
+        type: "testCase"
       } // Можно передать данные в диалоговое окно
     });
 
@@ -341,8 +341,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
       if (testCase !== undefined && testCase !== '') {
         testCase.data.folderId = folderId;
         testCase.data.folderName = folderName;
-        console.log('RESULT from dialog: ', testCase);
-        this.projectService.addTestCase(this.projectId!, folderId, testCase);
+        console.log('RESULT from openDialogToCreateTestCase: ', testCase);
+        this.testCaseService.addTestCaseToFolder(folderId, testCase);
         this.getTestCases(folderId);
         this.ngOnInit();
 

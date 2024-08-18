@@ -224,7 +224,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     const index = testCase.data.length - 1;
     console.log('index: ', index);
     console.log('STEP_ITEMS: ', testCase.data[index].stepItems)
-    this.testCaseId = testCase.id;
     this.name = testCase.name;
     this.typeOf = testCase.type;
     this.folderName = testCase.folderName;
@@ -589,31 +588,31 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 //   Sidenav ===========================================================
 
   typesOfTests = [
-    'functional',
-    'system',
-    'performance',
-    'regression',
-    'unit',
-    'security',
-    'localization',
-    'usability'
-  ];
+    {value: 0, viewValue: 'functional'},
+    {value: 1, viewValue: 'system'},
+    {value: 2, viewValue: 'performance'},
+    {value: 3, viewValue: 'regression'},
+    {value: 4, viewValue: 'unit'},
+    {value: 5, viewValue: 'security'},
+    {value: 6, viewValue: 'localization'},
+    {value: 7, viewValue: 'usability'}];
+
   typesOfPriority = [
-    'Highest',
-    'High',
-    'Medium',
-    'Low'
+    {value: 0, viewValue: 'Highest'},
+    {value: 1, viewValue: 'High'},
+    {value: 2, viewValue: 'Medium'},
+    {value: 3, viewValue: 'Low'}
   ];
 
   automationFlags = [
-    'auto',
-    'manual'
+    {value: 0, viewValue: 'auto'},
+    {value: 1, viewValue: 'manual'}
   ]
 
   statuses = [
-    'ready',
-    'not ready',
-    'requires updating'
+    {value: 0, viewValue: 'ready'},
+    {value: 1, viewValue:'not ready'},
+    {value: 2, viewValue: 'requires updating'}
   ]
 
 

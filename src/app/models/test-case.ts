@@ -2,7 +2,7 @@
 import {User} from "./user";
 
 export interface TestCase {
-  id: number;
+  id?: any;
   name: string;
   folderId: number | null;
   folderName: string;
@@ -30,7 +30,7 @@ export interface TestCaseData {
   postConditionItems: TestCasePostCondition[] | null; //+
   priority: 'Highest' | 'High' | 'Medium' | 'Low' | null;
   stepItems: TestCaseStep[] | null; //*
-  type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null;
+  type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null | number;
   version: number;
   status: 'ready' | 'not ready' | 'requires updating'
 }

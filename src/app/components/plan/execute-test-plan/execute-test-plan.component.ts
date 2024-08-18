@@ -32,7 +32,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {FormsModule} from "@angular/forms";
-import {TestPlanTreeComponent} from "../test-plan-tree/test-plan-tree.component";
+import {TestPlanTreeComponent} from "../list-test-plan/test-plan-tree/test-plan-tree.component";
 import {ExecuteTestCaseComponent} from "../../case/execute-test-case/execute-test-case.component";
 import {ExecuteTestPlanTreeComponent} from "./execute-test-plan-tree/execute-test-plan-tree.component";
 import {CreateTestPlanTreeComponent} from "../create-test-plan/create-test-plan-tree/create-test-plan-tree.component";
