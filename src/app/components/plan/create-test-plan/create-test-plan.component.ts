@@ -210,8 +210,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
       if (folder.testCases && folder.testCases.length > 0) {
         testCases = [...testCases, ...folder.testCases];
       }
-      if (folder.folders && folder.folders.length > 0) {
-        testCases = [...testCases, ...this.getAllTestCases(folder.folders)];
+      if (folder.childFolders && folder.childFolders.length > 0) {
+        testCases = [...testCases, ...this.getAllTestCases(folder.childFolders)];
       }
     });
 
@@ -248,8 +248,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     const updateFolder = (folder: Folder): Folder => {
       const updatedTestCases = testCases.filter(testCase => testCase.folderId === folder.id);
 
-      const updatedSubFolders = folder.folders
-        ? folder.folders.map(updateFolder)
+      const updatedSubFolders = folder.childFolders
+        ? folder.childFolders.map(updateFolder)
         : [];
 
       return {
@@ -258,7 +258,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
           ...tc,
           selected: tc.selected // обновляем значение selected
         })),
-        folders: updatedSubFolders,
+        childFolders: updatedSubFolders,
       };
     };
 
@@ -269,15 +269,15 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     const filterFolder = (folder: Folder): Folder | null => {
       const selectedTestCases = testCases.filter(testCase => testCase.folderId === folder.id && testCase.selected);
 
-      const selectedSubFolders = folder.folders
-        ? folder.folders.map(filterFolder).filter(f => f !== null) as Folder[]
+      const selectedSubFolders = folder.childFolders
+        ? folder.childFolders.map(filterFolder).filter(f => f !== null) as Folder[]
         : [];
 
       if (selectedTestCases.length > 0 || selectedSubFolders.length > 0) {
         return {
           ...folder,
           testCases: selectedTestCases,
-          folders: selectedSubFolders,
+          childFolders: selectedSubFolders,
         };
       }
 

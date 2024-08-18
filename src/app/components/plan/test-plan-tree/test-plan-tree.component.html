@@ -19,7 +19,7 @@
           <span class="folder-name" cdkDrag [cdkDragData]="folder">{{ folder.name }}</span>
         </div>
         <div *ngIf="folder.expanded">
-          <div *ngFor="let subFolder of folder.folders"
+          <div *ngFor="let subFolder of folder.childFolders"
                cdkDrag [cdkDragData]="subFolder"
 
                cdkDragDisabled="true"

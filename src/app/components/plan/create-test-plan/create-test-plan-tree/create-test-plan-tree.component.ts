@@ -93,8 +93,8 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   private addTestCasesToMap(folder: Folder) {
     if (folder.name) {
       this.testCasesMap[folder.name] = folder.testCases!;
-      if (folder.folders) {
-        folder.folders.forEach(subFolder => this.addTestCasesToMap(subFolder));
+      if (folder.childFolders) {
+        folder.childFolders.forEach(subFolder => this.addTestCasesToMap(subFolder));
       }
     }
   }
@@ -121,8 +121,8 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
         return folder;
       }
 
-      if (folder.folders && folder.folders.length > 0) {
-        const foundFolder = this.findFolderById(folderId, folder.folders);
+      if (folder.childFolders && folder.childFolders.length > 0) {
+        const foundFolder = this.findFolderById(folderId, folder.childFolders);
         if (foundFolder) {
           return foundFolder;
         }

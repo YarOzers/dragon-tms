@@ -79,6 +79,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
         }
       }
       this.dataLoading = true;
+      console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
     });
   }
 
@@ -104,8 +105,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
   private addTestCasesToMap(folder: Folder) {
     if (folder.name) {
       this.testCasesMap[folder.name] = folder.testCases!;
-      if (folder.folders) {
-        folder.folders.forEach(subFolder => this.addTestCasesToMap(subFolder));
+      if (folder.childFolders) {
+        folder.childFolders.forEach(subFolder => this.addTestCasesToMap(subFolder));
       }
     }
   }
@@ -121,8 +122,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
   private syncFolderTestCases(folder: Folder) {
     if (folder.name) {
       folder.testCases = this.testCasesMap[folder.name];
-      if (folder.folders) {
-        folder.folders.forEach(subFolder => this.syncFolderTestCases(subFolder));
+      if (folder.childFolders) {
+        folder.childFolders.forEach(subFolder => this.syncFolderTestCases(subFolder));
       }
     }
   }
@@ -166,8 +167,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
         if (folder.id === currentFolderId) {
           sourceFolder = folder;
           if (parentFolder) {
-            if (parentFolder.folders) {
-              parentFolder.folders = parentFolder.folders.filter(f => f.id !== currentFolderId);
+            if (parentFolder.childFolders) {
+              parentFolder.childFolders = parentFolder.childFolders.filter(f => f.id !== currentFolderId);
             }
           } else {
             if (this.TEST_CASE_DATA) {
@@ -178,8 +179,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
         if (folder.id === targetFolderId) {
           targetFolder = folder;
         }
-        if (folder.folders) {
-          findFolders(folder.folders, folder);
+        if (folder.childFolders) {
+          findFolders(folder.childFolders, folder);
         }
       }
     };
@@ -187,10 +188,10 @@ export class TreeComponent implements OnInit, AfterViewInit {
     findFolders(this.TEST_CASE_DATA);
 
     if (sourceFolder && targetFolder) {
-      if (!targetFolder.folders) {
-        targetFolder.folders = [];
+      if (!targetFolder.childFolders) {
+        targetFolder.childFolders = [];
       }
-      targetFolder.folders.push(sourceFolder);
+      targetFolder.childFolders.push(sourceFolder);
 
     }
   }
@@ -216,8 +217,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
           if (folder.id === id) {
             return folder;
           }
-          if (folder.folders) {
-            const nestedFolder = findFolderById(folder.folders, id);
+          if (folder.childFolders) {
+            const nestedFolder = findFolderById(folder.childFolders, id);
             if (nestedFolder) {
               return nestedFolder;
             }
@@ -234,8 +235,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
         if (folder.id === id) {
           return true;
         }
-        if (folder.folders) {
-          if (checkForNestedId(folder.folders, id)) {
+        if (folder.childFolders) {
+          if (checkForNestedId(folder.childFolders, id)) {
             return true;
           }
         }
@@ -249,7 +250,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (checkForNestedId(sourceFolder.folders || [], targetFolderId)) {
+    if (checkForNestedId(sourceFolder.childFolders || [], targetFolderId)) {
       console.log('Error: Target folder ID found within the nested folders of the source folder.');
 
     } else {
@@ -262,8 +263,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   }
 
-  openDialogToAddFolder(folderId: number): void {
-    console.log("FolderId::::", folderId);
+  openDialogToAddFolder(parentFolderId: number): void {
+    console.log("FolderId::::", parentFolderId);
 
     const dialogRef = this.dialog.open(DialogComponent, {
 
@@ -271,7 +272,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
       data: {
         type: 'folder',
         folderName: '',
-        folderId: folderId
+        parentFolderId: parentFolderId
       } // Можно передать данные в диалоговое окно
     });
 
@@ -279,17 +280,16 @@ export class TreeComponent implements OnInit, AfterViewInit {
       if (result !== undefined && result !== '') {
         console.log('полученное имя из формы: ', result)
         console.log('Id проекта: ', this.projectId)
-        console.log('Id папки: ', folderId)
-        const folder: any = {
+        console.log('Id папки: ', parentFolderId)
+        const folderDto: FolderDTO = {
           name: result as string,
-          type: 1,
+          type: 0,
           projectId: Number(this.projectId)
         }
-        console.log(`Folder, parentFolderId ${folderId} , folderDto:: ${folder}`);
-        console.log(folder as string);
-        this.folderService.addChildFolder(folderId, folder).subscribe(
+        console.log(`Folder, parentFolderId ${parentFolderId} , folderDto:: ${folderDto}`);
+        this.folderService.addChildFolder(parentFolderId, folderDto).subscribe(
           folder=>{
-            console.log(`Folder, parentFolderId ${folderId} , folder:: ${folder}`);
+            console.log(`Folder, parentFolderId ${parentFolderId} , folder:: ${folder}`);
           }
         );
         this.ngOnInit();

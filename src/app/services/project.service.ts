@@ -89,14 +89,14 @@ export class ProjectService {
     testCases: [
       // this.testCase6
     ],
-    folders: [this.folder5],
+    childFolders: [this.folder5],
     type: 'folder'
   };
   private folder1: Folder = {
     id: 1,
     name: 'folder 1',
     parentFolderId: 0,
-    folders: [this.folder4],
+    childFolders: [this.folder4],
     testCases: [
       {
         "id": 5,
@@ -435,7 +435,7 @@ export class ProjectService {
         "selected": null,
         "automationFlag": "auto"
       }],
-    folders: [this.folder1, this.folder2, this.folder3],
+    childFolders: [this.folder1, this.folder2, this.folder3],
     type: 'folder',
     selected: false
   };
@@ -590,7 +590,7 @@ export class ProjectService {
       id: id,
       name: name,
       parentFolderId: parentFolderId,
-      folders: [],
+      childFolders: [],
       testCases: [],
       type: 'folder'
     };
@@ -598,13 +598,13 @@ export class ProjectService {
     const addFolderRecursively = (folders: Folder[]): boolean => {
       for (const folder of folders) {
         if (folder.id === parentFolderId) {
-          folder.folders = folder.folders || [];
-          folder.folders.push(newFolder);
+          folder.childFolders = folder.childFolders || [];
+          folder.childFolders.push(newFolder);
           console.log('Projects:  ', this._projects);
           return true;
         }
-        if (folder.folders) {
-          const added = addFolderRecursively(folder.folders);
+        if (folder.childFolders) {
+          const added = addFolderRecursively(folder.childFolders);
           if (added) return true;
         }
       }
@@ -638,8 +638,8 @@ export class ProjectService {
       if (folders[i].id === folderId) {
         folders.splice(i, 1);
         return true;
-      } else if (folders[i].folders) {
-        const removed = this.removeFolderRecursively(folders[i].folders, folderId);
+      } else if (folders[i].childFolders) {
+        const removed = this.removeFolderRecursively(folders[i].childFolders, folderId);
         if (removed) {
           return true;
         }
@@ -658,8 +658,8 @@ export class ProjectService {
           if (folder.id > maxId) {
             maxId = folder.id;
           }
-          if (folder.folders) {
-            findMaxIdRecursively(folder.folders);
+          if (folder.childFolders) {
+            findMaxIdRecursively(folder.childFolders);
           }
         }
       };
@@ -692,8 +692,8 @@ export class ProjectService {
           folder.testCases.push(testCase);
           return true;
         }
-        if (folder.folders) {
-          const added = addTestCaseRecursively(folder.folders);
+        if (folder.childFolders) {
+          const added = addTestCaseRecursively(folder.childFolders);
           if (added) return true;
         }
       }
@@ -730,8 +730,8 @@ export class ProjectService {
             return true;
           }
         }
-        if (folder.folders) {
-          const removed = removeTestCaseRecursively(folder.folders);
+        if (folder.childFolders) {
+          const removed = removeTestCaseRecursively(folder.childFolders);
           if (removed) return true;
         }
       }
@@ -759,8 +759,8 @@ export class ProjectService {
           if (folder.testCases) {
             allTestCases = allTestCases.concat(folder.testCases);
           }
-          if (folder.folders) {
-            collectTestCasesRecursively(folder.folders);
+          if (folder.childFolders) {
+            collectTestCasesRecursively(folder.childFolders);
           }
         }
       };
@@ -793,20 +793,20 @@ export class ProjectService {
           const gatherNestedTestCases = (nestedFolders: Folder[]) => {
             for (const nestedFolder of nestedFolders) {
               testCases = testCases.concat(nestedFolder.testCases);
-              if (nestedFolder.folders) {
-                gatherNestedTestCases(nestedFolder.folders);
+              if (nestedFolder.childFolders) {
+                gatherNestedTestCases(nestedFolder.childFolders);
               }
             }
           };
 
-          if (folder.folders) {
-            gatherNestedTestCases(folder.folders);
+          if (folder.childFolders) {
+            gatherNestedTestCases(folder.childFolders);
           }
 
           return testCases; // Возвращаем найденные тест-кейсы
-        } else if (folder.folders) {
+        } else if (folder.childFolders) {
           // Продолжаем поиск в вложенных папках
-          const nestedTestCases = collectTestCasesRecursively(folder.folders);
+          const nestedTestCases = collectTestCasesRecursively(folder.childFolders);
           if (nestedTestCases.length) {
             return nestedTestCases; // Возвращаем тест-кейсы, если они найдены в вложенных папках
           }
@@ -841,8 +841,8 @@ export class ProjectService {
         }
 
         // Продолжаем искать в вложенных папках
-        if (folder.folders) {
-          const nestedFoundTestCase = findTestCaseRecursively(folder.folders);
+        if (folder.childFolders) {
+          const nestedFoundTestCase = findTestCaseRecursively(folder.childFolders);
           if (nestedFoundTestCase) {
             return nestedFoundTestCase;
           }
@@ -877,8 +877,8 @@ export class ProjectService {
           if (folder.id === id) {
             return folder;
           }
-          if (folder.folders) {
-            const foundFolder = findFolderById(folder.folders, id);
+          if (folder.childFolders) {
+            const foundFolder = findFolderById(folder.childFolders, id);
             if (foundFolder) {
               return foundFolder;
             }
@@ -900,7 +900,7 @@ export class ProjectService {
         if (existingFolder.id === folderId) {
           return true;
         }
-        if (existingFolder.folders && folderExists(existingFolder.folders, folderId)) {
+        if (existingFolder.childFolders && folderExists(existingFolder.childFolders, folderId)) {
           return true;
         }
       }
@@ -915,7 +915,7 @@ export class ProjectService {
     const cloneFolder = (folder: Folder): Folder => {
       return {
         ...folder,
-        folders: folder.folders?.map(cloneFolder),
+        childFolders: folder.childFolders?.map(cloneFolder),
         testCases: [...folder.testCases]
       };
     };
@@ -944,8 +944,8 @@ export class ProjectService {
         if (folder.id === folderId) {
           return folder;
         }
-        if (folder.folders) {
-          const foundFolder = findFolderRecursively(folder.folders, folderId);
+        if (folder.childFolders) {
+          const foundFolder = findFolderRecursively(folder.childFolders, folderId);
           if (foundFolder) {
             return foundFolder;
           }
@@ -1012,8 +1012,8 @@ export class ProjectService {
         if (folder.id === id) {
           return folder;
         }
-        if (folder.folders) {
-          const foundFolder = findFolderById(folder.folders, id);
+        if (folder.childFolders) {
+          const foundFolder = findFolderById(folder.childFolders, id);
           if (foundFolder) {
             return foundFolder;
           }
@@ -1025,7 +1025,7 @@ export class ProjectService {
     const collectTestCasesRecursively = (folder: Folder): TestCase[] => {
       let testCases = [...folder.testCases];
 
-      for (const nestedFolder of folder.folders || []) {
+      for (const nestedFolder of folder.childFolders || []) {
         testCases = testCases.concat(collectTestCasesRecursively(nestedFolder));
       }
 
@@ -1112,7 +1112,7 @@ export class ProjectService {
         const filteredTestCases = folder.testCases.filter(testCase => testCase.selected);
 
         // Рекурсивно фильтруем подпапки
-        const filteredSubFolders = folder.folders ? this.filterFolders(folder.folders) : [];
+        const filteredSubFolders = folder.childFolders ? this.filterFolders(folder.childFolders) : [];
 
         // Возвращаем папку, если у нее есть выбранные тест-кейсы или подпапки
         return {

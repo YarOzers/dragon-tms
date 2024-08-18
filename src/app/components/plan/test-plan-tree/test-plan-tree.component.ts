@@ -112,8 +112,8 @@ export class TestPlanTreeComponent {
       console.log('folder.name: ', folder.name);
       this.testCasesMap[folder.name] = folder.testCases!;
       console.log('testCaseMap: ', this.testCasesMap);
-      if (folder.folders) {
-        folder.folders.forEach(subFolder => this.addTestCasesToMap(subFolder));
+      if (folder.childFolders) {
+        folder.childFolders.forEach(subFolder => this.addTestCasesToMap(subFolder));
         console.log('afterAdding Test cases to map: ', this.testCasesMap);
       }
     }
@@ -131,8 +131,8 @@ export class TestPlanTreeComponent {
   private syncFolderTestCases(folder: Folder) {
     if (folder.name) {
       folder.testCases = this.testCasesMap[folder.name];
-      if (folder.folders) {
-        folder.folders.forEach(subFolder => this.syncFolderTestCases(subFolder));
+      if (folder.childFolders) {
+        folder.childFolders.forEach(subFolder => this.syncFolderTestCases(subFolder));
       }
     }
   }
@@ -177,8 +177,8 @@ export class TestPlanTreeComponent {
         if (folder.id === currentFolderId) {
           sourceFolder = folder;
           if (parentFolder) {
-            if (parentFolder.folders) {
-              parentFolder.folders = parentFolder.folders.filter(f => f.id !== currentFolderId);
+            if (parentFolder.childFolders) {
+              parentFolder.childFolders = parentFolder.childFolders.filter(f => f.id !== currentFolderId);
             }
           } else {
             if (this.TEST_CASE_DATA) {
@@ -189,8 +189,8 @@ export class TestPlanTreeComponent {
         if (folder.id === targetFolderId) {
           targetFolder = folder;
         }
-        if (folder.folders) {
-          findFolders(folder.folders, folder);
+        if (folder.childFolders) {
+          findFolders(folder.childFolders, folder);
         }
       }
     };
@@ -198,10 +198,10 @@ export class TestPlanTreeComponent {
     findFolders(this.TEST_CASE_DATA);
 
     if (sourceFolder && targetFolder) {
-      if (!targetFolder.folders) {
-        targetFolder.folders = [];
+      if (!targetFolder.childFolders) {
+        targetFolder.childFolders = [];
       }
-      targetFolder.folders.push(sourceFolder);
+      targetFolder.childFolders.push(sourceFolder);
 
       console.log('TEST_CASE_DATA after moveFolder: ', this.TEST_CASE_DATA);
     }
@@ -229,8 +229,8 @@ export class TestPlanTreeComponent {
           if (folder.id === id) {
             return folder;
           }
-          if (folder.folders) {
-            const nestedFolder = findFolderById(folder.folders, id);
+          if (folder.childFolders) {
+            const nestedFolder = findFolderById(folder.childFolders, id);
             if (nestedFolder) {
               return nestedFolder;
             }
@@ -247,8 +247,8 @@ export class TestPlanTreeComponent {
         if (folder.id === id) {
           return true;
         }
-        if (folder.folders) {
-          if (checkForNestedId(folder.folders, id)) {
+        if (folder.childFolders) {
+          if (checkForNestedId(folder.childFolders, id)) {
             return true;
           }
         }
@@ -262,7 +262,7 @@ export class TestPlanTreeComponent {
       return;
     }
 
-    if (checkForNestedId(sourceFolder.folders || [], targetFolderId)) {
+    if (checkForNestedId(sourceFolder.childFolders || [], targetFolderId)) {
       console.log('Error: Target folder ID found within the nested folders of the source folder.');
 
     } else {
