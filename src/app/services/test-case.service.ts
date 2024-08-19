@@ -14,8 +14,12 @@ export class TestCaseService {
 
   getTestCasesInFolder(folderId: number): Observable<TestCase[]> {
 
-    const testCases = this.http.get<TestCase[]>(`${this.apiUrl}/testcases/${folderId}`, );
+    const testCases = this.http.get<TestCase[]>(`${this.apiUrl}/testcases/${folderId}`);
     console.log(`Get testCases in folder ${folderId} : ${testCases}`);
+    const test = testCases;
+    test.subscribe(testCases=>{
+      console.log("GETtestCases:  ", testCases);
+    })
 
     return testCases;
   }
