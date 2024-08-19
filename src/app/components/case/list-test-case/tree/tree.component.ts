@@ -358,7 +358,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
   getTestCases(folderId: number) {
     console.log('getTestCases WAs executed, folderId: ', folderId)
     if (this.projectId) {
-      this.testCaseService.getTestCasesInFolder(folderId).subscribe({
+      this.testCaseService.getAllTestCases(Number(folderId)).subscribe({
         next: (testCases) => {
           console.log('TestCases: ', testCases)
           this.testCases = testCases;
