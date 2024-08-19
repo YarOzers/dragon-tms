@@ -209,7 +209,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   }
 
   runSelectedAutoTests() {
-    const selectedAutoTests = this.selection.selected.filter(test => test.type === 'auto');
+    const selectedAutoTests = this.selection.selected.filter(test => test.type === 'AUTO');
     selectedAutoTests.forEach(test => {
       this.runTestCase(test);
     });

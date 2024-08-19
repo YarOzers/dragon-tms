@@ -203,7 +203,7 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   runSelectedAutoTests() {
-    const selectedAutoTests = this.selection.selected.filter((test) => test.automationFlag === 'auto');
+    const selectedAutoTests = this.selection.selected.filter((test) => test.automationFlag === 'AUTO');
     selectedAutoTests.forEach((test) => {
       this.runTestCase(test);
     });

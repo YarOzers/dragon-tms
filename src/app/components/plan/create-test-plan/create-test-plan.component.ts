@@ -93,7 +93,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     select: true,
     id: true,
     name: true,
-    type: true
+    type: true,
+    run: true
   };
 
   testPlanName: string = '';
@@ -238,7 +239,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   runSelectedAutoTests() {
-    const selectedAutoTests = this.selection.selected.filter((test) => test.automationFlag === 'auto');
+    const selectedAutoTests = this.selection.selected.filter((test) => test.automationFlag === 'AUTO');
     selectedAutoTests.forEach((test) => {
       this.runTestCase(test);
     });
