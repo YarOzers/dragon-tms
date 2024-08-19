@@ -7,7 +7,7 @@ export interface Folder {
   childFolders?: Folder[];
   testCases: TestCase[];
   expanded?: boolean;
-  type: 'folder';
+  type: 'FOLDER' | any;
   selected? : boolean | null;
 }
 export interface FolderDTO {

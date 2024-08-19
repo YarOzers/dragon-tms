@@ -146,7 +146,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     action: '',
     expectedResult: ''
   }
-  protected typeOf: 'testCase' | 'checkList' = 'testCase';
+  protected typeOf: any = 'TESTCASE';
   protected name: string = '';
   protected steps: TestCaseStep[] = [this.step];
   protected preConditions: TestCasePreCondition[] = [this.preCondition];
@@ -588,37 +588,37 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 //   Sidenav ===========================================================
 
   typesOfTests = [
-    {value: 0, viewValue: 'functional'},
-    {value: 1, viewValue: 'system'},
-    {value: 2, viewValue: 'performance'},
-    {value: 3, viewValue: 'regression'},
-    {value: 4, viewValue: 'unit'},
-    {value: 5, viewValue: 'security'},
-    {value: 6, viewValue: 'localization'},
-    {value: 7, viewValue: 'usability'}];
+    {value: 'FUNCTIONAl', viewValue: 'functional'},
+    {value: 'SYSTEM', viewValue: 'system'},
+    {value: 'PERFORMANCE', viewValue: 'performance'},
+    {value: 'REGRESSION', viewValue: 'regression'},
+    {value: 'UNIT', viewValue: 'unit'},
+    {value: 'SECURITY', viewValue: 'security'},
+    {value: 'LOCALIZATION', viewValue: 'localization'},
+    {value: 'USABILITY', viewValue: 'usability'}];
 
   typesOfPriority = [
-    {value: 0, viewValue: 'Highest'},
-    {value: 1, viewValue: 'High'},
-    {value: 2, viewValue: 'Medium'},
-    {value: 3, viewValue: 'Low'}
+    {value: 'HIGHEST', viewValue: 'Highest'},
+    {value: 'HIGH', viewValue: 'High'},
+    {value: 'MEDIUM', viewValue: 'Medium'},
+    {value: 'LOW', viewValue: 'Low'}
   ];
 
   automationFlags = [
-    {value: 0, viewValue: 'auto'},
-    {value: 1, viewValue: 'manual'}
+    {value: 'AUTO', viewValue: 'auto'},
+    {value: 'MANUAL', viewValue: 'manual'}
   ]
 
   statuses = [
-    {value: 0, viewValue: 'ready'},
-    {value: 1, viewValue:'not ready'},
-    {value: 2, viewValue: 'requires updating'}
+    {value: 'READY', viewValue: 'ready'},
+    {value: 'NOT_READY', viewValue:'not ready'},
+    {value: 'REQUIRES_UPDATING', viewValue: 'requires updating'}
   ]
 
 
   //                             EDITOR
-  //////////////////////////////////////////////////////////////
-  /////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   equalizeTwoEditorsHeight(editor1: HTMLElement, editor2: HTMLElement) {
     requestAnimationFrame(() => {

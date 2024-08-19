@@ -9,7 +9,7 @@ export interface TestPlan {
   startDate?: string;
   finishDate?: string;
   testCaseCount: number;
-  status: 'await' | 'process' | 'finished';
+  status: 'await' | 'process' | 'finished' | 'AWAIT' | 'PROCESS' | 'FINISHED' | any;
   qas: User[];
   folders: Folder[];
 }

@@ -1,6 +1,6 @@
 export interface User {
   id: number;
-  role: 'qa' | 'admin';
+  role: 'qa' | 'admin' | 'QA' | 'ADMIN' | any;
   name: string;
   rights: 'create' | 'delete' | 'super'
 }
