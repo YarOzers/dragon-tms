@@ -121,27 +121,27 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   private user: User = {
     id: 1,
-    role: 'admin',
+    role: 'ADMIN',
     name: 'Ярослав Андреевич',
-    rights: 'super'
+    rights: 'SUPER'
   }
 
   private preCondition: TestCasePreCondition = {
-    id: 1,
+    index: 1,
     selected: false,
     action: '',
     expectedResult: ''
   }
 
   private step: TestCaseStep = {
-    id: 1,
+    index: 1,
     selected: false,
     action: '',
     expectedResult: ''
   }
 
   private postCondition: TestCasePostCondition = {
-    id: 1,
+    index: 1,
     selected: false,
     action: '',
     expectedResult: ''
@@ -162,7 +162,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
   protected new: boolean = true;
   private results: testCaseResult[] | null | undefined = [];
-  counter = this.preConditions.length + 1;
   protected data: TestCaseData = {
     status: this.status,
     automationFlag: this.automationFlag,
@@ -175,17 +174,15 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     stepItems: this.steps,
     postConditionItems: this.postConditions,
     priority: null,
-    type: this.type,
+    testCaseType: this.type,
     version: 1
   }
   protected testCase: TestCase = {
-    id: this.testCaseId,
     name: this.name,
     lastDataIndex: 0,
     folderId: this.folderId,
     folderName: this.folderName,
     type: this.typeOf,
-    author: this.user,
     data: [],
     loading: null,
     new: true,
@@ -220,7 +217,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   setFields(testCase: TestCase) {
-
+    this.testCaseId = testCase.id;
     const index = testCase.data.length - 1;
     console.log('index: ', index);
     console.log('STEP_ITEMS: ', testCase.data[index].stepItems)
@@ -228,7 +225,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.typeOf = testCase.type;
     this.folderName = testCase.folderName;
     this.folderId = testCase.folderId;
-    this.user = testCase.author;
     this.new = false;
     this.results = testCase.results;
     this.data = testCase.data[index];
@@ -243,7 +239,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     if (testCase.data[index].postConditionItems) {
       this.postConditions = testCase.data[index].postConditionItems;
     }
-    console.log('preConditions:::::::::', testCase.data[index].preConditionItems);
   }
 
   ngAfterViewInit() {
@@ -281,7 +276,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   initEditors() {
     setTimeout(() => {
-      console.log('preConditions in setTimeout: ', this.preConditions);
       this.preConditions.forEach((preCondition, index) => {
         const actionEditor = this.getEditorPreConditionByIndex(index, 'action');
         const expectedResultEditor = this.getEditorPreConditionByIndex(index, 'expectedResult');
@@ -457,25 +451,25 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   private reorderPreConditions() {
     this.preConditions.forEach((step, index) => {
-      step.id = index + 1;
+      step.index = index + 1;
     });
   }
 
   private reorderSteps() {
     this.steps.forEach((step, index) => {
-      step.id = index + 1;
+      step.index = index + 1;
     });
   }
 
   private reorderPostConditions() {
     this.postConditions.forEach((step, index) => {
-      step.id = index + 1;
+      step.index = index + 1;
     });
   }
 
   addStep() {
     const step: TestCaseStep = {
-      id: this.steps.length + 1,
+      index: this.steps.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -486,7 +480,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   addPreCondition() {
     const preCondition: TestCasePreCondition = {
-      id: this.preConditions.length + 1,
+      index: this.preConditions.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -498,7 +492,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   addPostCondition() {
     const postCondition: TestCasePostCondition = {
-      id: this.postConditions.length + 1,
+      index: this.postConditions.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -572,7 +566,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   updateAllSelectedPostConditions() {
-    const totalSelected = this.steps.filter(step => step.selected).length;
+    const totalSelected = this.postConditions.filter(step => step.selected).length;
     this.allSelectedPostConditions = totalSelected === this.postConditions.length;
     this.indeterminatePostCondition = totalSelected > 0 && totalSelected < this.postConditions.length;
   }
@@ -611,7 +605,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   statuses = [
     {value: 'READY', viewValue: 'ready'},
-    {value: 'NOT_READY', viewValue:'not ready'},
+    {value: 'NOT_READY', viewValue: 'not ready'},
     {value: 'REQUIRES_UPDATING', viewValue: 'requires updating'}
   ]
 
@@ -630,22 +624,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       editor1.style.height = `${maxHeight}px`;
       editor2.style.height = `${maxHeight}px`;
     });
-  }
-
-  show() {
-    console.log(this.preConditions);
-    this.add();
-  }
-
-
-  add() {
-    const precondition: TestCasePreCondition = {
-      id: this.counter,
-      selected: false,
-      action: '',
-      expectedResult: ''
-    }
-    this.preConditions.push(precondition);
   }
 
   // Устанавливает активный редактор при его фокусировке
@@ -1246,15 +1224,15 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     console.log('test-case in save: ', this.testCase);
     console.log('test-case data in save: ', this.data);
     if (this.new) {
-      this.testCase.id = this.testCaseId;
       this.testCase.folderId = this.folderId;
       this.testCase.folderName = this.folderName;
       this.testCase.data.push(this.data);
       this.testCase.automationFlag = this.data.automationFlag;
+      this.testCase.id = null;
     }
     this.testCase.name = this.name;
     this.testCase.lastDataIndex = this.testCase.data.length - 1;
-    console.log('lastDAtaIndex in save: ', this.testCase.lastDataIndex);
+    console.log('TEstCASE in SAVE::', this.testCase);
     this.dialogRef.close(this.testCase);
 
   }
@@ -1262,12 +1240,4 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   protected readonly prompt = prompt;
 
-
-  showName() {
-    console.log(this.name);
-  }
-
-  getData() {
-    console.log('preConditions---------------->', this.preConditions);
-  }
 }

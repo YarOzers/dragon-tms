@@ -21,6 +21,7 @@ export class TestCaseService {
   }
 
   addTestCaseToFolder(folderId: number, testCase: TestCase):Observable<TestCase>{
+    console.log("Add testCaseToFolder was executed, testCase::", testCase);
     return this.http.post<TestCase>(`${this.apiUrl}/testcases/folder/${folderId}`,testCase)
   }
 

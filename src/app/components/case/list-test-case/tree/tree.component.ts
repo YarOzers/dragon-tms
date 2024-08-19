@@ -342,7 +342,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
         testCase.data.folderId = folderId;
         testCase.data.folderName = folderName;
         console.log('RESULT from openDialogToCreateTestCase: ', testCase);
-        this.testCaseService.addTestCaseToFolder(folderId, testCase);
+        this.testCaseService.addTestCaseToFolder(folderId, testCase).subscribe(testCase=>{
+          console.log('TestCase::', testCase)
+        });
         this.getTestCases(folderId);
         this.ngOnInit();
 

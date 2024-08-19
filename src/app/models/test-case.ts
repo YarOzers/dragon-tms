@@ -8,7 +8,7 @@ export interface TestCase {
   folderName: string;
   type: 'testCase' | 'checkList' | 'TESTCASE' | 'CHECKLIST' | any;
   automationFlag? : 'auto' | 'manual' | 'AUTO' | 'MANUAL' | null | any
-  author: User;
+  // user: User;
   data: TestCaseData[];
   lastDataIndex?: number;
   loading: boolean | null;
@@ -30,7 +30,7 @@ export interface TestCaseData {
   postConditionItems: TestCasePostCondition[] | null; //+
   priority: 'Highest' | 'High' | 'Medium' | 'Low' | 'HIGHEST' | 'HIGH'| 'MEDIUM' | 'LOW' | null | any;
   stepItems: TestCaseStep[] | null; //*
-  type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null | number| 'FUNCTIONAL' | 'SYSTEM' | 'PERFORMANCE' | 'REGRESSION' | 'UNIT' | 'SECURITY' | 'LOCALIZATION' | 'USABILITY' | any;
+  testCaseType: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null | number| 'FUNCTIONAL' | 'SYSTEM' | 'PERFORMANCE' | 'REGRESSION' | 'UNIT' | 'SECURITY' | 'LOCALIZATION' | 'USABILITY' | any;
   version: number;
   status: 'ready' | 'not ready' | 'requires updating' | 'READY' | 'NOT_READY' | 'REQUIRES UPDATING' | any
 }
@@ -44,7 +44,8 @@ export interface testCaseResult {
 }
 
 export interface TestCaseStep {
-  id: number;
+  id?: number;
+  index: number;
   selected: boolean;
   action: string;
   expectedResult?: string
@@ -52,14 +53,16 @@ export interface TestCaseStep {
 
 export interface TestCasePreCondition {
   selected: boolean;
-  id: number;
+  index: number;
+  id?: number;
   action: string;
   expectedResult?: string
 }
 
 export interface TestCasePostCondition {
   selected: boolean;
-  id: number;
+  index: number;
+  id?: number;
   action: string;
   expectedResult?: string
 }

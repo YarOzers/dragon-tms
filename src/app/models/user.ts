@@ -1,8 +1,8 @@
 export interface User {
   id: number;
-  role: 'qa' | 'admin' | 'QA' | 'ADMIN' | any;
+  role: 'QA' | 'ADMIN' ;
   name: string;
-  rights: 'create' | 'delete' | 'super'
+  rights:  'CREATE' | 'DELETE' | 'SUPER' ;
 }
 
 export interface UserDTO {

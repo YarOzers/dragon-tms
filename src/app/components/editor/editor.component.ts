@@ -25,14 +25,14 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('fileInput') fileInput: ElementRef<HTMLInputElement> | undefined;
 
   preConditions: TestCasePreCondition[] = [
-    {id: 1, selected: false, action: '', expectedResult: ''},
-    {id: 2, selected: false, action: '', expectedResult: ''},
-    {id: 3, selected: false, action: '', expectedResult: ''}
+    {index: 1, selected: false, action: '', expectedResult: ''},
+    {index: 2, selected: false, action: '', expectedResult: ''},
+    {index: 3, selected: false, action: '', expectedResult: ''}
   ];
 
   counter = this.preConditions.length + 1;
   private preCondition: TestCasePreCondition = {
-    id: 1,
+    index: 1,
     selected: false,
     action: '',
     expectedResult: ''
@@ -96,7 +96,7 @@ export class EditorComponent implements AfterViewInit {
 
   add() {
     const precondition: TestCasePreCondition = {
-      id: this.counter,
+      index: this.counter,
       selected: false,
       action: '',
       expectedResult: ''

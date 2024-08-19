@@ -122,27 +122,27 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
   private user: User = {
     id: 1,
-    role: 'admin',
+    role: 'ADMIN',
     name: 'Ярослав Андреевич',
-    rights: 'super'
+    rights: 'SUPER'
   }
 
   private preCondition: TestCasePreCondition = {
-    id: 1,
+    index: 1,
     selected: false,
     action: '',
     expectedResult: ''
   }
 
   private step: TestCaseStep = {
-    id: 1,
+    index: 1,
     selected: false,
     action: '',
     expectedResult: ''
   }
 
   private postCondition: TestCasePostCondition = {
-    id: 1,
+    index: 1,
     selected: false,
     action: '',
     expectedResult: ''
@@ -181,7 +181,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     stepItems: this.steps,
     postConditionItems: this.postConditions,
     priority: null,
-    type: this.type,
+    testCaseType: this.type,
     version: 1
   }
   protected testCase: TestCase = {
@@ -191,7 +191,6 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     folderId: this.folderId,
     folderName: this.folderName,
     type: this.typeOf,
-    author: this.user,
     data: [],
     loading: null,
     new: true,
@@ -227,7 +226,6 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     this.typeOf = testCase.type;
     this.folderName = testCase.folderName;
     this.folderId = testCase.folderId;
-    this.user = testCase.author;
     this.new = false;
     this.results = testCase.results;
     this.data = testCase.data[index];
@@ -456,25 +454,25 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
   private reorderPreConditions() {
     this.preConditions.forEach((step, index) => {
-      step.id = index + 1;
+      step.index = index + 1;
     });
   }
 
   private reorderSteps() {
     this.steps.forEach((step, index) => {
-      step.id = index + 1;
+      step.index = index + 1;
     });
   }
 
   private reorderPostConditions() {
     this.postConditions.forEach((step, index) => {
-      step.id = index + 1;
+      step.index = index + 1;
     });
   }
 
   addStep() {
     const step: TestCaseStep = {
-      id: this.steps.length + 1,
+      index: this.steps.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -485,7 +483,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
   addPreCondition() {
     const preCondition: TestCasePreCondition = {
-      id: this.preConditions.length + 1,
+      index: this.preConditions.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -497,7 +495,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
   addPostCondition() {
     const postCondition: TestCasePostCondition = {
-      id: this.postConditions.length + 1,
+      index: this.postConditions.length + 1,
       selected: false,
       action: '',
       expectedResult: ''
@@ -646,7 +644,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
   add() {
     const precondition: TestCasePreCondition = {
-      id: this.counter,
+      index: this.counter,
       selected: false,
       action: '',
       expectedResult: ''

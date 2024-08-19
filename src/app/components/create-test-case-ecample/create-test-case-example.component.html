@@ -113,7 +113,7 @@
               <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
                             fxFlex="6">
               </mat-checkbox>
-              <span fxFlex="3">{{ preCondition.id }}</span>
+              <span fxFlex="3">{{ preCondition.index }}</span>
               <div fxFlex="91" class="steps-container" [ngClass]="{'border-top': i === 0}">
 
                 <div class="editor" #actionEditor
@@ -170,7 +170,7 @@
             <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
               <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
               </mat-checkbox>
-              <span fxFlex="3">{{ step.id }}</span>
+              <span fxFlex="3">{{ step.index }}</span>
               <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                 <div class="editor" #actionEditor
                      contenteditable="true"
@@ -219,7 +219,7 @@
               <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
                             fxFlex="6">
               </mat-checkbox>
-              <span fxFlex="3">{{ postCondition.id }}</span>
+              <span fxFlex="3">{{ postCondition.index }}</span>
               <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                 <div class="editor" #actionEditor
                      contenteditable="true"

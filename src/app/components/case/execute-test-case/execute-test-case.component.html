@@ -29,7 +29,7 @@
               <mat-card-header>
                 <mat-card-title>Вид тестирования</mat-card-title>
               </mat-card-header>
-              <mat-card-content>{{ data.type }}</mat-card-content>
+              <mat-card-content>{{ data.testCaseType }}</mat-card-content>
             </mat-card>
 
             <mat-card appearance="outlined" class="card">
@@ -88,7 +88,7 @@
                   <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
                                 fxFlex="6">
                   </mat-checkbox>
-                  <span fxFlex="3">{{ preCondition.id }}</span>
+                  <span fxFlex="3">{{ preCondition.index }}</span>
                   <div fxFlex="91" class="steps-container" [ngClass]="{'border-top': i === 0}">
 
                     <div class="editor" #actionEditor
@@ -144,7 +144,7 @@
      >
                   <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
                   </mat-checkbox>
-                  <span fxFlex="3">{{ step.id }}</span>
+                  <span fxFlex="3">{{ step.index }}</span>
                   <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                     <div class="editor" #actionEditor
                          contenteditable="false"
@@ -187,7 +187,7 @@
                   <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
                                 fxFlex="6">
                   </mat-checkbox>
-                  <span fxFlex="3">{{ postCondition.id }}</span>
+                  <span fxFlex="3">{{ postCondition.index }}</span>
                   <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                     <div class="editor" #actionEditor
                          contenteditable="false"
