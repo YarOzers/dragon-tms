@@ -44,4 +44,8 @@ export class TestCaseService {
   deleteTestCase(testCaseId:number): Observable<void>{
     return this.http.delete<void>(`${this.apiUrl}/${testCaseId}`);
   }
+
+  getTestCase(testCaseId: number): Observable<TestCase>{
+    return  this.http.get<TestCase>(`${this.apiUrl}/testcases/testcase/${testCaseId}`)
+  }
 }

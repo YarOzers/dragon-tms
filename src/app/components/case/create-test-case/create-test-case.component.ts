@@ -33,6 +33,7 @@ import {
 import {ProjectService} from "../../../services/project.service";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {RouterParamsService} from "../../../services/router-params.service";
+import {TestCaseService} from "../../../services/test-case.service";
 
 @Component({
   selector: 'app-create-test-case',
@@ -83,6 +84,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   //////////////////////////////////////////////////////////////////
   elementWidth!: number;
   private resizeObserver!: ResizeObserver;
+  progressBar: boolean = false;
 
 
   // Массив редакторов, представляющий количество редакторов
@@ -174,7 +176,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     stepItems: this.steps,
     postConditionItems: this.postConditions,
     priority: null,
-    testCaseType: this.type,
+    testCaseType: null,
     version: 1
   }
   protected testCase: TestCase = {
@@ -198,7 +200,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     private dialogRef: MatDialogRef<CreateTestCaseComponent>,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
     private projectService: ProjectService,
-    private routerParamsService: RouterParamsService
+    private routerParamsService: RouterParamsService,
+    private testCaseService: TestCaseService
   ) {
   }
 
@@ -217,18 +220,17 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   setFields(testCase: TestCase) {
+    console.log("TESTCASE:::", testCase);
     this.testCaseId = testCase.id;
     const index = testCase.data.length - 1;
-    console.log('index: ', index);
-    console.log('STEP_ITEMS: ', testCase.data[index].stepItems)
     this.name = testCase.name;
-    this.typeOf = testCase.type;
+    this.type = testCase.type;
     this.folderName = testCase.folderName;
     this.folderId = testCase.folderId;
     this.new = false;
     this.results = testCase.results;
     this.data = testCase.data[index];
-    console.log('stepItems: ', testCase.data[index].stepItems)
+    console.log('TESTCASEDATA::', this.data)
     if (testCase.data[index].stepItems) {
 
       this.steps = testCase.data[index].stepItems;
@@ -242,8 +244,11 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   ngAfterViewInit() {
+    if(this.new){
+      this.progressBar = false;
+    }
     if (!this.new) {
-      this.projectService.getTestCaseById(+this.dataDialog.projectId, +this.dataDialog.testCaseId).subscribe({
+      this.testCaseService.getTestCase(+this.dataDialog.testCaseId).subscribe({
           next: (testCase) => {
             console.log('testCase in setFields::: ', testCase)
             if (testCase) {
@@ -251,12 +256,17 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
               if (testCase) {
                 console.log('initTestCase: : ', this.initTestCase);
                 this.setFields(this.initTestCase);
-                this.initEditors();
+                this.progressBar=false;
               }
             }
           }, error: (err) => {
             console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
-          }
+          },complete:(()=>{
+
+
+          this.initEditors();
+
+        })
         }
       )
     }
@@ -582,7 +592,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 //   Sidenav ===========================================================
 
   typesOfTests = [
-    {value: 'FUNCTIONAl', viewValue: 'functional'},
+    {value: 'FUNCTIONAL', viewValue: 'functional'},
     {value: 'SYSTEM', viewValue: 'system'},
     {value: 'PERFORMANCE', viewValue: 'performance'},
     {value: 'REGRESSION', viewValue: 'regression'},
@@ -592,10 +602,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     {value: 'USABILITY', viewValue: 'usability'}];
 
   typesOfPriority = [
-    {value: 'HIGHEST', viewValue: 'Highest'},
-    {value: 'HIGH', viewValue: 'High'},
-    {value: 'MEDIUM', viewValue: 'Medium'},
-    {value: 'LOW', viewValue: 'Low'}
+    {value: 'HIGHEST', viewValue: 'highest'},
+    {value: 'HIGH', viewValue: 'high'},
+    {value: 'MEDIUM', viewValue: 'medium'},
+    {value: 'LOW', viewValue: 'low'}
   ];
 
   automationFlags = [
@@ -1239,5 +1249,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
 
   protected readonly prompt = prompt;
+
 
 }
