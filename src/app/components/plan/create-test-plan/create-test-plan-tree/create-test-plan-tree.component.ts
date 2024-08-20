@@ -11,6 +11,8 @@ import {MatProgressBar} from "@angular/material/progress-bar";
 import {NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {FormsModule} from "@angular/forms";
+import {TestCaseService} from "../../../../services/test-case.service";
+import {FolderService} from "../../../../services/folder.service";
 
 @Component({
   selector: 'app-create-test-plan-tree',
@@ -49,6 +51,8 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   constructor(
     private projectService: ProjectService,
     private routerParamsService: RouterParamsService,
+    private testCaseService: TestCaseService,
+    private folderService: FolderService
   ) {
     this.routerParamsService.projectId$.subscribe(id => {
       this.projectId = id;
@@ -57,7 +61,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataLoading = false;
-    this.projectService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
+    this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
       if (folders) {
         this.TEST_CASE_DATA = [...folders];
         this.generateTestCaseArrays();
@@ -66,9 +70,8 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
         }
       }
       this.dataLoading = true;
+      console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
     });
-    if (this.TEST_CASE_DATA) {
-    }
 
   }
 

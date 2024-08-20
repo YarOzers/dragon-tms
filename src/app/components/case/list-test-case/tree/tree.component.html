@@ -1,5 +1,7 @@
 <mat-progress-bar *ngIf="!dataLoading" mode="indeterminate"></mat-progress-bar>
+
 <div *ngIf="dataLoading">
+  <button (click)="showData()">ggggg</button>
   <div cdkDropListGroup>
     <div *ngFor="let folder of TEST_CASE_DATA">
       <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>

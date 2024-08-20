@@ -48,7 +48,7 @@ import {TestCaseService} from "../../../../services/test-case.service";
 export class TreeComponent implements OnInit, AfterViewInit {
   dataLoading: boolean = false;
   private projectId: number | null = 0;
-  private testCases: TestCase[] = [];
+  private testCases: Folder[] = [];
   @Output() testCasesFromTree = new EventEmitter<any>();
 
   constructor(
@@ -72,6 +72,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
     this.dataLoading = false;
     this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
       if (folders) {
+        console.log("FOLDERS:::", folders);
         this.TEST_CASE_DATA = [...folders];
         this.generateTestCaseArrays();
         if (this.TEST_CASE_DATA) {
@@ -278,22 +279,31 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined && result !== '') {
-        console.log('полученное имя из формы: ', result)
-        console.log('Id проекта: ', this.projectId)
-        console.log('Id папки: ', parentFolderId)
         const folderDto: FolderDTO = {
           name: result as string,
           type: 0,
           projectId: Number(this.projectId)
         }
-        console.log(`Folder, parentFolderId ${parentFolderId} , folderDto:: ${folderDto}`);
         this.folderService.addChildFolder(parentFolderId, folderDto).subscribe(
           folder=>{
             console.log(`Folder, parentFolderId ${parentFolderId} , folder:: ${folder}`);
+          },error => {
+            console.error(`Ошибка при добавлении папки`, error)
+          },()=> {
+            this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
+              if (folders) {
+                console.log("FOLDERS:::", folders);
+                this.TEST_CASE_DATA = [...folders];
+                this.generateTestCaseArrays();
+                if (this.TEST_CASE_DATA) {
+                  this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+                }
+              }
+              this.dataLoading = true;
+              console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
+            });
           }
         );
-        this.ngOnInit();
-
       } else {
         console.log("Введите имя папки!!!")
       }
@@ -343,10 +353,20 @@ export class TreeComponent implements OnInit, AfterViewInit {
         testCase.data.folderName = folderName;
         console.log('RESULT from openDialogToCreateTestCase: ', testCase);
         this.testCaseService.addTestCaseToFolder(folderId, testCase).subscribe(testCase=>{
-          console.log('TestCase::', testCase)
+          this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
+            if (folders) {
+              console.log("FOLDERS:::", folders);
+              this.TEST_CASE_DATA = [...folders];
+              this.generateTestCaseArrays();
+              if (this.TEST_CASE_DATA) {
+                this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+              }
+            }
+            this.dataLoading = true;
+            console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
+          });
         });
-        this.getTestCases(folderId);
-        this.ngOnInit();
+
 
 
       } else {
@@ -396,6 +416,11 @@ export class TreeComponent implements OnInit, AfterViewInit {
       }
 
     });
+  }
+
+  showData(){
+    console.log("testcases-----------: ",this.testCases);
+    console.log("DATA-----------: ",this.TEST_CASE_DATA);
   }
 }
 

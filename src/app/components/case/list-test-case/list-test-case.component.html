@@ -70,7 +70,7 @@
                     type
                   </th>
                   <td mat-cell *matCellDef="let element">
-                    {{ element.data[element.lastDataIndex].automationFlag }}
+                    {{ element.automationFlag }}
                   </td>
                 </ng-container>
                 <!-- RUN Column -->
@@ -79,7 +79,7 @@
                     run
                   </th>
                   <td mat-cell *matCellDef="let element">
-                    <button *ngIf="element.data[element.lastDataIndex].automationFlag === 'AUTO'" mat-icon-button
+                    <button *ngIf="element.automationFlag === 'AUTO'" mat-icon-button
                             color="primary" (click)="runTestCase(element,$event)" [disabled]="element.isRunning">
                       <mat-icon *ngIf="!element.isRunning">play_arrow</mat-icon>
                       <mat-progress-spinner *ngIf="element.isRunning" mode="indeterminate"

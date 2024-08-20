@@ -49,7 +49,9 @@ export class TestCaseService {
     return  this.http.get<TestCase>(`${this.apiUrl}/testcases/testcase/${testCaseId}`)
   }
 
-  getAllTestCases(folderId: number): Observable<TestCase[]>{
-    return  this.http.get<TestCase[]>(`${this.apiUrl}/testcases/folder/${folderId}/all`)
+  getAllTestCases(folderId: number): Observable<Folder[]>{
+    return  this.http.get<Folder[]>(`${this.apiUrl}/testcases/folder/${folderId}/all`)
   }
+
+
 }

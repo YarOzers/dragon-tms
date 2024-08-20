@@ -99,12 +99,11 @@ export class ListTestPlanComponent implements AfterViewInit{
       }
     });
 
-    this.projectService.getTestPlans(+this.projectId).subscribe({
+    this.testPlanService.getTestPlansByProjectId(+this.projectId).subscribe({
       next: (testPlans) => {
         if (testPlans){
 
           this.dataSource.data = [...testPlans]
-          this.testPlanId = testPlans.length +1;
         }
         this.isLoading = false;
       }, error: (err) => {

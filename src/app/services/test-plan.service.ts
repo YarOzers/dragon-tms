@@ -1,13 +1,17 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {TestPlan} from "../models/test-plan";
 import {User} from "../models/user";
 import {Folder} from "../models/folder";
 import {delay, Observable, of} from "rxjs";
+import {HttpClient, HttpParams} from "@angular/common/http";
+import {environment} from "../environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TestPlanService {
+
+  private apiUrl = environment.apiUrl;
 
   private _testPlans: TestPlan[] = [{
     id: 1,
@@ -25,8 +29,11 @@ export class TestPlanService {
   private nextId = 1;
 
 
+  constructor(
+    private http: HttpClient
+  ) {
+  }
 
-  constructor() { }
   getCurrentDateTimeString(): string {
     const currentDateTime = new Date();
     const year = currentDateTime.getFullYear();
@@ -41,15 +48,6 @@ export class TestPlanService {
 
   getTestPlan(): Observable<TestPlan[]> {
     return of(this._testPlans).pipe(delay(500)); // Симуляция задержки
-  }
-
-
-  createTestPlan(project: TestPlan): Observable<TestPlan> {
-    project.createdDate = this.getCurrentDateTimeString();
-    project.id = this.nextId++;
-    this._testPlans.push(project);
-
-    return of(project).pipe(delay(500)); // Симуляция задержки
   }
 
 
@@ -75,5 +73,22 @@ export class TestPlanService {
 
   set testPlan(value: TestPlan[]) {
     this._testPlans = value;
+  }
+
+  getTestPlansByProjectId(projectId: number): Observable<TestPlan[]> {
+    return this.http.get<TestPlan[]>(`${this.apiUrl}/testplans/project/${projectId}`)
+
+  }
+
+  createTestPlan(testPlanName: string, userId: number, projectId: number): Observable<TestPlan> {
+    let requestParam: HttpParams = new HttpParams()
+      .set('name', testPlanName)
+      .set('userId', userId)
+      .set('projectId', projectId);
+    return this.http.post<TestPlan>(`${this.apiUrl}/testplans/create`, null, {params: requestParam})
+  }
+
+  addTestCasesToTestPlan(testPlanId: number, testCaseIds: number[]):Observable<TestPlan>{
+    return this.http.post<TestPlan>(`${this.apiUrl}/testplans/${testPlanId}/add-test-cases`,testCaseIds)
   }
 }

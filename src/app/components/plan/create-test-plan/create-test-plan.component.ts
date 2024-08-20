@@ -38,6 +38,9 @@ import {MatInput} from "@angular/material/input";
 import {CreateTestPlanTreeComponent} from "./create-test-plan-tree/create-test-plan-tree.component";
 import {Folder} from "../../../models/folder";
 import {TestPlan} from "../../../models/test-plan";
+import {TestPlanService} from "../../../services/test-plan.service";
+import {UserService} from "../../../services/user.service";
+import {TestCaseService} from "../../../services/test-case.service";
 
 @Component({
   selector: 'app-create-test-plan',
@@ -124,7 +127,10 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private router: Router,
     private headerService: HeaderService,
-    private routerParamsService: RouterParamsService
+    private routerParamsService: RouterParamsService,
+    private testPlanService: TestPlanService,
+    private userService: UserService,
+    private testCaseService: TestCaseService
   ) {
   }
 
@@ -137,8 +143,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
       this.testPlan = this.data.testPlan;
     }
 
-    this.projectService.getAllProjectTestCases(this.projectId).subscribe({
-      next: (projects) => {
+    this.testCaseService.getAllTestCases(this.projectId).subscribe({
+      next: (testCases) => {
         // Обработка загруженных данных
         this.isLoading = false;
       },
@@ -289,6 +295,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   // Обработчик для каждого отдельного чекбокса
+  private testCaseIds: number[] = [];
   onCheckboxChange(row: any, event: any) {
     row.selected = event.checked;
     if (event.checked) {
@@ -303,10 +310,22 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     this.dialogRef.close();
   }
 
+  getSelectedIds(items: any[]): number[] {
+    return items
+      .filter(item => item.selected === true)
+      .map(item => item.id);
+  }
+
   save() {
     console.log('1 this.testPlan:::', this.testPlan)
     this.testPlan.folders = this.updateFoldersWithSelection(this.dataSource.data, this.folders);
     console.log('2 this.testPlan:::', this.testPlan)
+
+    this.testPlanService.createTestPlan(this.testPlanName,Number(this.userService.getUserId()),this.projectId).subscribe(testPlan=>{
+      const testPlanId = testPlan.id;
+      this.testPlanService.addTestCasesToTestPlan(testPlanId, this.getSelectedIds(this.dataSource.data))
+    })
+
     this.projectService.updateTestPlan(this.projectId, this.testPlan);
     this.testPlanId = this.testPlanId + 1;
     this.dialogRef.close(this.testPlan);
@@ -318,6 +337,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     const selectedFolders = this.filterSelectedFolders(this.dataSource.data, this.folders);
     console.log('updateSelectedFolders: ',updatedFolders)
     console.log('SelectedFolders: ',selectedFolders)
+    console.log('dataSourse.data: ',this.dataSource.data)
+
   }
 
   updateDisplayedColumns() {
