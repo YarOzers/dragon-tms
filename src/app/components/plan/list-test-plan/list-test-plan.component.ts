@@ -68,7 +68,6 @@ export class ListTestPlanComponent implements AfterViewInit{
   protected projectName = '';
   private testPlanId = 0;
   private testPlan: TestPlan = {
-    id: 0,
     name: '',
     createdDate: '',
     author: '',
@@ -102,8 +101,10 @@ export class ListTestPlanComponent implements AfterViewInit{
     this.testPlanService.getTestPlansByProjectId(+this.projectId).subscribe({
       next: (testPlans) => {
         if (testPlans){
+          console.log("testPlans::" , testPlans);
 
           this.dataSource.data = [...testPlans]
+          console.log("DATAsourse::", this.dataSource.data);
         }
         this.isLoading = false;
       }, error: (err) => {
@@ -224,7 +225,9 @@ export class ListTestPlanComponent implements AfterViewInit{
     });
 
     dialogRef.afterClosed().subscribe(testPlan => {
-      this.ngOnInit();
+      this.testPlanService.getTestPlansByProjectId(this.projectId).subscribe(testPlans=>{
+        this.dataSource.data = [...testPlans];
+      })
     });
   }
 

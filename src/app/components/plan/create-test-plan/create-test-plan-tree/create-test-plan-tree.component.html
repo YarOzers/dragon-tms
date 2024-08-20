@@ -17,7 +17,7 @@
 
         </div>
         <div *ngIf="folder.expanded">
-          <div *ngFor="let subFolder of folder.folders"
+          <div *ngFor="let subFolder of folder.childFolders"
                class="subfolder">
             <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>
           </div>

@@ -2,7 +2,7 @@ import {User} from "./user";
 import {Folder} from "./folder";
 
 export interface TestPlan {
-  id: number;
+  id?: number;
   name: string;
   createdDate: string;
   author: string;

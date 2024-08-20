@@ -108,11 +108,9 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   protected projectName = '';
   private projectId = 0;
   private folders: Folder[] = [];
-  private testPlanId: number = 2;
   protected testPlan: TestPlan = {
     author: "",
-    id: this.testPlanId,
-    name: this.testPlanName,
+    name: '',
     createdDate: '',
     testCaseCount: 0,
     status: 'await',
@@ -323,11 +321,9 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
     this.testPlanService.createTestPlan(this.testPlanName,Number(this.userService.getUserId()),this.projectId).subscribe(testPlan=>{
       const testPlanId = testPlan.id;
-      this.testPlanService.addTestCasesToTestPlan(testPlanId, this.getSelectedIds(this.dataSource.data))
+      this.testPlanService.addTestCasesToTestPlan(Number(testPlanId), this.getSelectedIds(this.dataSource.data))
     })
 
-    this.projectService.updateTestPlan(this.projectId, this.testPlan);
-    this.testPlanId = this.testPlanId + 1;
     this.dialogRef.close(this.testPlan);
 
   }
