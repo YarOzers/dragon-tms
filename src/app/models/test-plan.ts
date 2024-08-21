@@ -12,4 +12,5 @@ export interface TestPlan {
   status: 'await' | 'process' | 'finished' | 'AWAIT' | 'PROCESS' | 'FINISHED' | any;
   qas: User[];
   folders: Folder[];
+  testCaseIds?: number[]
 }

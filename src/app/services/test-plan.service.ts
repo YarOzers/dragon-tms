@@ -91,4 +91,8 @@ export class TestPlanService {
   addTestCasesToTestPlan(testPlanId: number, testCaseIds: number[]):Observable<TestPlan>{
     return this.http.post<TestPlan>(`${this.apiUrl}/testplans/${testPlanId}/add-test-cases`,testCaseIds)
   }
+
+  getFoldersForTestCasesInTestPlan(testPlanId: number): Observable<Folder[]>{
+    return this.http.get<Folder[]>(`${this.apiUrl}/testplans/${testPlanId}/folders`)
+  }
 }
