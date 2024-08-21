@@ -46,26 +46,6 @@ export class TestPlanService {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   }
 
-  getTestPlan(): Observable<TestPlan[]> {
-    return of(this._testPlans).pipe(delay(500)); // Симуляция задержки
-  }
-
-
-  updateTestPlan(project: TestPlan): Observable<TestPlan> {
-    const index = this._testPlans.findIndex(p => p.id === project.id);
-    if (index !== -1) {
-      this._testPlans[index] = project;
-    }
-    return of(project).pipe(delay(500)); // Симуляция задержки
-  }
-
-
-  deleteTestPlan(id: number): Observable<void> {
-    this._testPlans = this._testPlans.filter(project => project.id !== id);
-    return of(undefined).pipe(delay(500)); // Симуляция задержки
-  }
-
-
   get testPlan(): TestPlan[] {
     return this._testPlans;
   }
@@ -88,11 +68,15 @@ export class TestPlanService {
     return this.http.post<TestPlan>(`${this.apiUrl}/testplans/create`, null, {params: requestParam})
   }
 
-  addTestCasesToTestPlan(testPlanId: number, testCaseIds: number[]):Observable<TestPlan>{
-    return this.http.post<TestPlan>(`${this.apiUrl}/testplans/${testPlanId}/add-test-cases`,testCaseIds)
+  addTestCasesToTestPlan(testPlanId: number, testCaseIds: number[]):Observable<string>{
+    return this.http.post(`${this.apiUrl}/testplans/${testPlanId}/test-cases`,testCaseIds,{ responseType: 'text' })
   }
 
-  getFoldersForTestCasesInTestPlan(testPlanId: number): Observable<Folder[]>{
-    return this.http.get<Folder[]>(`${this.apiUrl}/testplans/${testPlanId}/folders`)
+  getFoldersForTestCasesInTestPlan(testPlanId: number): Observable<Folder>{
+    return this.http.get<Folder>(`${this.apiUrl}/testplans/${testPlanId}/folders`)
+  }
+
+  getTestPlan(testPlanId: number): Observable<TestPlan>{
+    return  this.http.get<TestPlan>(`${this.apiUrl}/testplans/${testPlanId}`)
   }
 }

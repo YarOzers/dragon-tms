@@ -315,13 +315,16 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   save() {
-    console.log('1 this.testPlan:::', this.testPlan)
-    this.testPlan.folders = this.updateFoldersWithSelection(this.dataSource.data, this.folders);
-    console.log('2 this.testPlan:::', this.testPlan)
-
+    console.log("TESTPlan Name ::", this.testPlanName);
     this.testPlanService.createTestPlan(this.testPlanName,Number(this.userService.getUserId()),this.projectId).subscribe(testPlan=>{
-      const testPlanId = testPlan.id;
-      this.testPlanService.addTestCasesToTestPlan(Number(testPlanId), this.getSelectedIds(this.dataSource.data))
+      if(testPlan){
+        const testPlanId = testPlan.id;
+        const ids: number[] = this.getSelectedIds(this.dataSource.data);
+        console.log("IDS::", ids);
+        this.testPlanService.addTestCasesToTestPlan(Number(testPlanId),ids).subscribe(message=>{
+          console.log(message);
+        });
+      }
     })
 
     this.dialogRef.close(this.testPlan);

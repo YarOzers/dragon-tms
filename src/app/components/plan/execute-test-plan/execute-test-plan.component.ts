@@ -27,18 +27,17 @@ import {SelectionModel} from "@angular/cdk/collections";
 import {TestCase} from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
-import {MatDialog, MatDialogActions, MatDialogContent, MatDialogRef} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {ActivatedRoute, Router} from "@angular/router";
 import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {FormsModule} from "@angular/forms";
-import {TestPlanTreeComponent} from "../list-test-plan/test-plan-tree/test-plan-tree.component";
 import {ExecuteTestCaseComponent} from "../../case/execute-test-case/execute-test-case.component";
 import {ExecuteTestPlanTreeComponent} from "./execute-test-plan-tree/execute-test-plan-tree.component";
 import {CreateTestPlanTreeComponent} from "../create-test-plan/create-test-plan-tree/create-test-plan-tree.component";
-import {CreateTestPlanComponent} from "../create-test-plan/create-test-plan.component";
 import {Folder} from "../../../models/folder";
 import {TestPlan} from "../../../models/test-plan";
+import {TestPlanService} from "../../../services/test-plan.service";
 
 @Component({
   selector: 'app-execute-test-plan',
@@ -71,7 +70,6 @@ import {TestPlan} from "../../../models/test-plan";
     FormsModule,
     MatMenuTrigger,
     MatHeaderCellDef,
-    TestPlanTreeComponent,
     ExecuteTestPlanTreeComponent,
     CreateTestPlanTreeComponent,
   ],
@@ -99,11 +97,10 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   protected projectName = '';
   private projectId = 0;
   private folders: Folder[] = [];
-  private testPlanId: number = 2;
+  private testPlanId: number = 0;
   protected testPlan: TestPlan = {
     author: "",
-    id: this.testPlanId,
-    name: this.testPlanName,
+    name: '',
     createdDate: '',
     testCaseCount: 0,
     status: 'await',
@@ -118,7 +115,8 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     private router: Router,
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private testPlanService: TestPlanService
   ) {
   }
 
@@ -131,11 +129,10 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
       this.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
     }
 
-    this.projectService.getTestPlanById(+this.projectId, +this.testPlanId).subscribe(testPlan => {
+    this.testPlanService.getTestPlan(Number(this.testPlanId)).subscribe(testPlan=>{
       this.testPlan = testPlan;
-      console.log('testPlan:: ', this.testPlan)
-      this.dataSource.sort = this.sort;
     });
+
   }
 
   ngAfterViewInit() {

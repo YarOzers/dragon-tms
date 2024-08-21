@@ -19,6 +19,8 @@ import {Folder} from "../../../../models/folder";
 import {DialogComponent} from "../../../dialog/dialog.component";
 import {CreateTestCaseComponent} from "../../../case/create-test-case/create-test-case.component";
 import {ActivatedRoute} from "@angular/router";
+import {TestPlanService} from "../../../../services/test-plan.service";
+import {TestPlan} from "../../../../models/test-plan";
 
 @Component({
   selector: 'app-execute-test-plan-tree',
@@ -47,12 +49,14 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit{
   public TEST_CASE_DATA: Folder[] | null = [];
   testCasesMap: { [key: string]: TestCase[] } = {};
   private testPlanId: number | null = 0;
+  private testPlan: any;
 
 
   constructor(
     private projectService: ProjectService,
     private routerParamsService: RouterParamsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private testPlanService: TestPlanService
   ) {
     this.routerParamsService.projectId$.subscribe(id => {
       this.projectId = id;
@@ -64,11 +68,12 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit{
 
   ngOnInit(): void {
     this.dataLoading = false;
-    this.projectService.getSelectedFolders(Number(this.projectId), Number(this.testPlanId)).subscribe(folders => {
-      console.log(' 1 filteredFolders::',folders)
+    this.testPlanService.getFoldersForTestCasesInTestPlan(Number(this.testPlanId)).subscribe(folders => {
+      console.log("TESTPlanId::", this.testPlanId);
+      console.log('FolDERs::',folders)
       if (folders) {
         console.log('2 filteredFolders::',folders)
-        this.TEST_CASE_DATA = [...folders];
+        this.TEST_CASE_DATA?.push(folders);
         this.generateTestCaseArrays();
         if (this.TEST_CASE_DATA) {
           this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
