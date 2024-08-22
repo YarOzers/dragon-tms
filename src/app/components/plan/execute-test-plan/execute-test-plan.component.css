@@ -69,8 +69,9 @@ h3.dark-theme{
 }
 
 .test-plan-input{
-  margin: 1rem 1rem 0 1rem;
+  margin: 0 1rem 1rem 1rem;
 }
 input{
   height: 30px;
 }
+

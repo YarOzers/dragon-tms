@@ -1,9 +1,9 @@
-<button (click)="showData()">showData</button>
+<!--<button (click)="showData()">showData</button>-->
 
 
 <div fxFlex="column">
-  <div>
-    <input type="text" [(ngModel)]="testPlan.name" fxFlex="100" class="test-plan-input">
+  <div class="test-plan-name">
+    <input type="text" [(ngModel)]="testPlan.name" fxFlex="100" class="test-plan-input" disabled>
   </div>
   <div class="dialog-content" fxLayoutAlign="center center">
     <as-split unit="percent" direction="horizontal" gutterSize="10" class="left-column-container">
@@ -92,9 +92,9 @@
                       (click)="executeTestCaseDialog(row.id)"></tr>
                 </table>
 
-<!--                <div *ngIf="isLoading" class="progress-bar-container">-->
-<!--                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>-->
-<!--                </div>-->
+                <!--                <div *ngIf="isLoading" class="progress-bar-container">-->
+                <!--                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>-->
+                <!--                </div>-->
               </div>
             </div>
           </div>
@@ -102,4 +102,4 @@
       </as-split-area>
     </as-split>
   </div>
-
+</div>

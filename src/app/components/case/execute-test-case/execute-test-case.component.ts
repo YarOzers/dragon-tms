@@ -32,6 +32,7 @@ import {
 } from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
+import {TestCaseService} from "../../../services/test-case.service";
 
 @Component({
   selector: 'app-execute-test-case',
@@ -204,14 +205,22 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     private renderer: Renderer2,
     private dialogRef: MatDialogRef<ExecuteTestCaseComponent>,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private testCaseService: TestCaseService
   ) {
   }
 
   ngOnInit() {
-
-    this.new = this.dataDialog.isNew;
-    console.log('this.new:', this.new);
+    //
+    // this.new = this.dataDialog.isNew;
+    // this.testCaseService.getTestCase(this.dataDialog.testCaseId).subscribe(testCase =>{
+    //   this.setFields(testCase);
+    // },(error)=>{
+    //   console.error("Oшибка загрузки тест-кейса ", error)
+    // },()=>{
+    //   this.initEditors();
+    // })
+    // console.log('this.new:', this.new);
   }
 
   setFields(testCase: TestCase) {
@@ -244,8 +253,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   ngAfterViewInit() {
-    if (!this.new) {
-      this.projectService.getTestCaseById(+this.dataDialog.projectId, +this.dataDialog.testCaseId).subscribe({
+      this.testCaseService.getTestCase(Number(this.dataDialog.testCaseId)).subscribe({
           next: (testCase) => {
             console.log('testCase in setFields::: ', testCase)
             if (testCase) {
@@ -261,7 +269,6 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
           }
         }
       )
-    }
 
     if (this.new) {
 
@@ -373,9 +380,9 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
   ngOnDestroy() {
     // Отписка от наблюдателя при уничтожении компонента
-    if (this.actionEditor) {
-      this.resizeObserver.unobserve(this.actionEditor.nativeElement);
-    }
+    // if (this.actionEditor) {
+    //   this.resizeObserver.unobserve(this.actionEditor.nativeElement);
+    // }
   }
 
   addPasteEventListenerToPreConditionEditors(editors: any[]) {
