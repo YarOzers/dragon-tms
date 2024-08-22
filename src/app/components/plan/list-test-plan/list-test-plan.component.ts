@@ -95,6 +95,7 @@ export class ListTestPlanComponent implements AfterViewInit{
     this.activeRouter.paramMap.subscribe(params =>{
       if (params.get('projectId')){
         this.projectId = params.get('projectId');
+        this.routerParamsService.setProjectId(this.projectId);
       }
     });
 

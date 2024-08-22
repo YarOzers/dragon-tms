@@ -22,6 +22,7 @@ import {MatProgressBar} from "@angular/material/progress-bar";
 import {DialogTestPlanListComponent} from "../../../plan/dialog-test-plan-list/dialog-test-plan-list.component";
 import {FolderService} from "../../../../services/folder.service";
 import {TestCaseService} from "../../../../services/test-case.service";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -56,11 +57,21 @@ export class TreeComponent implements OnInit, AfterViewInit {
     private folderService: FolderService,
     private testCaseService: TestCaseService,
     private routerParamsService: RouterParamsService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
-    this.routerParamsService.projectId$.subscribe(id => {
-      this.projectId = id;
-    })
+    // this.routerParamsService.projectId$.subscribe(id => {
+    //   this.projectId = id;
+    // })
+
+    this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
+    if(!this.projectId){
+      this.routerParamsService.projectId$.subscribe(projectId =>{
+        this.projectId = projectId;
+      })
+    }
+    this.routerParamsService.setProjectId(this.projectId);
+
   }
 
   protected TEST_CASE_DATA: Folder[] | null = [];
@@ -81,7 +92,73 @@ export class TreeComponent implements OnInit, AfterViewInit {
       }
       this.dataLoading = true;
       console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
+    },(error)=>{
+      console.error("Ошибка загрузки тест-кейсов", error)
+    },()=>{
+      if (this.TEST_CASE_DATA){
+        this.setExpandedTrue(this.TEST_CASE_DATA);
+        this.getTestCases(Number(this.findRootFolderId(this.TEST_CASE_DATA)));
+      }
     });
+  }
+
+  findRootFolderId(folders: Folder[]): number | null {
+    for (const folder of folders) {
+      if (folder.parentFolderId === null) {
+        return folder.id;
+      }
+    }
+    return null;
+  }
+
+  setExpandedTrue(folders: Folder[] | undefined): void {
+    if (folders) {
+      for (const folder of folders) {
+        // Устанавливаем expanded: true для текущей папки
+        folder.expanded = true;
+
+        // Рекурсивно вызываем функцию для дочерних папок
+        if (!(folder.childFolders) || folder.childFolders.length > 0) {
+          this.setExpandedTrue(folder.childFolders);
+        }
+      }
+    }
+
+  }
+
+  setChildrenExpandedTrue(folders: Folder[] | undefined, targetFolderId: number): boolean {
+    if (folders) {
+      for (const folder of folders) {
+        // Если текущая папка имеет совпадающий id, устанавливаем expanded для ее дочерних папок
+        if (folder.id === targetFolderId) {
+          this.expandChildren(folder.childFolders);
+          return true;  // Папка найдена и обработана
+        }
+
+        // Рекурсивно проходим по дочерним папкам
+        if (!(folder.childFolders) || folder.childFolders.length > 0) {
+          const found = this.setChildrenExpandedTrue(folder.childFolders, targetFolderId);
+          if (found) return true;  // Останавливаем поиск, если папка уже найдена
+        }
+      }
+    }
+
+
+    return false;  // Если папка не найдена
+  }
+
+  expandChildren(childFolders: Folder[] | undefined): void {
+    if (childFolders) {
+      for (const child of childFolders) {
+        child.expanded = true;  // Устанавливаем expanded: true для дочерних папок
+
+        // Рекурсивно вызываем для вложенных дочерних папок
+        if (!(child.childFolders) || child.childFolders.length > 0) {
+          this.expandChildren(child.childFolders);
+        }
+      }
+    }
+
   }
 
   sentTestCasesFromTree() {

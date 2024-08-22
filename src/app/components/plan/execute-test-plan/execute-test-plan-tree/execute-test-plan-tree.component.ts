@@ -40,7 +40,7 @@ import {TestPlan} from "../../../../models/test-plan";
   templateUrl: './execute-test-plan-tree.component.html',
   styleUrl: './execute-test-plan-tree.component.css'
 })
-export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit{
+export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit {
   selectedFolder: Folder | null = null;
   dataLoading: boolean = false;
   private projectId: number | null = 0;
@@ -70,22 +70,85 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit{
     this.dataLoading = false;
     this.testPlanService.getFoldersForTestCasesInTestPlan(Number(this.testPlanId)).subscribe(folders => {
       console.log("TESTPlanId::", this.testPlanId);
-      console.log('FolDERs::',folders)
+      console.log('FolDERs::', folders)
       if (folders) {
-        console.log('2 filteredFolders::',folders)
+        console.log('2 filteredFolders::', folders)
         this.TEST_CASE_DATA?.push(folders);
+        console.log("TEstCAseDATA:::", this.TEST_CASE_DATA)
+
         this.generateTestCaseArrays();
         if (this.TEST_CASE_DATA) {
-          this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+          this.sentTestCasesFromTree(this.TEST_CASE_DATA);
         }
       }
       this.dataLoading = true;
+    }, error => {
+      console.error("Ошибка загрузки тест-кейсов", error);
+    }, () => {
+      if (this.TEST_CASE_DATA) {
+        this.setExpandedTrue(this.TEST_CASE_DATA);
+      }
     });
-    if (this.TEST_CASE_DATA) {
+  }
+
+  findRootFolderId(folders: Folder[]): number | null {
+    for (const folder of folders) {
+      if (folder.parentFolderId === null) {
+        return folder.id;
+      }
+    }
+    return null;
+  }
+
+  setExpandedTrue(folders: Folder[] | undefined): void {
+    if (folders) {
+      for (const folder of folders) {
+        // Устанавливаем expanded: true для текущей папки
+        folder.expanded = true;
+
+        // Рекурсивно вызываем функцию для дочерних папок
+        if (!(folder.childFolders) || folder.childFolders.length > 0) {
+          this.setExpandedTrue(folder.childFolders);
+        }
+      }
     }
 
   }
 
+  setChildrenExpandedTrue(folders: Folder[] | undefined, targetFolderId: number): boolean {
+    if (folders) {
+      for (const folder of folders) {
+        // Если текущая папка имеет совпадающий id, устанавливаем expanded для ее дочерних папок
+        if (folder.id === targetFolderId) {
+          this.expandChildren(folder.childFolders);
+          return true;  // Папка найдена и обработана
+        }
+
+        // Рекурсивно проходим по дочерним папкам
+        if (!(folder.childFolders) || folder.childFolders.length > 0) {
+          const found = this.setChildrenExpandedTrue(folder.childFolders, targetFolderId);
+          if (found) return true;  // Останавливаем поиск, если папка уже найдена
+        }
+      }
+    }
+
+
+    return false;  // Если папка не найдена
+  }
+
+  expandChildren(childFolders: Folder[] | undefined): void {
+    if (childFolders) {
+      for (const child of childFolders) {
+        child.expanded = true;  // Устанавливаем expanded: true для дочерних папок
+
+        // Рекурсивно вызываем для вложенных дочерних папок
+        if (!(child.childFolders) || child.childFolders.length > 0) {
+          this.expandChildren(child.childFolders);
+        }
+      }
+    }
+
+  }
 
   sentTestCasesFromTree(folders: Folder[]) {
     if (this.testCasesFromTree) {
@@ -94,6 +157,7 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit{
   }
 
   ngAfterViewInit(): void {
+
   }
 
   private generateTestCaseArrays() {
@@ -119,16 +183,15 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit{
   }
 
   getTestCases(folderId: number) {
-    if (this.projectId  && this.TEST_CASE_DATA) {
-      const folder =  this.findFolderById(folderId, this.TEST_CASE_DATA);
-      if(folder){
+    if (this.projectId && this.TEST_CASE_DATA) {
+      const folder = this.findFolderById(folderId, this.TEST_CASE_DATA);
+      if (folder) {
         const folderArray: Folder[] = [folder];
         this.sentTestCasesFromTree(folderArray);
       }
-
-
     }
   }
+
   findFolderById(folderId: number, folders: Folder[]): Folder | null {
     for (const folder of folders) {
       if (folder.id === folderId) {
@@ -147,7 +210,7 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit{
   }
 
 
-  showTestCaseData(){
+  showTestCaseData() {
     console.log(this.TEST_CASE_DATA);
   }
 }
