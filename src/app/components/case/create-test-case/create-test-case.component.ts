@@ -531,30 +531,44 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   autoResize(event: Event, secondEditor: HTMLElement) {
     const target = event.target as HTMLElement;
-    const initialHeight = target.style.height; // Запоминаем начальную высоту
 
     // Используем requestAnimationFrame для отложенного пересчета размеров
     requestAnimationFrame(() => {
-      const contentHeight = target.scrollHeight;
+      // Проверка, есть ли контент в редакторе
+      const isTargetEmpty = !target.textContent || target.textContent.trim() === '';
+      const isSecondEditorEmpty = !secondEditor.textContent || secondEditor.textContent.trim() === '';
 
-      // Проверяем, изменилась ли высота после ввода
-      if (contentHeight !== parseFloat(initialHeight)) {
-        // Сбрасываем высоту, только если содержимое изменилось
-        target.style.height = 'auto';
+      // Сбрасываем высоту перед обновлением
+      target.style.height = 'auto';
+      secondEditor.style.height = 'auto';
 
-        // Обновляем высоту измененного элемента
-        const newHeight = `${contentHeight}px`;
-        target.style.height = newHeight;
+      // Если оба редактора пусты, устанавливаем минимальную высоту
+      const minHeight = '44px';
+      if (isTargetEmpty && isSecondEditorEmpty) {
+        target.style.height = minHeight;
+        secondEditor.style.height = minHeight;
+      } else {
+        // Если хотя бы один редактор не пуст, обновляем их высоты
+        const newHeight = `${target.scrollHeight}px`;
+        const secondEditorHeight = `${secondEditor.scrollHeight}px`;
 
-        // Синхронизируем высоты двух редакторов
-        this.equalizeTwoEditorsHeight(target, secondEditor);
-
-        // Обновляем высоту родительского контейнера только если это действительно необходимо
-        const parentContainer = target.closest('.steps-container') as HTMLElement;
-        if (parentContainer && newHeight !== initialHeight) {
-          parentContainer.style.height = 'auto';  // Сбрасываем высоту для пересчета
-          parentContainer.style.height = `${parentContainer.scrollHeight}px`;
+        // Синхронизируем высоты
+        if (isTargetEmpty) {
+          target.style.height = secondEditorHeight;
+        } else if (isSecondEditorEmpty) {
+          secondEditor.style.height = newHeight;
+        } else {
+          const maxHeight = Math.max(target.scrollHeight, secondEditor.scrollHeight);
+          target.style.height = `${maxHeight}px`;
+          secondEditor.style.height = `${maxHeight}px`;
         }
+      }
+
+      // Обновляем высоту родительского контейнера
+      const parentContainer = target.closest('.steps-container') as HTMLElement;
+      if (parentContainer) {
+        parentContainer.style.height = 'auto';  // Сбрасываем высоту для пересчета
+        parentContainer.style.height = `${parentContainer.scrollHeight}px`;
       }
     });
   }
