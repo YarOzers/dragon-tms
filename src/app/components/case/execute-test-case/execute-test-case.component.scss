@@ -63,9 +63,13 @@ mat-card-content.mat-mdc-card-content{
 .bottom-radius {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  border-bottom: 1px solid #b2c5ff;
   border-left: 1px solid #b2c5ff;
   border-right: 1px solid #b2c5ff;
+}
+
+.test-case-editors{
+
+  border: 1px solid #b2c5ff;
 }
 
 

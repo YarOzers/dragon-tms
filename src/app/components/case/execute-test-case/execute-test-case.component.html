@@ -146,8 +146,10 @@
                   <div class="steps-container" fxFlex="91"
                        [ngClass]="{
        'top-radius': i === 0,
-       'bottom-radius': i === steps.length - 1
-     }">
+       'bottom-radius': i === steps.length - 1,
+       'test-case-editors': i > 0 && i < steps.length - 1
+     }"
+                  >
                     <div class="editor" #actionEditor
                          contenteditable="false"
                          fxFlex="50"

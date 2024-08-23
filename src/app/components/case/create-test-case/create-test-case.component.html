@@ -123,9 +123,13 @@
                                 fxFlex="6">
                   </mat-checkbox>
                   <span fxFlex="3">{{ preCondition.index }}</span>
-                  <div fxFlex="91" class="steps-container" [ngClass]="{'border-top': i === 0}">
-
-                    <div class="editor" #actionEditor
+                  <div fxFlex="91" class="steps-container" >
+                    <div class="editor action" #actionEditor
+                         [ngClass]="{
+       'action-top-radius': i === 0,
+       'action-bottom-radius': i === preConditions.length - 1,
+       'action-test-case-editors': i > 0 && i < preConditions.length - 1
+     }"
                          contenteditable="true"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -142,6 +146,11 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                     <div class="editor" #expectedResultEditor
+                         [ngClass]="{
+       'expected-result-top-radius': i === 0,
+       'expected-result-bottom-radius': i === preConditions.length - 1,
+       'expected-result-test-case-editors': i > 0 && i < preConditions.length - 1
+     }"
                          contenteditable="true"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"

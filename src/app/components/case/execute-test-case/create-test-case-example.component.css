@@ -31,20 +31,7 @@ mat-checkbox{
   text-align: center;
 }
 
-textarea{
-  border-radius: 0;
-  border: none;
-  border-left: #b9d6ea 1px solid;
-  border-bottom: #b9d6ea 1px solid;
 
-}
-.steps-container{
-  border-right: #b9d6ea 1px solid;
-}
-
-.border-top{
-  border-top: #b9d6ea 1px solid;
-}
 
 
 /* Фиксируем header */

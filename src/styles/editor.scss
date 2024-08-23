@@ -1,0 +1,81 @@
+// Определение переменной для цвета
+$border-color: #b2c5ff;
+$border-color-active: #057913;
+
+.action-top-radius {
+  border-top-left-radius: 8px;
+  border: 1px solid $border-color;
+  /*border: 1px solid #b2c5ff;*/
+
+}
+
+.action-bottom-radius {
+  border-bottom-left-radius: 8px;
+  border-bottom: 1px solid $border-color;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+}
+
+.action-test-case-editors {
+  border-bottom: 1px solid $border-color;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+}
+
+
+//   ==============
+
+.expected-result-top-radius {
+  border-top-right-radius: 8px;
+  border: 1px solid $border-color;
+  /*border: 1px solid #b2c5ff;*/
+
+}
+
+.expected-result-bottom-radius {
+  border-bottom-right-radius: 8px;
+  border-bottom: 1px solid $border-color;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+}
+
+.expected-result-test-case-editors {
+  border-bottom: 1px solid $border-color;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+}
+
+//.editor.action{
+//  border-right: 1px solid $border-color;
+//}
+
+.editor:focus {
+  outline: none;
+}
+
+//.top-radius:active {
+//  border-top-left-radius: 8px;
+//  border-top-right-radius: 8px;
+//  border: 1px solid $border-color-active;
+//  /*border: 1px solid #b2c5ff;*/
+//
+//}
+//
+//.bottom-radius:active {
+//  border-bottom-left-radius: 8px;
+//  border-bottom-right-radius: 8px;
+//  border-bottom: 1px solid $border-color-active;
+//  border-left: 1px solid $border-color-active;
+//  border-right: 1px solid $border-color-active;
+//}
+//
+//.test-case-editors:active {
+//  border-bottom: 1px solid $border-color-active;
+//  border-left: 1px solid $border-color-active;
+//  border-right: 1px solid $border-color-active;
+//}
+//
+//
+//.editor.action:active{
+//  border-right: 1px solid $border-color-active;
+//}
