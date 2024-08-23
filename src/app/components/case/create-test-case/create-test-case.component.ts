@@ -531,26 +531,35 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   autoResize(event: Event, secondEditor: HTMLElement) {
     const target = event.target as HTMLElement;
+    const initialHeight = target.style.height; // Запоминаем начальную высоту
 
     // Используем requestAnimationFrame для отложенного пересчета размеров
     requestAnimationFrame(() => {
-      // Сбрасываем высоту перед обновлением
-      target.style.height = 'auto';
+      const contentHeight = target.scrollHeight;
 
-      // Обновляем высоту измененного элемента
-      target.style.height = `${target.scrollHeight}px`;
+      // Проверяем, изменилась ли высота после ввода
+      if (contentHeight !== parseFloat(initialHeight)) {
+        // Сбрасываем высоту, только если содержимое изменилось
+        target.style.height = 'auto';
 
-      // Выравниваем высоту двух соседних элементов
-      this.equalizeTwoEditorsHeight(target, secondEditor);
+        // Обновляем высоту измененного элемента
+        const newHeight = `${contentHeight}px`;
+        target.style.height = newHeight;
 
-      // Принудительное обновление размеров родительского контейнера
-      const parentContainer = target.closest('.steps-container') as HTMLElement;
-      if (parentContainer) {
-        parentContainer.style.height = 'auto';
-        parentContainer.style.height = `${Math.max(parentContainer.scrollHeight, target.scrollHeight)}px`;
+        // Синхронизируем высоты двух редакторов
+        this.equalizeTwoEditorsHeight(target, secondEditor);
+
+        // Обновляем высоту родительского контейнера только если это действительно необходимо
+        const parentContainer = target.closest('.steps-container') as HTMLElement;
+        if (parentContainer && newHeight !== initialHeight) {
+          parentContainer.style.height = 'auto';  // Сбрасываем высоту для пересчета
+          parentContainer.style.height = `${parentContainer.scrollHeight}px`;
+        }
       }
     });
   }
+
+
 
   selectAllPreconditions(checked: boolean) {
     this.preConditions.forEach(step => step.selected = checked);
@@ -626,13 +635,17 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   equalizeTwoEditorsHeight(editor1: HTMLElement, editor2: HTMLElement) {
     requestAnimationFrame(() => {
+      // Сбрасываем высоту редакторов перед пересчетом
       editor1.style.height = 'auto';
       editor2.style.height = 'auto';
 
       const maxHeight = Math.max(editor1.scrollHeight, editor2.scrollHeight);
 
-      editor1.style.height = `${maxHeight}px`;
-      editor2.style.height = `${maxHeight}px`;
+      // Если высота изменяется, то обновляем
+      if (editor1.scrollHeight !== maxHeight || editor2.scrollHeight !== maxHeight) {
+        editor1.style.height = `${maxHeight}px`;
+        editor2.style.height = `${maxHeight}px`;
+      }
     });
   }
 
