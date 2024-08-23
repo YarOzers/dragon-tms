@@ -25,6 +25,7 @@
                 }
               </mat-select>
             </mat-form-field>
+            <app-timer></app-timer>
             <mat-card appearance="outlined" class="card">
               <mat-card-header>
                 <mat-card-title>Вид тестирования</mat-card-title>
@@ -137,15 +138,16 @@
               </div>
               <div #editorStepContainer>
                 <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row"
-                     [ngClass]="{
-       'top-radius': i === 0,
-       'bottom-radius': i === steps.length - 1
-     }"
-     >
+
+                >
                   <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
                   </mat-checkbox>
                   <span fxFlex="3">{{ step.index }}</span>
-                  <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
+                  <div class="steps-container" fxFlex="91"
+                       [ngClass]="{
+       'top-radius': i === 0,
+       'bottom-radius': i === steps.length - 1
+     }">
                     <div class="editor" #actionEditor
                          contenteditable="false"
                          fxFlex="50"

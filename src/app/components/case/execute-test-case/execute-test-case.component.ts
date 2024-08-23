@@ -34,6 +34,7 @@ import {ProjectService} from "../../../services/project.service";
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {TestCaseService} from "../../../services/test-case.service";
 import {ActivatedRoute} from "@angular/router";
+import {TimerComponent} from "../../timer/timer.component";
 
 @Component({
   selector: 'app-execute-test-case',
@@ -64,7 +65,8 @@ import {ActivatedRoute} from "@angular/router";
     MatCardContent,
     MatCardHeader,
     MatCardModule,
-    NgStyle
+    NgStyle,
+    TimerComponent
   ],
   templateUrl: './execute-test-case.component.html',
   styleUrls: [

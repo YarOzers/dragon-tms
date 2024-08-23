@@ -1,0 +1,12 @@
+<div fxLayout="row" fxLayoutAlign="start center" class="timer">
+  <h3>{{ formatTime(time) }}</h3>
+  <button mat-icon-button (click)="pauseTimer()" [disabled]="isPaused">
+    <mat-icon>pause</mat-icon>
+  </button>
+  <button mat-icon-button (click)="resumeTimer()" [disabled]="!isPaused">
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <button mat-icon-button (click)="resetTimer()">
+    <mat-icon>restore</mat-icon>
+  </button>
+</div>
