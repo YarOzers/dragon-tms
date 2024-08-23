@@ -38,6 +38,7 @@ import {CreateTestPlanTreeComponent} from "../create-test-plan/create-test-plan-
 import {Folder} from "../../../models/folder";
 import {TestPlan} from "../../../models/test-plan";
 import {TestPlanService} from "../../../services/test-plan.service";
+import {TestCaseService} from "../../../services/test-case.service";
 
 @Component({
   selector: 'app-execute-test-plan',
@@ -80,8 +81,8 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   @ViewChild(CreateTestPlanTreeComponent) treeComponent!: CreateTestPlanTreeComponent;
   @ViewChild(MatSort) sort!: MatSort;
   private syncScheduled = false;
-  allColumns = ['select', 'run', 'id', 'name', 'type'];
-  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
+  allColumns = ['select', 'run', 'id', 'name', 'type','result'];
+  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type', 'result'];
   displayedColumnsSelection: { [key: string]: boolean } = {
     select: true,
     id: true,
@@ -116,7 +117,8 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService,
     private route: ActivatedRoute,
-    private testPlanService: TestPlanService
+    private testPlanService: TestPlanService,
+    private testCaseService: TestCaseService
   ) {
   }
 
@@ -129,7 +131,7 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
       this.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
     }
 
-    this.testPlanService.getTestPlan(Number(this.testPlanId)).subscribe(testPlan=>{
+    this.testPlanService.getTestPlan(Number(this.testPlanId)).subscribe(testPlan => {
       this.testPlan = testPlan;
     });
 
@@ -280,14 +282,24 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
       }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result !== undefined && result !== '') {
-        console.log('Result from dialog: ', result);
-      } else {
-        console.log('Введите имя проекта!!!');
-      }
+    dialogRef.afterClosed().subscribe((testCaseResult) => {
+      testCaseResult.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
+      console.log("TEstCaseRESULT::::", testCaseResult);
+      this.testCaseService.setTestCaseResult(testCaseId, testCaseResult).subscribe(testCase => {
+        this.dataSource.data.forEach((tc) => {
+          if (tc.id === testCase.id) {
+            tc.results?.push(testCaseResult);
+          }
+        })
+        console.log("TestCaseWithResult::", testCase);
+      });
+    }, (error) => {
+      console.error('Ошибка при установке результата тест-кейса', error)
+    }, () => {
+      console.log("this.dataSource.data:: ", this.dataSource.data);
     });
   }
+
   updateDisplayedColumns() {
     this.displayedColumns = Object.keys(this.displayedColumnsSelection).filter(column => this.displayedColumnsSelection[column]);
   }

@@ -27,7 +27,7 @@ import {
   TestCaseData,
   TestCasePostCondition,
   TestCasePreCondition,
-  testCaseResult,
+  TestCaseResult,
   TestCaseStep
 } from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
@@ -163,7 +163,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
   protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
   protected new: boolean = true;
-  private results: testCaseResult[] | null | undefined = [];
+  private results: TestCaseResult[] | null | undefined = [];
   protected data: TestCaseData = {
     status: this.status,
     automationFlag: this.automationFlag,

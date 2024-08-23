@@ -27,12 +27,13 @@ import {
   TestCaseData,
   TestCasePostCondition,
   TestCasePreCondition,
-  testCaseResult,
+  TestCaseResult,
   TestCaseStep
 } from "../../../models/test-case";
 import {ProjectService} from "../../../services/project.service";
 import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 import {TestCaseService} from "../../../services/test-case.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-execute-test-case',
@@ -159,13 +160,13 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   protected typeOfTest: string | null = null;
   protected type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null = null;
   protected automationFlag: 'auto' | 'manual' | null = null;
-  protected executionTime: string | null = '00:00';
+  protected timeSpent: string = '00:00';
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
   protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
   protected new: boolean = true;
   protected selectedResult: 'awaits' | 'in_process' | 'successfully' | 'failed' | 'blocked' = 'in_process';
-  protected results: testCaseResult[] | null | undefined = [{
-    id: 1,
+  protected results: TestCaseResult[] | null | undefined = [{
+    timeSpent: this.timeSpent,
     result: this.selectedResult
   }
   ];
@@ -176,7 +177,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     changesAuthor: this.user,
     createdTime: null,
     executionTime: null,
-    expectedExecutionTime: this.executionTime,
+    expectedExecutionTime: this.timeSpent,
     name: this.name,
     preConditionItems: this.preConditions,
     stepItems: this.steps,
@@ -199,6 +200,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     selected: null
   }
   private initTestCase: any = null;
+  private testPlanId: number = 0;
 
 
   constructor(
@@ -206,7 +208,8 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     private dialogRef: MatDialogRef<ExecuteTestCaseComponent>,
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
     private projectService: ProjectService,
-    private testCaseService: TestCaseService
+    private testCaseService: TestCaseService,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -591,11 +594,11 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
 //   Sidenav ===========================================================
   result = [
-    'awaits',
-    'in_process',
-    'successfully',
-    'failed',
-    'blocked'
+    {value: 'AWAITS', viewValue: 'awaits'},
+    {value: 'IN_PROCESS', viewValue:'in_process'},
+    {value: 'SUCCESSFULLY', viewValue: 'successfully'},
+    {value: 'FAILED', viewValue: 'failed'},
+    {value: 'BLOCKED', viewValue: 'blocked'}
   ]
 
   typesOfTests = [
@@ -1254,16 +1257,19 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   save() {
-    console.log('test-case in save: ', this.testCase);
-    console.log('test-case data in save: ', this.data);
-    if (this.new) {
-      this.testCase.id = this.testCaseId;
-      this.testCase.data.push(this.data);
+    if(this.timeSpent && this.result){
+      const testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
+      const testCaseResult: TestCaseResult = {
+        user: this.user,
+        timeSpent: this.timeSpent,
+        result: this.selectedResult,
+        testPlanId: testPlanId
+      }
+      console.log("TEstCAseResult::", testCaseResult);
+      this.dialogRef.close(testCaseResult);
     }
-    this.testCase.name = this.name;
-    this.testCase.lastDataIndex = this.testCase.data.length - 1;
-    console.log('lastDAtaIndex in save: ', this.testCase.lastDataIndex);
-    this.dialogRef.close(this.testCase);
+
+
 
   }
 

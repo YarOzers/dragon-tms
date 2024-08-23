@@ -13,7 +13,7 @@ export interface TestCase {
   lastDataIndex?: number;
   loading: boolean | null;
   new: boolean;
-  results?: testCaseResult[] | null;
+  results?: TestCaseResult[] | null;
   selected: boolean | null;
   isRunning?: boolean;
 }
@@ -35,12 +35,13 @@ export interface TestCaseData {
   status: 'ready' | 'not ready' | 'requires updating' | 'READY' | 'NOT_READY' | 'REQUIRES UPDATING' | any
 }
 
-export interface testCaseResult {
-  id: number;
-  author?: User;
+export interface TestCaseResult {
+  id?: number;
+  user?: User;
   executedTime?: string;
+  timeSpent: string;
   result: 'awaits' | 'in_process' | 'successfully' | 'failed' | 'blocked' | null | 'AWAITS' | 'IN_PROGRESS' | 'SUCCESSFULLY' | 'FAILED' | 'BLOCKED' | any;
-  testPlanId? : string;
+  testPlanId? : number;
 }
 
 export interface TestCaseStep {

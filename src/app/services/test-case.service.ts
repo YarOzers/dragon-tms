@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../environment";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {TestCase, TestCaseData} from "../models/test-case";
+import {TestCase, TestCaseData, TestCaseResult} from "../models/test-case";
 import {Folder} from "../models/folder";
 
 @Injectable({
@@ -51,6 +51,11 @@ export class TestCaseService {
 
   getAllTestCases(folderId: number): Observable<Folder[]>{
     return  this.http.get<Folder[]>(`${this.apiUrl}/testcases/folder/${folderId}/all`)
+  }
+
+  setTestCaseResult(testCaseId: number, testCaseResult: TestCaseResult): Observable<TestCase> {
+    return this.http.post<TestCase>(`${this.apiUrl}/testcases/setresult/${testCaseId}`, testCaseResult)
+
   }
 
 

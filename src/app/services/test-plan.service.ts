@@ -5,6 +5,7 @@ import {Folder} from "../models/folder";
 import {delay, Observable, of} from "rxjs";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../environment";
+import {TestCase, TestCaseResult} from "../models/test-case";
 
 @Injectable({
   providedIn: 'root'
@@ -79,4 +80,5 @@ export class TestPlanService {
   getTestPlan(testPlanId: number): Observable<TestPlan>{
     return  this.http.get<TestPlan>(`${this.apiUrl}/testplans/${testPlanId}`)
   }
+
 }
