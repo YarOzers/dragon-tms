@@ -139,8 +139,6 @@
                          (resize)="autoResize($event, expectedResultEditor)"
                          (mouseup)="autoResize($event, expectedResultEditor)"
                          (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)"
                     >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -160,8 +158,6 @@
                          (resize)="autoResize($event, actionEditor)"
                          (mouseup)="autoResize($event, actionEditor)"
                          (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)"
                     >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -199,8 +195,7 @@
                          (input)="autoResize($event, expectedResultEditor)"
                          (paste)="autoResize($event, expectedResultEditor)"
                          (blur)="updateEditorStepContent(actionEditor, i, 'action')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+                         >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
@@ -211,8 +206,7 @@
                          (input)="autoResize($event, actionEditor)"
                          (paste)="autoResize($event, actionEditor)"
                          (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+                         >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
@@ -250,8 +244,7 @@
                          (input)="autoResize($event, expectedResultEditor)"
                          (paste)="autoResize($event, expectedResultEditor)"
                          (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+                         >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
@@ -262,8 +255,7 @@
                          (input)="autoResize($event, actionEditor)"
                          (paste)="autoResize($event, actionEditor)"
                          (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+                         >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">

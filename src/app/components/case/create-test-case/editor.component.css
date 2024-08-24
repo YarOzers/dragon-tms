@@ -128,34 +128,34 @@ button.active.btn_black {
 margin-bottom: 1rem;
 }
 
-.resizable {
-  display: inline-block;
-  position: relative;
-}
+/*.resizable {*/
+/*  display: inline-block;*/
+/*  position: relative;*/
+/*}*/
 
-.resizable img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
+/*.resizable img {*/
+/*  max-width: 100%;*/
+/*  height: auto;*/
+/*  display: block;*/
+/*}*/
 
-.resizable .resize-handle {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
-  right: 0;
-  bottom: 0;
-  cursor: se-resize; /* Курсор для изменения размера */
-  z-index: 10; /* Поверх всех других элементов */
-}
-.resize-handle {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: rgba(0, 0, 0, 0.5); /* Темный фон для видимости */
-  right: 0;
-  bottom: 0;
-  cursor: se-resize; /* Курсор для изменения размера */
-  z-index: 10; /* Поверх всех других элементов */
-}
+/*.resizable .resize-handle {*/
+/*  position: absolute;*/
+/*  width: 15px;*/
+/*  height: 15px;*/
+/*  background-color: rgba(0, 0, 0, 0.5); !* Темный фон для видимости *!*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  cursor: se-resize; !* Курсор для изменения размера *!*/
+/*  z-index: 10; !* Поверх всех других элементов *!*/
+/*}*/
+/*.resize-handle {*/
+/*  position: absolute;*/
+/*  width: 15px;*/
+/*  height: 15px;*/
+/*  background-color: rgba(0, 0, 0, 0.5); !* Темный фон для видимости *!*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  cursor: se-resize; !* Курсор для изменения размера *!*/
+/*  z-index: 10; !* Поверх всех других элементов *!*/
+/*}*/

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import {FlexModule} from "@angular/flex-layout";
 import {MatButton, MatIconButton, MatMiniFabButton} from "@angular/material/button";
-import {MAT_DIALOG_DATA, MatDialogActions, MatDialogContent, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogContent, MatDialogRef} from "@angular/material/dialog";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {NgClass, NgForOf, NgIf, NgSwitchCase} from "@angular/common";
@@ -34,6 +34,7 @@ import {ProjectService} from "../../../services/project.service";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {TestCaseService} from "../../../services/test-case.service";
+import {ImageDialogComponent} from "./image-dialog/image-dialog.component";
 
 @Component({
   selector: 'app-create-test-case',
@@ -201,7 +202,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
     private projectService: ProjectService,
     private routerParamsService: RouterParamsService,
-    private testCaseService: TestCaseService
+    private testCaseService: TestCaseService,
+    private dialog: MatDialog
   ) {
   }
 
@@ -530,8 +532,15 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   autoResize(event: Event, secondEditor: HTMLElement) {
-    const target = event.target as HTMLElement;
 
+
+
+    const target = event.target as HTMLElement;
+    // Проверяем, если клик был по изображению
+    if (target.tagName.toLowerCase() === 'img') {
+      event.stopPropagation(); // Останавливаем распространение события
+      return; // Прерываем выполнение функции, если клик по изображению
+    }
     // Используем requestAnimationFrame для отложенного пересчета размеров
     requestAnimationFrame(() => {
       // Проверка, есть ли контент в редакторе
@@ -665,6 +674,13 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   // Устанавливает активный редактор при его фокусировке
   setActiveEditor(event: FocusEvent) {
+    const target = event.target as HTMLElement;
+
+    // Проверяем, если клик был по изображению
+    if (target.tagName.toLowerCase() === 'img') {
+      event.stopPropagation(); // Останавливаем распространение события
+      return; // Прерываем выполнение функции, если клик по изображению
+    }
     this.activeEditor = event.target as HTMLElement;
     this.updateButtonStyles(); // Обновляет стили кнопок на панели инструментов
   }
@@ -1006,6 +1022,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   updateEditorPostConditionContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
+
+
     if (editor) {
       this.postConditions[index][field] = editor.innerHTML;
     }
@@ -1134,9 +1152,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       const reader = new FileReader();
 
       reader.onload = (e) => {
+        // Создаем контейнер для изображения
         const wrapper = document.createElement('div');
-        wrapper.style.minHeight = '200px';
-        wrapper.style.minWidth = '200px';
+        wrapper.style.maxHeight = '200px';
+        wrapper.style.maxWidth = '200px';
         wrapper.className = 'resizable';
         wrapper.contentEditable = 'false'; // Запрещаем редактирование
 
@@ -1144,71 +1163,77 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
         img.src = e.target?.result as string;
         img.alt = 'Uploaded image';
 
-        // Получаем ширину инпута (родительского элемента)
-        const inputWidth = this.activeEditor!.clientWidth;
-        console.log(inputWidth);
+        // Задаем стили для изображения
+        img.style.width = '200px';
+        img.style.height = '200px';
+        img.style.objectFit = 'contain';
 
-        // Определяем размеры изображения
-        const imgRatio = img.naturalWidth / img.naturalHeight;
-        let imgWidth = img.naturalWidth;
-        let imgHeight = img.naturalHeight;
+        // Добавляем обработчик события click для блокировки клика по изображению
+        img.addEventListener('click', (event) => {
+          this.onImageClick(img.src);
+          event.preventDefault(); // Блокирует действие по умолчанию
+          event.stopPropagation(); // Останавливает распространение события
 
-        // Если изображение шире инпута, уменьшаем его до ширины инпута
-        if (imgWidth > inputWidth) {
-          imgWidth = inputWidth;
-          imgHeight = imgWidth / imgRatio;
-        }
+        });
 
-        wrapper.style.width = `${imgWidth}px`;
-        wrapper.style.height = `${imgHeight}px`;
-
-        // Устанавливаем размеры изображения в div с сохранением пропорций
-        img.style.width = '100%';
-        img.style.height = '100%';
-        img.style.objectFit = 'contain'; // Сохраняем пропорции изображения
-
+        // Вставляем изображение в контейнер
         wrapper.appendChild(img);
 
-        // Создаем новый span под div для установки каретки
-        const caretPositionSpan = document.createElement('span');
-        caretPositionSpan.innerHTML = '<br>'; // создаем разрыв строки для видимости
-
+        // Сохраняем текущий диапазон (если требуется)
         this.saveSelection();
-        this.savedRange!.insertNode(wrapper);
-        this.savedRange!.insertNode(caretPositionSpan);
-        this.savedRange!.setStartAfter(caretPositionSpan);
-        this.savedRange!.collapse(true);
 
-        // Перемещаем каретку в span
+        // Вставляем контейнер изображения в редактор
+        this.savedRange!.insertNode(wrapper);
+
+        // Создаем новый пустой div для каретки и текста
+        const emptyDiv = document.createElement('div');
+        emptyDiv.style.minHeight = '1em';  // Минимальная высота для видимого места
+        emptyDiv.className = 'empty-text-container'; // Класс для стилизации
+
+        // Вставляем span внутрь div, где будет находиться каретка
+        const caretSpan = document.createElement('span');
+        caretSpan.innerHTML = '&#8203;'; // Невидимый символ Zero Width Space
+        emptyDiv.appendChild(caretSpan);
+
+        // Вставляем пустой div после изображения
+        wrapper.after(emptyDiv);
+
+        // Устанавливаем каретку в созданный span
         const range = document.createRange();
-        range.setStart(caretPositionSpan, 0);
-        range.setEnd(caretPositionSpan, 0);
+        range.setStart(caretSpan, 0);
+        range.setEnd(caretSpan, 0);
 
         const selection = window.getSelection();
         if (selection) {
-          selection.removeAllRanges();
-          selection.addRange(range);
+          selection.removeAllRanges(); // Очищаем предыдущие выделения
+          selection.addRange(range); // Добавляем новый диапазон
         }
 
-        this.restoreSelection();
+        // Фокусируем редактор и восстанавливаем стили кнопок
         this.activeEditor!.focus();
         this.updateButtonStyles();
-
-        // Добавляем возможность изменения размера div
-        this.addResizeFunctionality(wrapper, img, inputWidth);
       };
 
       reader.readAsDataURL(file);
     }
 
-    input.value = '';
+    input.value = ''; // Сбрасываем значение инпута после обработки
+  }
+
+
+
+  onImageClick(imageSrc: string): void {
+    this.dialog.open(ImageDialogComponent, {
+      data: { imageSrc },
+      panelClass: 'full-screen-dialog'
+    });
   }
 
   addResizeFunctionality(wrapper: HTMLElement, img: HTMLImageElement, maxWidth: number) {
     const aspectRatio = img.naturalWidth / img.naturalHeight; // Соотношение сторон изображения
 
-    wrapper.style.resize = 'both'; // Разрешаем изменение размера как по ширине, так и по высоте
-    wrapper.style.overflow = 'hidden'; // Скрываем переполнение
+    // wrapper.style.resize = 'both'; // Разрешаем изменение размера как по ширине, так и по высоте
+    // wrapper.style.overflow = 'hidden'; // Скрываем переполнение
 
     const mouseMoveHandler = (event: MouseEvent) => {
       const rect = wrapper.getBoundingClientRect();
