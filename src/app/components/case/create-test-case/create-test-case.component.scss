@@ -37,3 +37,18 @@
 }
 
 
+//выравнивание иконок в mat-icon-button
+.center-icon-button {
+  display: flex;                /* Используем flexbox для кнопки */
+  align-items: center;          /* Центрируем по вертикали */
+  justify-content: center;      /* Центрируем по горизонтали */
+}
+
+.center-icon-button mat-icon {
+  display: flex;                /* Используем flexbox для иконки */
+  align-items: center;          /* Центрируем по вертикали */
+  justify-content: center;      /* Центрируем по горизонтали */
+  width: 24px;                  /* Стандартный размер иконки */
+  height: 24px;                 /* Стандартный размер иконки */
+}
+

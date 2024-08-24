@@ -10,7 +10,7 @@
         <div *ngIf="new" fxFlex="6">
           <span fxFlex="6"></span>
         </div>
-        <input type="text" fxFlex="91" [(ngModel)]="name">
+        <input type="text" fxFlex="91" [(ngModel)]="name" class="test-case-name" placeholder="введите название тест кейса">
       </div>
     </div>
     <div>
@@ -58,12 +58,12 @@
 
         <mat-sidenav-content>
           <div fxLayout="row" class="toolbar-plus-btn">
-            <div fxFlex="7">
-              <button mat-icon-button (click)="toggleSidenav()">
+            <div fxFlex="15">
+              <button mat-icon-button (click)="toggleSidenav()" class="center-icon-button">
                 <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
               </button>
             </div>
-            <div class="toolbar" fxFlex="93">
+            <div class="toolbar" fxFlex="85">
               <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')"
                       [class.active]="currentStyles['bold']">
                 <mat-icon>format_bold</mat-icon>
@@ -122,8 +122,8 @@
                   <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
                                 fxFlex="6">
                   </mat-checkbox>
-                  <span fxFlex="3">{{ preCondition.index }}</span>
-                  <div fxFlex="91" class="steps-container" >
+                  <span fxFlex="5">{{ preCondition.index }}</span>
+                  <div fxFlex="89" class="steps-container" >
                     <div class="editor action" #actionEditor
                          [ngClass]="{
        'action-top-radius': i === 0,
@@ -143,7 +143,7 @@
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
-                    <div class="editor" #expectedResultEditor
+                    <div class="editor expected" #expectedResultEditor
                          [ngClass]="{
        'expected-result-top-radius': i === 0,
        'expected-result-bottom-radius': i === preConditions.length - 1,
@@ -164,11 +164,11 @@
                            (change)="onFileSelected($event)">
                   </div>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addPreCondition()">
+                <div fxLayout="row" fxLayoutAlign="end center" class="button-container">
+                  <button mat-icon-button (click)="addPreCondition()" class="center-icon-button">
                     <mat-icon>add</mat-icon>
                   </button>
-                  <button mat-icon-button (click)="deleteSelectedPreconditions()">
+                  <button mat-icon-button (click)="deleteSelectedPreconditions()" class="center-icon-button">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
@@ -213,10 +213,10 @@
                   </div>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addStep()">
+                  <button mat-icon-button (click)="addStep()" class="center-icon-button">
                     <mat-icon>add</mat-icon>
                   </button>
-                  <button mat-icon-button (click)="deleteSelectedSteps()">
+                  <button mat-icon-button (click)="deleteSelectedSteps()" class="center-icon-button">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
@@ -263,10 +263,10 @@
                   </div>
                 </div>
                 <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addPostCondition()">
+                  <button mat-icon-button (click)="addPostCondition()" class="center-icon-button">
                     <mat-icon>add</mat-icon>
                   </button>
-                  <button mat-icon-button (click)="deleteSelectedPostConditions()">
+                  <button mat-icon-button (click)="deleteSelectedPostConditions()" class="center-icon-button">
                     <mat-icon>delete</mat-icon>
                   </button>
                 </div>
