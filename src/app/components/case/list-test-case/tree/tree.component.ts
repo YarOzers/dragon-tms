@@ -23,6 +23,8 @@ import {DialogTestPlanListComponent} from "../../../plan/dialog-test-plan-list/d
 import {FolderService} from "../../../../services/folder.service";
 import {TestCaseService} from "../../../../services/test-case.service";
 import {ActivatedRoute} from "@angular/router";
+import {CreateTestPlanComponent} from "../../../plan/create-test-plan/create-test-plan.component";
+import {MoveAndCopyDialogComponent} from "../move-and-copy-dialog/move-and-copy-dialog.component";
 
 
 @Component({
@@ -65,8 +67,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
     // })
 
     this.projectId = Number(this.route.snapshot.paramMap.get('projectId'));
-    if(!this.projectId){
-      this.routerParamsService.projectId$.subscribe(projectId =>{
+    if (!this.projectId) {
+      this.routerParamsService.projectId$.subscribe(projectId => {
         this.projectId = projectId;
       })
     }
@@ -92,10 +94,10 @@ export class TreeComponent implements OnInit, AfterViewInit {
       }
       this.dataLoading = true;
       console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
-    },(error)=>{
+    }, (error) => {
       console.error("Ошибка загрузки тест-кейсов", error)
-    },()=>{
-      if (this.TEST_CASE_DATA){
+    }, () => {
+      if (this.TEST_CASE_DATA) {
         this.setExpandedTrue(this.TEST_CASE_DATA);
         this.getTestCases(Number(this.findRootFolderId(this.TEST_CASE_DATA)));
       }
@@ -206,11 +208,17 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onDrop(event: CdkDragDrop<any[]>, type: string, targetId: any) {
-    if (type === 'testCase' && event.item.data.type === 'testCase') {
+  onDrop(event: CdkDragDrop<any[]>, type: string, targetId: any, targetFolderName?: string) {
+    console.log('TYpe::', type);
+    console.log('TargetId::', targetId);
+    console.log("eventTarget::  ", event.item.data.type);
+    if (type === 'testCase' && event.item.data.type === 'TESTCASE') {
       this.dropTestCase(event, targetId);
-    } else if (type === 'folder' && event.item.data.type === 'folder') {
-      this.dropFolder(event, targetId);
+    } else if (type === 'folder' && event.item.data.type === 'FOLDER') {
+      if(targetFolderName){
+        this.dropFolder(event, targetId, targetFolderName);
+      }
+
     }
   }
 
@@ -230,13 +238,16 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  moveFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number) {
+  moveFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number, targetFolderName: string) {
     if (event.item.data.id === 0) {
       return;
     }
     console.log('eventFolderId: ', event.item.data.id);
     console.log('targetFolderId: ', targetFolderId);
     const currentFolderId = event.item.data.id;
+    console.log("44444444")
+    this.openMoveFolderDialog(currentFolderId, targetFolderId, event.item.data.name, targetFolderName);
+
     let sourceFolder: Folder | undefined;
     let targetFolder: Folder | undefined;
 
@@ -259,6 +270,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
         }
         if (folder.childFolders) {
           findFolders(folder.childFolders, folder);
+
         }
       }
     };
@@ -279,12 +291,12 @@ export class TreeComponent implements OnInit, AfterViewInit {
     (event.target as HTMLElement).blur();
   }
 
-  dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number) {
-    this.checkNestedFoldersForId(event, targetFolderId);
+  dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number, targetFolderName: string) {
+    this.checkNestedFoldersForId(event, targetFolderId , targetFolderName);
 
   }
 
-  checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number): void {
+  checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number, targetFolderName:string): void {
     const sourceFolderId = event.item.data.id;
     if (sourceFolderId === targetFolderId) {
       return
@@ -333,7 +345,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
     } else {
       console.log('No nested folder with the target ID found within the source folder.');
-      this.moveFolder(event, targetFolderId);
+      this.moveFolder(event, targetFolderId, targetFolderName);
     }
   }
 
@@ -362,11 +374,11 @@ export class TreeComponent implements OnInit, AfterViewInit {
           projectId: Number(this.projectId)
         }
         this.folderService.addChildFolder(parentFolderId, folderDto).subscribe(
-          folder=>{
+          folder => {
             console.log(`Folder, parentFolderId ${parentFolderId} , folder:: ${folder}`);
-          },error => {
+          }, error => {
             console.error(`Ошибка при добавлении папки`, error)
-          },()=> {
+          }, () => {
             this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
               if (folders) {
                 console.log("FOLDERS:::", folders);
@@ -429,7 +441,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
         testCase.data.folderId = folderId;
         testCase.data.folderName = folderName;
         console.log('RESULT from openDialogToCreateTestCase: ', testCase);
-        this.testCaseService.addTestCaseToFolder(folderId, testCase).subscribe(testCase=>{
+        this.testCaseService.addTestCaseToFolder(folderId, testCase).subscribe(testCase => {
           this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
             if (folders) {
               console.log("FOLDERS:::", folders);
@@ -443,7 +455,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
             console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
           });
         });
-
 
 
       } else {
@@ -495,9 +506,33 @@ export class TreeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  showData(){
-    console.log("testcases-----------: ",this.testCases);
-    console.log("DATA-----------: ",this.TEST_CASE_DATA);
+  openMoveFolderDialog(folderId: number, targetFolderId: number, folderName: string, targetFolderName: string) {
+
+    const dialogRef = this.dialog.open(MoveAndCopyDialogComponent, {
+
+
+      width: '500px',
+      height: '500px',
+      maxWidth: '500px',
+      maxHeight: '500px',
+      data: {
+        folderId: folderId,
+        targetFolderId: targetFolderId,
+        folderName: folderName,
+        targetFolderName: targetFolderName,
+        type: 'FOLDER'
+
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Папка ${result.name} была перемещена !`)
+    });
+  }
+
+  showData() {
+    console.log("testcases-----------: ", this.testCases);
+    console.log("DATA-----------: ", this.TEST_CASE_DATA);
   }
 }
 

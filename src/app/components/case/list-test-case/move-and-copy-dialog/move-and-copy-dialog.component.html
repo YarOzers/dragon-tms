@@ -1,0 +1,14 @@
+
+  <mat-dialog-content>
+<div *ngIf="data.type === 'FOLDER'">
+  <h3>Что вы хотите сделать с папкой {{this.data.folderName}}?</h3>
+  <div>Целевая папка {{this.data.targetFolderName}}</div>
+</div>
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-button>Копировать</button>
+    <button mat-button (click)="moveFolder()">Переместить</button>
+    <button mat-button>Отмена</button>
+  </mat-dialog-actions>
+

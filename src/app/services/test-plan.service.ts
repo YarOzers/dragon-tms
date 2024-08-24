@@ -66,6 +66,7 @@ export class TestPlanService {
       .set('name', testPlanName)
       .set('userId', userId)
       .set('projectId', projectId);
+    console.log("REquestParam:::", requestParam);
     return this.http.post<TestPlan>(`${this.apiUrl}/testplans/create`, null, {params: requestParam})
   }
 

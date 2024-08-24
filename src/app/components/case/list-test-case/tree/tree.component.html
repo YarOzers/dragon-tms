@@ -11,7 +11,7 @@
       <div [ngClass]="{'nested-folder': folder.parentFolderId}">
         <div cdkDropList
              [cdkDropListData]="folder.folders"
-             (cdkDropListDropped)="onDrop($event, 'folder', folder.id)"
+             (cdkDropListDropped)="onDrop($event, 'folder', folder.id, folder.name)"
              (click)="getTestCases(folder.id)"
              class="folder-header">
           <button mat-icon-button (click)="toggleFolder(folder, $event)">

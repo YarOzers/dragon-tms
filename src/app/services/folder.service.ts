@@ -30,15 +30,15 @@ export class FolderService {
   }
 
   moveFolder(folderId: number, targetFolderId: number): Observable<Folder>{
-    const params: HttpParams = new HttpParams();
-    params
-      .set('folderId',folderId)
+    let params: HttpParams = new HttpParams()
+      .set('folderId', folderId)
       .set('targetFolderId',targetFolderId);
+    console.log(params);
     return this.http.put<Folder>(`${this.apiUrl}/folders/move`, null,{params: params})
   }
 
   copyFolder(folderId: number, targetFolderId: number):Observable<Folder>{
-    const params : HttpParams = new HttpParams()
+    let params : HttpParams = new HttpParams()
       .set('folderId', folderId)
       .set('targetFolderId', targetFolderId);
     return this.http.post<Folder>(`${this.apiUrl}/folders/copy`,null, {params:params})

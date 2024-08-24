@@ -58,14 +58,14 @@ export class TestCaseService {
   }
 
   moveTestCase(testCaseId: number, targetFolderId: number): Observable<TestCase>{
-    const params : HttpParams  = new HttpParams()
+    let params : HttpParams  = new HttpParams()
       .set('testCaseId', testCaseId)
       .set('targetFolderId', targetFolderId);
     return this.http.put<TestCase>(`${this.apiUrl}/testcases/move`, null, {params:params})
   }
 
   copyTestCase(testCaseId: number, targetFolderId: number): Observable<TestCase>{
-    const params: HttpParams = new HttpParams()
+    let params: HttpParams = new HttpParams()
       .set('testCaseId', testCaseId)
       .set('targetFolderId', targetFolderId);
     return this.http.post<TestCase>(`${this.apiUrl}/testcases/copy`, null, {params: params})
