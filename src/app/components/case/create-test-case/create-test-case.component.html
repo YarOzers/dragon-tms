@@ -189,6 +189,11 @@
                   <span fxFlex="3">{{ step.index }}</span>
                   <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                     <div class="editor" #actionEditor
+                         [ngClass]="{
+       'action-top-radius': i === 0,
+       'action-bottom-radius': i === steps.length - 1,
+       'action-test-case-editors': i > 0 && i < steps.length - 1
+     }"
                          contenteditable="true"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -200,6 +205,11 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                     <div class="editor" #expectedResultEditor
+                         [ngClass]="{
+       'expected-result-top-radius': i === 0,
+       'expected-result-bottom-radius': i === steps.length - 1,
+       'expected-result-test-case-editors': i > 0 && i < steps.length - 1
+     }"
                          contenteditable="true"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -238,6 +248,11 @@
                   <span fxFlex="3">{{ postCondition.index }}</span>
                   <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
                     <div class="editor" #actionEditor
+                         [ngClass]="{
+       'action-top-radius': i === 0,
+       'action-bottom-radius': i === postConditions.length - 1,
+       'action-test-case-editors': i > 0 && i < postConditions.length - 1
+     }"
                          contenteditable="true"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -249,6 +264,11 @@
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
                     <div class="editor" #expectedResultEditor
+                         [ngClass]="{
+       'expected-result-top-radius': i === 0,
+       'expected-result-bottom-radius': i === postConditions.length - 1,
+       'expected-result-test-case-editors': i > 0 && i < postConditions.length - 1
+     }"
                          contenteditable="true"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"

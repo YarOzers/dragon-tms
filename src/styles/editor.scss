@@ -1,6 +1,8 @@
 // Определение переменной для цвета
 $border-color: #b2c5ff;
-$border-color-active: #057913;
+$border-color-active: #5b82fc;
+$border-width: 2px;
+
 
 .action-top-radius {
   border-top-left-radius: 8px;
@@ -61,6 +63,10 @@ input.test-case-name{
   font-size: larger;
 }
 
+input.test-case-name:focus{
+  border: 2px solid$border-color-active;
+}
+
 .button-container{
   margin: 0.5rem;
 }
@@ -83,28 +89,44 @@ input.test-case-name{
   outline: none;
 }
 
-//.top-radius:active {
-//  border-top-left-radius: 8px;
-//  border-top-right-radius: 8px;
-//  border: 1px solid $border-color-active;
-//  /*border: 1px solid #b2c5ff;*/
-//
-//}
-//
-//.bottom-radius:active {
-//  border-bottom-left-radius: 8px;
-//  border-bottom-right-radius: 8px;
-//  border-bottom: 1px solid $border-color-active;
-//  border-left: 1px solid $border-color-active;
-//  border-right: 1px solid $border-color-active;
-//}
-//
-//.test-case-editors:active {
-//  border-bottom: 1px solid $border-color-active;
-//  border-left: 1px solid $border-color-active;
-//  border-right: 1px solid $border-color-active;
-//}
-//
+.action-top-radius:focus {
+  border-top-left-radius: 8px;
+  border: $border-width solid $border-color-active;
+  /*border: 1px solid #b2c5ff;*/
+
+}
+
+.action-bottom-radius:focus {
+  border-bottom-left-radius: 8px;
+  border-bottom: $border-width solid $border-color-active;
+  border-left: $border-width solid $border-color-active;
+  border-right: $border-width solid $border-color-active;
+  border-top: $border-width solid $border-color-active;
+}
+
+.action-test-case-editors:focus {
+  border: $border-width solid $border-color-active;
+}
+
+.expected-result-top-radius:focus {
+  border-top-right-radius: 8px;
+  border: $border-width solid $border-color-active;
+  /*border: 1px solid #b2c5ff;*/
+
+}
+
+.expected-result-bottom-radius:focus {
+  border-bottom-right-radius: 8px;
+  border-bottom: $border-width solid $border-color-active;
+  border-left: $border-width solid $border-color-active;
+  border-right: $border-width solid $border-color-active;
+  border-top: $border-width solid $border-color-active;
+}
+
+.expected-result-test-case-editors:focus {
+  border: $border-width solid $border-color-active;
+}
+
 //
 //.editor.action:active{
 //  border-right: 1px solid $border-color-active;
