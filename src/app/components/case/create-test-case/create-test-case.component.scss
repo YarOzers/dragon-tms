@@ -44,11 +44,17 @@
   justify-content: center;      /* Центрируем по горизонтали */
 }
 
+
+
 .center-icon-button mat-icon {
   display: flex;                /* Используем flexbox для иконки */
   align-items: center;          /* Центрируем по вертикали */
   justify-content: center;      /* Центрируем по горизонтали */
   width: 24px;                  /* Стандартный размер иконки */
   height: 24px;                 /* Стандартный размер иконки */
+}
+
+.mat-expansion-panel-body{
+  padding: 0;
 }
 

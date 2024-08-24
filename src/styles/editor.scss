@@ -78,7 +78,15 @@ input.test-case-name:focus{
 }
 
 .mat-drawer.mat-sidenav{
-  margin-left: 1rem;
+  //margin-left: 1rem;
+}
+
+.mat-mdc-form-field{
+  padding: 0 0.5rem 0 0.5rem;
+}
+
+mat-expansion-panel.mat-expansion-panel-body{
+  padding: 0;
 }
 
 //.editor.action{

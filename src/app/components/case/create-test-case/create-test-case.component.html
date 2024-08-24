@@ -108,190 +108,221 @@
           </div>
 
           <div class="step-container" fxLayout="column">
-            <div class="steps">
-              <div>
-                <mat-checkbox [(ngModel)]="allSelectedPreConditions" [indeterminate]="indeterminatePreCondition"
-                              (change)="selectAllPreconditions($event.checked)">
-                  Предусловия
-                </mat-checkbox>
-              </div>
-              <div #editorPreConditionContainer>
-                <div *ngFor="let preCondition of preConditions; let i = index"
-                     class="editor-item"
-                     fxLayout="row">
-                  <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
-                                fxFlex="6">
-                  </mat-checkbox>
-                  <span fxFlex="5">{{ preCondition.index }}</span>
-                  <div fxFlex="89" class="steps-container" >
-                    <div class="editor action" #actionEditor
-                         [ngClass]="{
+            <mat-accordion multi>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Предусловия</mat-panel-title>
+                  <mat-panel-description>
+
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="steps">
+                  <div>
+                    <mat-checkbox [(ngModel)]="allSelectedPreConditions" [indeterminate]="indeterminatePreCondition"
+                                  (change)="selectAllPreconditions($event.checked)">
+                      Предусловия
+                    </mat-checkbox>
+                  </div>
+                  <div #editorPreConditionContainer>
+                    <div *ngFor="let preCondition of preConditions; let i = index"
+                         class="editor-item"
+                         fxLayout="row">
+                      <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
+                                    fxFlex="6">
+                      </mat-checkbox>
+                      <span fxFlex="5">{{ preCondition.index }}</span>
+                      <div fxFlex="89" class="steps-container" >
+                        <div class="editor action" #actionEditor
+                             [ngClass]="{
        'action-top-radius': i === 0,
        'action-bottom-radius': i === preConditions.length - 1,
        'action-test-case-editors': i > 0 && i < preConditions.length - 1
      }"
-                         contenteditable="true"
-                         fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, expectedResultEditor)"
-                         (paste)="autoResize($event, expectedResultEditor)"
-                         (focusin)="autoResize($event, expectedResultEditor)"
-                         (resize)="autoResize($event, expectedResultEditor)"
-                         (mouseup)="autoResize($event, expectedResultEditor)"
-                         (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
-                    >
-                    </div>
-                    <input type="file" #fileInput accept="image/*" style="display: none;"
-                           (change)="onFileSelected($event)">
-                    <div class="editor expected" #expectedResultEditor
-                         [ngClass]="{
+                             contenteditable="true"
+                             fxFlex="50"
+                             (focus)="setActiveEditor($event)"
+                             (input)="autoResize($event, expectedResultEditor)"
+                             (paste)="autoResize($event, expectedResultEditor)"
+                             (focusin)="autoResize($event, expectedResultEditor)"
+                             (resize)="autoResize($event, expectedResultEditor)"
+                             (mouseup)="autoResize($event, expectedResultEditor)"
+                             (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
+                        >
+                        </div>
+                        <input type="file" #fileInput accept="image/*" style="display: none;"
+                               (change)="onFileSelected($event)">
+                        <div class="editor expected" #expectedResultEditor
+                             [ngClass]="{
        'expected-result-top-radius': i === 0,
        'expected-result-bottom-radius': i === preConditions.length - 1,
        'expected-result-test-case-editors': i > 0 && i < preConditions.length - 1
      }"
-                         contenteditable="true"
-                         fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, actionEditor)"
-                         (paste)="autoResize($event, actionEditor)"
-                         (focusin)="autoResize($event, actionEditor)"
-                         (resize)="autoResize($event, actionEditor)"
-                         (mouseup)="autoResize($event, actionEditor)"
-                         (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
-                    >
+                             contenteditable="true"
+                             fxFlex="50"
+                             (focus)="setActiveEditor($event)"
+                             (input)="autoResize($event, actionEditor)"
+                             (paste)="autoResize($event, actionEditor)"
+                             (focusin)="autoResize($event, actionEditor)"
+                             (resize)="autoResize($event, actionEditor)"
+                             (mouseup)="autoResize($event, actionEditor)"
+                             (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
+                        >
+                        </div>
+                        <input type="file" #fileInput accept="image/*" style="display: none;"
+                               (change)="onFileSelected($event)">
+                      </div>
                     </div>
-                    <input type="file" #fileInput accept="image/*" style="display: none;"
-                           (change)="onFileSelected($event)">
+                    <div fxLayout="row" fxLayoutAlign="end center" class="button-container">
+                      <button mat-icon-button (click)="addPreCondition()" class="center-icon-button">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="deleteSelectedPreconditions()" class="center-icon-button">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="end center" class="button-container">
-                  <button mat-icon-button (click)="addPreCondition()" class="center-icon-button">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteSelectedPreconditions()" class="center-icon-button">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
+              </mat-expansion-panel>
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Шаги</mat-panel-title>
+                  <mat-panel-description>
 
-            <div class="steps">
-              <div>
-                <mat-checkbox [(ngModel)]="allSelectedSteps" [indeterminate]="indeterminateSteps"
-                              (change)="selectAllSteps($event.checked)">
-                  Шаги
-                </mat-checkbox>
-              </div>
-              <div #editorStepContainer>
-                <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
-                  <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
-                  </mat-checkbox>
-                  <span fxFlex="3">{{ step.index }}</span>
-                  <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
-                    <div class="editor" #actionEditor
-                         [ngClass]="{
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="steps">
+                  <div>
+                    <mat-checkbox [(ngModel)]="allSelectedSteps" [indeterminate]="indeterminateSteps"
+                                  (change)="selectAllSteps($event.checked)">
+                      Шаги
+                    </mat-checkbox>
+                  </div>
+                  <div #editorStepContainer>
+                    <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
+                      <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
+                      </mat-checkbox>
+                      <span fxFlex="3">{{ step.index }}</span>
+                      <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
+                        <div class="editor" #actionEditor
+                             [ngClass]="{
        'action-top-radius': i === 0,
        'action-bottom-radius': i === steps.length - 1,
        'action-test-case-editors': i > 0 && i < steps.length - 1
      }"
-                         contenteditable="true"
-                         fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, expectedResultEditor)"
-                         (paste)="autoResize($event, expectedResultEditor)"
-                         (blur)="updateEditorStepContent(actionEditor, i, 'action')"
-                         >
-                    </div>
-                    <input type="file" #fileInput accept="image/*" style="display: none;"
-                           (change)="onFileSelected($event)">
-                    <div class="editor" #expectedResultEditor
-                         [ngClass]="{
+                             contenteditable="true"
+                             fxFlex="50"
+                             (focus)="setActiveEditor($event)"
+                             (input)="autoResize($event, expectedResultEditor)"
+                             (paste)="autoResize($event, expectedResultEditor)"
+                             (blur)="updateEditorStepContent(actionEditor, i, 'action')"
+                        >
+                        </div>
+                        <input type="file" #fileInput accept="image/*" style="display: none;"
+                               (change)="onFileSelected($event)">
+                        <div class="editor" #expectedResultEditor
+                             [ngClass]="{
        'expected-result-top-radius': i === 0,
        'expected-result-bottom-radius': i === steps.length - 1,
        'expected-result-test-case-editors': i > 0 && i < steps.length - 1
      }"
-                         contenteditable="true"
-                         fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, actionEditor)"
-                         (paste)="autoResize($event, actionEditor)"
-                         (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
-                         >
+                             contenteditable="true"
+                             fxFlex="50"
+                             (focus)="setActiveEditor($event)"
+                             (input)="autoResize($event, actionEditor)"
+                             (paste)="autoResize($event, actionEditor)"
+                             (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
+                        >
+                        </div>
+                        <input type="file" #fileInput accept="image/*" style="display: none;"
+                               (change)="onFileSelected($event)">
+                      </div>
                     </div>
-                    <input type="file" #fileInput accept="image/*" style="display: none;"
-                           (change)="onFileSelected($event)">
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                      <button mat-icon-button (click)="addStep()" class="center-icon-button">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="deleteSelectedSteps()" class="center-icon-button">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addStep()" class="center-icon-button">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteSelectedSteps()" class="center-icon-button">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
+              </mat-expansion-panel>
 
-            <div class="steps">
-              <div>
-                <mat-checkbox [(ngModel)]="allSelectedPostConditions" [indeterminate]="indeterminatePostCondition"
-                              (change)="selectAllPostConditions($event.checked)">
-                  Постусловия
-                </mat-checkbox>
-              </div>
-              <div #editorPostConditionContainer>
-                <div *ngFor="let postCondition of postConditions; let i = index" class="editor-item" fxLayout="row">
-                  <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
-                                fxFlex="6">
-                  </mat-checkbox>
-                  <span fxFlex="3">{{ postCondition.index }}</span>
-                  <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
-                    <div class="editor" #actionEditor
-                         [ngClass]="{
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>Постусловия</mat-panel-title>
+                  <mat-panel-description>
+
+                  </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="steps">
+                  <div>
+                    <mat-checkbox [(ngModel)]="allSelectedPostConditions" [indeterminate]="indeterminatePostCondition"
+                                  (change)="selectAllPostConditions($event.checked)">
+                      Постусловия
+                    </mat-checkbox>
+                  </div>
+                  <div #editorPostConditionContainer>
+                    <div *ngFor="let postCondition of postConditions; let i = index" class="editor-item" fxLayout="row">
+                      <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
+                                    fxFlex="6">
+                      </mat-checkbox>
+                      <span fxFlex="3">{{ postCondition.index }}</span>
+                      <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
+                        <div class="editor" #actionEditor
+                             [ngClass]="{
        'action-top-radius': i === 0,
        'action-bottom-radius': i === postConditions.length - 1,
        'action-test-case-editors': i > 0 && i < postConditions.length - 1
      }"
-                         contenteditable="true"
-                         fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, expectedResultEditor)"
-                         (paste)="autoResize($event, expectedResultEditor)"
-                         (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
-                         >
-                    </div>
-                    <input type="file" #fileInput accept="image/*" style="display: none;"
-                           (change)="onFileSelected($event)">
-                    <div class="editor" #expectedResultEditor
-                         [ngClass]="{
+                             contenteditable="true"
+                             fxFlex="50"
+                             (focus)="setActiveEditor($event)"
+                             (input)="autoResize($event, expectedResultEditor)"
+                             (paste)="autoResize($event, expectedResultEditor)"
+                             (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
+                        >
+                        </div>
+                        <input type="file" #fileInput accept="image/*" style="display: none;"
+                               (change)="onFileSelected($event)">
+                        <div class="editor" #expectedResultEditor
+                             [ngClass]="{
        'expected-result-top-radius': i === 0,
        'expected-result-bottom-radius': i === postConditions.length - 1,
        'expected-result-test-case-editors': i > 0 && i < postConditions.length - 1
      }"
-                         contenteditable="true"
-                         fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, actionEditor)"
-                         (paste)="autoResize($event, actionEditor)"
-                         (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
-                         >
-                    </div>
-                    <input type="file" #fileInput accept="image/*" style="display: none;"
-                           (change)="onFileSelected($event)">
+                             contenteditable="true"
+                             fxFlex="50"
+                             (focus)="setActiveEditor($event)"
+                             (input)="autoResize($event, actionEditor)"
+                             (paste)="autoResize($event, actionEditor)"
+                             (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
+                        >
+                        </div>
+                        <input type="file" #fileInput accept="image/*" style="display: none;"
+                               (change)="onFileSelected($event)">
 
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                      <button mat-icon-button (click)="addPostCondition()" class="center-icon-button">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                      <button mat-icon-button (click)="deleteSelectedPostConditions()" class="center-icon-button">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div fxLayout="row" fxLayoutAlign="end center">
-                  <button mat-icon-button (click)="addPostCondition()" class="center-icon-button">
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button mat-icon-button (click)="deleteSelectedPostConditions()" class="center-icon-button">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
+              </mat-expansion-panel>
+            </mat-accordion>
+
+
+
+
+
+
           </div>
         </mat-sidenav-content>
       </mat-sidenav-container>

@@ -8,7 +8,7 @@
 }
 
 .mat-sidenav {
-  width: 250px;
+  width: 230px;
 }
 
 span{
@@ -30,39 +30,6 @@ input{
 mat-checkbox{
   text-align: center;
 }
-
-
-
-/*.border-top{*/
-/*  border-top: #b9d6ea 1px solid;*/
-/*}*/
-
-/*.top-radius {*/
-/*  border-top-left-radius: 8px;*/
-/*  border-top-right-radius: 8px;*/
-/*  border: 1px solid #b20067;*/
-/*  !*border: 1px solid #b2c5ff;*!*/
-
-/*}*/
-
-/*.bottom-radius {*/
-/*  border-bottom-left-radius: 8px;*/
-/*  border-bottom-right-radius: 8px;*/
-/*  border-bottom: 1px solid #b20067;*/
-/*  border-left: 1px solid #b20067;*/
-/*  border-right: 1px solid #b20067;*/
-/*}*/
-
-/*.test-case-editors {*/
-/*  border-bottom: 1px solid #b20067;*/
-/*  border-left: 1px solid #b20067;*/
-/*  border-right: 1px solid #b20067;*/
-/*}*/
-
-
-/*.editor.action{*/
-/*  border-right: 1px solid #b20067;*/
-/*}*/
 
 /* Фиксируем header */
 .header {

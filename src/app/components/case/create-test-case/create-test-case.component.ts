@@ -35,6 +35,12 @@ import {MatProgressBar} from "@angular/material/progress-bar";
 import {RouterParamsService} from "../../../services/router-params.service";
 import {TestCaseService} from "../../../services/test-case.service";
 import {ImageDialogComponent} from "./image-dialog/image-dialog.component";
+import {
+  MatAccordion, MatExpansionModule,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelTitle
+} from "@angular/material/expansion";
 
 @Component({
   selector: 'app-create-test-case',
@@ -64,7 +70,12 @@ import {ImageDialogComponent} from "./image-dialog/image-dialog.component";
     MatSidenavContainer,
     MatSidenavContent,
     NgClass,
-    MatProgressBar
+    MatProgressBar,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelTitle,
+    MatExpansionPanelDescription,
+    MatExpansionModule
   ],
   templateUrl: './create-test-case.component.html',
   styleUrls: [
