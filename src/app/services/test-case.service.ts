@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {TestCase, TestCaseData, TestCaseResult} from "../models/test-case";
 import {Folder} from "../models/folder";
@@ -33,13 +33,13 @@ export class TestCaseService {
     return this.http.put<TestCase>(`${this.apiUrl}/testcases/${testCaseId}`,testCaseDate);
   }
 
-  moveTestCase(testCaseId: number, targetFolderId: number):Observable<TestCase>{
-    return this.http.put<TestCase>(`${this.apiUrl}/${testCaseId}/move/${targetFolderId}`, null);
-  }
-
-  copyTestCase(testCaseId: number, targetFolderId: number): Observable<TestCase>{
-    return this.http.post<TestCase>(`${this.apiUrl}/${testCaseId}/copy/${targetFolderId}`,null);
-  }
+  // moveTestCase(testCaseId: number, targetFolderId: number):Observable<TestCase>{
+  //   return this.http.put<TestCase>(`${this.apiUrl}/${testCaseId}/move/${targetFolderId}`, null);
+  // }
+  //
+  // copyTestCase(testCaseId: number, targetFolderId: number): Observable<TestCase>{
+  //   return this.http.post<TestCase>(`${this.apiUrl}/${testCaseId}/copy/${targetFolderId}`,null);
+  // }
 
   deleteTestCase(testCaseId:number): Observable<void>{
     return this.http.delete<void>(`${this.apiUrl}/${testCaseId}`);
@@ -55,7 +55,20 @@ export class TestCaseService {
 
   setTestCaseResult(testCaseId: number, testCaseResult: TestCaseResult): Observable<TestCase> {
     return this.http.post<TestCase>(`${this.apiUrl}/testcases/setresult/${testCaseId}`, testCaseResult)
+  }
 
+  moveTestCase(testCaseId: number, targetFolderId: number): Observable<TestCase>{
+    const params : HttpParams  = new HttpParams()
+      .set('testCaseId', testCaseId)
+      .set('targetFolderId', targetFolderId);
+    return this.http.put<TestCase>(`${this.apiUrl}/testcases/move`, null, {params:params})
+  }
+
+  copyTestCase(testCaseId: number, targetFolderId: number): Observable<TestCase>{
+    const params: HttpParams = new HttpParams()
+      .set('testCaseId', testCaseId)
+      .set('targetFolderId', targetFolderId);
+    return this.http.post<TestCase>(`${this.apiUrl}/testcases/copy`, null, {params: params})
   }
 
 

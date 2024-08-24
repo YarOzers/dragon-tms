@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Folder, FolderDTO} from "../models/folder";
 import {environment} from "../environment";
@@ -27,6 +27,21 @@ export class FolderService {
   addChildFolder(parentFolderId: number, folder: FolderDTO): Observable<Folder>{
     console.log("addChildFolder was executed")
     return this.http.post<Folder>(`${this.apiUrl}/folders/${parentFolderId}/child`,folder);
+  }
+
+  moveFolder(folderId: number, targetFolderId: number): Observable<Folder>{
+    const params: HttpParams = new HttpParams();
+    params
+      .set('folderId',folderId)
+      .set('targetFolderId',targetFolderId);
+    return this.http.put<Folder>(`${this.apiUrl}/folders/move`, null,{params: params})
+  }
+
+  copyFolder(folderId: number, targetFolderId: number):Observable<Folder>{
+    const params : HttpParams = new HttpParams()
+      .set('folderId', folderId)
+      .set('targetFolderId', targetFolderId);
+    return this.http.post<Folder>(`${this.apiUrl}/folders/copy`,null, {params:params})
   }
 
 
