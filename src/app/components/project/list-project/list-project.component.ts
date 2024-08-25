@@ -128,7 +128,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   }
 
 
-  openDialog(): void {
+  openCreateProjectDialog(): void {
 
     const dialogRef = this.dialog.open(DialogComponent, {
 

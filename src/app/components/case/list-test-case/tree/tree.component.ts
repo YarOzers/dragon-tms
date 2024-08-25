@@ -558,7 +558,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
         if (result) {
           this.getProjectFolders();
         }
-        console.log(`Папка ${result.name} была перемещена !`)
+        console.log(`Перемещение папки отменено!`)
       });
     }
   }
@@ -597,8 +597,26 @@ export class TreeComponent implements OnInit, AfterViewInit {
     // Логика редактирования тест-кейса
   }
 
-  deleteTestCase(testCase: any) {
-    // Логика удаления тест-кейса
+  openDeleteTestCaseDialog(testCaseId: number, testCaseName: string) {
+    const dialogRef = this.dialog.open(DialogComponent, {
+
+
+      width: 'auto',
+      data: {
+        testCaseId: testCaseId,
+        testCaseName: testCaseName,
+        type: 'testCase-del'
+
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+    }, (error) => {
+      console.error(`Ошибка при удалении тест-кейса ${testCaseName}` , error);
+    }, () => {
+      this.getProjectFolders();
+    });
   }
 
   showData() {

@@ -75,7 +75,7 @@
                   <mat-icon>edit</mat-icon>
                   <span>Редактировать</span>
                 </button>
-                <button mat-menu-item (click)="deleteTestCase(testCase)">
+                <button mat-menu-item (click)="openDeleteTestCaseDialog(testCase.id, testCase.name)">
                   <mat-icon>delete</mat-icon>
                   <span>Удалить</span>
                 </button>

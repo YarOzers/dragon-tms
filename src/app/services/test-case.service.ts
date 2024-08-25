@@ -41,8 +41,9 @@ export class TestCaseService {
   //   return this.http.post<TestCase>(`${this.apiUrl}/${testCaseId}/copy/${targetFolderId}`,null);
   // }
 
-  deleteTestCase(testCaseId:number): Observable<void>{
-    return this.http.delete<void>(`${this.apiUrl}/testcases/${testCaseId}`);
+  deleteTestCase(testCaseId:number): Observable<string>{
+    console.log("deleteTEstCase::", testCaseId);
+    return this.http.delete(`${this.apiUrl}/testcases/${testCaseId}`, {responseType:'text'});
   }
 
   getTestCase(testCaseId: number): Observable<TestCase>{

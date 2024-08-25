@@ -15,6 +15,7 @@ import {NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
 import {MatFormField, MatInput, MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FolderService} from "../../services/folder.service";
+import {TestCaseService} from "../../services/test-case.service";
 
 @Component({
   selector: 'app-dialog',
@@ -53,6 +54,7 @@ export class DialogComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<DialogComponent>,
     private folderService: FolderService,
+    private testCaseService: TestCaseService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.projectForm = this.fb.group({
@@ -147,11 +149,21 @@ export class DialogComponent implements OnInit {
     }
   }
 
-  protected deleteFolder(){
-    this.folderService.deleteFolder(Number(this.data.folderId)).subscribe(msg=>{
+  protected deleteFolder() {
+    this.folderService.deleteFolder(Number(this.data.folderId)).subscribe(msg => {
       console.log(msg);
       this.dialogRef.close(msg);
     });
+  }
 
+  protected deleteTestCase() {
+    this.testCaseService.deleteTestCase(this.data.testCaseId).subscribe(msg => {
+      console.log(msg);
+    }, (error) => {
+      console.error('Ошибка при удалении тест-кейса', error);
+    }, () => {
+
+      this.dialogRef.close();
+    });
   }
 }

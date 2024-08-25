@@ -45,13 +45,14 @@
         <p>Это контент для типа new type.</p>
       </div>
       <div *ngSwitchDefault>
-        <p>Это контент по умолчанию.</p>
+        <p>Вы действительно хотите удалить тест-кейс {{data?.testCaseName}}</p>
       </div>
     </ng-container>
   </div>
   <div mat-dialog-actions>
-    <button *ngIf="data.type != 'folder-del' " mat-flat-button (click)="save()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>
+    <button *ngIf="data.type != 'folder-del' && data.type != 'testCase-del' " mat-flat-button (click)="save()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>
     <button *ngIf="data.type === 'folder-del' " mat-flat-button (click)="deleteFolder()" fxLayoutAlign="start center" class="save-btn">Удалить</button>
+    <button *ngIf="data.type === 'testCase-del' " mat-flat-button (click)="deleteTestCase()" fxLayoutAlign="start center" class="save-btn">Удалить</button>
     <button mat-button (click)="closeMatDialog()" fxLayoutAlign="space-between center" class="close-btn">Отмена</button>
   </div>
 </div>
