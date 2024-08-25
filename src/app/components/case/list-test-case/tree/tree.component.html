@@ -33,7 +33,7 @@
     <span>Добавить папку</span>
   </button>
   <button mat-menu-item
-          (click)="openDialogToDeleteFolder(folder.id)"
+          (click)="openDialogToDeleteFolder(folder.id, folder.name)"
           [disabled]="folder.id === 0">
     <mat-icon>delete_outline</mat-icon>
     <span>Удалить папку</span>
@@ -55,11 +55,11 @@
           </div>
         </div>
         <div *ngIf="folder.expanded" cdkDropList
-             [cdkDropListData]="testCasesMap[folder.name]"
+             [cdkDropListData]="testCasesMap[folder.id]"
              (cdkDropListDropped)="onDrop($event, 'testCase', folder.id, folder.name)"
              class="test-case-list">
 
-          <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag [cdkDragData]="testCase">
+          <div *ngFor="let testCase of testCasesMap[folder.id]" cdkDrag [cdkDragData]="testCase">
             <div class="test-case-item" [ngClass]="{'test-case-hover': hoveredTestCase === testCase}"
                  (mouseenter)="hoveredTestCase = testCase"
                  (mouseleave)="hoveredTestCase = null">
@@ -75,7 +75,7 @@
                   <mat-icon>edit</mat-icon>
                   <span>Редактировать</span>
                 </button>
-                <button mat-menu-item (click)="openDeleteTestCaseDialog(testCase.id, testCase.name)">
+                <button mat-menu-item (click)="openDeleteTestCaseDialog(testCase.id, testCase.name,folder.name)">
                   <mat-icon>delete</mat-icon>
                   <span>Удалить</span>
                 </button>

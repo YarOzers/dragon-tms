@@ -38,14 +38,23 @@
         </form>
       </div>
       <div *ngSwitchCase="'folder-del'">
-        <p>Вы действительно хотите удалить папку {{data?.folderName}} ?</p>
+        <p style="font-weight: bolder; font-size: larger">Вы действительно хотите удалить папку "{{data?.folderName}}" ?</p>
+        <div style="position: relative; display: inline-block;">
+          <mat-icon style="position: absolute; top: 0; left: 0; font-size: 24px;">info</mat-icon>
+          <span style="padding-left: 30px;">При удалении папки все тест-кейсы папки и дочерних папок переместятся в корзину.</span>
+        </div>
       </div>
-      <div *ngSwitchCase="'new type'">
+      <div *ngSwitchCase="'testCase-del'">
+        <p style="font-weight: bolder; font-size: larger">Вы действительно хотите удалить тест-кейс "{{data?.testCaseName}}" ?</p>
+        <div style="position: relative; display: inline-block;">
+          <mat-icon style="position: absolute; top: 0; left: 0; font-size: 24px;">info</mat-icon>
+          <span *ngIf="data?.folderName !='Корзина' " style="padding-left: 30px;">Тест-кейс будет перемещен в корзину. (не реализовано, удаляется полностью)</span>
+          <span *ngIf="data?.folderName ==='Корзина' " style="padding-left: 30px;">При удалении тест-кейса из "Корзины", его нельзя будет востановить!</span>
+        </div>
 
-        <p>Это контент для типа new type.</p>
       </div>
       <div *ngSwitchDefault>
-        <p>Вы действительно хотите удалить тест-кейс {{data?.testCaseName}}</p>
+        <p></p>
       </div>
     </ng-container>
   </div>

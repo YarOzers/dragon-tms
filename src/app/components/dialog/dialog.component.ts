@@ -16,6 +16,7 @@ import {MatFormField, MatInput, MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {FolderService} from "../../services/folder.service";
 import {TestCaseService} from "../../services/test-case.service";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-dialog',
@@ -39,7 +40,8 @@ import {TestCaseService} from "../../services/test-case.service";
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatIcon
   ],
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.scss'

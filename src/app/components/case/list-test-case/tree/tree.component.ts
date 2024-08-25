@@ -78,7 +78,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   protected TEST_CASE_DATA: Folder[] | null = [];
 
-  testCasesMap: { [key: string]: TestCase[] } = {};
+  testCasesMap: { [key: number]: TestCase[] } = {};
 
 
   ngOnInit(): void {
@@ -187,8 +187,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   private addTestCasesToMap(folder: Folder) {
-    if (folder.name) {
-      this.testCasesMap[folder.name] = folder.testCases!;
+    if (folder.id) {
+      this.testCasesMap[folder.id] = folder.testCases!;
       if (folder.childFolders) {
         folder.childFolders.forEach(subFolder => this.addTestCasesToMap(subFolder));
       }
@@ -204,8 +204,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   private syncFolderTestCases(folder: Folder) {
-    if (folder.name) {
-      folder.testCases = this.testCasesMap[folder.name];
+    if (folder.id) {
+      folder.testCases = this.testCasesMap[folder.id];
       if (folder.childFolders) {
         folder.childFolders.forEach(subFolder => this.syncFolderTestCases(subFolder));
       }
@@ -405,7 +405,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
 
-  openDialogToDeleteFolder(id: number) {
+  openDialogToDeleteFolder(id: number, folderName: string) {
     console.log("FOlderId in deleteDialog::", id);
     const dialogRef = this.dialog.open(DialogComponent, {
 
@@ -413,7 +413,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
       data: {
         type: 'folder-del',
         del: false,
-        folderId: id
+        folderId: id,
+        folderName: folderName
       } // Можно передать данные в диалоговое окно
     });
 
@@ -597,7 +598,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
     // Логика редактирования тест-кейса
   }
 
-  openDeleteTestCaseDialog(testCaseId: number, testCaseName: string) {
+  openDeleteTestCaseDialog(testCaseId: number, testCaseName: string, folderName: string) {
     const dialogRef = this.dialog.open(DialogComponent, {
 
 
@@ -605,7 +606,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
       data: {
         testCaseId: testCaseId,
         testCaseName: testCaseName,
-        type: 'testCase-del'
+        type: 'testCase-del',
+        folderName: folderName
 
       } // Можно передать данные в диалоговое окно
     });
