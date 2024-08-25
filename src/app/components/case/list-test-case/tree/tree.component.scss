@@ -76,6 +76,7 @@
   align-items: center;
   position: relative;
   z-index: 2;
+  height: 40px;
 }
 
 .background-element{
@@ -100,6 +101,13 @@
   display: inline;
 }
 
+.testcase-btn-menu{
+  display: none;
+}
+
+.test-case-item:hover .testcase-btn-menu{
+  display: inline;
+}
 
 :host {
   --mdc-dialog-container-shape: 0px;

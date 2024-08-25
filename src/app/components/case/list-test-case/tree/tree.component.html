@@ -65,11 +65,11 @@
                  (mouseleave)="hoveredTestCase = null">
               <mat-icon>subject</mat-icon>
               {{ testCase.name }}
-              <span *ngIf="hoveredTestCase === testCase" class="test-case-btn-menu">
+              <span class="testcase-btn-menu">&nbsp;
                 <button mat-icon-button [matMenuTriggerFor]="testCaseMenu" aria-label="Test case options">
                   <mat-icon>more_vert</mat-icon>
                 </button>
-              </span>
+
               <mat-menu #testCaseMenu="matMenu">
                 <button mat-menu-item (click)="editTestCase(testCase)">
                   <mat-icon>edit</mat-icon>
@@ -80,6 +80,7 @@
                   <span>Удалить</span>
                 </button>
               </mat-menu>
+              </span>
             </div>
           </div>
         </div>
