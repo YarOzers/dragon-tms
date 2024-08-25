@@ -20,10 +20,10 @@
           <mat-icon>folder_open</mat-icon>
           <span class="folder-name" cdkDrag [cdkDragData]="folder">{{ folder.name }}</span>
           <span class="folder-btn-menu">&nbsp;
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+          <button mat-icon-button [matMenuTriggerFor]="folderMenu" aria-label="Example icon-button with a menu">
   <mat-icon>more_vert</mat-icon>
 </button>
-<mat-menu #menu="matMenu">
+<mat-menu #folderMenu="matMenu">
   <button mat-menu-item (click)="openDialogToCreateTestCase(folder.id, folder.name)">
     <mat-icon>playlist_add</mat-icon>
     <span>Добавить тест кейс</span>
@@ -60,9 +60,26 @@
              class="test-case-list">
 
           <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag [cdkDragData]="testCase">
-            <div class="test-case-item">
+            <div class="test-case-item" [ngClass]="{'test-case-hover': hoveredTestCase === testCase}"
+                 (mouseenter)="hoveredTestCase = testCase"
+                 (mouseleave)="hoveredTestCase = null">
               <mat-icon>subject</mat-icon>
               {{ testCase.name }}
+              <span *ngIf="hoveredTestCase === testCase" class="test-case-btn-menu">
+                <button mat-icon-button [matMenuTriggerFor]="testCaseMenu" aria-label="Test case options">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+              </span>
+              <mat-menu #testCaseMenu="matMenu">
+                <button mat-menu-item (click)="editTestCase(testCase)">
+                  <mat-icon>edit</mat-icon>
+                  <span>Редактировать</span>
+                </button>
+                <button mat-menu-item (click)="deleteTestCase(testCase)">
+                  <mat-icon>delete</mat-icon>
+                  <span>Удалить</span>
+                </button>
+              </mat-menu>
             </div>
           </div>
         </div>

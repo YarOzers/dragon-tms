@@ -591,6 +591,16 @@ export class TreeComponent implements OnInit, AfterViewInit {
     });
   }
 
+  hoveredTestCase: any = null;
+
+  editTestCase(testCase: any) {
+    // Логика редактирования тест-кейса
+  }
+
+  deleteTestCase(testCase: any) {
+    // Логика удаления тест-кейса
+  }
+
   showData() {
     console.log("testcases-----------: ", this.testCases);
     console.log("DATA-----------: ", this.TEST_CASE_DATA);
