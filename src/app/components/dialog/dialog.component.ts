@@ -14,6 +14,7 @@ import {FlexModule} from "@angular/flex-layout";
 import {NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
 import {MatFormField, MatInput, MatInputModule} from "@angular/material/input";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {FolderService} from "../../services/folder.service";
 
 @Component({
   selector: 'app-dialog',
@@ -51,6 +52,7 @@ export class DialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<DialogComponent>,
+    private folderService: FolderService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.projectForm = this.fb.group({
@@ -107,8 +109,6 @@ export class DialogComponent implements OnInit {
       this.addTestPlan();
     } else if (this.data.type === 'folder') {
       this.addFolder();
-    } else if (this.data.type === 'folder-del') {
-      this.deleteFolder();
     } else {
       this.dialogRef.close();
     }
@@ -147,8 +147,11 @@ export class DialogComponent implements OnInit {
     }
   }
 
-  private deleteFolder(){
-    this.data.del = true;
-    this.dialogRef.close(this.data.del);
+  protected deleteFolder(){
+    this.folderService.deleteFolder(Number(this.data.folderId)).subscribe(msg=>{
+      console.log(msg);
+      this.dialogRef.close(msg);
+    });
+
   }
 }

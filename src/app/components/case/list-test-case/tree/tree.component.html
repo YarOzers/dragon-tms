@@ -56,7 +56,7 @@
         </div>
         <div *ngIf="folder.expanded" cdkDropList
              [cdkDropListData]="testCasesMap[folder.name]"
-             (cdkDropListDropped)="onDrop($event, 'testCase', folder.name)"
+             (cdkDropListDropped)="onDrop($event, 'testCase', folder.id, folder.name)"
              class="test-case-list">
 
           <div *ngFor="let testCase of testCasesMap[folder.name]" cdkDrag [cdkDragData]="testCase">

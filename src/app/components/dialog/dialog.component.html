@@ -50,7 +50,8 @@
     </ng-container>
   </div>
   <div mat-dialog-actions>
-    <button mat-flat-button (click)="save()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>
+    <button *ngIf="data.type != 'folder-del' " mat-flat-button (click)="save()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>
+    <button *ngIf="data.type === 'folder-del' " mat-flat-button (click)="deleteFolder()" fxLayoutAlign="start center" class="save-btn">Удалить</button>
     <button mat-button (click)="closeMatDialog()" fxLayoutAlign="space-between center" class="close-btn">Отмена</button>
   </div>
 </div>

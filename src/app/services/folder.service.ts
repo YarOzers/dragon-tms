@@ -24,25 +24,33 @@ export class FolderService {
 
   }
 
-  addChildFolder(parentFolderId: number, folder: FolderDTO): Observable<Folder>{
+  addChildFolder(parentFolderId: number, folder: FolderDTO): Observable<Folder> {
     console.log("addChildFolder was executed")
-    return this.http.post<Folder>(`${this.apiUrl}/folders/${parentFolderId}/child`,folder);
+    return this.http.post<Folder>(`${this.apiUrl}/folders/${parentFolderId}/child`, folder);
   }
 
-  moveFolder(folderId: number, targetFolderId: number): Observable<Folder>{
+  moveFolder(folderId: number, targetFolderId: number): Observable<Folder> {
     let params: HttpParams = new HttpParams()
       .set('folderId', folderId)
-      .set('targetFolderId',targetFolderId);
+      .set('targetFolderId', targetFolderId);
     console.log(params);
-    return this.http.put<Folder>(`${this.apiUrl}/folders/move`, null,{params: params})
+    return this.http.put<Folder>(`${this.apiUrl}/folders/move`, null, {params: params})
   }
 
-  copyFolder(folderId: number, targetFolderId: number):Observable<Folder>{
-    let params : HttpParams = new HttpParams()
+  copyFolder(folderId: number, targetFolderId: number): Observable<Folder> {
+    let params: HttpParams = new HttpParams()
       .set('folderId', folderId)
       .set('targetFolderId', targetFolderId);
-    return this.http.post<Folder>(`${this.apiUrl}/folders/copy`,null, {params:params})
+    return this.http.post<Folder>(`${this.apiUrl}/folders/copy`, null, {params: params})
   }
 
 
+  deleteFolder(folderId: number):Observable<string> {
+    console.log("DEleteFolder::", folderId);
+    let params: HttpParams = new HttpParams()
+      .set('folderId', folderId);
+    console.log(params);
+    return this.http.delete(`${this.apiUrl}/folders/delete`, {params: params, responseType: "text"},);
+
+  }
 }

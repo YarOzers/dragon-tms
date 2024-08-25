@@ -83,6 +83,19 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.dataLoading = false;
+    this.getProjectFolders();
+  }
+
+  findRootFolderId(folders: Folder[]): number | null {
+    for (const folder of folders) {
+      if (folder.parentFolderId === null) {
+        return folder.id;
+      }
+    }
+    return null;
+  }
+
+  getProjectFolders() {
     this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
       if (folders) {
         console.log("FOLDERS:::", folders);
@@ -102,15 +115,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
         this.getTestCases(Number(this.findRootFolderId(this.TEST_CASE_DATA)));
       }
     });
-  }
-
-  findRootFolderId(folders: Folder[]): number | null {
-    for (const folder of folders) {
-      if (folder.parentFolderId === null) {
-        return folder.id;
-      }
-    }
-    return null;
   }
 
   setExpandedTrue(folders: Folder[] | undefined): void {
@@ -208,21 +212,21 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onDrop(event: CdkDragDrop<any[]>, type: string, targetId: any, targetFolderName?: string) {
+  onDrop(event: CdkDragDrop<any[]>, type: string, targetId: any, targetFolderName: string) {
     console.log('TYpe::', type);
     console.log('TargetId::', targetId);
     console.log("eventTarget::  ", event.item.data.type);
     if (type === 'testCase' && event.item.data.type === 'TESTCASE') {
-      this.dropTestCase(event, targetId);
+      this.dropTestCase(event, targetId, targetFolderName);
     } else if (type === 'folder' && event.item.data.type === 'FOLDER') {
-      if(targetFolderName){
+      if (targetFolderName) {
         this.dropFolder(event, targetId, targetFolderName);
       }
 
     }
   }
 
-  dropTestCase(event: CdkDragDrop<TestCase[]>, targetFolderName: string) {
+  dropTestCase(event: CdkDragDrop<TestCase[]>, targetId: number, targetFolderName: string,) {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -234,7 +238,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
         event.previousIndex,
         event.currentIndex,
       );
+      this.openMoveTestCaseDialog(testCase.id, testCase.name, targetId, targetFolderName);
       this.updateTestCaseData();
+
     }
   }
 
@@ -292,11 +298,11 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   dropFolder(event: CdkDragDrop<Folder[]>, targetFolderId: number, targetFolderName: string) {
-    this.checkNestedFoldersForId(event, targetFolderId , targetFolderName);
+    this.checkNestedFoldersForId(event, targetFolderId, targetFolderName);
 
   }
 
-  checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number, targetFolderName:string): void {
+  checkNestedFoldersForId(event: CdkDragDrop<Folder[]>, targetFolderId: number, targetFolderName: string): void {
     const sourceFolderId = event.item.data.id;
     if (sourceFolderId === targetFolderId) {
       return
@@ -341,6 +347,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
 
     if (checkForNestedId(sourceFolder.childFolders || [], targetFolderId)) {
+      const isParentFolder = true;
+      this.openMoveFolderDialog(event.item.data.id, targetFolderId, event.item.data.folderName, targetFolderName, isParentFolder)
       console.log('Error: Target folder ID found within the nested folders of the source folder.');
 
     } else {
@@ -349,9 +357,6 @@ export class TreeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  addFolder(parentFolderId: number) {
-
-  }
 
   openDialogToAddFolder(parentFolderId: number): void {
     console.log("FolderId::::", parentFolderId);
@@ -385,7 +390,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
                 this.TEST_CASE_DATA = [...folders];
                 this.generateTestCaseArrays();
                 if (this.TEST_CASE_DATA) {
-                  this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+                  this.setExpandedTrue(this.TEST_CASE_DATA);
                 }
               }
               this.dataLoading = true;
@@ -401,20 +406,20 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
 
   openDialogToDeleteFolder(id: number) {
+    console.log("FOlderId in deleteDialog::", id);
     const dialogRef = this.dialog.open(DialogComponent, {
 
       width: 'auto',
       data: {
         type: 'folder-del',
-        del: false
+        del: false,
+        folderId: id
       } // Можно передать данные в диалоговое окно
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.projectService.deleteFolder(this.projectId, id).subscribe(folders => {
-        });
-      }
+      console.log("MSG :: ", result);
+      this.getProjectFolders();
     });
   }
 
@@ -448,7 +453,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
               this.TEST_CASE_DATA = [...folders];
               this.generateTestCaseArrays();
               if (this.TEST_CASE_DATA) {
-                this.TEST_CASE_DATA.forEach(folder => folder.expanded = true);
+                this.setExpandedTrue(this.TEST_CASE_DATA);
               }
             }
             this.dataLoading = true;
@@ -506,7 +511,59 @@ export class TreeComponent implements OnInit, AfterViewInit {
     });
   }
 
-  openMoveFolderDialog(folderId: number, targetFolderId: number, folderName: string, targetFolderName: string) {
+  openMoveFolderDialog(folderId: number, targetFolderId: number, folderName: string, targetFolderName: string, isParentFolder?: boolean) {
+    if (isParentFolder) {
+      const dialogRef = this.dialog.open(MoveAndCopyDialogComponent, {
+
+
+        width: '500px',
+        height: '500px',
+        maxWidth: '500px',
+        maxHeight: '500px',
+        data: {
+          folderId: folderId,
+          targetFolderId: targetFolderId,
+          folderName: folderName,
+          targetFolderName: targetFolderName,
+          type: 'FOLDER',
+          onlyCopy: isParentFolder
+        } // Можно передать данные в диалоговое окно
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.getProjectFolders();
+        }
+        console.log(`Папка ${result.name} была перемещена !`)
+      });
+    }
+
+    if (!isParentFolder) {
+      const dialogRef = this.dialog.open(MoveAndCopyDialogComponent, {
+
+
+        width: '500px',
+        height: '500px',
+        maxWidth: '500px',
+        maxHeight: '500px',
+        data: {
+          folderId: folderId,
+          targetFolderId: targetFolderId,
+          folderName: folderName,
+          targetFolderName: targetFolderName,
+          type: 'FOLDER',
+          onlyCopy: false
+        } // Можно передать данные в диалоговое окно
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.getProjectFolders();
+        }
+        console.log(`Папка ${result.name} была перемещена !`)
+      });
+    }
+  }
+
+  openMoveTestCaseDialog(testCaseId: number, testCaseName: string, targetFolderId: number, targetFolderName: string) {
 
     const dialogRef = this.dialog.open(MoveAndCopyDialogComponent, {
 
@@ -516,17 +573,21 @@ export class TreeComponent implements OnInit, AfterViewInit {
       maxWidth: '500px',
       maxHeight: '500px',
       data: {
-        folderId: folderId,
+        testCaseId: testCaseId,
+        testCaseName: testCaseName,
         targetFolderId: targetFolderId,
-        folderName: folderName,
         targetFolderName: targetFolderName,
-        type: 'FOLDER'
+        type: 'TESTCASE'
 
       } // Можно передать данные в диалоговое окно
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Папка ${result.name} была перемещена !`)
+    }, (error) => {
+      console.error("Ошибка при перемещении папки", error);
+    }, () => {
+      this.getProjectFolders();
     });
   }
 

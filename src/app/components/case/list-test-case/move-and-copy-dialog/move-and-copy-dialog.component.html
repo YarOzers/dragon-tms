@@ -1,14 +1,29 @@
+<mat-dialog-content>
+  <div *ngIf="data.type === 'FOLDER'">
+    <div *ngIf="!data.onlyCopy">
+      <h3>Выберите действие с папкой {{ this.data.folderName }}.</h3>
+      <div>Папка будет скопирована или перемещена в папку {{ this.data.targetFolderName }}.</div>
+    </div>
+    <div *ngIf="data.onlyCopy">
+      <h3>Подтвердите копирование папки {{ this.data.folderName }}</h3>
+      <div>в папку {{ this.data.targetFolderName }}?</div>
+    </div>
 
-  <mat-dialog-content>
-<div *ngIf="data.type === 'FOLDER'">
-  <h3>Что вы хотите сделать с папкой {{this.data.folderName}}?</h3>
-  <div>Целевая папка {{this.data.targetFolderName}}</div>
-</div>
+  </div>
 
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-button>Копировать</button>
-    <button mat-button (click)="moveFolder()">Переместить</button>
-    <button mat-button>Отмена</button>
-  </mat-dialog-actions>
+  <div *ngIf="data.type === 'TESTCASE'">
+    <h3>Что вы хотите сделать с тест-кейсом {{ this.data.testCaseName }}?</h3>
+    <div>Целевая папка {{ this.data.targetFolderName }}</div>
+  </div>
+
+
+
+
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="copy()">Копировать</button>
+  <button *ngIf="!data.onlyCopy" mat-button (click)="move()">Переместить</button>
+  <button mat-button (click)="closeMatDialog()">Отмена</button>
+</mat-dialog-actions>
+
 
