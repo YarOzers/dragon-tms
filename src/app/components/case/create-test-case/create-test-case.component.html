@@ -10,7 +10,8 @@
         <div *ngIf="new" fxFlex="6">
           <span fxFlex="6"></span>
         </div>
-        <input type="text" fxFlex="91" [(ngModel)]="name" class="test-case-name" placeholder="введите название тест кейса">
+        <input type="text" fxFlex="91" [(ngModel)]="name" class="test-case-name" placeholder="введите название тест кейса"
+        (change)="onChange()">
       </div>
     </div>
     <div>
@@ -19,7 +20,7 @@
           <form>
             <mat-form-field>
               <mat-label>Вид тестирования</mat-label>
-              <mat-select [(ngModel)]="data.testCaseType" name="type">
+              <mat-select [(ngModel)]="data.testCaseType" name="type" (change)="onChange()">
                 @for (type of typesOfTests; track type) {
                   <mat-option [value]="type.value">{{ type.viewValue }}</mat-option>
                 }
@@ -27,7 +28,7 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Приоритет</mat-label>
-              <mat-select [(ngModel)]="data.priority" name="priority">
+              <mat-select [(ngModel)]="data.priority" name="priority" (change)="onChange()">
                 @for (priority of typesOfPriority; track priority) {
                   <mat-option [value]="priority.value">{{ priority.viewValue }}</mat-option>
                 }
@@ -35,7 +36,7 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Признак автоматизации</mat-label>
-              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag">
+              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag" (change)="onChange()">
                 @for (auto of automationFlags; track auto) {
                   <mat-option [value]="auto.value">{{ auto.viewValue }}</mat-option>
                 }
@@ -43,11 +44,11 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Время выполнения</mat-label>
-              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time">
+              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time" (change)="onChange()">
             </mat-form-field>
             <mat-form-field>
               <mat-label>Готовность</mat-label>
-              <mat-select [(ngModel)]="data.status" name="status">
+              <mat-select [(ngModel)]="data.status" name="status" (change)="onChange()">
                 @for (status of statuses; track status) {
                   <mat-option [value]="status.value">{{ status.viewValue }}</mat-option>
                 }
@@ -143,10 +144,8 @@
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, expectedResultEditor)"
                              (paste)="autoResize($event, expectedResultEditor)"
-                             (focusin)="autoResize($event, expectedResultEditor)"
-                             (resize)="autoResize($event, expectedResultEditor)"
-                             (mouseup)="autoResize($event, expectedResultEditor)"
                              (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
+                             (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -162,10 +161,8 @@
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, actionEditor)"
                              (paste)="autoResize($event, actionEditor)"
-                             (focusin)="autoResize($event, actionEditor)"
-                             (resize)="autoResize($event, actionEditor)"
-                             (mouseup)="autoResize($event, actionEditor)"
                              (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
+                             (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -215,6 +212,7 @@
                              (input)="autoResize($event, expectedResultEditor)"
                              (paste)="autoResize($event, expectedResultEditor)"
                              (blur)="updateEditorStepContent(actionEditor, i, 'action')"
+                             (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -231,6 +229,7 @@
                              (input)="autoResize($event, actionEditor)"
                              (paste)="autoResize($event, actionEditor)"
                              (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
+                             (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -282,6 +281,7 @@
                              (input)="autoResize($event, expectedResultEditor)"
                              (paste)="autoResize($event, expectedResultEditor)"
                              (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
+                             (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -298,6 +298,7 @@
                              (input)="autoResize($event, actionEditor)"
                              (paste)="autoResize($event, actionEditor)"
                              (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
+                             (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -317,12 +318,6 @@
                 </div>
               </mat-expansion-panel>
             </mat-accordion>
-
-
-
-
-
-
           </div>
         </mat-sidenav-content>
       </mat-sidenav-container>

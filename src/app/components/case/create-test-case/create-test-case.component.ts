@@ -94,6 +94,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
 
   //////////////////////////////////////////////////////////////////
+  protected hasChange: boolean = false;
   elementWidth!: number;
   private resizeObserver!: ResizeObserver;
   progressBar: boolean = false;
@@ -168,12 +169,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected testCaseId = 0;
   private folderName = '';
   private folderId: number | null = null;
-  protected typeOfTest: string | null = null;
   protected type: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null = null;
   protected automationFlag: 'auto' | 'manual' | null = null;
   protected executionTime: string | null = '00:00';
   protected status: 'ready' | 'not ready' | 'requires updating' = 'not ready';
-  protected priority: 'Highest' | "High" | "Medium" | "Low" | null = "Low";
   protected new: boolean = true;
   private results: TestCaseResult[] | null | undefined = [];
   protected data: TestCaseData = {
@@ -246,13 +245,13 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     console.log('TESTCASEDATA::', this.data)
     if (testCase.data[index].stepItems) {
 
-      this.steps = testCase.data[index].stepItems;
+      this.steps = testCase.data[index].stepItems!;
     }
     if (testCase.data[index].preConditionItems) {
-      this.preConditions = testCase.data[index].preConditionItems;
+      this.preConditions = testCase.data[index].preConditionItems!;
     }
     if (testCase.data[index].postConditionItems) {
-      this.postConditions = testCase.data[index].postConditionItems;
+      this.postConditions = testCase.data[index].postConditionItems!;
     }
   }
 
@@ -398,6 +397,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
   }
 
+  onChange(){
+    this.hasChange = true;
+  }
   addPasteEventListenerToPreConditionEditors(editors: any[]) {
     console.log('addPasteEventListener')
     editors.forEach((editor, index) => {
@@ -667,21 +669,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  equalizeTwoEditorsHeight(editor1: HTMLElement, editor2: HTMLElement) {
-    requestAnimationFrame(() => {
-      // Сбрасываем высоту редакторов перед пересчетом
-      editor1.style.height = 'auto';
-      editor2.style.height = 'auto';
-
-      const maxHeight = Math.max(editor1.scrollHeight, editor2.scrollHeight);
-
-      // Если высота изменяется, то обновляем
-      if (editor1.scrollHeight !== maxHeight || editor2.scrollHeight !== maxHeight) {
-        editor1.style.height = `${maxHeight}px`;
-        editor2.style.height = `${maxHeight}px`;
-      }
-    });
-  }
 
   // Устанавливает активный редактор при его фокусировке
   setActiveEditor(event: FocusEvent) {
@@ -900,23 +887,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   // Обертка выделения в элемент с классом
-  wrapSelectionWithClass(className: string) {
-    const selection = window.getSelection();
-    if (!selection) return;
-
-    const range = selection.getRangeAt(0);
-    const span = document.createElement('span');
-    span.className = className;
-
-    // Извлечение содержимого и обертка его в span
-    span.appendChild(range.extractContents());
-    range.insertNode(span);
-
-    // Обновление выделения
-    selection.removeAllRanges();
-    range.selectNodeContents(span);
-    selection.addRange(range);
-  }
 
   // Удаление обертки элемента (убрать класс)
   unwrap(element: HTMLElement) {
@@ -1010,9 +980,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
   }
 
-  getHtmlContent(editor: HTMLElement): string {
-    return editor.innerHTML;
-  }
 
   setHtmlContent(editor: HTMLElement, content: string): void {
     if (editor) {
@@ -1119,38 +1086,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.activeEditor.focus();
   }
 
-  handleDrop(event: DragEvent) {
-    event.preventDefault();
-    const dataTransfer = event.dataTransfer;
-    if (dataTransfer && dataTransfer.files && dataTransfer.files[0]) {
-      const file = dataTransfer.files[0];
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        const img = document.createElement('img');
-        img.src = e.target.result;
-        img.style.maxWidth = '100%';
-        this.insertImageIntoEditor(img);
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-
-  insertImageIntoEditor(image: HTMLImageElement) {
-    const selection = window.getSelection();
-    if (selection) {
-      if (!selection.rangeCount) return;
-      const range = selection.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(image);
-      selection.collapseToEnd();
-    }
-
-  }
-
-  handleDragOver(event: DragEvent) {
-    event.preventDefault();
-  }
-
   triggerFileInput() {
     this.fileInput?.nativeElement.click(); // Триггер для открытия диалогового окна выбора файла
   }
@@ -1159,7 +1094,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
 
-      const file = input.files[0];
+      const file = input?.files[0];
       const reader = new FileReader();
 
       reader.onload = (e) => {
