@@ -23,12 +23,12 @@
           <button mat-icon-button [matMenuTriggerFor]="folderMenu" aria-label="Example icon-button with a menu">
   <mat-icon>more_vert</mat-icon>
 </button>
-<mat-menu #folderMenu="matMenu">
-  <button mat-menu-item (click)="openDialogToCreateTestCase(folder.id, folder.name)">
+<mat-menu #folderMenu="matMenu" >
+  <button mat-menu-item (click)="openDialogToCreateTestCase(folder.id, folder.name)" *ngIf="!folder.trashFolder">
     <mat-icon>playlist_add</mat-icon>
     <span>Добавить тест кейс</span>
   </button>
-  <button mat-menu-item (click)="openDialogToAddFolder(folder.id)">
+  <button mat-menu-item (click)="openDialogToAddFolder(folder.id)" *ngIf="!folder.trashFolder">
     <mat-icon>add</mat-icon>
     <span>Добавить папку</span>
   </button>
@@ -36,12 +36,13 @@
           (click)="openDialogToDeleteFolder(folder.id, folder.name)"
           [disabled]="folder.id === 0">
     <mat-icon>delete_outline</mat-icon>
-    <span>Удалить папку</span>
+    <span *ngIf="!folder.trashFolder">Удалить папку</span>
+    <span *ngIf="folder.trashFolder">Очистить корзину</span>
   </button>
-  <button mat-menu-item>
-    <mat-icon>change_history</mat-icon>
-    <span (click)="openDialogToAddFolderInTestPlan(folder.id, folder.name)">Добавить в тест план</span>
-  </button>
+<!--  <button mat-menu-item *ngIf="!folder.trashFolder">-->
+<!--    <mat-icon>change_history</mat-icon>-->
+<!--    <span (click)="openDialogToAddFolderInTestPlan(folder.id, folder.name)">Добавить в тест план</span>-->
+<!--  </button>-->
 </mat-menu>
         </span>
         </div>

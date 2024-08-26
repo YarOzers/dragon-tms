@@ -254,42 +254,42 @@ export class TreeComponent implements OnInit, AfterViewInit {
     console.log("44444444")
     this.openMoveFolderDialog(currentFolderId, targetFolderId, event.item.data.name, targetFolderName);
 
-    let sourceFolder: Folder | undefined;
-    let targetFolder: Folder | undefined;
-
-    const findFolders = (folders: Folder[] | null, parentFolder: Folder | null = null) => {
-      for (let folder of folders ?? []) {
-        if (folder.id === currentFolderId) {
-          sourceFolder = folder;
-          if (parentFolder) {
-            if (parentFolder.childFolders) {
-              parentFolder.childFolders = parentFolder.childFolders.filter(f => f.id !== currentFolderId);
-            }
-          } else {
-            if (this.TEST_CASE_DATA) {
-              this.TEST_CASE_DATA = this.TEST_CASE_DATA.filter(f => f.id !== currentFolderId);
-            }
-          }
-        }
-        if (folder.id === targetFolderId) {
-          targetFolder = folder;
-        }
-        if (folder.childFolders) {
-          findFolders(folder.childFolders, folder);
-
-        }
-      }
-    };
-
-    findFolders(this.TEST_CASE_DATA);
-
-    if (sourceFolder && targetFolder) {
-      if (!targetFolder.childFolders) {
-        targetFolder.childFolders = [];
-      }
-      targetFolder.childFolders.push(sourceFolder);
-
-    }
+    // let sourceFolder: Folder | undefined;
+    // let targetFolder: Folder | undefined;
+    //
+    // const findFolders = (folders: Folder[] | null, parentFolder: Folder | null = null) => {
+    //   for (let folder of folders ?? []) {
+    //     if (folder.id === currentFolderId) {
+    //       sourceFolder = folder;
+    //       if (parentFolder) {
+    //         if (parentFolder.childFolders) {
+    //           parentFolder.childFolders = parentFolder.childFolders.filter(f => f.id !== currentFolderId);
+    //         }
+    //       } else {
+    //         if (this.TEST_CASE_DATA) {
+    //           this.TEST_CASE_DATA = this.TEST_CASE_DATA.filter(f => f.id !== currentFolderId);
+    //         }
+    //       }
+    //     }
+    //     if (folder.id === targetFolderId) {
+    //       targetFolder = folder;
+    //     }
+    //     if (folder.childFolders) {
+    //       findFolders(folder.childFolders, folder);
+    //
+    //     }
+    //   }
+    // };
+    //
+    // findFolders(this.TEST_CASE_DATA);
+    //
+    // if (sourceFolder && targetFolder) {
+    //   if (!targetFolder.childFolders) {
+    //     targetFolder.childFolders = [];
+    //   }
+    //   targetFolder.childFolders.push(sourceFolder);
+    //
+    // }
   }
 
   toggleFolder(folder: Folder, event: MouseEvent) {
@@ -517,10 +517,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
       const dialogRef = this.dialog.open(MoveAndCopyDialogComponent, {
 
 
-        width: '500px',
-        height: '500px',
-        maxWidth: '500px',
-        maxHeight: '500px',
+        width: 'auto',
+
         data: {
           folderId: folderId,
           targetFolderId: targetFolderId,
@@ -534,7 +532,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
         if (result) {
           this.getProjectFolders();
         }
-        console.log(`Папка ${result.name} была перемещена !`)
+        if(result.name){
+          console.log(`Папка ${result.name} была перемещена !`)
+        }
       });
     }
 
@@ -542,10 +542,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
       const dialogRef = this.dialog.open(MoveAndCopyDialogComponent, {
 
 
-        width: '500px',
-        height: '500px',
-        maxWidth: '500px',
-        maxHeight: '500px',
+        width: 'auto',
+
         data: {
           folderId: folderId,
           targetFolderId: targetFolderId,
@@ -569,10 +567,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(MoveAndCopyDialogComponent, {
 
 
-      width: '500px',
-      height: '500px',
-      maxWidth: '500px',
-      maxHeight: '500px',
+      width: 'auto',
+
       data: {
         testCaseId: testCaseId,
         testCaseName: testCaseName,
@@ -584,7 +580,9 @@ export class TreeComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Папка ${result.name} была перемещена !`)
+      if(result){
+        console.log(`Папка ${result.name} была перемещена !`)
+      }
     }, (error) => {
       console.error("Ошибка при перемещении папки", error);
     }, () => {

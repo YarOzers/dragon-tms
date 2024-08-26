@@ -9,6 +9,7 @@ export interface Folder {
   expanded?: boolean;
   type: 'FOLDER' | any;
   selected? : boolean | null;
+  trashFolder?: boolean;
 }
 export interface FolderDTO {
   name: string;
