@@ -26,10 +26,10 @@ export interface TestCaseData {
   executionTime: string | null;
   expectedExecutionTime: string | null;
   name: string;
-  preConditionItems: TestCasePreCondition[] | null; //+
-  postConditionItems: TestCasePostCondition[] | null; //+
+  preConditions: TestCasePreCondition[] | null; //+
+  postConditions: TestCasePostCondition[] | null; //+
   priority: 'Highest' | 'High' | 'Medium' | 'Low' | 'HIGHEST' | 'HIGH'| 'MEDIUM' | 'LOW' | null | any;
-  stepItems: TestCaseStep[] | null; //*
+  steps: TestCaseStep[] | null; //*
   testCaseType: 'functional' | 'system' | 'performance' | 'regression' | 'unit' | 'security' | 'localization' | 'usability' | null | number| 'FUNCTIONAL' | 'SYSTEM' | 'PERFORMANCE' | 'REGRESSION' | 'UNIT' | 'SECURITY' | 'LOCALIZATION' | 'USABILITY' | any;
   version: number;
   status: 'ready' | 'not ready' | 'requires updating' | 'READY' | 'NOT_READY' | 'REQUIRES UPDATING' | any

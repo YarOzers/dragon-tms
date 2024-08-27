@@ -74,11 +74,13 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
           this.dataSource.data = this.projectTableData;
           this.isLoading = false;
         }
+        this.isLoading = false;
 
       }, error: (err) => {
         console.log("Ошибка при загрузке проектов: ", err);
         this.isLoading = false;
       }, complete() {
+
       }
     })
 

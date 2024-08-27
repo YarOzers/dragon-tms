@@ -144,9 +144,9 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
     executionTime: null,
     expectedExecutionTime: this.executionTime,
     name: this.name,
-    preConditionItems: this.preConditions,
-    stepItems: this.steps,
-    postConditionItems: this.postConditions,
+    preConditions: this.preConditions,
+    steps: this.steps,
+    postConditions: this.postConditions,
     priority: null,
     testCaseType: this.type,
     version: 1

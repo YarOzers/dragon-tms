@@ -36,7 +36,8 @@ import {RouterParamsService} from "../../../services/router-params.service";
 import {TestCaseService} from "../../../services/test-case.service";
 import {ImageDialogComponent} from "./image-dialog/image-dialog.component";
 import {
-  MatAccordion, MatExpansionModule,
+  MatAccordion,
+  MatExpansionModule,
   MatExpansionPanel,
   MatExpansionPanelDescription,
   MatExpansionPanelTitle
@@ -183,9 +184,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     executionTime: null,
     expectedExecutionTime: this.executionTime,
     name: this.name,
-    preConditionItems: this.preConditions,
-    stepItems: this.steps,
-    postConditionItems: this.postConditions,
+    preConditions: this.preConditions,
+    steps: this.steps,
+    postConditions: this.postConditions,
     priority: null,
     testCaseType: null,
     version: 1
@@ -229,6 +230,45 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.folderId = this.dataDialog.folderId;
     this.folderName = this.dataDialog.folderName;
     console.log('this.new:', this.new);
+
+    if (this.new) {
+      this.progressBar = false;
+    }
+    if (!this.new) {
+      this.testCaseService.getTestCase(+this.dataDialog.testCaseId).subscribe({
+          next: (testCase) => {
+            console.log('testCase in setFields::: ', testCase)
+            if (testCase) {
+              this.initTestCase = testCase;
+              const index = testCase.data.length - 1;
+              this.preConditions = testCase.data[index].preConditions!;
+              this.steps = testCase.data[index].steps!;
+              this.postConditions = testCase.data[index].postConditions!;
+              if (testCase) {
+                console.log('initTestCase: : ', this.initTestCase);
+                this.setFields(this.initTestCase);
+                this.progressBar = false;
+              }
+            }
+          }, error: (err) => {
+            console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
+          }, complete: (() => {
+            this.initEditors();
+
+          })
+        }
+      )
+    }
+
+    if (this.new) {
+
+      this.projectService.getAllProjectTestCases(this.dataDialog.projectId).subscribe({
+        next: (testCases) => {
+
+        }
+      })
+      this.initEditors();
+    }
   }
 
   setFields(testCase: TestCase) {
@@ -243,55 +283,20 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.results = testCase.results;
     this.data = testCase.data[index];
     console.log('TESTCASEDATA::', this.data)
-    if (testCase.data[index].stepItems) {
+    if (testCase.data[index].steps) {
 
-      this.steps = testCase.data[index].stepItems!;
+      this.steps = testCase.data[index].steps!;
     }
-    if (testCase.data[index].preConditionItems) {
-      this.preConditions = testCase.data[index].preConditionItems!;
+    if (testCase.data[index].preConditions) {
+      this.preConditions = testCase.data[index].preConditions!;
     }
-    if (testCase.data[index].postConditionItems) {
-      this.postConditions = testCase.data[index].postConditionItems!;
+    if (testCase.data[index].postConditions) {
+      this.postConditions = testCase.data[index].postConditions!;
     }
   }
 
   ngAfterViewInit() {
-    if(this.new){
-      this.progressBar = false;
-    }
-    if (!this.new) {
-      this.testCaseService.getTestCase(+this.dataDialog.testCaseId).subscribe({
-          next: (testCase) => {
-            console.log('testCase in setFields::: ', testCase)
-            if (testCase) {
-              this.initTestCase = testCase;
-              if (testCase) {
-                console.log('initTestCase: : ', this.initTestCase);
-                this.setFields(this.initTestCase);
-                this.progressBar=false;
-              }
-            }
-          }, error: (err) => {
-            console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
-          },complete:(()=>{
 
-
-          this.initEditors();
-
-        })
-        }
-      )
-    }
-
-    if (this.new) {
-
-      this.projectService.getAllProjectTestCases(this.dataDialog.projectId).subscribe({
-        next: (testCases) => {
-
-        }
-      })
-      this.initEditors();
-    }
 
 
   }
@@ -397,9 +402,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
   }
 
-  onChange(){
+  onChange() {
     this.hasChange = true;
   }
+
   addPasteEventListenerToPreConditionEditors(editors: any[]) {
     console.log('addPasteEventListener')
     editors.forEach((editor, index) => {
@@ -547,7 +553,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   autoResize(event: Event, secondEditor: HTMLElement) {
 
 
-
     const target = event.target as HTMLElement;
     // Проверяем, если клик был по изображению
     if (target.tagName.toLowerCase() === 'img') {
@@ -594,7 +599,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       }
     });
   }
-
 
 
   selectAllPreconditions(checked: boolean) {
@@ -1167,10 +1171,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
 
-
   onImageClick(imageSrc: string): void {
     this.dialog.open(ImageDialogComponent, {
-      data: { imageSrc },
+      data: {imageSrc},
       panelClass: 'full-screen-dialog'
     });
   }
@@ -1237,12 +1240,50 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       this.testCase.data.push(this.data);
       this.testCase.automationFlag = this.data.automationFlag;
       this.testCase.id = null;
-    }
-    this.testCase.name = this.name;
-    this.testCase.lastDataIndex = this.testCase.data.length - 1;
-    console.log('TEstCASE in SAVE::', this.testCase);
-    this.dialogRef.close(this.testCase);
 
+      this.testCase.name = this.name;
+      this.testCase.lastDataIndex = this.testCase.data.length - 1;
+      console.log('TEstCASE in SAVE::', this.testCase);
+      this.testCaseService.addTestCaseToFolder(this.dataDialog.folderId, this.testCase).subscribe(testCase => {
+        if (testCase) {
+          this.dialogRef.close(testCase);
+        }
+      }, (error) => {
+        console.error(error)
+      }, () => {
+
+      })
+      // this.dialogRef.close(this.testCase);
+    }
+
+    if (!this.new && this.hasChange) {
+      this.testCase.name = this.name;
+      this.testCase.lastDataIndex = this.testCase.data.length - 1;
+      if (this.data?.steps) {
+        this.data.steps[0].id = undefined;
+      }
+      if (this.data?.preConditions) {
+        this.data.preConditions[0].id = undefined;
+      }
+      if (this.data?.postConditions) {
+        this.data.postConditions[0].id = undefined;
+      }
+      if(this.data?.id){
+        this.data.id = undefined;
+      }
+      console.log('TEstCASE in SAVE::', this.testCase);
+      console.log("update testCase, data::", this.data)
+      console.log("this.testCaseId::", this.testCaseId)
+      this.testCaseService.updateTestCase(this.testCaseId, this.data).subscribe(testCase => {
+        if (testCase) {
+          this.dialogRef.close()
+        }
+      }, (error) => {
+        console.error(error)
+      }, () => {
+
+      })
+    }
   }
 
 
@@ -1251,5 +1292,12 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   showChange() {
     console.log(this.hasChange);
+  }
+
+  showPreConditions() {
+    console.log(this.preConditions)
+    console.log(this.steps)
+    console.log(this.postConditions)
+    console.log('new::',this.new)
   }
 }

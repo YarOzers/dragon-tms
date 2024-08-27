@@ -181,9 +181,9 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     executionTime: null,
     expectedExecutionTime: this.timeSpent,
     name: this.name,
-    preConditionItems: this.preConditions,
-    stepItems: this.steps,
-    postConditionItems: this.postConditions,
+    preConditions: this.preConditions,
+    steps: this.steps,
+    postConditions: this.postConditions,
     priority: null,
     testCaseType: this.type,
     version: 1
@@ -232,7 +232,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
     const index = testCase.data.length - 1;
     console.log('index: ', index);
-    console.log('STEP_ITEMS: ', testCase.data[index].stepItems)
+    console.log('STEP_ITEMS: ', testCase.data[index].steps)
     if(testCase.id){
       this.testCaseId = testCase.id;
     }
@@ -243,18 +243,18 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     this.new = false;
     this.results = testCase.results;
     this.data = testCase.data[index];
-    console.log('stepItems: ', testCase.data[index].stepItems)
-    if (testCase.data[index].stepItems) {
+    console.log('stepItems: ', testCase.data[index].steps)
+    if (testCase.data[index].steps) {
 
-      this.steps = testCase.data[index].stepItems;
+      this.steps = testCase.data[index].steps;
     }
-    if (testCase.data[index].preConditionItems) {
-      this.preConditions = testCase.data[index].preConditionItems;
+    if (testCase.data[index].preConditions) {
+      this.preConditions = testCase.data[index].preConditions;
     }
-    if (testCase.data[index].postConditionItems) {
-      this.postConditions = testCase.data[index].postConditionItems;
+    if (testCase.data[index].postConditions) {
+      this.postConditions = testCase.data[index].postConditions;
     }
-    console.log('preConditions:::::::::', testCase.data[index].preConditionItems);
+    console.log('preConditions:::::::::', testCase.data[index].preConditions);
   }
 
   ngAfterViewInit() {

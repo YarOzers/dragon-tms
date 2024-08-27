@@ -444,10 +444,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(testCase => {
       if (testCase !== undefined && testCase !== '') {
-        testCase.data.folderId = folderId;
-        testCase.data.folderName = folderName;
         console.log('RESULT from openDialogToCreateTestCase: ', testCase);
-        this.testCaseService.addTestCaseToFolder(folderId, testCase).subscribe(testCase => {
           this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
             if (folders) {
               console.log("FOLDERS:::", folders);
@@ -460,7 +457,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
             this.dataLoading = true;
             console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
           });
-        });
+
 
 
       } else {
