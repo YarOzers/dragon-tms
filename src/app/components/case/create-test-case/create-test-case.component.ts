@@ -1249,4 +1249,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected readonly prompt = prompt;
 
 
+  showChange() {
+    console.log(this.hasChange);
+  }
 }

@@ -20,7 +20,7 @@
           <form>
             <mat-form-field>
               <mat-label>Вид тестирования</mat-label>
-              <mat-select [(ngModel)]="data.testCaseType" name="type" (change)="onChange()">
+              <mat-select [(ngModel)]="data.testCaseType" name="type" (ngModelChange)="onChange()">
                 @for (type of typesOfTests; track type) {
                   <mat-option [value]="type.value">{{ type.viewValue }}</mat-option>
                 }
@@ -28,7 +28,7 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Приоритет</mat-label>
-              <mat-select [(ngModel)]="data.priority" name="priority" (change)="onChange()">
+              <mat-select [(ngModel)]="data.priority" name="priority" (ngModelChange)="onChange()">
                 @for (priority of typesOfPriority; track priority) {
                   <mat-option [value]="priority.value">{{ priority.viewValue }}</mat-option>
                 }
@@ -36,7 +36,7 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Признак автоматизации</mat-label>
-              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag" (change)="onChange()">
+              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag" (ngModelChange)="onChange()">
                 @for (auto of automationFlags; track auto) {
                   <mat-option [value]="auto.value">{{ auto.viewValue }}</mat-option>
                 }
@@ -44,11 +44,11 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Время выполнения</mat-label>
-              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time" (change)="onChange()">
+              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time" (ngModelChange)="onChange()">
             </mat-form-field>
             <mat-form-field>
               <mat-label>Готовность</mat-label>
-              <mat-select [(ngModel)]="data.status" name="status" (change)="onChange()">
+              <mat-select [(ngModel)]="data.status" name="status" (ngModelChange)="onChange()">
                 @for (status of statuses; track status) {
                   <mat-option [value]="status.value">{{ status.viewValue }}</mat-option>
                 }
@@ -325,7 +325,8 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem">Сохранить</button>
+  <button mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem" [disabled]="!hasChange">Сохранить</button>
+  <button mat-flat-button (click)="showChange()" class="save-btn" style="padding: 1rem">showChange</button>
   <button mat-button (click)="closeMatDialog()" class="close-btn" style="margin: 0 1rem 0 1rem; padding: 1rem">
     Отмена
   </button>
