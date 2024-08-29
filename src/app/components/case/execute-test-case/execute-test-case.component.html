@@ -1,4 +1,4 @@
-<!--<mat-progress-bar mode="indeterminate"></mat-progress-bar>-->
+<mat-progress-bar *ngIf="progressBar" mode="indeterminate"></mat-progress-bar>
 <div class="dialog-container">
   <div mat-dialog-content class="dialog-content">
 
@@ -89,10 +89,15 @@
                   <mat-checkbox [(ngModel)]="preCondition.selected" (change)="updateAllSelectedPreconditions()"
                                 fxFlex="6">
                   </mat-checkbox>
-                  <span fxFlex="3">{{ preCondition.index }}</span>
-                  <div fxFlex="91" class="steps-container" [ngClass]="{'border-top': i === 0}">
+                  <span fxFlex="5">{{ preCondition.index }}</span>
+                  <div fxFlex="89" class="steps-container" [ngClass]="{'border-top': i === 0}">
 
-                    <div class="editor" #actionEditor
+                    <div class="editor action" #actionEditor
+                         [ngClass]="{
+       'action-top-radius': i === 0,
+       'action-bottom-radius': i === preConditions.length - 1,
+       'action-test-case-editors': i > 0 && i < preConditions.length - 1
+     }"
                          contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -108,7 +113,12 @@
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
-                    <div class="editor" #expectedResultEditor
+                    <div class="editor expected" #expectedResultEditor
+                         [ngClass]="{
+       'expected-result-top-radius': i === 0,
+       'expected-result-bottom-radius': i === preConditions.length - 1,
+       'expected-result-test-case-editors': i > 0 && i < preConditions.length - 1
+     }"
                          contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -142,15 +152,15 @@
                 >
                   <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
                   </mat-checkbox>
-                  <span fxFlex="3">{{ step.index }}</span>
-                  <div class="steps-container" fxFlex="91"
-                       [ngClass]="{
-       'top-radius': i === 0,
-       'bottom-radius': i === steps.length - 1,
-       'test-case-editors': i > 0 && i < steps.length - 1
-     }"
+                  <span fxFlex="5">{{ step.index }}</span>
+                  <div class="steps-container" fxFlex="89"
                   >
-                    <div class="editor" #actionEditor
+                    <div class="editor action" #actionEditor
+                         [ngClass]="{
+       'action-top-radius': i === 0,
+       'action-bottom-radius': i === steps.length - 1,
+       'action-test-case-editors': i > 0 && i < steps.length - 1
+     }"
                          contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -162,7 +172,12 @@
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
-                    <div class="editor" #expectedResultEditor
+                    <div class="editor expected" #expectedResultEditor
+                         [ngClass]="{
+       'expected-result-top-radius': i === 0,
+       'expected-result-bottom-radius': i === steps.length - 1,
+       'expected-result-test-case-editors': i > 0 && i < steps.length - 1
+     }"
                          contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -191,9 +206,14 @@
                   <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
                                 fxFlex="6">
                   </mat-checkbox>
-                  <span fxFlex="3">{{ postCondition.index }}</span>
-                  <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
-                    <div class="editor" #actionEditor
+                  <span fxFlex="5">{{ postCondition.index }}</span>
+                  <div class="steps-container" fxFlex="89" [ngClass]="{'border-top': i === 0}">
+                    <div class="editor action" #actionEditor
+                         [ngClass]="{
+       'action-top-radius': i === 0,
+       'action-bottom-radius': i === postConditions.length - 1,
+       'action-test-case-editors': i > 0 && i < postConditions.length - 1
+     }"
                          contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"
@@ -205,7 +225,12 @@
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
-                    <div class="editor" #expectedResultEditor
+                    <div class="editor expected" #expectedResultEditor
+                         [ngClass]="{
+       'expected-result-top-radius': i === 0,
+       'expected-result-bottom-radius': i === postConditions.length - 1,
+       'expected-result-test-case-editors': i > 0 && i < postConditions.length - 1
+     }"
                          contenteditable="false"
                          fxFlex="50"
                          (focus)="setActiveEditor($event)"

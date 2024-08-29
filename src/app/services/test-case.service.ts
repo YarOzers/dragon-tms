@@ -29,8 +29,9 @@ export class TestCaseService {
     return this.http.post<TestCase>(`${this.apiUrl}/testcases/folder/${folderId}`,testCase)
   }
 
-  updateTestCase(testCaseId: number, testCaseDate: TestCaseData): Observable<TestCase>{
-    return this.http.put<TestCase>(`${this.apiUrl}/testcases/${testCaseId}`,testCaseDate);
+  updateTestCase(testCaseId: number, testCaseData: TestCaseData): Observable<TestCase>{
+    console.log("TEstCAseDATA::", )
+    return this.http.put<TestCase>(`${this.apiUrl}/testcases/${testCaseId}`,testCaseData);
   }
 
   // moveTestCase(testCaseId: number, targetFolderId: number):Observable<TestCase>{

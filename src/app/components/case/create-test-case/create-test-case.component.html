@@ -10,8 +10,9 @@
         <div *ngIf="new" fxFlex="6">
           <span fxFlex="6"></span>
         </div>
-        <input type="text" fxFlex="91" [(ngModel)]="name" class="test-case-name" placeholder="введите название тест кейса"
-        (change)="onChange()">
+        <input type="text" fxFlex="91" [(ngModel)]="name" class="test-case-name"
+               placeholder="введите название тест кейса"
+               (ngModelChange)="onChange()">
       </div>
     </div>
     <div>
@@ -44,7 +45,8 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Время выполнения</mat-label>
-              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time" (ngModelChange)="onChange()">
+              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time"
+                     (ngModelChange)="onChange()">
             </mat-form-field>
             <mat-form-field>
               <mat-label>Готовность</mat-label>
@@ -132,7 +134,7 @@
                                     fxFlex="6">
                       </mat-checkbox>
                       <span fxFlex="5">{{ preCondition.index }}</span>
-                      <div fxFlex="89" class="steps-container" >
+                      <div fxFlex="89" class="steps-container">
                         <div class="editor action" #actionEditor
                              [ngClass]="{
        'action-top-radius': i === 0,
@@ -142,8 +144,8 @@
                              contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
-                             (input)="autoResize($event, expectedResultEditor)"
-                             (paste)="autoResize($event, expectedResultEditor)"
+                             (input)="autoResize($event, expectedResultEditor); onChange()"
+                             (paste)="autoResize($event, expectedResultEditor); onChange()"
                              (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
                              (change)="onChange()"
                         >
@@ -159,8 +161,8 @@
                              contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
-                             (input)="autoResize($event, actionEditor)"
-                             (paste)="autoResize($event, actionEditor)"
+                             (input)="autoResize($event, actionEditor); onChange()"
+                             (paste)="autoResize($event, actionEditor); onChange()"
                              (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
                              (change)="onChange()"
                         >
@@ -170,10 +172,13 @@
                       </div>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="end center" class="button-container">
-                      <button mat-icon-button (click)="addPreCondition()" class="center-icon-button">
+                      <button mat-icon-button (click)="addPreCondition(); onChange()" class="center-icon-button">
                         <mat-icon>add</mat-icon>
                       </button>
-                      <button mat-icon-button (click)="deleteSelectedPreconditions()" class="center-icon-button">
+                      <button mat-icon-button (click)="deleteSelectedPreconditions();
+                       onChange()"
+                              [disabled]="!deletePreconditionsDisabled"
+                              class="center-icon-button">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </div>
@@ -198,9 +203,9 @@
                     <div *ngFor="let step of steps; let i = index" class="editor-item" fxLayout="row">
                       <mat-checkbox [(ngModel)]="step.selected" (change)="updateAllSelectedSteps()" fxFlex="6">
                       </mat-checkbox>
-                      <span fxFlex="3">{{ step.index }}</span>
-                      <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
-                        <div class="editor" #actionEditor
+                      <span fxFlex="5">{{ step.index }}</span>
+                      <div class="steps-container" fxFlex="89" [ngClass]="{'border-top': i === 0}">
+                        <div class="editor action" #actionEditor
                              [ngClass]="{
        'action-top-radius': i === 0,
        'action-bottom-radius': i === steps.length - 1,
@@ -209,15 +214,15 @@
                              contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
-                             (input)="autoResize($event, expectedResultEditor)"
-                             (paste)="autoResize($event, expectedResultEditor)"
+                             (input)="autoResize($event, expectedResultEditor); onChange()"
+                             (paste)="autoResize($event, expectedResultEditor); onChange()"
                              (blur)="updateEditorStepContent(actionEditor, i, 'action')"
                              (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">
-                        <div class="editor" #expectedResultEditor
+                        <div class="editor expectedr" #expectedResultEditor
                              [ngClass]="{
        'expected-result-top-radius': i === 0,
        'expected-result-bottom-radius': i === steps.length - 1,
@@ -226,10 +231,9 @@
                              contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
-                             (input)="autoResize($event, actionEditor)"
-                             (paste)="autoResize($event, actionEditor)"
+                             (input)="autoResize($event, actionEditor); onChange()"
+                             (paste)="autoResize($event, actionEditor); onChange()"
                              (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
-                             (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -237,10 +241,13 @@
                       </div>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="end center">
-                      <button mat-icon-button (click)="addStep()" class="center-icon-button">
+                      <button mat-icon-button (click)="addStep(); onChange()" class="center-icon-button">
                         <mat-icon>add</mat-icon>
                       </button>
-                      <button mat-icon-button (click)="deleteSelectedSteps()" class="center-icon-button">
+                      <button mat-icon-button (click)="deleteSelectedSteps();
+                       onChange()"
+                              [disabled]="!deleteStepsDisabled"
+                              class="center-icon-button">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </div>
@@ -267,9 +274,9 @@
                       <mat-checkbox [(ngModel)]="postCondition.selected" (change)="updateAllSelectedPostConditions()"
                                     fxFlex="6">
                       </mat-checkbox>
-                      <span fxFlex="3">{{ postCondition.index }}</span>
-                      <div class="steps-container" fxFlex="91" [ngClass]="{'border-top': i === 0}">
-                        <div class="editor" #actionEditor
+                      <span fxFlex="5">{{ postCondition.index }}</span>
+                      <div class="steps-container" fxFlex="89" [ngClass]="{'border-top': i === 0}">
+                        <div class="editor action" #actionEditor
                              [ngClass]="{
        'action-top-radius': i === 0,
        'action-bottom-radius': i === postConditions.length - 1,
@@ -278,15 +285,15 @@
                              contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
-                             (input)="autoResize($event, expectedResultEditor)"
-                             (paste)="autoResize($event, expectedResultEditor)"
+                             (input)="autoResize($event, expectedResultEditor); onChange()"
+                             (paste)="autoResize($event, expectedResultEditor); onChange()"
                              (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
                              (change)="onChange()"
                         >
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">
-                        <div class="editor" #expectedResultEditor
+                        <div class="editor expected" #expectedResultEditor
                              [ngClass]="{
        'expected-result-top-radius': i === 0,
        'expected-result-bottom-radius': i === postConditions.length - 1,
@@ -295,8 +302,8 @@
                              contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
-                             (input)="autoResize($event, actionEditor)"
-                             (paste)="autoResize($event, actionEditor)"
+                             (input)="autoResize($event, actionEditor); onChange()"
+                             (paste)="autoResize($event, actionEditor); onChange()"
                              (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
                              (change)="onChange()"
                         >
@@ -307,10 +314,13 @@
                       </div>
                     </div>
                     <div fxLayout="row" fxLayoutAlign="end center">
-                      <button mat-icon-button (click)="addPostCondition()" class="center-icon-button">
+                      <button mat-icon-button (click)="addPostCondition(); onChange()" class="center-icon-button">
                         <mat-icon>add</mat-icon>
                       </button>
-                      <button mat-icon-button (click)="deleteSelectedPostConditions()" class="center-icon-button">
+                      <button mat-icon-button (click)="deleteSelectedPostConditions();
+                       onChange()"
+                              [disabled]="!deletePostConditionsDisabled"
+                              class="center-icon-button">
                         <mat-icon>delete</mat-icon>
                       </button>
                     </div>
@@ -325,7 +335,8 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem" [disabled]="!hasChange">Сохранить</button>
+  <button mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem" [disabled]="!hasChange">Сохранить
+  </button>
   <button mat-flat-button (click)="showChange()" class="save-btn" style="padding: 1rem">showChange</button>
   <button mat-flat-button (click)="showPreConditions()" class="save-btn" style="padding: 1rem">showSteps</button>
   <button mat-button (click)="closeMatDialog()" class="close-btn" style="margin: 0 1rem 0 1rem; padding: 1rem">

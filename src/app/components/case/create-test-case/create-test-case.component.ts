@@ -205,6 +205,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
   private initTestCase: any = null;
   private projectId: number | null = null;
+  protected deletePreconditionsDisabled: boolean = false;
+  protected deletePostConditionsDisabled: boolean = false;
+  protected deleteStepsDisabled: boolean = false;
 
 
   constructor(
@@ -221,9 +224,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   ngOnInit() {
     this.routerParamsService.projectId$.subscribe(projectId => {
       this.projectId = projectId;
-      this.projectService.getAllProjectTestCases(Number(this.projectId)).subscribe(testCases => {
-        this.testCase.id = testCases.length + 1;
-      })
     });
 
     this.new = this.dataDialog.isNew;
@@ -259,16 +259,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
         }
       )
     }
-
-    if (this.new) {
-
-      this.projectService.getAllProjectTestCases(this.dataDialog.projectId).subscribe({
-        next: (testCases) => {
-
-        }
-      })
-      this.initEditors();
-    }
   }
 
   setFields(testCase: TestCase) {
@@ -296,7 +286,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   }
 
   ngAfterViewInit() {
-
 
 
   }
@@ -398,7 +387,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   ngOnDestroy() {
     // Отписка от наблюдателя при уничтожении компонента
     if (this.actionEditor) {
-      this.resizeObserver.unobserve(this.actionEditor.nativeElement);
+      if (this.resizeObserver) {
+        this.resizeObserver.unobserve(this.actionEditor.nativeElement);
+      }
     }
   }
 
@@ -542,12 +533,19 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   selectAllSteps(checked: boolean) {
     this.steps.forEach(step => step.selected = checked);
     this.allSelectedSteps = checked;
+    this.updateAllSelectedSteps();
   }
 
   updateAllSelectedSteps() {
     const totalSelected = this.steps.filter(step => step.selected).length;
     this.allSelectedSteps = totalSelected === this.steps.length;
     this.indeterminateSteps = totalSelected > 0 && totalSelected < this.steps.length;
+    if (totalSelected > 0) {
+      this.deleteStepsDisabled = true;
+    }
+    if (totalSelected===0){
+      this.deleteStepsDisabled = false;
+    }
   }
 
   autoResize(event: Event, secondEditor: HTMLElement) {
@@ -604,12 +602,20 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   selectAllPreconditions(checked: boolean) {
     this.preConditions.forEach(step => step.selected = checked);
     this.allSelectedPreConditions = checked;
+    this.updateAllSelectedPreconditions();
   }
 
   updateAllSelectedPreconditions() {
+    console.log('updateAllSelectedPreconditions')
     const totalSelected = this.preConditions.filter(step => step.selected).length;
     this.allSelectedPreConditions = totalSelected === this.preConditions.length;
     this.indeterminatePreCondition = totalSelected > 0 && totalSelected < this.preConditions.length;
+    if (totalSelected > 0) {
+      this.deletePreconditionsDisabled = true;
+    }
+    if (totalSelected===0){
+      this.deletePreconditionsDisabled = false;
+    }
   }
 
   deleteSelectedPreconditions() {
@@ -617,17 +623,25 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     this.reorderPreConditions();
     this.updateAllSelectedPreconditions();
     this.allSelectedPreConditions = false;
+    this.onChange();
   }
 
   selectAllPostConditions(checked: boolean) {
     this.postConditions.forEach(step => step.selected = checked);
     this.allSelectedPostConditions = checked;
+    this.updateAllSelectedPostConditions();
   }
 
   updateAllSelectedPostConditions() {
     const totalSelected = this.postConditions.filter(step => step.selected).length;
     this.allSelectedPostConditions = totalSelected === this.postConditions.length;
     this.indeterminatePostCondition = totalSelected > 0 && totalSelected < this.postConditions.length;
+    if (totalSelected > 0) {
+      this.deletePostConditionsDisabled = true;
+    }
+    if (totalSelected===0){
+      this.deletePostConditionsDisabled = false;
+    }
   }
 
   deleteSelectedPostConditions() {
@@ -1268,7 +1282,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       if (this.data?.postConditions) {
         this.data.postConditions[0].id = undefined;
       }
-      if(this.data?.id){
+      if (this.data?.id) {
         this.data.id = undefined;
       }
       console.log('TEstCASE in SAVE::', this.testCase);
@@ -1298,6 +1312,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     console.log(this.preConditions)
     console.log(this.steps)
     console.log(this.postConditions)
-    console.log('new::',this.new)
+    console.log('new::', this.new)
   }
 }

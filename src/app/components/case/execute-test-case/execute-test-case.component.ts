@@ -88,6 +88,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   elementWidth!: number;
   private resizeObserver!: ResizeObserver;
   isDisabled = true;
+  progressBar: boolean = false;
 
 
   // Массив редакторов, представляющий количество редакторов
@@ -216,24 +217,41 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   ngOnInit() {
-    //
-    // this.new = this.dataDialog.isNew;
-    // this.testCaseService.getTestCase(this.dataDialog.testCaseId).subscribe(testCase =>{
-    //   this.setFields(testCase);
-    // },(error)=>{
-    //   console.error("Oшибка загрузки тест-кейса ", error)
-    // },()=>{
-    //   this.initEditors();
-    // })
-    // console.log('this.new:', this.new);
-  }
+    if (this.new) {
+      this.progressBar = false;
+    }
+
+      this.testCaseService.getTestCase(+this.dataDialog.testCaseId).subscribe({
+          next: (testCase) => {
+            console.log('testCase in setFields::: ', testCase)
+            if (testCase) {
+              this.initTestCase = testCase;
+              const index = testCase.data.length - 1;
+              this.preConditions = testCase.data[index].preConditions!;
+              this.steps = testCase.data[index].steps!;
+              this.postConditions = testCase.data[index].postConditions!;
+              if (testCase) {
+                console.log('initTestCase: : ', this.initTestCase);
+                this.setFields(this.initTestCase);
+                this.progressBar = false;
+              }
+            }
+          }, error: (err) => {
+            console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
+          }, complete: (() => {
+            this.initEditors();
+
+          })
+        }
+      )
+    }
 
   setFields(testCase: TestCase) {
 
     const index = testCase.data.length - 1;
     console.log('index: ', index);
     console.log('STEP_ITEMS: ', testCase.data[index].steps)
-    if(testCase.id){
+    if (testCase.id) {
       this.testCaseId = testCase.id;
     }
     this.name = testCase.name;
@@ -246,46 +264,36 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     console.log('stepItems: ', testCase.data[index].steps)
     if (testCase.data[index].steps) {
 
-      this.steps = testCase.data[index].steps;
+      this.steps = testCase.data[index].steps!;
     }
     if (testCase.data[index].preConditions) {
-      this.preConditions = testCase.data[index].preConditions;
+      this.preConditions = testCase.data[index].preConditions!;
     }
     if (testCase.data[index].postConditions) {
-      this.postConditions = testCase.data[index].postConditions;
+      this.postConditions = testCase.data[index].postConditions!;
     }
     console.log('preConditions:::::::::', testCase.data[index].preConditions);
   }
 
   ngAfterViewInit() {
-      this.testCaseService.getTestCase(Number(this.dataDialog.testCaseId)).subscribe({
-          next: (testCase) => {
-            console.log('testCase in setFields::: ', testCase)
-            if (testCase) {
-              this.initTestCase = testCase;
-              if (testCase) {
-                console.log('initTestCase: : ', this.initTestCase);
-                this.setFields(this.initTestCase);
-                this.initEditors();
-              }
-            }
-          }, error: (err) => {
-            console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
-          }
-        }
-      )
-
-    if (this.new) {
-
-      this.projectService.getAllProjectTestCases(this.dataDialog.projectId).subscribe({
-        next: (testCases) => {
-
-        }
-      })
-      this.initEditors();
-    }
-
-
+    // this.testCaseService.getTestCase(Number(this.dataDialog.testCaseId)).subscribe({
+    //     next: (testCase) => {
+    //       console.log('testCase in setFields::: ', testCase)
+    //       if (testCase) {
+    //         this.initTestCase = testCase;
+    //         if (testCase) {
+    //           console.log('initTestCase: : ', this.initTestCase);
+    //           this.setFields(this.initTestCase);
+    //           this.initEditors();
+    //         }
+    //       }
+    //     }, error: (err) => {
+    //       console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
+    //     }, complete: (() => {
+    //       this.initEditors();
+    //     })
+    //   }
+    // )
   }
 
   initEditors() {
@@ -597,7 +605,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 //   Sidenav ===========================================================
   result = [
     {value: 'AWAITS', viewValue: 'awaits'},
-    {value: 'IN_PROCESS', viewValue:'in_process'},
+    {value: 'IN_PROCESS', viewValue: 'in_process'},
     {value: 'SUCCESSFULLY', viewValue: 'successfully'},
     {value: 'FAILED', viewValue: 'failed'},
     {value: 'BLOCKED', viewValue: 'blocked'}
@@ -1131,7 +1139,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
 
-      const file = input.files[0];
+      const file = input?.files[0];
       const reader = new FileReader();
 
       reader.onload = (e) => {
@@ -1259,7 +1267,7 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   save() {
-    if(this.timeSpent && this.result){
+    if (this.timeSpent && this.result) {
       const testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
       const testCaseResult: TestCaseResult = {
         user: this.user,
@@ -1270,7 +1278,6 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
       console.log("TEstCAseResult::", testCaseResult);
       this.dialogRef.close(testCaseResult);
     }
-
 
 
   }
