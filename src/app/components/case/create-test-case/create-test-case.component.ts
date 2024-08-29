@@ -42,6 +42,7 @@ import {
   MatExpansionPanelDescription,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
+import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 
 @Component({
   selector: 'app-create-test-case',
@@ -76,8 +77,10 @@ import {
     MatExpansionPanel,
     MatExpansionPanelTitle,
     MatExpansionPanelDescription,
-    MatExpansionModule
+    MatExpansionModule,
+    NgxMaskDirective
   ],
+  providers: [provideNgxMask()],
   templateUrl: './create-test-case.component.html',
   styleUrls: [
     './create-test-case.component.scss',

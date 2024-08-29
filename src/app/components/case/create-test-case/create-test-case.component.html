@@ -45,7 +45,7 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Время выполнения</mat-label>
-              <input matInput type="time" placeholder="Время выполнения" [(ngModel)]="data.executionTime" name="time"
+              <input matInput mask="Hh:m0:s0" placeholder="00:00:00" [(ngModel)]="data.executionTime" name="time"
                      (ngModelChange)="onChange()">
             </mat-form-field>
             <mat-form-field>
