@@ -1252,6 +1252,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     console.log('test-case in save: ', this.testCase);
     console.log('test-case data in save: ', this.data);
     if (this.new) {
+      this.data.name = this.name;
       this.testCase.folderId = this.folderId;
       this.testCase.folderName = this.folderName;
       this.testCase.data.push(this.data);
@@ -1274,6 +1275,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
 
     if (!this.new && this.hasChange) {
+      this.data.name = this.name;
       this.testCase.name = this.name;
       this.testCase.lastDataIndex = this.testCase.data.length - 1;
       if (this.data?.steps) {
