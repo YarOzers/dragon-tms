@@ -102,6 +102,9 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   elementWidth!: number;
   private resizeObserver!: ResizeObserver;
   progressBar: boolean = false;
+  protected versions: any[] = [];
+  protected version: any;
+  protected selectedVersion: any;
 
 
   // Массив редакторов, представляющий количество редакторов
@@ -211,6 +214,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected deletePreconditionsDisabled: boolean = false;
   protected deletePostConditionsDisabled: boolean = false;
   protected deleteStepsDisabled: boolean = false;
+  private testCaseData: TestCaseData[] = [];
 
 
   constructor(
@@ -240,19 +244,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     if (!this.new) {
       this.testCaseService.getTestCase(+this.dataDialog.testCaseId).subscribe({
           next: (testCase) => {
+            this.setVersionFromData(testCase);
+            this.selectedVersion = this.versions[this.versions.length -1].value;
             console.log('testCase in setFields::: ', testCase)
-            if (testCase) {
-              this.initTestCase = testCase;
-              const index = testCase.data.length - 1;
-              this.preConditions = testCase.data[index].preConditions!;
-              this.steps = testCase.data[index].steps!;
-              this.postConditions = testCase.data[index].postConditions!;
-              if (testCase) {
-                console.log('initTestCase: : ', this.initTestCase);
-                this.setFields(this.initTestCase);
-                this.progressBar = false;
-              }
-            }
+            this.setFieldsAndSteps(testCase);
           }, error: (err) => {
             console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
           }, complete: (() => {
@@ -261,6 +256,46 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
           })
         }
       )
+    }
+  }
+
+  setVersionFromData(testCase: TestCase) {
+    for (const dataItem of testCase.data) {
+      this.versions.push({value: `${dataItem.version}`, viewValue: `VERSION-${dataItem.version}`});
+    }
+  }
+
+  setFieldsAndSteps(testCase: TestCase) {
+    if (testCase) {
+      this.initTestCase = testCase;
+      this.testCaseData = testCase.data;
+      const index = testCase.data.length - 1;
+      this.preConditions = testCase.data[index].preConditions!;
+      this.steps = testCase.data[index].steps!;
+      this.postConditions = testCase.data[index].postConditions!;
+      if (testCase) {
+        console.log('initTestCase: : ', this.initTestCase);
+        this.setFields(this.initTestCase);
+        this.progressBar = false;
+      }
+    }
+  }
+
+  choseTestCaseVersion(version: number) {
+    const index = Number(version);
+    console.log('Index::', index);
+    if (index) {
+      this.preConditions = this.testCaseData[index - 1].preConditions!;
+      this.steps = this.testCaseData[index - 1].steps!;
+      this.postConditions = this.testCaseData[index - 1].postConditions!;
+      if (this.initTestCase) {
+        this.data = this.testCaseData[index - 1];
+        this.progressBar = false;
+        this.initEditors();
+      }
+      console.log(this.steps);
+      console.log(this.postConditions);
+      console.log(this.typesOfPriority)
     }
   }
 
@@ -546,7 +581,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     if (totalSelected > 0) {
       this.deleteStepsDisabled = true;
     }
-    if (totalSelected===0){
+    if (totalSelected === 0) {
       this.deleteStepsDisabled = false;
     }
   }
@@ -616,7 +651,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     if (totalSelected > 0) {
       this.deletePreconditionsDisabled = true;
     }
-    if (totalSelected===0){
+    if (totalSelected === 0) {
       this.deletePreconditionsDisabled = false;
     }
   }
@@ -642,7 +677,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     if (totalSelected > 0) {
       this.deletePostConditionsDisabled = true;
     }
-    if (totalSelected===0){
+    if (totalSelected === 0) {
       this.deletePostConditionsDisabled = false;
     }
   }
@@ -1309,8 +1344,11 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   protected readonly prompt = prompt;
 
 
+
   showChange() {
     console.log(this.hasChange);
+    console.log(this.versions);
+    console.log(this.version);
   }
 
   showPreConditions() {
@@ -1319,4 +1357,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     console.log(this.postConditions)
     console.log('new::', this.new)
   }
+
+
 }
