@@ -35,6 +35,7 @@ import {SelectionModel} from "@angular/cdk/collections";
 import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
 import {FlexModule} from "@angular/flex-layout";
+import {TestRunnerServiceService} from "../../../services/test-runner-service.service";
 
 
 @Component({
@@ -94,6 +95,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   protected projectName = '';
   private projectId = 0;
   dataIndex: any;
+  private testResults: any;
 
   constructor(
     private projectService: ProjectService,
@@ -101,7 +103,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private router: Router,
     private headerService: HeaderService,
-    private routerParamsService: RouterParamsService
+    private routerParamsService: RouterParamsService,
+    private testRunnerService: TestRunnerServiceService
   ) {
   }
 
@@ -136,6 +139,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       element.isRunning = false;
     }, 3000);
+
+
   }
 
   ngOnInit(): void {
@@ -209,7 +214,20 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   }
 
   runSelectedAutoTests() {
-    const selectedAutoTests = this.selection.selected.filter(test => test.type === 'AUTO');
+    console.log(this.selection);
+    const selectedAutoTests = this.selection.selected.filter(test => test.automationFlag === 'AUTO');
+    this.isLoading = true;
+    this.testRunnerService.runTests(selectedAutoTests).subscribe(
+      results => {
+        this.testResults = results;
+        this.isLoading = false;
+      },
+      error => {
+        console.error('Ошибка запуска тестов', error);
+        this.isLoading = false;
+      }
+    )
+    console.log(selectedAutoTests)
     selectedAutoTests.forEach(test => {
       this.runTestCase(test);
     });
