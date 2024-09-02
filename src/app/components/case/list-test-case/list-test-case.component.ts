@@ -135,11 +135,22 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
       event.stopPropagation();
     }
     element.isRunning = true;
-    // Симуляция выполнения
-    setTimeout(() => {
-      element.isRunning = false;
-    }, 3000);
+if (element.automationFlag === 'AUTO'){
 
+}
+    let ids: number[] = [];
+      ids.push(element.id)
+
+    this.testRunnerService.runTests(ids).subscribe(
+      results => {
+        this.testResults = results;
+        element.isRunning = false;
+      },
+      error => {
+        console.error('Ошибка запуска тестов', error);
+        this.isLoading = false;
+      }
+    )
 
   }
 
@@ -216,8 +227,14 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   runSelectedAutoTests() {
     console.log(this.selection);
     const selectedAutoTests = this.selection.selected.filter(test => test.automationFlag === 'AUTO');
+    console.log("SELSECTEDautotests:::", selectedAutoTests)
+    let ids: number[] = [];
+    for (const test of selectedAutoTests){
+      ids.push(test.id)
+    }
+
     this.isLoading = true;
-    this.testRunnerService.runTests(selectedAutoTests).subscribe(
+    this.testRunnerService.runTests(ids).subscribe(
       results => {
         this.testResults = results;
         this.isLoading = false;

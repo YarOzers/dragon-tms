@@ -12,6 +12,7 @@ export class TestRunnerServiceService {
   constructor(private http: HttpClient) { }
 
   runTests(testIds: number[]): Observable<any>{
-    return this.http.post(`${this.apiUrl}/run-tests`,{testIds});
+    console.log("TEstIDS::",testIds)
+    return this.http.post(`${this.apiUrl}/run-tests`,testIds);
   }
 }
