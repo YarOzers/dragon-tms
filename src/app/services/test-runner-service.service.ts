@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 
 @Injectable({
@@ -11,8 +11,11 @@ export class TestRunnerServiceService {
 
   constructor(private http: HttpClient) { }
 
-  runTests(testIds: number[]): Observable<any>{
+  runTests(testIds: number[], userId: number, testPlanId: number): Observable<any>{
     console.log("TEstIDS::",testIds)
-    return this.http.post(`${this.apiUrl}/run-tests`,testIds);
+   let params: HttpParams = new HttpParams()
+     .set("userId", userId)
+     .set("testPlanId", testPlanId);
+    return this.http.post(`${this.apiUrl}/run-tests`,testIds, {params: params});
   }
 }

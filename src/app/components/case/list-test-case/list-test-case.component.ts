@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
 import {TreeComponent} from "./tree/tree.component";
@@ -36,6 +36,8 @@ import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
 import {FlexModule} from "@angular/flex-layout";
 import {TestRunnerServiceService} from "../../../services/test-runner-service.service";
+import {WebSocketService} from "../../../services/web-socket.service";
+import {User} from "../../../models/user";
 
 
 @Component({
@@ -78,9 +80,16 @@ import {TestRunnerServiceService} from "../../../services/test-runner-service.se
   templateUrl: './list-test-case.component.html',
   styleUrl: './list-test-case.component.scss'
 })
-export class ListTestCaseComponent implements OnInit, AfterViewInit {
+export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
+  private user: User = {
+    id: 1,
+    role: 'ADMIN',
+    name: 'Ярослав Андреевич',
+    rights: 'SUPER'
+  }
   allColumns = ['select', 'run', 'id', 'name', 'type'];
   displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
+  testStatus: any;
   displayedColumnsSelection: { [key: string]: boolean } = {
     select: true,
     id: true,
@@ -96,6 +105,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
   private projectId = 0;
   dataIndex: any;
   private testResults: any;
+  private testPlanId: number = 1;
+  private userId: number = 1;
 
   constructor(
     private projectService: ProjectService,
@@ -104,7 +115,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit {
     private router: Router,
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService,
-    private testRunnerService: TestRunnerServiceService
+    private testRunnerService: TestRunnerServiceService,
+    private webSocketService: WebSocketService
   ) {
   }
 
@@ -141,7 +153,7 @@ if (element.automationFlag === 'AUTO'){
     let ids: number[] = [];
       ids.push(element.id)
 
-    this.testRunnerService.runTests(ids).subscribe(
+    this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
       results => {
         this.testResults = results;
         element.isRunning = false;
@@ -158,6 +170,10 @@ if (element.automationFlag === 'AUTO'){
     this.routerParamsService.projectId$.subscribe(projectId => {
       this.projectId = Number(projectId);
     })
+
+    this.routerParamsService.testPlanId$.subscribe(testPlanId => {
+      this.testPlanId = Number(testPlanId);
+    })
     this.projectService.getAllProjectTestCases(this.projectId).subscribe({
       next: (projects) => {
 
@@ -170,6 +186,20 @@ if (element.automationFlag === 'AUTO'){
     })
     console.log(this.testCaseTableData);
     console.log(this.dataSource.data);
+
+    this.webSocketService.connect();
+
+    // Подписываемся на обновление статуса тестов
+    this.webSocketService.testStatus$.subscribe(status => {
+      if (status){
+        console.log("Status From WebSocket:::: ",status);
+      }
+
+      // if (status) {
+      //   this.testStatus = status;
+      //   this.updateTestStatus();
+      // }
+    });
   }
 
 
@@ -177,6 +207,17 @@ if (element.automationFlag === 'AUTO'){
     this.dataSource.sort = this.sort;
     console.log(this.dataSource.data)
 
+  }
+
+  ngOnDestroy() {
+    this.webSocketService.disconnect();
+  }
+
+
+  updateTestStatus() {
+    // Логика для обновления статуса тестов и отключения лоадера
+    console.log('Test Status Updated:', this.testStatus);
+    // Остановите лоадер для тестов, которые получили статус
   }
 
   /** Announce the change in sort state for assistive technology. */
@@ -234,7 +275,7 @@ if (element.automationFlag === 'AUTO'){
     }
 
     this.isLoading = true;
-    this.testRunnerService.runTests(ids).subscribe(
+    this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
       results => {
         this.testResults = results;
         this.isLoading = false;
