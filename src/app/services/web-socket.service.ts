@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client'; // Исправленный импорт
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {AutotestResult} from "../models/autotest-result";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 export class WebSocketService {
   private stompClient: any;
   private testStatusSubject = new BehaviorSubject<any>(null);
-  testStatus$ = this.testStatusSubject.asObservable();
+  testStatus$: Observable<AutotestResult[]> = this.testStatusSubject.asObservable();
 
   constructor() { }
 

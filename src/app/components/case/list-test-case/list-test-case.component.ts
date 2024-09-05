@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {NgForOf, NgIf, NgStyle} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
 import {TreeComponent} from "./tree/tree.component";
 import {MatButton, MatIconButton} from "@angular/material/button";
@@ -75,7 +75,8 @@ import {User} from "../../../models/user";
     MatMenu,
     FormsModule,
     MatMenuTrigger,
-    FlexModule
+    FlexModule,
+    NgClass
   ],
   templateUrl: './list-test-case.component.html',
   styleUrl: './list-test-case.component.scss'
@@ -87,15 +88,16 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     name: 'Ярослав Андреевич',
     rights: 'SUPER'
   }
-  allColumns = ['select', 'run', 'id', 'name', 'type'];
-  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
+  allColumns = ['select', 'run', 'id', 'name', 'type', 'result'];
+  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type', 'result'];
   testStatus: any;
   displayedColumnsSelection: { [key: string]: boolean } = {
     select: true,
     id: true,
     name: true,
     type: true,
-    run: true
+    run: true,
+    result: true
   };
   selection = new SelectionModel<any>(true, []);
   private testCaseTableData: TestCase[] = [];
@@ -143,20 +145,20 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   runTestCase(element: any, event?: MouseEvent) {
+    console.log("Element::", element)
     if (event) {
       event.stopPropagation();
     }
     element.isRunning = true;
-if (element.automationFlag === 'AUTO'){
+    if (element.automationFlag === 'AUTO') {
 
-}
+    }
     let ids: number[] = [];
-      ids.push(element.id)
+    ids.push(element.id)
 
     this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
       results => {
         this.testResults = results;
-        element.isRunning = false;
       },
       error => {
         console.error('Ошибка запуска тестов', error);
@@ -191,14 +193,28 @@ if (element.automationFlag === 'AUTO'){
 
     // Подписываемся на обновление статуса тестов
     this.webSocketService.testStatus$.subscribe(status => {
-      if (status){
-        console.log("Status From WebSocket:::: ",status);
-      }
+      if (status) {
+        console.log("Status From WebSocket:::: ", status);
 
-      // if (status) {
-      //   this.testStatus = status;
-      //   this.updateTestStatus();
-      // }
+        for (const st of status) {
+          console.log("st::", st);
+          this.dataSource.data.forEach(testCase => {
+            if (testCase.id === Number(st.AS_ID)) {
+              testCase.isRunning = false;
+              if(st.status === 'passed'){
+                testCase.result = 'SUCCESSFULLY';
+              }
+              if(st.status !== 'passed'){
+                testCase.result = 'FAILED';
+              }
+
+            }
+          });
+        }
+        console.log("DATASOURCE>DATA:::", this.dataSource.data);
+        // Если требуется обновить таблицу данных
+        this.dataSource.data = [...this.dataSource.data];
+      }
     });
   }
 
@@ -270,15 +286,13 @@ if (element.automationFlag === 'AUTO'){
     const selectedAutoTests = this.selection.selected.filter(test => test.automationFlag === 'AUTO');
     console.log("SELSECTEDautotests:::", selectedAutoTests)
     let ids: number[] = [];
-    for (const test of selectedAutoTests){
+    for (const test of selectedAutoTests) {
       ids.push(test.id)
     }
 
-    this.isLoading = true;
     this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
       results => {
         this.testResults = results;
-        this.isLoading = false;
       },
       error => {
         console.error('Ошибка запуска тестов', error);
@@ -288,10 +302,15 @@ if (element.automationFlag === 'AUTO'){
     console.log(selectedAutoTests)
     selectedAutoTests.forEach(test => {
       this.runTestCase(test);
+
     });
   }
 
   updateDisplayedColumns() {
     this.displayedColumns = Object.keys(this.displayedColumnsSelection).filter(column => this.displayedColumnsSelection[column]);
+  }
+
+  showTableData() {
+    console.log(this.dataSource.data);
   }
 }

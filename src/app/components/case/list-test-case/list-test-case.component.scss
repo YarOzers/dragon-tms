@@ -12,12 +12,12 @@
 }
 
 .left {
-  background-color: #f0f0f0; /* Цвет фона первой колонки */
+  background-color: #eef0ff; /* Цвет фона первой колонки */
   width: 100vw;
 }
 
 .right {
-  background-color: #e0e0e0; /* Цвет фона второй колонки */
+  background-color: #e3e7ff; /* Цвет фона второй колонки */
   width: 100%;
 }
 
@@ -49,4 +49,23 @@ h3.dark-theme{
   background-color: #eaedff;
 }
 
+.success-result {
+  display: inline-block;
+  background-color: #aefac2;
+  border-radius: 5px;
+  border: 1px solid green;
+  width: auto;
+  height: auto;
+  padding: 3px;
+}
+
+.fail-result {
+  display: inline-block;
+  background-color: #c29292;
+  border-radius: 5px;
+  border: 1px solid red;
+  width: auto;
+  height: auto;
+  padding: 3px;
+}
 
