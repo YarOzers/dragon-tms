@@ -5,6 +5,7 @@ import {DetailProjectComponent} from "./components/project/detail-project/detail
 import {ListTestCaseComponent} from "./components/case/list-test-case/list-test-case.component";
 import {ExecuteTestPlanComponent} from "./components/plan/execute-test-plan/execute-test-plan.component";
 import {redirectGuard} from "./components/guard/redirect.guard";
+import {KeycloakAuthGuard} from "keycloak-angular";
 
 export const routes: Routes = [
   {

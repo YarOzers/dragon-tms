@@ -8,7 +8,7 @@
   <!-- Table -->
   <as-split-area [size]="60">
     <div class="column right">
-      <h3>Test Cases:</h3>
+<!--      <h3>Test Cases:</h3>-->
       <div class="table-container">
         <div class="table-container" fxLayout="column" fxLayoutGap="10px">
           <div fxLayoutAlign="start-center" fxFlex="none">
@@ -29,9 +29,34 @@
             <button mat-icon-button (click)="runSelectedAutoTests()">
               <mat-icon>playlist_play</mat-icon>
             </button>
-<!--            <button mat-raised-button color="primary" (click)="showTableData()">-->
-<!--              showTableData-->
-<!--            </button>-->
+
+
+            <!-- Иконка с выпадающим меню -->
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <!-- Выпадающее меню -->
+            <mat-menu #menu="matMenu">
+              <!-- Пункт "Запустить в общем ране" -->
+              <button mat-menu-item (click)="setRunMode(true)">
+                <!-- Контейнер для галочки -->
+                <mat-icon *ngIf="runTests">check</mat-icon>
+                <mat-icon *ngIf="!runTests" style="opacity: 0;">check</mat-icon>
+                <span>Запустить в общем ране</span>
+              </button>
+
+              <!-- Пункт "Запустить в отдельных ранах" -->
+              <button mat-menu-item (click)="setRunMode(false)">
+                <!-- Контейнер для галочки -->
+                <mat-icon *ngIf="!runTests">check</mat-icon>
+                <mat-icon *ngIf="runTests" style="opacity: 0;">check</mat-icon>
+                <span>Запустить в отдельных ранах</span>
+              </button>
+            </mat-menu>
+            <!--            <button mat-raised-button color="primary" (click)="showTableData()">-->
+            <!--              showTableData-->
+            <!--            </button>-->
           </div>
 
           <div fxFlex="1 1 auto">
@@ -87,7 +112,8 @@
                   'success-result': element.result === 'SUCCESSFULLY',
                   'fail-result': element.result === 'FAILED'
                   }"
-                    >{{ element.result }}</div>
+                    >{{ element.result }}
+                    </div>
                   </td>
                 </ng-container>
 

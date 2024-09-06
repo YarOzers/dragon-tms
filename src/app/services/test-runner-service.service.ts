@@ -12,6 +12,7 @@ export class TestRunnerServiceService {
   constructor(private http: HttpClient) { }
 
   runTests(testIds: number[], userId: number, testPlanId: number): Observable<any>{
+    console.log("RUN TESTS!!!!!")
     console.log("TEstIDS::",testIds)
    let params: HttpParams = new HttpParams()
      .set("userId", userId)

@@ -9,6 +9,7 @@ import {filter} from "rxjs";
 import {RouterParamsService} from "../../services/router-params.service";
 import {User, UserDTO} from "../../models/user";
 import {UserService} from "../../services/user.service";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-header',
@@ -41,7 +42,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private routeParamsService: RouterParamsService,
-    private userService: UserService
+    private userService: UserService,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -102,5 +104,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   goToTestCases() {
     this.activeButton = 'testCases';
     this.router.navigate([`project/${this.projectId}/testcases`], {state: {go: true}})
+  }
+
+  logout(){
+    this.keycloakService.logout(window.location.origin).then(r =>{
+      // Очистка локальных данных
+      localStorage.clear();  // Например, очистка localStorage
+      sessionStorage.clear(); // Очистка sessionStorage
+      console.log('Данные пользователя очищены');
+    }).catch(err => console.error('Ошибка при выходе', err));
   }
 }

@@ -32,7 +32,7 @@ import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {SelectionModel} from "@angular/cdk/collections";
-import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
 import {FlexModule} from "@angular/flex-layout";
 import {TestRunnerServiceService} from "../../../services/test-runner-service.service";
@@ -76,12 +76,17 @@ import {User} from "../../../models/user";
     FormsModule,
     MatMenuTrigger,
     FlexModule,
-    NgClass
+    NgClass,
+    MatMenuItem
   ],
   templateUrl: './list-test-case.component.html',
   styleUrl: './list-test-case.component.scss'
 })
 export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  // Переменная, которая управляет режимом
+  runTests: boolean = true; // Дефолтное значение
+
   private user: User = {
     id: 1,
     role: 'ADMIN',
@@ -201,10 +206,10 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dataSource.data.forEach(testCase => {
             if (testCase.id === Number(st.AS_ID)) {
               testCase.isRunning = false;
-              if(st.status === 'passed'){
+              if (st.status === 'passed') {
                 testCase.result = 'SUCCESSFULLY';
               }
-              if(st.status !== 'passed'){
+              if (st.status !== 'passed') {
                 testCase.result = 'FAILED';
               }
 
@@ -284,26 +289,37 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   runSelectedAutoTests() {
     console.log(this.selection);
     const selectedAutoTests = this.selection.selected.filter(test => test.automationFlag === 'AUTO');
-    console.log("SELSECTEDautotests:::", selectedAutoTests)
-    let ids: number[] = [];
-    for (const test of selectedAutoTests) {
-      ids.push(test.id)
+    if (this.runTests) {
+      console.log("SELSECTEDautotests:::", selectedAutoTests)
+      let ids: number[] = [];
+      for (const test of selectedAutoTests) {
+        ids.push(test.id)
+        this.dataSource.data.forEach(testCase => {
+          if (testCase.id === Number(test.id)) {
+            testCase.isRunning = true;
+          }
+        })
+      }
+      console.log("RAAAAANNNNNN!!!!!!!!!")
+      this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
+        results => {
+          this.testResults = results;
+        },
+        error => {
+          console.error('Ошибка запуска тестов', error);
+          this.isLoading = false;
+        }
+      )
     }
 
-    this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
-      results => {
-        this.testResults = results;
-      },
-      error => {
-        console.error('Ошибка запуска тестов', error);
-        this.isLoading = false;
-      }
-    )
-    console.log(selectedAutoTests)
-    selectedAutoTests.forEach(test => {
-      this.runTestCase(test);
 
-    });
+    if (!this.runTests) {
+      console.log(selectedAutoTests)
+      selectedAutoTests.forEach(test => {
+        this.runTestCase(test);
+      });
+    }
+
   }
 
   updateDisplayedColumns() {
@@ -312,5 +328,10 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   showTableData() {
     console.log(this.dataSource.data);
+  }
+
+  // Функция для переключения режима
+  setRunMode(runInSingle: boolean): void {
+    this.runTests = runInSingle;
   }
 }

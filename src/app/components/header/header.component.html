@@ -4,7 +4,7 @@
       <mat-icon (click)="goHome()">home</mat-icon>
     </button>
   </div>
-  <div fxFlex="90">
+  <div fxFlex="85">
     <div *ngIf="showProjectButtons">
       <button mat-flat-button (click)="goToTestCases()"
               [class.active-button]="activeButton != 'testCases'"
@@ -17,8 +17,13 @@
     </div>
   </div>
   <div fxFlex="5">
-    <button mat-icon-button (click)="toggleIcon()">
+    <button mat-icon-button disabled (click)="toggleIcon()">
       <mat-icon>{{ matIcon }}</mat-icon>
+    </button>
+  </div>
+  <div fxFlex="5">
+    <button mat-icon-button (click)="logout()">
+      <mat-icon>logout</mat-icon>
     </button>
   </div>
 </div>
