@@ -3,30 +3,41 @@ import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client'; // Исправленный импорт
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AutotestResult} from "../models/autotest-result";
+import {environment} from "../environment";
+import { KeycloakService } from 'keycloak-angular'; // Импорт KeycloakService для получения токена
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService {
+  private wsUrl = environment.wsUrl;
   private stompClient: any;
   private testStatusSubject = new BehaviorSubject<any>(null);
   testStatus$: Observable<AutotestResult[]> = this.testStatusSubject.asObservable();
 
-  constructor() { }
+  constructor(private keycloakService: KeycloakService) {} // Добавляем KeycloakService в конструктор
 
-  connect() {
-    const socket = new SockJS('http://localhost:9111/ws');
+  async connect() {
+    const token = await this.keycloakService.getToken(); // Получаем токен от Keycloak
+
+    const socket = new SockJS(`${this.wsUrl}`);
     this.stompClient = Stomp.over(<WebSocket>socket);
 
-    this.stompClient.connect({}, (frame: any) => {
+    // Проверьте, выводится ли корректный токен
+    console.log('Bearer Token:', token);
+
+    this.stompClient.connect({
+      Authorization: `Bearer ${token}`  // Добавляем токен в заголовок
+    }, (frame: any) => {
       console.log('Connected: ' + frame);
 
-      // Подписываемся на обновление статусов тестов для конкретного пользователя
       this.stompClient.subscribe('/topic/test-status/1', (message: any) => {
         if (message.body) {
           this.testStatusSubject.next(JSON.parse(message.body));
         }
       });
+    }, (error: any) => {
+      console.error('Error during WebSocket connection:', error);
     });
   }
 

@@ -1,13 +1,12 @@
 export interface User {
-  id: number;
-  role: 'QA' | 'ADMIN' ;
-  name: string;
-  rights:  'CREATE' | 'DELETE' | 'SUPER' ;
+  id: number
+  roles: string[]
+  name: string
+  email: string
 }
 
 export interface UserDTO {
-  id: number;
-  role: number;
-  name: string;
-  rights: number;
+  roles: string[]
+  name: string
+  email: string
 }

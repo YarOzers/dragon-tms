@@ -1,10 +1,11 @@
 import {APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
 import {provideRouter} from '@angular/router';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {provideHttpClient, withInterceptors, withInterceptorsFromDi} from "@angular/common/http";
 import {KeycloakService} from 'keycloak-angular';
 import keycloakConfig from './keycloak/keycloak.config';
 import {routes} from "./app.routes";
+import {keycloakHttpInterceptor} from "./keycloak/keycloak-http.interceptor";
 
 // Функция для инициализации Keycloak
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -24,7 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([keycloakHttpInterceptor])),
 
     // Добавляем KeycloakService как провайдер
     {

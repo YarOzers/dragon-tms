@@ -18,6 +18,7 @@ import {MatListItem, MatNavList} from "@angular/material/list";
 import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-create-test-case-ecample',
@@ -96,10 +97,10 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
   indeterminatePostCondition = false;
 
   private user: User = {
-    id: 1,
-    role: 'ADMIN',
-    name: 'Ярослав Андреевич',
-    rights: 'SUPER'
+    id: 0,
+    roles: [],
+    name: '',
+    email: ''
   }
 
   private preCondition: TestCasePreCondition = {
@@ -166,10 +167,12 @@ export class CreateTestCaseExampleComponent implements OnInit, AfterViewInit {
 
   constructor(
     private renderer: Renderer2,
+    private userService: UserService
   ) {
   }
 
   ngOnInit() {
+    this.user = this.userService.getUser();
   }
 
   ngAfterViewInit() {

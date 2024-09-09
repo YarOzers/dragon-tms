@@ -13,9 +13,11 @@ import {DialogComponent} from "../../dialog/dialog.component";
 import {Router} from "@angular/router";
 import {HeaderService} from "../../../services/header.service";
 import {RouterParamsService} from "../../../services/router-params.service";
-import {HttpClientModule, HttpClientXsrfModule} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {AuthService} from "../../../services/auth.service";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-list-project',
@@ -58,7 +60,9 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     private dialog: MatDialog,
     private router: Router,
     private headerService: HeaderService,
-    private routerParamsService: RouterParamsService
+    private routerParamsService: RouterParamsService,
+    private authService: AuthService,
+    private userService: UserService
   ) {
   }
 
@@ -68,7 +72,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
     this.projectService.getProjects().subscribe({
       next: (projects) => {
-        if(projects){
+        if (projects) {
           console.log(projects);
           this.projectTableData = projects;
           this.dataSource.data = this.projectTableData;
@@ -120,7 +124,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
     }
 
-    this.projectService.createProject(project).subscribe(proj=>{
+    this.projectService.createProject(project).subscribe(proj => {
       this.dataSource.data.push(proj);
       this.isLoading = true;
       this.ngOnInit();
@@ -153,20 +157,19 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
   navigateToProject(projectId: any) {
     this.headerService.showButtons(true);
     this.routerParamsService.setProjectId(projectId);
-    this.router.navigate(['project', projectId,'testcases'],
+    this.router.navigate(['project', projectId, 'testcases'],
       {
         state: {go: true}
       });
   }
 
   deleteProject(id: number) {
-    this.projectService.deleteProject(id).subscribe(id=>{
-      console.log(`Проект с id ${id} удален!`)
-      this.projectService.getProjects().subscribe(projects=>{
-        this.dataSource.data = projects;
-      })
+    this.projectService.deleteProject(id).subscribe(id => {
+        console.log(`Проект с id ${id} удален!`)
+        this.projectService.getProjects().subscribe(projects => {
+          this.dataSource.data = projects;
+        })
       }
-
     )
 
   }

@@ -43,6 +43,7 @@ import {
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
 import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-create-test-case',
@@ -142,10 +143,10 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   indeterminatePostCondition = false;
 
   private user: User = {
-    id: 1,
-    role: 'ADMIN',
-    name: 'Ярослав Андреевич',
-    rights: 'SUPER'
+    id: 0,
+    roles: [],
+    name: '',
+    email: ''
   }
 
   private preCondition: TestCasePreCondition = {
@@ -224,11 +225,13 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     private projectService: ProjectService,
     private routerParamsService: RouterParamsService,
     private testCaseService: TestCaseService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private userService: UserService
   ) {
   }
 
   ngOnInit() {
+    this.user = this.userService.getUser();
     this.routerParamsService.projectId$.subscribe(projectId => {
       this.projectId = projectId;
     });
@@ -1288,6 +1291,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     console.log('test-case data in save: ', this.data);
     if (this.new) {
       this.data.name = this.name;
+      this.data.changesAuthor = this.user;
       this.testCase.folderId = this.folderId;
       this.testCase.folderName = this.folderName;
       this.testCase.data.push(this.data);
@@ -1311,6 +1315,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
     if (!this.new && this.hasChange) {
       this.data.name = this.name;
+      this.data.changesAuthor = this.user;
       this.testCase.name = this.name;
       this.testCase.lastDataIndex = this.testCase.data.length - 1;
       if (this.data?.steps) {

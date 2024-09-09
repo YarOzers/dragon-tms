@@ -18,7 +18,8 @@
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
           <mat-icon>folder_open</mat-icon>
-          <span class="folder-name" cdkDrag [cdkDragData]="folder">{{ folder.name }}</span>
+          <span class="folder-name" cdkDrag [cdkDragData]="folder">
+            <div class="folder-name-item">{{ folder.name }}</div></span>
           <span class="folder-btn-menu">&nbsp;
           <button mat-icon-button [matMenuTriggerFor]="folderMenu" aria-label="Example icon-button with a menu">
   <mat-icon>more_vert</mat-icon>
@@ -65,7 +66,7 @@
                  (mouseenter)="hoveredTestCase = testCase"
                  (mouseleave)="hoveredTestCase = null">
               <mat-icon>subject</mat-icon>
-              {{ testCase.name }}
+              <div class="test-case-name">{{ testCase.name }}</div>
               <span class="testcase-btn-menu">&nbsp;
                 <button mat-icon-button [matMenuTriggerFor]="testCaseMenu" aria-label="Test case options">
                   <mat-icon>more_vert</mat-icon>

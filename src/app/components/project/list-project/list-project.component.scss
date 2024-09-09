@@ -1,3 +1,6 @@
+.project-list{
+  //background-color: #e3e7ff;
+}
 .mat-mdc-unelevated-button{
   margin: 1rem;
   border-radius: 7px;
@@ -9,10 +12,12 @@
 }
 
 .table-container{
-  width: 90vw;
+  width: 95vw;
   height: 60vh;
   margin-bottom: 1rem;
   overflow: auto;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 h3.dark-theme{

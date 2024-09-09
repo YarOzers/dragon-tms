@@ -38,6 +38,7 @@ import {FlexModule} from "@angular/flex-layout";
 import {TestRunnerServiceService} from "../../../services/test-runner-service.service";
 import {WebSocketService} from "../../../services/web-socket.service";
 import {User} from "../../../models/user";
+import {UserService} from "../../../services/user.service";
 
 
 @Component({
@@ -88,10 +89,10 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   runTests: boolean = true; // Дефолтное значение
 
   private user: User = {
-    id: 1,
-    role: 'ADMIN',
-    name: 'Ярослав Андреевич',
-    rights: 'SUPER'
+    id: 0,
+    roles: [],
+    name: '',
+    email: ''
   }
   allColumns = ['select', 'run', 'id', 'name', 'type', 'result'];
   displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type', 'result'];
@@ -113,7 +114,6 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   dataIndex: any;
   private testResults: any;
   private testPlanId: number = 1;
-  private userId: number = 1;
 
   constructor(
     private projectService: ProjectService,
@@ -123,7 +123,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService,
     private testRunnerService: TestRunnerServiceService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private userService: UserService
   ) {
   }
 
@@ -161,7 +162,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     let ids: number[] = [];
     ids.push(element.id)
 
-    this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
+    this.testRunnerService.runTests(ids, this.user.id, 0).subscribe(
       results => {
         this.testResults = results;
       },
@@ -174,6 +175,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.user = this.userService.getUser();
     this.routerParamsService.projectId$.subscribe(projectId => {
       this.projectId = Number(projectId);
     })
@@ -301,7 +303,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       }
       console.log("RAAAAANNNNNN!!!!!!!!!")
-      this.testRunnerService.runTests(ids, this.userId, 0).subscribe(
+      this.testRunnerService.runTests(ids, this.user.id, 0).subscribe(
         results => {
           this.testResults = results;
         },

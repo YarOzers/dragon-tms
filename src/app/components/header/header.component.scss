@@ -14,3 +14,13 @@
   color: white;
   /* Добавьте другие стили для активной кнопки, если необходимо */
 }
+
+.user-name{
+  text-align: center;
+  justify-items: center;
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* Скрытие текста, который не помещается */
+  white-space: nowrap; /* Текст в одну строку */
+  text-overflow: ellipsis;
+}

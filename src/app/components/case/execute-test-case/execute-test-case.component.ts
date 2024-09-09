@@ -35,6 +35,7 @@ import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/ma
 import {TestCaseService} from "../../../services/test-case.service";
 import {ActivatedRoute} from "@angular/router";
 import {TimerComponent} from "../../timer/timer.component";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-execute-test-case',
@@ -126,10 +127,10 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
   indeterminatePostCondition = false;
 
   private user: User = {
-    id: 1,
-    role: 'ADMIN',
-    name: 'Ярослав Андреевич',
-    rights: 'SUPER'
+    id: 0,
+    roles: [],
+    name: '',
+    email: ''
   }
 
   private preCondition: TestCasePreCondition = {
@@ -212,11 +213,13 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     @Inject(MAT_DIALOG_DATA) public dataDialog: any,
     private projectService: ProjectService,
     private testCaseService: TestCaseService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userService: UserService
   ) {
   }
 
   ngOnInit() {
+    this.user = this.userService.getUser();
     if (this.new) {
       this.progressBar = false;
     }
