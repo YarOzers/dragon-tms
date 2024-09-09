@@ -60,9 +60,6 @@
   display: none;
 }
 
-/* Стиль для элементов, которые скрыты (если папка не развёрнута) */
-.nested-folder {
-}
 
 .cdk-drag.subfolder {
   width: 1px;
