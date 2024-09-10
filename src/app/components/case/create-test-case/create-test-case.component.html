@@ -10,9 +10,24 @@
         <div *ngIf="new" fxFlex="6">
           <span fxFlex="6"></span>
         </div>
-        <input type="text" fxFlex="91" [(ngModel)]="name" class="test-case-name"
-               placeholder="введите название тест кейса"
-               (ngModelChange)="onChange()">
+        <mat-form-field fxFlex="91">
+          <input matInput type="text"
+                 [(ngModel)]="name"
+                 class="test-case-name"
+                 placeholder="введите название тест кейса"
+                 id="testCaseName"
+                 required
+                 minlength="3"
+                 #testCaseNameInput="ngModel"
+                 (ngModelChange)="onChange()">
+          <!-- Сообщения об ошибках -->
+          <mat-error *ngIf="testCaseNameInput.errors?.['required'] && testCaseNameInput.touched">
+            Название тест кейса обязательно для заполнения.
+          </mat-error>
+          <mat-error *ngIf="testCaseNameInput.errors?.['minlength'] && testCaseNameInput.touched">
+            Название тест кейса должно быть не менее 3 символов.
+          </mat-error>
+        </mat-form-field>
       </div>
     </div>
     <div>
@@ -61,7 +76,9 @@
               <mat-label>История изменений</mat-label>
               <mat-select [(ngModel)]="selectedVersion" name="version" (ngModelChange)="onChange()">
                 @for (version of versions; track version) {
-                  <mat-option [value]="version?.value" (click)="choseTestCaseVersion(version?.value)">{{ version?.viewValue }}</mat-option>
+                  <mat-option [value]="version?.value"
+                              (click)="choseTestCaseVersion(version?.value)">{{ version?.viewValue }}
+                  </mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -249,7 +266,7 @@
                                (change)="onFileSelected($event)">
                       </div>
                     </div>
-                    <div fxLayout="row" fxLayoutAlign="end center">
+                    <div fxLayout="row" fxLayoutAlign="end center" class="button-container">
                       <button mat-icon-button (click)="addStep(); onChange()" class="center-icon-button">
                         <mat-icon>add</mat-icon>
                       </button>
@@ -322,7 +339,7 @@
 
                       </div>
                     </div>
-                    <div fxLayout="row" fxLayoutAlign="end center">
+                    <div fxLayout="row" fxLayoutAlign="end center" class="button-container">
                       <button mat-icon-button (click)="addPostCondition(); onChange()" class="center-icon-button">
                         <mat-icon>add</mat-icon>
                       </button>
@@ -344,11 +361,18 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem" [disabled]="!hasChange">Сохранить
+  <button mat-flat-button
+          (click)="save()"
+          class="save-btn"
+          style="padding: 1rem"
+          [disabled]="!hasChange
+           || testCaseNameInput.invalid"
+  >Сохранить
   </button>
-  <button mat-flat-button (click)="showChange()" class="save-btn" style="padding: 1rem">showChange</button>
-  <button mat-flat-button (click)="showPreConditions()" class="save-btn" style="padding: 1rem">showSteps</button>
-  <button mat-button (click)="closeMatDialog()" class="close-btn" style="margin: 0 1rem 0 1rem; padding: 1rem">
+  <button mat-button
+          (click)="closeMatDialog()"
+          class="close-btn"
+          style="margin: 0 1rem 0 1rem; padding: 1rem">
     Отмена
   </button>
 </div>
