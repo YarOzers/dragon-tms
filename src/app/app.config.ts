@@ -6,6 +6,7 @@ import {KeycloakService} from 'keycloak-angular';
 import keycloakConfig from './keycloak/keycloak.config';
 import {routes} from "./app.routes";
 import {keycloakHttpInterceptor} from "./keycloak/keycloak-http.interceptor";
+import {errorInterceptor} from "./errors/error.interceptor";
 
 // Функция для инициализации Keycloak
 function initializeKeycloak(keycloak: KeycloakService) {
@@ -25,7 +26,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([keycloakHttpInterceptor])),
+    provideHttpClient(withInterceptors([keycloakHttpInterceptor, errorInterceptor])),
 
     // Добавляем KeycloakService как провайдер
     {

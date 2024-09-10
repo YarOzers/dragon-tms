@@ -687,6 +687,7 @@ export class ProjectService {
   }
 
   createProject(projectDTO: ProjectDTO): Observable<Project> {
+    console.log("ProjectDTO::: ", projectDTO);
     return this.http.post<Project>(`${this.apiUrl}/projects`, projectDTO);
   }
 

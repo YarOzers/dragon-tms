@@ -17,7 +17,7 @@
           <button mat-icon-button (click)="toggleFolder(folder, $event)">
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
-          <mat-icon>folder_open</mat-icon>
+          <mat-icon class="folder-icon">folder_open</mat-icon>
           <span class="folder-name" cdkDrag [cdkDragData]="folder">
             <div class="folder-name-item">{{ folder.name }}</div></span>
           <span class="folder-btn-menu">&nbsp;
