@@ -1,6 +1,6 @@
 <div>
   <div class="main-container">
-    <div class="editor-container editor-container_balloon-editor" #editorContainerElement>
+    <div class="editor-container editor-container_balloon-editor editor-container_include-block-toolbar" #editorContainerElement>
       <div class="editor-container__editor">
         <div #editorElement>
           <ckeditor [editor]="Editor" [config]="config" *ngIf="isLayoutReady" (change)="onEditorChange($event)"  [(ngModel)]="content"/>

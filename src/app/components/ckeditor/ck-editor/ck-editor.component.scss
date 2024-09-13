@@ -13,6 +13,7 @@
   height: 100%;
   margin-left: auto;
   margin-right: auto;
+
 }
 
 .ck-content {
@@ -24,4 +25,8 @@
 .editor-container_balloon-editor .editor-container__editor {
   min-width: 100%;
   max-width: 100%;
+}
+
+.ck.ck-button.ck-hidden.ck-off.ck-block-toolbar-button{
+  z-index: 9999;
 }
