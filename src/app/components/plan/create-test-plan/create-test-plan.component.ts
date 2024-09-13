@@ -117,6 +117,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     qas: [],
     folders: []
   }
+  private hasChange: boolean=false;
   constructor(
     private dialogRef: MatDialogRef<CreateTestPlanComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -342,5 +343,9 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   updateDisplayedColumns() {
     this.displayedColumns = Object.keys(this.displayedColumnsSelection).filter(column => this.displayedColumnsSelection[column]);
+  }
+
+  onChange() {
+    this.hasChange = true;
   }
 }

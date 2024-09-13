@@ -18,6 +18,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {AuthService} from "../../../services/auth.service";
 import {UserService} from "../../../services/user.service";
+import {MediaObserver} from "@angular/flex-layout";
 
 @Component({
   selector: 'app-list-project',
@@ -61,8 +62,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     private router: Router,
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService,
-    private authService: AuthService,
-    private userService: UserService
+    private mediaObserver: MediaObserver,
   ) {
   }
 
@@ -136,11 +136,13 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
   openCreateProjectDialog(): void {
 
+    const isSmallScreen = this.mediaObserver.isActive('ld-md');
     const dialogRef = this.dialog.open(DialogComponent, {
 
-      width: 'auto',
+      width: isSmallScreen ? '90%' : '50%',
+      height: 'auto',
       data: {
-        type: 'folder',
+        type: 'project',
         folderName: ''
       } // Можно передать данные в диалоговое окно
     });

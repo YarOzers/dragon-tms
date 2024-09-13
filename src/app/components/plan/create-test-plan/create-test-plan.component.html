@@ -1,9 +1,26 @@
-<button (click)="showData()">showData</button>
 
 
 <div fxFlex="column">
   <div>
-    <input type="text" [(ngModel)]="testPlanName" fxFlex="100" class="test-plan-input">
+    <mat-form-field fxFlex="100">
+      <input matInput type="text"
+             [(ngModel)]="testPlanName"
+             class="test-plan-name"
+             placeholder="введите название тест плана"
+             id="testPlanName"
+             required
+             minlength="3"
+             #testCaseNameInput="ngModel"
+             (ngModelChange)="onChange()">
+      <!-- Сообщения об ошибках -->
+      <mat-error *ngIf="testCaseNameInput.errors?.['required'] && testCaseNameInput.touched">
+        Название тест-плана обязательно для заполнения.
+      </mat-error>
+      <mat-error *ngIf="testCaseNameInput.errors?.['minlength'] && testCaseNameInput.touched">
+        Название тест-плана должно быть не менее 3 символов.
+      </mat-error>
+    </mat-form-field>
+
   </div>
   <div mat-dialog-content class="dialog-content" fxLayoutAlign="center center">
     <as-split unit="percent" direction="horizontal" gutterSize="10" class="left-column-container">

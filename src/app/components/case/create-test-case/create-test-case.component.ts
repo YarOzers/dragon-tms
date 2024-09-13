@@ -1336,7 +1336,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       console.log("this.testCaseId::", this.testCaseId)
       this.testCaseService.updateTestCase(this.testCaseId, this.data).subscribe(testCase => {
         if (testCase) {
-          this.dialogRef.close()
+          this.dialogRef.close(testCase)
         }
       }, (error) => {
         console.error(error)
@@ -1346,23 +1346,6 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
   }
 
-
   protected readonly prompt = prompt;
-
-
-
-  showChange() {
-    console.log(this.hasChange);
-    console.log(this.versions);
-    console.log(this.version);
-  }
-
-  showPreConditions() {
-    console.log(this.preConditions)
-    console.log(this.steps)
-    console.log(this.postConditions)
-    console.log('new::', this.new)
-  }
-
 
 }

@@ -189,3 +189,14 @@
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
   border: 1px solid #c6c5d0; /* Для наглядности добавим границу */
 }
+
+.empty-folder{
+    width: 300px; /* Ширина контейнера */
+    overflow: hidden; /* Скрытие текста, который не помещается */
+    white-space: nowrap; /* Текст в одну строку */
+    text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
+    border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+    border-radius: 4px;
+    padding: 0.3rem;
+    background-color: #dce2fc;
+}

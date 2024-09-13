@@ -23,7 +23,6 @@ import {DialogTestPlanListComponent} from "../../../plan/dialog-test-plan-list/d
 import {FolderService} from "../../../../services/folder.service";
 import {TestCaseService} from "../../../../services/test-case.service";
 import {ActivatedRoute} from "@angular/router";
-import {CreateTestPlanComponent} from "../../../plan/create-test-plan/create-test-plan.component";
 import {MoveAndCopyDialogComponent} from "../move-and-copy-dialog/move-and-copy-dialog.component";
 
 
@@ -619,6 +618,45 @@ export class TreeComponent implements OnInit, AfterViewInit {
   showData() {
     console.log("testcases-----------: ", this.testCases);
     console.log("DATA-----------: ", this.TEST_CASE_DATA);
+  }
+
+  changeTestCaseDialog(testCaseId: number): void {
+
+    const dialogRef = this.dialog.open(CreateTestCaseComponent, {
+
+      width: '100%',
+      height: '100%',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      data: {
+        type: 'project',
+        testCaseId: testCaseId,
+        projectId: this.projectId,
+        isNew: false
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(testCase => {
+      if (testCase !== undefined && testCase !== '') {
+        console.log('RESULT from openDialogToCreateTestCase: ', testCase);
+        this.folderService.getProjectFolders(Number(this.projectId)).subscribe(folders => {
+          if (folders) {
+            console.log("FOLDERS:::", folders);
+            this.TEST_CASE_DATA = [...folders];
+            this.generateTestCaseArrays();
+            if (this.TEST_CASE_DATA) {
+              this.setExpandedTrue(this.TEST_CASE_DATA);
+            }
+          }
+          this.dataLoading = true;
+          console.log("TEST_CASE_DATa::", this.TEST_CASE_DATA);
+        });
+      }
+    },error => {
+      console.error('Ошибка при изменении тест кейса!')
+    },()=>{
+
+    });
   }
 }
 

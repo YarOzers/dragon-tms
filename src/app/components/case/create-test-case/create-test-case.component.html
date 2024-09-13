@@ -33,26 +33,32 @@
     <div>
       <mat-sidenav-container class="sidenav-container" fxFlex>
         <mat-sidenav #sidenav mode="side" opened>
-          <form>
+          <form #testCaseForm>
             <mat-form-field>
               <mat-label>Вид тестирования</mat-label>
-              <mat-select [(ngModel)]="data.testCaseType" name="type" (ngModelChange)="onChange()">
+              <mat-select [(ngModel)]="data.testCaseType" name="type" (ngModelChange)="onChange()" required
+                          #testCaseType="ngModel">
                 @for (type of typesOfTests; track type) {
                   <mat-option [value]="type.value">{{ type.viewValue }}</mat-option>
                 }
               </mat-select>
+<!--              <mat-error *ngIf="testCaseType.invalid && testCaseType.touched">-->
+<!--                Выбор вида тестирования обязателен-->
+<!--              </mat-error>-->
             </mat-form-field>
+
             <mat-form-field>
               <mat-label>Приоритет</mat-label>
-              <mat-select [(ngModel)]="data.priority" name="priority" (ngModelChange)="onChange()">
+              <mat-select [(ngModel)]="data.priority" name="priority" (ngModelChange)="onChange()" required #testCasePriority="ngModel">
                 @for (priority of typesOfPriority; track priority) {
                   <mat-option [value]="priority.value">{{ priority.viewValue }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
+
             <mat-form-field>
               <mat-label>Признак автоматизации</mat-label>
-              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag" (ngModelChange)="onChange()">
+              <mat-select [(ngModel)]="data.automationFlag" name="automationFlag" (ngModelChange)="onChange()" required #testCaseAutomationFlag="ngModel">
                 @for (auto of automationFlags; track auto) {
                   <mat-option [value]="auto.value">{{ auto.viewValue }}</mat-option>
                 }
@@ -61,11 +67,11 @@
             <mat-form-field>
               <mat-label>Время выполнения</mat-label>
               <input matInput mask="Hh:m0:s0" placeholder="00:00:00" [(ngModel)]="data.executionTime" name="time"
-                     (ngModelChange)="onChange()">
+                     (ngModelChange)="onChange()" required #testCaseExecutionTime="ngModel">
             </mat-form-field>
             <mat-form-field>
               <mat-label>Готовность</mat-label>
-              <mat-select [(ngModel)]="data.status" name="status" (ngModelChange)="onChange()">
+              <mat-select [(ngModel)]="data.status" name="status" (ngModelChange)="onChange()" required #testCaseStatus="ngModel">
                 @for (status of statuses; track status) {
                   <mat-option [value]="status.value">{{ status.viewValue }}</mat-option>
                 }
@@ -366,7 +372,7 @@
           class="save-btn"
           style="padding: 1rem"
           [disabled]="!hasChange
-           || testCaseNameInput.invalid"
+           || testCaseNameInput.invalid || testCaseType.invalid || testCaseAutomationFlag.invalid || testCasePriority.invalid || testCaseStatus.invalid || testCaseExecutionTime.invalid"
   >Сохранить
   </button>
   <button mat-button

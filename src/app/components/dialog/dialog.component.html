@@ -1,12 +1,12 @@
-<div fxFlex="column">
-  <div mat-dialog-content class="dialog-content" fxLayoutAlign="center center">
+<div fxLayout="column">
+  <div mat-dialog-content class="dialog-content" >
     <ng-container [ngSwitch]="data.type">
-      <div *ngSwitchCase="'project'">
-        <p fxLayoutAlign="start center">Введите имя проекта</p>
-        <form [formGroup]="projectForm">
+      <div *ngSwitchCase="'project'" >
+        <p fxLayoutAlign="start center" >Введите название проекта</p>
+        <form [formGroup]="projectForm"  >
           <mat-form-field>
-            <mat-label>Input</mat-label>
-            <input matInput formControlName="projectName">
+            <mat-label>название проекта</mat-label>
+            <input matInput formControlName="projectName" id="projectName" >
             <mat-error *ngIf="projectForm.get('projectName')?.invalid"
                        fxLayoutAlign="start center">{{ getProjectErrorMessage() }}
             </mat-error>
@@ -58,7 +58,7 @@
       </div>
     </ng-container>
   </div>
-  <div mat-dialog-actions>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
     <button *ngIf="data.type != 'folder-del' && data.type != 'testCase-del' " mat-flat-button (click)="save()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>
     <button *ngIf="data.type === 'folder-del' " mat-flat-button (click)="deleteFolder()" fxLayoutAlign="start center" class="save-btn">Удалить</button>
     <button *ngIf="data.type === 'testCase-del' " mat-flat-button (click)="deleteTestCase()" fxLayoutAlign="start center" class="save-btn">Удалить</button>
