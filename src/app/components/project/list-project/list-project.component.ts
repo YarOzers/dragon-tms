@@ -19,6 +19,7 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {AuthService} from "../../../services/auth.service";
 import {UserService} from "../../../services/user.service";
 import {MediaObserver} from "@angular/flex-layout";
+import {CkEditorComponent} from "../../ckeditor/ck-editor/ck-editor.component";
 
 @Component({
   selector: 'app-list-project',
@@ -37,7 +38,8 @@ import {MediaObserver} from "@angular/flex-layout";
     MatIconButton,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger
+    MatMenuTrigger,
+    CkEditorComponent
   ],
   templateUrl: './list-project.component.html',
   styleUrl: './list-project.component.scss'

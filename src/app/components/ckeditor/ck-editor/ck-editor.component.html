@@ -1,0 +1,13 @@
+<div>
+  <div class="main-container">
+    <div class="editor-container editor-container_inline-editor" #editorContainerElement>
+      <div class="editor-container__editor">
+        <div #editorElement>
+          <ckeditor [editor]="Editor" [config]="config" *ngIf="isLayoutReady" [(ngModel)]="editorData"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button (click)="showEdotor()">showEditor</button>
