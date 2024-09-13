@@ -98,48 +98,6 @@
                 <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
               </button>
             </div>
-            <div class="toolbar" fxFlex="85">
-              <button mat-mini-fab class="btn_bold" (click)="toggleStyle('bold')"
-                      [class.active]="currentStyles['bold']">
-                <mat-icon>format_bold</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_underline" (click)="toggleCustomClass('underline', 'active-underline')"
-                      [class.active-underline]="currentClasses['underline']">
-                <mat-icon> format_underlined</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_italic" (click)="toggleStyle('italic')"
-                      [class.active]="currentStyles['italic']">
-                <mat-icon> format_italic</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_red" (click)="toggleStyle('color', 'red')"
-                      [class.active]="currentStyles['color-red']">
-                <mat-icon>format_color_text</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_green" (click)="toggleStyle('color', 'green')"
-                      [class.active]="currentStyles['color-green']">
-                <mat-icon>format_color_text</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_black" (click)="toggleStyle('color', 'black')"
-                      [class.active]="currentStyles['color-black']">
-                <mat-icon>format_color_text</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_li" (click)="toggleStyle('insertUnorderedList')"
-                      [class.active]="currentStyles['li']">
-                <mat-icon> format_list_bulleted</mat-icon>
-              </button>
-              <button mat-mini-fab (click)="insertImage()">
-                <mat-icon>image_search</mat-icon>
-              </button>
-              <button mat-mini-fab (click)="triggerFileInput()">
-                <mat-icon>add_photo_alternate</mat-icon>
-              </button>
-              <button mat-mini-fab class="btn_highlight" (click)="toggleCustomClass('highlight', 'active-highlight')"
-                      [class.active-highlight]="currentClasses['highlight']">
-                <mat-icon> format_color_fill</mat-icon>
-              </button>
-
-
-            </div>
           </div>
 
           <div class="step-container" fxLayout="column">
@@ -173,14 +131,15 @@
        'action-bottom-radius': i === preConditions.length - 1,
        'action-test-case-editors': i > 0 && i < preConditions.length - 1
      }"
-                             contenteditable="true"
+
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, expectedResultEditor); onChange()"
                              (paste)="autoResize($event, expectedResultEditor); onChange()"
-                             (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
+
                              (change)="onChange()"
                         >
+                          <app-ck-editor  [content]=preConditions[i].action (editorEvent)="updateEditorPreConditionContent($event, i, 'action')"></app-ck-editor>
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">
@@ -190,14 +149,14 @@
        'expected-result-bottom-radius': i === preConditions.length - 1,
        'expected-result-test-case-editors': i > 0 && i < preConditions.length - 1
      }"
-                             contenteditable="true"
+
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, actionEditor); onChange()"
                              (paste)="autoResize($event, actionEditor); onChange()"
-                             (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
                              (change)="onChange()"
                         >
+                          <app-ck-editor [content]="preConditions[i].expectedResult" (editorEvent)="updateEditorPreConditionContent($event, i, 'expectedResult')"></app-ck-editor>
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">
@@ -243,14 +202,15 @@
        'action-bottom-radius': i === steps.length - 1,
        'action-test-case-editors': i > 0 && i < steps.length - 1
      }"
-                             contenteditable="true"
+
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, expectedResultEditor); onChange()"
                              (paste)="autoResize($event, expectedResultEditor); onChange()"
-                             (blur)="updateEditorStepContent(actionEditor, i, 'action')"
                              (change)="onChange()"
                         >
+                          <app-ck-editor  [content]=steps[i].action (editorEvent)="updateEditorStepContent($event, i, 'action')"></app-ck-editor>
+
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">
@@ -260,13 +220,15 @@
        'expected-result-bottom-radius': i === steps.length - 1,
        'expected-result-test-case-editors': i > 0 && i < steps.length - 1
      }"
-                             contenteditable="true"
+
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, actionEditor); onChange()"
                              (paste)="autoResize($event, actionEditor); onChange()"
-                             (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
+                             (change)="onChange()"
                         >
+                          <app-ck-editor [content]="steps[i].expectedResult" (editorEvent)="updateEditorStepContent($event, i, 'expectedResult')"></app-ck-editor>
+
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">
@@ -314,14 +276,14 @@
        'action-bottom-radius': i === postConditions.length - 1,
        'action-test-case-editors': i > 0 && i < postConditions.length - 1
      }"
-                             contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, expectedResultEditor); onChange()"
                              (paste)="autoResize($event, expectedResultEditor); onChange()"
-                             (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
                              (change)="onChange()"
                         >
+                          <app-ck-editor  [content]=postConditions[i].action (editorEvent)="updateEditorPostConditionContent($event, i, 'action')"></app-ck-editor>
+
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">
@@ -331,14 +293,14 @@
        'expected-result-bottom-radius': i === postConditions.length - 1,
        'expected-result-test-case-editors': i > 0 && i < postConditions.length - 1
      }"
-                             contenteditable="true"
                              fxFlex="50"
                              (focus)="setActiveEditor($event)"
                              (input)="autoResize($event, actionEditor); onChange()"
                              (paste)="autoResize($event, actionEditor); onChange()"
-                             (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
                              (change)="onChange()"
                         >
+                          <app-ck-editor  [content]=postConditions[i].expectedResult (editorEvent)="updateEditorPostConditionContent($event, i, 'expectedResult')"></app-ck-editor>
+
                         </div>
                         <input type="file" #fileInput accept="image/*" style="display: none;"
                                (change)="onFileSelected($event)">

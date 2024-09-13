@@ -44,6 +44,7 @@ import {
 } from "@angular/material/expansion";
 import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 import {UserService} from "../../../services/user.service";
+import {CkEditorComponent} from "../../ckeditor/ck-editor/ck-editor.component";
 
 @Component({
   selector: 'app-create-test-case',
@@ -80,7 +81,8 @@ import {UserService} from "../../../services/user.service";
     MatExpansionPanelDescription,
     MatExpansionModule,
     NgxMaskDirective,
-    MatFormFieldModule
+    MatFormFieldModule,
+    CkEditorComponent
   ],
   providers: [provideNgxMask()],
   templateUrl: './create-test-case.component.html',
@@ -255,7 +257,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
           }, error: (err) => {
             console.error('Ошибка при получении данных текс-кейса при инициализации компонента CreateTestCaseComponent :', err)
           }, complete: (() => {
-            this.initEditors();
+            // this.initEditors();
 
           })
         }
@@ -295,7 +297,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       if (this.initTestCase) {
         this.data = this.testCaseData[index - 1];
         this.progressBar = false;
-        this.initEditors();
+        // this.initEditors();
       }
       console.log(this.steps);
       console.log(this.postConditions);
@@ -1047,23 +1049,25 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     }
   }
 
-  updateEditorPreConditionContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
+  updateEditorPreConditionContent(editor: string, index: number, field: 'action' | 'expectedResult'): void {
     if (editor) {
-      this.preConditions[index][field] = editor.innerHTML;
+      this.preConditions[index][field] = editor;
+      console.log('POSTCONDITIONS:::',this.preConditions[index][field]);
+      // this.preConditions[index][field] = editor.innerHTML;
     }
   }
 
-  updateEditorStepContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
+  updateEditorStepContent(editor: string, index: number, field: 'action' | 'expectedResult'): void {
     if (editor) {
-      this.steps[index][field] = editor.innerHTML;
+      this.steps[index][field] = editor;
+      // this.steps[index][field] = editor.innerHTML;
     }
   }
 
-  updateEditorPostConditionContent(editor: HTMLElement, index: number, field: 'action' | 'expectedResult'): void {
-
-
+  updateEditorPostConditionContent(editor: string, index: number, field: 'action' | 'expectedResult'): void {
     if (editor) {
-      this.postConditions[index][field] = editor.innerHTML;
+      this.postConditions[index][field] = editor;
+      // this.postConditions[index][field] = editor.innerHTML;
     }
   }
 
@@ -1348,4 +1352,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   protected readonly prompt = prompt;
 
+  receiveEditor($event: string):string {
+    return $event;
+  }
 }
