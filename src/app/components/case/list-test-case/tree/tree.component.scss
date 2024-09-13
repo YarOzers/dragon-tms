@@ -62,7 +62,8 @@
 
 
 
-.cdk-drag.subfolder {
+.cdk-drag-folder.subfolder {
+  position: relative;
   border-left: #c6c5d0 2px solid;
   width: auto;
   //background-color: #33e003;
@@ -70,6 +71,18 @@
   border-radius: 0;
   //left: -0.5px;
 }
+
+
+//.cdk-drag-folder.subfolder:before{
+//  position: absolute;
+//  border-left: #1200b9 2px solid;
+//  height: calc(100% + 6px);
+//  width: auto;
+//  //background-color: #33e003;
+//  padding: 0;
+//  border-radius: 0;
+//  //left: -0.5px;
+//}
 
 .test-case-item {
   display: flex;
@@ -88,6 +101,14 @@
 
 .test-case-chain-empty{
   width: 19px;
+}
+
+.test-case-chain-empty-empty{
+  left: 10px;
+}
+
+.test-case-chain-empty-empty{
+  padding: 10px;
 }
 
 .test-case-container{
@@ -195,8 +216,13 @@
     overflow: hidden; /* Скрытие текста, который не помещается */
     white-space: nowrap; /* Текст в одну строку */
     text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-    border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+    border: 1px solid #abaab4; /* Для наглядности добавим границу */
     border-radius: 4px;
     padding: 0.3rem;
-    background-color: #dce2fc;
+    background-color: #abaab4;
+  color: white;
+}
+
+mat-icon{
+  color: #51525b;
 }

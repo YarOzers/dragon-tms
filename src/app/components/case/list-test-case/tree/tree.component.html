@@ -17,7 +17,7 @@
           <button mat-icon-button (click)="toggleFolder(folder, $event)">
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
-          <mat-icon class="folder-icon">folder_open</mat-icon>
+          <mat-icon class="folder-icon">{{ folder.expanded ? 'folder_open' : 'folder' }}</mat-icon>
           <span class="folder-name" cdkDrag [cdkDragData]="folder">
             <div class="folder-name-item">{{ folder.name }}</div></span>
           <span class="folder-btn-menu">&nbsp;
@@ -52,7 +52,7 @@
                cdkDrag [cdkDragData]="subFolder"
 
                cdkDragDisabled="true"
-               class="subfolder">
+               class="subfolder cdk-drag-folder">
             <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>
           </div>
         </div>
@@ -63,7 +63,7 @@
           <div class="test-case-container">
             <div class="test-case-sub-container">
               <div
-                *ngIf="folder && testCasesMap && testCasesMap[folder.id] != null && testCasesMap[folder.id].length > 0;">
+                *ngIf="folder && testCasesMap && testCasesMap[folder.id] != null && testCasesMap[folder.id].length > 0; else emptyFolder">
                 <div *ngFor="let testCase of testCasesMap[folder.id]" cdkDrag [cdkDragData]="testCase">
                   <div class="test-case-item" [ngClass]="{'test-case-hover': hoveredTestCase === testCase}"
                        (mouseenter)="hoveredTestCase = testCase"
@@ -91,18 +91,18 @@
                   </div>
                 </div>
               </div>
-<!--              <ng-template #emptyFolder>-->
-<!--                <div class="test-case-container">-->
-<!--                  <div class="test-case-sub-container">-->
-<!--                    <div class="test-case-item" >-->
-<!--                      <div class="test-case-chain-empty"></div>-->
-<!--                      <div class="test-case-chain"></div>-->
-<!--                      <mat-icon>subject</mat-icon>-->
-<!--                      <div class="empty-folder">В папке нет тест-кейсов</div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </ng-template>-->
+              <ng-template #emptyFolder>
+                <div class="test-case-container-empty">
+                  <div class="test-case-sub-container">
+                    <div class="test-case-item" >
+                      <div class="test-case-chain-empty-empty"></div>
+                      <div class="test-case-chain"></div>
+                      <mat-icon>not_interested</mat-icon>
+                      <div class="empty-folder">В корне папки нет тест-кейсов</div>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
             </div>
           </div>
         </div>

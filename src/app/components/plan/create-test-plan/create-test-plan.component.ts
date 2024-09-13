@@ -90,8 +90,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   @ViewChild(CreateTestPlanTreeComponent) treeComponent!: CreateTestPlanTreeComponent;
   @ViewChild(MatSort) sort!: MatSort;
   private syncScheduled = false;
-  allColumns = ['select', 'run', 'id', 'name', 'type'];
-  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type'];
+  allColumns = ['select','id', 'name', 'type'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'type'];
   displayedColumnsSelection: { [key: string]: boolean } = {
     select: true,
     id: true,

@@ -56,13 +56,13 @@ h3.dark-theme{
 }
 
 .mat-mdc-dialog-content.mdc-dialog__content{
-  height: calc(100vh - 72px - 80px);
-  max-height: calc(100vh - 72px - 80px);
+  height: calc(100vh - 72px - 100px);
+  max-height: calc(100vh - 72px - 100px);
 }
 
 .column left {
-  height: calc(100vh - 72px - 80px);
-  max-height: calc(100vh - 72px - 80px);
+  height: calc(100vh - 72px - 100px);
+  max-height: calc(100vh - 72px - 100px);
 }
 .mat-mdc-dialog-component-host.ng-star-inserted{
   overflow: auto;
@@ -71,6 +71,11 @@ h3.dark-theme{
 .test-plan-input{
   margin: 1rem 1rem 0 1rem;
 }
+
 input{
   height: 30px;
+}
+
+mat-form-field{
+  margin-top: 0.5rem;
 }

@@ -7,9 +7,9 @@
 
 [cdkDropList] {
   display: block;
-  width: 200px;
-  border: 1px solid #ccc;
-  background-color: #f9f9f9;
+  width: 500px;
+//border: 1px solid #ccc;
+//background-color: #f9f9f9;
   min-height: 25px; /* Добавим минимальную высоту для удобства */
   margin-bottom: 2px; /* Добавим отступ снизу для разделения блоков */
   border-radius: 4px; /* Скруглим углы */
@@ -17,8 +17,8 @@
 
 /* Стиль для элементов, которые можно перетаскивать */
 [cdkDrag] {
-  border: 1px solid #ddd;
-  background-color: white;
+//border: 1px solid #ddd;
+//background-color: white;
   cursor: move;
   padding: 2px; /* Добавим отступ для лучшего визуального восприятия */
   border-radius: 4px; /* Скруглим углы */
@@ -26,10 +26,10 @@
 
 /* Стиль для папок */
 .folder-header {
-  background-color: #b9d6ea; /* Светло-серый фон для папок */
+//background-color: #b9d6ea; /* Светло-серый фон для папок */
   min-width: 300px;
   padding: 2px;
-  border-bottom: 1px solid #ccc;
+//border-bottom: 1px solid #ccc;
   display: flex;
   align-items: center;
   cursor: pointer; /* Изменим курсор на указатель при наведении */
@@ -40,19 +40,19 @@
 
 /* Стиль для подкаталогов (вложенных папок) */
 .subfolder {
-  margin-left: 50px;
-  background-color: #f0f0f0; /* Светло-серый фон для подкаталогов */
-  padding: 2px;
-  border: 1px solid #ddd;
+  margin-left: 52px;
+//background-color: #f0f0f0; /* Светло-серый фон для подкаталогов */
+//padding: 2px;
+//border: 2px solid #ddd;
   border-radius: 4px;
   position: relative;
 }
 
 /* Стиль для тест-кейсов */
 .test-case-list {
-  background-color: #e8f5e9; /* Светло-зеленый фон для тест-кейсов */
-  padding: 2px;
-  border: 1px solid #c8e6c9; /* Зеленоватый цвет границы для тест-кейсов */
+//background-color: #e8f5e9; /* Светло-зеленый фон для тест-кейсов */
+//padding: 2px;
+//border: 1px solid #c8e6c9; /* Зеленоватый цвет границы для тест-кейсов */
 }
 
 /* Стиль для скрытых элементов (дочерние элементы) */
@@ -61,11 +61,14 @@
 }
 
 
+
 .cdk-drag.subfolder {
-  width: 1px;
-  transform: translateX(-26px);
-  background-color: #a6a1a1;
+  border-left: #c6c5d0 2px solid;
+  width: auto;
+//background-color: #33e003;
   padding: 0;
+  border-radius: 0;
+//left: -0.5px;
 }
 
 .test-case-item {
@@ -73,10 +76,45 @@
   align-items: center;
   position: relative;
   z-index: 2;
+  height: 40px;
+//padding-left: 32px;
+}
+
+.test-case-chain{
+  height: 2px;
+  width: 32px;
+  background-color: #c6c5d0;
+}
+
+.test-case-chain-empty{
+  width: 20px;
+}
+
+.test-case-container{
+  margin-top: 0.2rem;
+  padding-left: 32px;
+//background-color: #00a82a;
+}
+
+.test-case-sub-container{
+  position: relative;
+//border-left: 1px solid black;
+//color: red;
+}
+
+.test-case-sub-container:before{
+  content: '';
+  position: absolute;
+//top: -10px;
+  left: 20px;
+  height: calc(100% - 10px);
+  width: 2px;
+  background-color: #c6c5d0;
+  top: -11px;
 }
 
 .background-element{
-  background-color: #a6a1a1;
+//background-color: #a6a1a1;
   position: absolute;
   z-index: 1;
   width: 20px;
@@ -89,6 +127,10 @@
   margin-right: 8px; /* Отступ справа от иконки */
 }
 
+.folder-icon{
+  margin-right: 8px; /* Отступ справа от иконки */
+}
+
 .folder-btn-menu {
   display: none;
 }
@@ -97,7 +139,65 @@
   display: inline;
 }
 
+.testcase-btn-menu{
+  display: none;
+}
+
+.test-case-item:hover .testcase-btn-menu{
+  display: inline;
+}
 
 :host {
   --mdc-dialog-container-shape: 0px;
+}
+
+.test-case-name{
+  width: 300px; /* Ширина контейнера */
+  overflow: hidden; /* Скрытие текста, который не помещается */
+  white-space: nowrap; /* Текст в одну строку */
+  text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
+  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+  border-radius: 4px;
+  padding: 0 0.3rem 0 0.3rem;
+  background-color: #dce2fc;
+}
+
+.test-case-name:hover{
+  content: attr(data-full-text); /* Отображаем весь текст при наведении */
+//position: absolute;
+//background-color: #fff;
+  border: 1px solid #c6c5d0;
+//padding: 5px;
+//white-space: normal;
+//z-index: 10;
+}
+
+.folder-name-item{
+  width: 300px; /* Ширина контейнера */
+  overflow: hidden; /* Скрытие текста, который не помещается */
+  white-space: nowrap; /* Текст в одну строку */
+  text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
+  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+  border-radius: 4px;
+  padding: 0 0.3rem 0 0.3rem;
+  background-color: #b2c5ff;
+}
+
+.folder-name-item:hover{
+  width: 300px; /* Ширина контейнера */
+  overflow: hidden; /* Скрытие текста, который не помещается */
+  white-space: nowrap; /* Текст в одну строку */
+  text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
+  border: 1px solid #c6c5d0; /* Для наглядности добавим границу */
+}
+
+.empty-folder{
+  width: 300px; /* Ширина контейнера */
+  overflow: hidden; /* Скрытие текста, который не помещается */
+  white-space: nowrap; /* Текст в одну строку */
+  text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
+  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+  border-radius: 4px;
+  padding: 0.3rem;
+  background-color: #dce2fc;
 }

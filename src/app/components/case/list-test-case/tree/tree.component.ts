@@ -24,6 +24,7 @@ import {FolderService} from "../../../../services/folder.service";
 import {TestCaseService} from "../../../../services/test-case.service";
 import {ActivatedRoute} from "@angular/router";
 import {MoveAndCopyDialogComponent} from "../move-and-copy-dialog/move-and-copy-dialog.component";
+import {MediaObserver} from "@angular/flex-layout";
 
 
 @Component({
@@ -59,7 +60,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
     private testCaseService: TestCaseService,
     private routerParamsService: RouterParamsService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private mediaObserver: MediaObserver
   ) {
     // this.routerParamsService.projectId$.subscribe(id => {
     //   this.projectId = id;
@@ -360,9 +362,10 @@ export class TreeComponent implements OnInit, AfterViewInit {
   openDialogToAddFolder(parentFolderId: number): void {
     console.log("FolderId::::", parentFolderId);
 
+    const isSmallScreen = this.mediaObserver.isActive('ld-md');
     const dialogRef = this.dialog.open(DialogComponent, {
 
-      width: 'auto',
+      width: isSmallScreen ? '90%' : '50%',
       data: {
         type: 'folder',
         folderName: '',
@@ -424,6 +427,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
   }
 
   openDialogToCreateTestCase(folderId: number, folderName: string): void {
+
+
     console.log('FolderId ::', folderId);
     console.log('FolderName ::', folderName);
 
