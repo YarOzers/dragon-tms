@@ -33,11 +33,12 @@
     <mat-icon>add</mat-icon>
     <span>Добавить папку</span>
   </button>
-  <button mat-menu-item
+
+  <button mat-menu-item *ngIf="folder.trashFolder || folder.parentFolderId"
           (click)="openDialogToDeleteFolder(folder.id, folder.name)"
           [disabled]="folder.id === 0">
     <mat-icon>delete_outline</mat-icon>
-    <span *ngIf="!folder.trashFolder">Удалить папку</span>
+    <span *ngIf="!folder.trashFolder ">Удалить папку</span>
     <span *ngIf="folder.trashFolder">Очистить корзину</span>
   </button>
   <!--  <button mat-menu-item *ngIf="!folder.trashFolder">-->
