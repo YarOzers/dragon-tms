@@ -1,8 +1,8 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {NgClass, NgForOf, NgIf, NgStyle} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgOptimizedImage, NgStyle} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
 import {TreeComponent} from "./tree/tree.component";
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconAnchor, MatIconButton} from "@angular/material/button";
 import {
   MatCell,
   MatCellDef,
@@ -39,6 +39,7 @@ import {TestRunnerServiceService} from "../../../services/test-runner-service.se
 import {WebSocketService} from "../../../services/web-socket.service";
 import {User} from "../../../models/user";
 import {UserService} from "../../../services/user.service";
+import {TestCaseService} from "../../../services/test-case.service";
 
 
 @Component({
@@ -78,7 +79,9 @@ import {UserService} from "../../../services/user.service";
     MatMenuTrigger,
     FlexModule,
     NgClass,
-    MatMenuItem
+    MatMenuItem,
+    MatIconAnchor,
+    NgOptimizedImage
   ],
   templateUrl: './list-test-case.component.html',
   styleUrl: './list-test-case.component.scss'
@@ -94,8 +97,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     name: '',
     email: ''
   }
-  allColumns = ['select', 'run', 'id', 'name', 'type', 'result'];
-  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type', 'result'];
+  allColumns = ['select', 'id', 'run', 'report', 'name', 'type', 'result'];
+  displayedColumns: string[] = ['select', 'id', 'run', 'report', 'name', 'type', 'result'];
   testStatus: any;
   displayedColumnsSelection: { [key: string]: boolean } = {
     select: true,
@@ -103,6 +106,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     name: true,
     type: true,
     run: true,
+    report: true,
     result: true
   };
   selection = new SelectionModel<any>(true, []);
@@ -124,7 +128,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     private routerParamsService: RouterParamsService,
     private testRunnerService: TestRunnerServiceService,
     private webSocketService: WebSocketService,
-    private userService: UserService
+    private userService: UserService,
+    private testCaseService: TestCaseService
   ) {
   }
 
@@ -162,7 +167,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     let ids: number[] = [];
     ids.push(element.id)
 
-    this.testRunnerService.runTests(ids, this.user.id, 0).subscribe(
+    this.testRunnerService.runTests(ids, this.user.id, 0, this.projectId).subscribe(
       results => {
         this.testResults = results;
       },
@@ -204,10 +209,12 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log("Status From WebSocket:::: ", status);
 
         for (const st of status) {
+
           console.log("st::", st);
           this.dataSource.data.forEach(testCase => {
             if (testCase.id === Number(st.AS_ID)) {
               testCase.isRunning = false;
+              testCase.reportUrl = st.reportUrl;
               if (st.status === 'passed') {
                 testCase.result = 'SUCCESSFULLY';
               }
@@ -274,9 +281,18 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
       } // Можно передать данные в диалоговое окно
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result !== undefined && result !== '') {
-        console.log('result from dialog: ', result);
+    dialogRef.afterClosed().subscribe(tc => {
+      console.log("tc::", tc);
+      if (tc !== undefined && tc !== '') {
+        this.dataSource.data.forEach((testCase) => {
+          if (testCase.id === tc.id) {
+            testCase.name = tc.name;
+            testCase.automationFlag = tc.automationFlag;
+            console.log("TESTCASE::", testCase);
+            this.dataSource.data = [...this.dataSource.data];
+            console.log('this.datasourse.data::', this.dataSource.data)
+          }
+        })
       } else {
         console.log("Введите имя проекта!!!");
       }
@@ -291,7 +307,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   runSelectedAutoTests() {
     console.log(this.selection);
     const selectedAutoTests = this.selection.selected.filter(test => test.automationFlag === 'AUTO');
-    if (this.runTests) {
+    if (this.runTests && selectedAutoTests.length > 0) {
       console.log("SELSECTEDautotests:::", selectedAutoTests)
       let ids: number[] = [];
       for (const test of selectedAutoTests) {
@@ -303,7 +319,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       }
       console.log("RAAAAANNNNNN!!!!!!!!!")
-      this.testRunnerService.runTests(ids, this.user.id, 0).subscribe(
+      this.testRunnerService.runTests(ids, this.user.id, 0, this.projectId).subscribe(
         results => {
           this.testResults = results;
         },

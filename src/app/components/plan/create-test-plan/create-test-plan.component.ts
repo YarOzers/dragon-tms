@@ -96,8 +96,7 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     select: true,
     id: true,
     name: true,
-    type: true,
-    run: true
+    type: true
   };
 
   testPlanName: string = '';
@@ -158,16 +157,6 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
 
-  }
-
-  runTestCase(element: TestCase, event?: MouseEvent) {
-    if (event) {
-      event.stopPropagation();
-    }
-    element.isRunning = true;
-    setTimeout(() => {
-      element.isRunning = false;
-    }, 3000);
   }
 
   announceSortChange(sortState: Sort) {
@@ -241,13 +230,6 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
         row.selected = true;
       });
     }
-  }
-
-  runSelectedAutoTests() {
-    const selectedAutoTests = this.selection.selected.filter((test) => test.automationFlag === 'AUTO');
-    selectedAutoTests.forEach((test) => {
-      this.runTestCase(test);
-    });
   }
 
   updateFoldersWithSelection(testCases: TestCase[], folders: Folder[]): Folder[] {

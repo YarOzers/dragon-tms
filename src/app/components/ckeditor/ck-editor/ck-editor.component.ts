@@ -216,7 +216,7 @@ export class CkEditorComponent implements AfterViewInit, OnChanges{
           }
         }
       },
-      placeholder: 'Type or paste your content here!',
+      placeholder: '',
       table: {
         contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties']
       }

@@ -5,4 +5,5 @@ export interface AutotestResult{
   userId: string;
   testPlanId?: string;
   testRunId: string;
+  reportUrl: string;
 }

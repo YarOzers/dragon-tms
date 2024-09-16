@@ -17,6 +17,7 @@ export interface TestCase {
   selected: boolean | null;
   isRunning?: boolean;
   result?: string;
+  reportUrl?: string;
 }
 
 export interface TestCaseData {

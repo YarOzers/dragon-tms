@@ -456,6 +456,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
               this.generateTestCaseArrays();
               if (this.TEST_CASE_DATA) {
                 this.setExpandedTrue(this.TEST_CASE_DATA);
+                this.getTestCases(folderId);
               }
             }
             this.dataLoading = true;
@@ -625,7 +626,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
     console.log("DATA-----------: ", this.TEST_CASE_DATA);
   }
 
-  changeTestCaseDialog(testCaseId: number): void {
+  changeTestCaseDialog(testCaseId: number, folderId: number): void {
 
     const dialogRef = this.dialog.open(CreateTestCaseComponent, {
 
@@ -651,6 +652,7 @@ export class TreeComponent implements OnInit, AfterViewInit {
             this.generateTestCaseArrays();
             if (this.TEST_CASE_DATA) {
               this.setExpandedTrue(this.TEST_CASE_DATA);
+              this.getTestCases(folderId)
             }
           }
           this.dataLoading = true;

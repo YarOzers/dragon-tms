@@ -59,7 +59,7 @@ import {ExecuteTestPlanComponent} from "../execute-test-plan/execute-test-plan.c
   templateUrl: './list-test-plan.component.html',
   styleUrl: './list-test-plan.component.scss'
 })
-export class ListTestPlanComponent implements AfterViewInit{
+export class ListTestPlanComponent implements AfterViewInit {
   projectId: any;
   displayedColumns: string[] = ['id', 'name', 'menu'];
   private testPlanTableData: TestPlan[] = [];
@@ -92,8 +92,8 @@ export class ListTestPlanComponent implements AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
 
   ngOnInit(): void {
-    this.activeRouter.paramMap.subscribe(params =>{
-      if (params.get('projectId')){
+    this.activeRouter.paramMap.subscribe(params => {
+      if (params.get('projectId')) {
         this.projectId = params.get('projectId');
         this.routerParamsService.setProjectId(this.projectId);
       }
@@ -101,8 +101,8 @@ export class ListTestPlanComponent implements AfterViewInit{
 
     this.testPlanService.getTestPlansByProjectId(+this.projectId).subscribe({
       next: (testPlans) => {
-        if (testPlans){
-          console.log("testPlans::" , testPlans);
+        if (testPlans) {
+          console.log("testPlans::", testPlans);
 
           this.dataSource.data = [...testPlans]
           console.log("DATAsourse::", this.dataSource.data);
@@ -164,10 +164,10 @@ export class ListTestPlanComponent implements AfterViewInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result !== undefined && result !== ''){
+      if (result !== undefined && result !== '') {
         this.addTestPlan(result);
         this.router.navigate([`/project/${this.projectId}/test-plan-create/${this.projectId}`]);
-      }else {
+      } else {
         console.log("Введите имя тест плана!!!")
       }
     });
@@ -181,9 +181,9 @@ export class ListTestPlanComponent implements AfterViewInit{
     this.router.navigate([`/project/${this.projectId}/test-plan-create/${this.projectId}`]);
   }
 
-  opedEditTestPlanDialog(testPlanId: number){
+  opedEditTestPlanDialog(testPlanId: number) {
     let testPlan: TestPlan;
-    this.projectService.getTestPlanById(Number(this.projectId),Number(testPlanId)).subscribe(tp=>{
+    this.projectService.getTestPlanById(Number(this.projectId), Number(testPlanId)).subscribe(tp => {
       testPlan = tp;
       console.log('testPlan*** : ', testPlan);
       const dialogRef = this.dialog.open(CreateTestPlanComponent, {
@@ -226,9 +226,23 @@ export class ListTestPlanComponent implements AfterViewInit{
     });
 
     dialogRef.afterClosed().subscribe(testPlan => {
-      this.testPlanService.getTestPlansByProjectId(this.projectId).subscribe(testPlans=>{
-        this.dataSource.data = [...testPlans];
-      })
+      if (testPlan){
+        this.testPlanService.getTestPlansByProjectId(+this.projectId).subscribe({
+          next: (testPlans) => {
+            if (testPlans) {
+              console.log("testPlans::", testPlans);
+
+              this.dataSource.data = [...testPlans]
+              console.log("DATAsourse::", this.dataSource.data);
+            }
+            this.isLoading = false;
+          }, error: (err) => {
+            console.error("Ошибка при загрузке проектов: ", err);
+            this.isLoading = false;
+          }, complete() {
+          }
+        })
+      }
     });
   }
 
@@ -263,7 +277,7 @@ export class ListTestPlanComponent implements AfterViewInit{
 
 
   executeTestPlan(testPlanId: number) {
-    this.router.navigate(['project', this.projectId,'testplan',testPlanId],
+    this.router.navigate(['project', this.projectId, 'testplan', testPlanId],
       {
         state: {go: true}
       });

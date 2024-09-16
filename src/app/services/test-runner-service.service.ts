@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
@@ -9,14 +9,16 @@ import {Observable} from "rxjs";
 export class TestRunnerServiceService {
   private apiUrl: string = environment.apiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
-  runTests(testIds: number[], userId: number, testPlanId: number): Observable<any>{
+  runTests(testIds: number[], userId: number, testPlanId: number, projectId: number): Observable<any> {
     console.log("RUN TESTS!!!!!")
-    console.log("TEstIDS::",testIds)
-   let params: HttpParams = new HttpParams()
-     .set("userId", userId)
-     .set("testPlanId", testPlanId);
-    return this.http.post(`${this.apiUrl}/run-tests`,testIds, {params: params});
+    console.log("TEstIDS::", testIds)
+    let params: HttpParams = new HttpParams()
+      .set("userId", userId)
+      .set("testPlanId", testPlanId)
+      .set("projectId", projectId);
+    return this.http.post(`${this.apiUrl}/run-tests`, testIds, {params: params});
   }
 }
