@@ -64,6 +64,12 @@
           "defaultConfiguration": "production"
         },
         "serve": {
+          "options": {
+            "ssl": true,
+            "sslCert": "cert/certificate.crt",
+            "sslKey": "cert/private.key",
+            "port": 443
+          },
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
