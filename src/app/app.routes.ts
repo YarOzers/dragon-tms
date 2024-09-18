@@ -6,6 +6,7 @@ import {ListTestCaseComponent} from "./components/case/list-test-case/list-test-
 import {ExecuteTestPlanComponent} from "./components/plan/execute-test-plan/execute-test-plan.component";
 import {redirectGuard} from "./components/guard/redirect.guard";
 import {KeycloakAuthGuard} from "keycloak-angular";
+import {TestRunsComponent} from "./components/test-runs/test-runs.component";
 
 export const routes: Routes = [
   {
@@ -14,7 +15,8 @@ export const routes: Routes = [
       {path: '', component: ListProjectComponent},
       {path: 'project/:projectId', component: DetailProjectComponent, canActivate: [redirectGuard]},
       {path: 'project/:projectId/testplan/:testPlanId', component: ExecuteTestPlanComponent, canActivate: [redirectGuard]},
-      {path: 'project/:projectId/testcases', component: ListTestCaseComponent, canActivate: [redirectGuard]}
+      {path: 'project/:projectId/testcases', component: ListTestCaseComponent, canActivate: [redirectGuard]},
+      {path: 'project/:projectId/test-runs', component: TestRunsComponent, canActivate: [redirectGuard]}
     ]
   }
 ];

@@ -229,6 +229,7 @@ export class ListTestPlanComponent implements AfterViewInit {
       if (testPlan){
         this.testPlanService.getTestPlansByProjectId(+this.projectId).subscribe({
           next: (testPlans) => {
+            console.log("TEST Plans::", testPlans)
             if (testPlans) {
               console.log("testPlans::", testPlans);
 

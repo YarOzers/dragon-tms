@@ -14,6 +14,11 @@
               [class.active-button]="activeButton != 'testPlans'"
       >Тест планы
       </button>
+
+      <button mat-flat-button (click)="goToTestRuns()"
+              [class.active-button]="activeButton != 'testRuns'"
+      >Запуски автотестов
+      </button>
     </div>
   </div>
   <div fxFlex="10" class="user-name">{{ userName }}</div>

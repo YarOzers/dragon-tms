@@ -129,6 +129,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.router.navigate([`project/${this.projectId}/testcases`], {state: {go: true}})
   }
 
+  goToTestRuns() {
+    this.activeButton = 'testRuns';
+    this.router.navigate([`project/${this.projectId}/test-runs`], {state: {go: true}})
+  }
   logout() {
     this.keycloakService.logout(window.location.origin).then(r => {
       // Очистка локальных данных
@@ -137,4 +141,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       console.log('Данные пользователя очищены');
     }).catch(err => console.error('Ошибка при выходе', err));
   }
+
+
 }

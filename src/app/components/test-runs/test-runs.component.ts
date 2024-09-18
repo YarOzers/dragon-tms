@@ -24,6 +24,7 @@ import {TestRunnerServiceService} from "../../services/test-runner-service.servi
 import {RouterParamsService} from "../../services/router-params.service";
 import {TestRun} from "../../models/test-run";
 import {FlexModule} from "@angular/flex-layout";
+import {TestRunService} from "../../services/test-run.service";
 
 @Component({
   selector: 'app-test-runs',
@@ -66,14 +67,14 @@ export class TestRunsComponent implements OnInit, AfterViewInit{
   private projectId: number = 0;
 
   constructor(
-    private testRunnerService: TestRunnerServiceService,
+    private testRunService: TestRunService,
     private routerParamsService: RouterParamsService
   ) {
   }
   ngOnInit(): void {
     this.routerParamsService.projectId$.subscribe(projectId =>{
       this.projectId = Number(projectId);
-      this.testRunnerService.getProjectTestRuns(this.projectId).subscribe(testRuns=>{
+      this.testRunService.getProjectTestRuns(this.projectId).subscribe(testRuns=>{
         this.data = testRuns;
       })
     })
