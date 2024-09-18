@@ -1,2 +1,28 @@
 .project-list{
 }
+
+app-header{
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  overflow: hidden;
+  background-color: white;
+}
+
+.container{
+  position: relative;
+  top: 72px;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.main-container{
+  overflow: hidden;
+}
+
+.as-horizontal.as-percent{
+  overflow: hidden;
+}
+app-main-container{
+  overflow: hidden;
+}

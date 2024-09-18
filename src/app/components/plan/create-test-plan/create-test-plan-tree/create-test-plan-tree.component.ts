@@ -45,7 +45,7 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   private testCases: TestCase[] = [];
   @Output() testCasesFromTree = new EventEmitter<any>();
   public TEST_CASE_DATA: Folder[] | null = [];
-  testCasesMap: { [key: string]: TestCase[] } = {};
+  testCasesMap: { [key: number]: TestCase[] } = {};
 
 
   constructor(
@@ -94,8 +94,8 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   private addTestCasesToMap(folder: Folder) {
-    if (folder.name) {
-      this.testCasesMap[folder.name] = folder.testCases!;
+    if (folder.id) {
+      this.testCasesMap[folder.id] = folder.testCases!;
       if (folder.childFolders) {
         folder.childFolders.forEach(subFolder => this.addTestCasesToMap(subFolder));
       }
@@ -140,5 +140,9 @@ export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
     console.log(this.TEST_CASE_DATA);
   }
 
+  showFolder(folder: any) {
+    console.log("Folder:::  ", folder)
+
+  }
 }
 

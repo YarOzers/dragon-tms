@@ -196,8 +196,11 @@
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+  border: 1px solid #abaab4; /* Для наглядности добавим границу */
   border-radius: 4px;
-  padding: 0.3rem;
-  background-color: #dce2fc;
+  padding: 0.2rem;
+  background-color: #abaab4;
+  color: white;
 }
+
+

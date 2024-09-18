@@ -9,18 +9,17 @@
       <mat-expansion-panel *ngFor="let item of data">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            {{ item.id }}
+            {{ item.id }} Создан {{ item.createdDate | date: 'medium' }}
           </mat-panel-title>
           <mat-panel-description>
-            Проект {{ item.projectId }}
-            Тест-план {{ item.testPlanId }}
-            Запуск производил {{ item.userId }}
-            Создан {{ item.created }}
+            <div>Проект {{ item.projectName }}</div>
+            <div>Тест-план {{ item.testPlanName }}</div>
+            <div>Запуск производил {{ item.userName }}</div>
           </mat-panel-description>
         </mat-expansion-panel-header>
 
         <!-- Таблица с данными autotestResults -->
-        <table mat-table [dataSource]="item.autotestResults" class="mat-elevation-z8" fxFlex="90">
+        <table mat-table [dataSource]="item.autotestResultList" class="mat-elevation-z8" fxFlex="90">
 
           <!-- Столбец ID -->
           <ng-container matColumnDef="id">

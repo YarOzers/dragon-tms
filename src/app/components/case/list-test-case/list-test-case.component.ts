@@ -39,7 +39,6 @@ import {TestRunnerServiceService} from "../../../services/test-runner-service.se
 import {WebSocketService} from "../../../services/web-socket.service";
 import {User} from "../../../models/user";
 import {UserService} from "../../../services/user.service";
-import {TestCaseService} from "../../../services/test-case.service";
 
 
 @Component({
@@ -128,8 +127,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     private routerParamsService: RouterParamsService,
     private testRunnerService: TestRunnerServiceService,
     private webSocketService: WebSocketService,
-    private userService: UserService,
-    private testCaseService: TestCaseService
+    private userService: UserService
   ) {
   }
 
@@ -167,7 +165,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     let ids: number[] = [];
     ids.push(element.id)
 
-    this.testRunnerService.runTests(ids, this.user.id, 0, this.projectId).subscribe(
+    this.testRunnerService.runTests(ids, this.user.email, 0, this.projectId).subscribe(
       results => {
         this.testResults = results;
       },
@@ -319,7 +317,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       }
       console.log("RAAAAANNNNNN!!!!!!!!!")
-      this.testRunnerService.runTests(ids, this.user.id, 0, this.projectId).subscribe(
+      this.testRunnerService.runTests(ids, this.user.email, 0, this.projectId).subscribe(
         results => {
           this.testResults = results;
         },

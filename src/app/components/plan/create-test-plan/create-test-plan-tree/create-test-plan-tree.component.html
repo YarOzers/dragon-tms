@@ -13,7 +13,7 @@
           </button>
           <mat-icon>folder_open</mat-icon>
           <span class="folder-name">
-            <div class="folder-name-item">{{ folder.name }}</div></span>
+            <div class="folder-name-item" (click)="showFolder(folder)">{{ folder.name }}</div></span>
 
         </div>
         <div *ngIf="folder.expanded">
@@ -26,18 +26,43 @@
              class="test-case-list">
           <div class="test-case-container">
             <div class="test-case-sub-container">
-              <div *ngFor="let testCase of testCasesMap[folder.name]" class="test-case-item">
-                <div class="test-case-chain-empty"></div>
-                <div class="test-case-chain"></div>
-                <mat-icon>subject</mat-icon>
-                <div class="test-case-name">
-                  {{ testCase.name }}
+              <div>
+                <div  *ngFor="let testCase of testCasesMap[folder.id]" class="test-case-item">
+                  <div class="test-case-chain-empty"></div>
+                  <div class="test-case-chain"></div>
+                  <mat-icon *ngIf="testCasesMap[folder.id].length > 0">subject</mat-icon>
+                  <div *ngIf="testCase != null" class="test-case-name">
+                    {{ testCase.name }}
+                  </div>
                 </div>
               </div>
+              <div >
+                <div  *ngIf="folder.testCases.length == 0" class="test-case-item">
+                  <div class="test-case-chain-empty"></div>
+                  <div class="test-case-chain"></div>
+                  <mat-icon>not_interested</mat-icon>
+                  <div class="test-case-name">
+                    В корне папки нет тест-кейсов
+                  </div>
+                </div>
+              </div>
+
+              </div>
+<!--              <ng-template #emptyFolder>-->
+<!--                <div class="test-case-container-empty">-->
+<!--                  <div class="test-case-sub-container">-->
+<!--                    <div class="test-case-item">-->
+<!--                      <div class="test-case-chain-empty-empty"></div>-->
+<!--                      <div class="test-case-chain"></div>-->
+<!--                      <mat-icon>not_interested</mat-icon>-->
+<!--                      <div class="empty-folder">В корне папки нет тест-кейсов</div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </ng-template>-->
             </div>
           </div>
         </div>
-      </div>
     </ng-template>
   </div>
 </div>

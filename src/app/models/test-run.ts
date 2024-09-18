@@ -2,10 +2,10 @@ import {AutotestResult} from "./autotest-result";
 
 export interface TestRun{
   id: number;
-  userId: number;
-  testPlanId: number;
-  projectId: number;
-  name: string;
-  created: string;
-  autotestResults: AutotestResult[];
+  userName: string;
+  testPlanName: string;
+  projectName: string;
+  name?: string;
+  createdDate: string;
+  autotestResultList: AutotestResult[];
 }

@@ -12,11 +12,11 @@ export class TestRunnerServiceService {
   constructor(private http: HttpClient) {
   }
 
-  runTests(testIds: number[], userId: number, testPlanId: number, projectId: number): Observable<any> {
+  runTests(testIds: number[], userEmail: string, testPlanId: number, projectId: number): Observable<any> {
     console.log("RUN TESTS!!!!!")
     console.log("TEstIDS::", testIds)
     let params: HttpParams = new HttpParams()
-      .set("userId", userId)
+      .set("userEmail", userEmail)
       .set("testPlanId", testPlanId)
       .set("projectId", projectId);
     return this.http.post(`${this.apiUrl}/run-tests`, testIds, {params: params});
