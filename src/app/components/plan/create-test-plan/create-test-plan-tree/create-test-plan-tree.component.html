@@ -2,7 +2,9 @@
 <div *ngIf="dataLoading">
   <div cdkDropListGroup>
     <div *ngFor="let folder of TEST_CASE_DATA">
-      <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>
+      <div *ngIf="!folder.trashFolder">
+        <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>
+      </div>
     </div>
 
     <ng-template #folderTemplate let-folder="folder">
@@ -27,7 +29,7 @@
           <div class="test-case-container">
             <div class="test-case-sub-container">
               <div>
-                <div  *ngFor="let testCase of testCasesMap[folder.id]" class="test-case-item">
+                <div *ngFor="let testCase of testCasesMap[folder.id]" class="test-case-item">
                   <div class="test-case-chain-empty"></div>
                   <div class="test-case-chain"></div>
                   <mat-icon *ngIf="testCasesMap[folder.id].length > 0">subject</mat-icon>
@@ -36,8 +38,8 @@
                   </div>
                 </div>
               </div>
-              <div >
-                <div  *ngIf="folder.testCases.length == 0" class="test-case-item">
+              <div>
+                <div *ngIf="folder.testCases.length == 0" class="test-case-item">
                   <div class="test-case-chain-empty"></div>
                   <div class="test-case-chain"></div>
                   <mat-icon>not_interested</mat-icon>
@@ -46,23 +48,10 @@
                   </div>
                 </div>
               </div>
-
-              </div>
-<!--              <ng-template #emptyFolder>-->
-<!--                <div class="test-case-container-empty">-->
-<!--                  <div class="test-case-sub-container">-->
-<!--                    <div class="test-case-item">-->
-<!--                      <div class="test-case-chain-empty-empty"></div>-->
-<!--                      <div class="test-case-chain"></div>-->
-<!--                      <mat-icon>not_interested</mat-icon>-->
-<!--                      <div class="empty-folder">В корне папки нет тест-кейсов</div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--              </ng-template>-->
             </div>
           </div>
         </div>
+      </div>
     </ng-template>
   </div>
 </div>

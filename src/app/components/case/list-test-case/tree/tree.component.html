@@ -17,7 +17,8 @@
           <button mat-icon-button (click)="toggleFolder(folder, $event)">
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
-          <mat-icon class="folder-icon">{{ folder.expanded ? 'folder_open' : 'folder' }}</mat-icon>
+          <mat-icon *ngIf="!folder.trashFolder" class="folder-icon">{{ folder.expanded ? 'folder_open' : 'folder' }}</mat-icon>
+          <mat-icon *ngIf="folder.trashFolder" class="folder-icon">{{ folder.expanded ? 'restore_from_trash' : 'restore_from_trash' }}</mat-icon>
           <span class="folder-name" cdkDrag [cdkDragData]="folder">
             <div class="folder-name-item">{{ folder.name }}</div></span>
           <span class="folder-btn-menu">&nbsp;
@@ -99,7 +100,8 @@
                       <div class="test-case-chain-empty-empty"></div>
                       <div class="test-case-chain"></div>
                       <mat-icon>not_interested</mat-icon>
-                      <div class="empty-folder">В корне папки нет тест-кейсов</div>
+                      <div *ngIf="!folder.trashFolder" class="empty-folder">В корне папки нет тест-кейсов</div>
+                      <div *ngIf="folder.trashFolder" class="empty-folder">Корзина пуста</div>
                     </div>
                   </div>
                 </div>

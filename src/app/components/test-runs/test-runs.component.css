@@ -14,3 +14,8 @@
 .expansion-panel{
   width: 95vw;
 }
+
+.test-run-container{
+  height: calc(100vh - 120px);
+  overflow: auto;
+}
