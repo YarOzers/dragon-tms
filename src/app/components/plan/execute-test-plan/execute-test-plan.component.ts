@@ -16,7 +16,7 @@ import {
 } from "@angular/material/table";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
-import {MatMenu, MatMenuTrigger} from "@angular/material/menu";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader, Sort} from "@angular/material/sort";
@@ -39,6 +39,10 @@ import {Folder} from "../../../models/folder";
 import {TestPlan} from "../../../models/test-plan";
 import {TestPlanService} from "../../../services/test-plan.service";
 import {TestCaseService} from "../../../services/test-case.service";
+import {TestRunnerService} from "../../../services/test-runner.service";
+import {User} from "../../../models/user";
+import {UserService} from "../../../services/user.service";
+import {WebSocketService} from "../../../services/web-socket.service";
 
 @Component({
   selector: 'app-execute-test-plan',
@@ -73,9 +77,10 @@ import {TestCaseService} from "../../../services/test-case.service";
     MatHeaderCellDef,
     ExecuteTestPlanTreeComponent,
     CreateTestPlanTreeComponent,
+    MatMenuItem,
   ],
   templateUrl: './execute-test-plan.component.html',
-  styleUrl: './execute-test-plan.component.css'
+  styleUrl: './execute-test-plan.component.scss'
 })
 export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   @ViewChild(CreateTestPlanTreeComponent) treeComponent!: CreateTestPlanTreeComponent;
@@ -99,6 +104,8 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   private projectId = 0;
   private folders: Folder[] = [];
   private testPlanId: number = 0;
+  private testResults: any;
+  runTests: boolean = true; // Дефолтное значение
   protected testPlan: TestPlan = {
     author: "",
     name: '',
@@ -107,6 +114,13 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     status: 'await',
     qas: [],
     folders: []
+  }
+
+  private user: User = {
+    id: 0,
+    roles: [],
+    name: '',
+    email: ''
   }
 
   constructor(
@@ -118,11 +132,15 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     private routerParamsService: RouterParamsService,
     private route: ActivatedRoute,
     private testPlanService: TestPlanService,
-    private testCaseService: TestCaseService
+    private testCaseService: TestCaseService,
+    private testRunnerService: TestRunnerService,
+    private userService: UserService,
+    private webSocketService: WebSocketService
   ) {
   }
 
   ngOnInit(): void {
+    this.user = this.userService.getUser();
     this.routerParamsService.projectId$.subscribe((projectId) => {
       this.projectId = Number(projectId);
 
@@ -131,9 +149,42 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
       this.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
     }
 
-    this.testPlanService.getTestPlan(Number(this.testPlanId)).subscribe(testPlan => {
-      this.testPlan = testPlan;
+    if (this.testPlanId){
+      this.testPlanService.getTestPlan(Number(this.testPlanId)).subscribe(testPlan => {
+        this.testPlan = testPlan;
+      });
+    }
+
+    this.webSocketService.connect();
+
+    // Подписываемся на обновление статуса тестов
+    this.webSocketService.testStatus$.subscribe(status => {
+      if (status) {
+        console.log("Status From WebSocket:::: ", status);
+
+        for (const st of status) {
+
+          console.log("st::", st);
+          this.dataSource.data.forEach(testCase => {
+            if (testCase.id === Number(st.AS_ID)) {
+              testCase.isRunning = false;
+              testCase.reportUrl = st.reportUrl;
+              if (st.status === 'passed') {
+                testCase.result = 'SUCCESSFULLY';
+              }
+              if (st.status !== 'passed') {
+                testCase.result = 'FAILED';
+              }
+
+            }
+          });
+        }
+        console.log("DATASOURCE>DATA:::", this.dataSource.data);
+        // Если требуется обновить таблицу данных
+        this.dataSource.data = [...this.dataSource.data];
+      }
     });
+
 
   }
 
@@ -141,14 +192,29 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
 
   }
 
-  runTestCase(element: TestCase, event?: MouseEvent) {
+  runTestCase(element: any, event?: MouseEvent) {
+    console.log("Element::", element)
     if (event) {
       event.stopPropagation();
     }
     element.isRunning = true;
-    setTimeout(() => {
-      element.isRunning = false;
-    }, 3000);
+    if (element.automationFlag === 'AUTO') {
+
+    }
+    let ids: number[] = [];
+    ids.push(element.id)
+
+    console.log("TESTPLANID::", this.testPlanId);
+    this.testRunnerService.runTests(ids, this.user.email, this.testPlanId, this.projectId).subscribe(
+      results => {
+        this.testResults = results;
+      },
+      error => {
+        console.error('Ошибка запуска тестов', error);
+        this.isLoading = false;
+      }
+    )
+
   }
 
   announceSortChange(sortState: Sort) {
@@ -202,10 +268,39 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   }
 
   runSelectedAutoTests() {
-    const selectedAutoTests = this.selection.selected.filter((test) => test.automationFlag === 'AUTO');
-    selectedAutoTests.forEach((test) => {
-      this.runTestCase(test);
-    });
+    console.log(this.selection);
+    const selectedAutoTests = this.selection.selected.filter(test => test.automationFlag === 'AUTO');
+    if (this.runTests && selectedAutoTests.length > 0) {
+      console.log("SELSECTEDautotests:::", selectedAutoTests)
+      let ids: number[] = [];
+      for (const test of selectedAutoTests) {
+        ids.push(test.id)
+        this.dataSource.data.forEach(testCase => {
+          if (testCase.id === Number(test.id)) {
+            testCase.isRunning = true;
+          }
+        })
+      }
+      console.log("RAAAAANNNNNN!!!!!!!!!")
+      this.testRunnerService.runTests(ids, this.user.email, this.testPlanId, this.projectId).subscribe(
+        results => {
+          this.testResults = results;
+        },
+        error => {
+          console.error('Ошибка запуска тестов', error);
+          this.isLoading = false;
+        }
+      )
+    }
+
+
+    if (!this.runTests) {
+      console.log(selectedAutoTests)
+      selectedAutoTests.forEach(test => {
+        this.runTestCase(test);
+      });
+    }
+
   }
 
   updateFoldersWithSelection(testCases: TestCase[], folders: Folder[]): Folder[] {
@@ -283,16 +378,18 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((testCaseResult) => {
-      testCaseResult.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
-      console.log("TEstCaseRESULT::::", testCaseResult);
-      this.testCaseService.setTestCaseResult(testCaseId, testCaseResult).subscribe(testCase => {
-        this.dataSource.data.forEach((tc) => {
-          if (tc.id === testCase.id) {
-            tc.results?.push(testCaseResult);
-          }
-        })
-        console.log("TestCaseWithResult::", testCase);
-      });
+      if (testCaseResult){
+        testCaseResult.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
+        console.log("TEstCaseRESULT::::", testCaseResult);
+        this.testCaseService.setTestCaseResult(testCaseId, testCaseResult).subscribe(testCase => {
+          this.dataSource.data.forEach((tc) => {
+            if (tc.id === testCase.id) {
+              tc.results?.push(testCaseResult);
+            }
+          })
+          console.log("TestCaseWithResult::", testCase);
+        });
+      }
     }, (error) => {
       console.error('Ошибка при установке результата тест-кейса', error)
     }, () => {
@@ -302,5 +399,10 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
 
   updateDisplayedColumns() {
     this.displayedColumns = Object.keys(this.displayedColumnsSelection).filter(column => this.displayedColumnsSelection[column]);
+  }
+
+  // Функция для переключения режима
+  setRunMode(runInSingle: boolean): void {
+    this.runTests = runInSingle;
   }
 }

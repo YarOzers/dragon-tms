@@ -35,7 +35,7 @@ import {SelectionModel} from "@angular/cdk/collections";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
 import {FlexModule} from "@angular/flex-layout";
-import {TestRunnerServiceService} from "../../../services/test-runner-service.service";
+import {TestRunnerService} from "../../../services/test-runner.service";
 import {WebSocketService} from "../../../services/web-socket.service";
 import {User} from "../../../models/user";
 import {UserService} from "../../../services/user.service";
@@ -125,7 +125,7 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService,
-    private testRunnerService: TestRunnerServiceService,
+    private testRunnerService: TestRunnerService,
     private webSocketService: WebSocketService,
     private userService: UserService
   ) {

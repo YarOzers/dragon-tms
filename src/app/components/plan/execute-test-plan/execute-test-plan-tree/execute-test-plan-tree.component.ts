@@ -21,6 +21,7 @@ import {CreateTestCaseComponent} from "../../../case/create-test-case/create-tes
 import {ActivatedRoute} from "@angular/router";
 import {TestPlanService} from "../../../../services/test-plan.service";
 import {TestPlan} from "../../../../models/test-plan";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-execute-test-plan-tree',
@@ -35,10 +36,13 @@ import {TestPlan} from "../../../../models/test-plan";
     NgForOf,
     NgIf,
     NgTemplateOutlet,
-    NgClass
+    NgClass,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger
   ],
   templateUrl: './execute-test-plan-tree.component.html',
-  styleUrl: './execute-test-plan-tree.component.css'
+  styleUrl: './execute-test-plan-tree.component.scss'
 })
 export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit {
   selectedFolder: Folder | null = null;
@@ -47,7 +51,7 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit {
   private testCases: TestCase[] = [];
   @Output() testCasesFromTree = new EventEmitter<any>();
   public TEST_CASE_DATA: Folder[] | null = [];
-  testCasesMap: { [key: string]: TestCase[] } = {};
+  testCasesMap: { [key: number]: TestCase[] } = {};
   private testPlanId: number | null = 0;
   private testPlan: any;
 
@@ -169,8 +173,8 @@ export class ExecuteTestPlanTreeComponent implements OnInit, AfterViewInit {
   }
 
   private addTestCasesToMap(folder: Folder) {
-    if (folder.name) {
-      this.testCasesMap[folder.name] = folder.testCases!;
+    if (folder.id) {
+      this.testCasesMap[folder.id] = folder.testCases!;
       if (folder.childFolders) {
         folder.childFolders.forEach(subFolder => this.addTestCasesToMap(subFolder));
       }

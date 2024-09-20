@@ -2,7 +2,9 @@
 <div *ngIf="dataLoading">
   <div cdkDropListGroup>
     <div *ngFor="let folder of TEST_CASE_DATA">
-      <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>
+      <div *ngIf="!folder.trashFolder">
+        <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: folder }"></ng-container>
+      </div>
     </div>
 
     <ng-template #folderTemplate let-folder="folder">
@@ -11,22 +13,42 @@
           <button mat-icon-button (click)="toggleFolder(folder, $event)">
             <mat-icon>{{ folder.expanded ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
-          <mat-icon>folder_open</mat-icon>
-          <span class="folder-name">{{ folder.name }}</span>
+          <mat-icon>{{ folder.expanded ? 'folder_open' : 'folder' }}</mat-icon>
+          <span class="folder-name">
+            <div class="folder-name-item">{{ folder.name }}</div></span>
 
         </div>
         <div *ngIf="folder.expanded">
           <div *ngFor="let subFolder of folder.childFolders"
-               class="subfolder">
+               class="subfolder cdk-drag">
             <ng-container *ngTemplateOutlet="folderTemplate; context: { folder: subFolder }"></ng-container>
           </div>
         </div>
         <div *ngIf="folder.expanded" cdkDropList
              class="test-case-list">
-
-          <div *ngFor="let testCase of testCasesMap[folder.name]" class="test-case-item">
-            <mat-icon>subject</mat-icon>
-            {{ testCase.name }}
+          <div class="test-case-container">
+            <div class="test-case-sub-container">
+              <div>
+                <div *ngFor="let testCase of testCasesMap[folder.id]" class="test-case-item">
+                  <div class="test-case-chain-empty"></div>
+                  <div class="test-case-chain"></div>
+                  <mat-icon *ngIf="testCasesMap[folder.id].length > 0">subject</mat-icon>
+                  <div *ngIf="testCase != null" class="test-case-name">
+                    {{ testCase.name }}
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div *ngIf="folder.testCases.length == 0" class="test-case-item">
+                  <div class="test-case-chain-empty"></div>
+                  <div class="test-case-chain"></div>
+                  <mat-icon>not_interested</mat-icon>
+                  <div class="test-case-name">
+                    В корне папки нет тест-кейсов
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

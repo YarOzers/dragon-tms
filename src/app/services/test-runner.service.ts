@@ -6,7 +6,7 @@ import {Observable} from "rxjs";
 @Injectable({
   providedIn: 'root'
 })
-export class TestRunnerServiceService {
+export class TestRunnerService {
   private apiUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) {

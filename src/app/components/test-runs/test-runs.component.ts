@@ -20,7 +20,7 @@ import {
   MatTable
 } from "@angular/material/table";
 import {DatePipe, NgForOf, NgOptimizedImage} from "@angular/common";
-import {TestRunnerServiceService} from "../../services/test-runner-service.service";
+import {TestRunnerService} from "../../services/test-runner.service";
 import {RouterParamsService} from "../../services/router-params.service";
 import {TestRun} from "../../models/test-run";
 import {FlexModule} from "@angular/flex-layout";
