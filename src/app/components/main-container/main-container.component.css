@@ -7,13 +7,15 @@ app-header{
   width: 100vw;
   overflow: hidden;
   background-color: white;
+  font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
 }
 
 .container{
   position: relative;
-  top: 72px;
+  top: 56px;
   overflow: hidden;
   height: 100vh;
+
 }
 
 .main-container{
@@ -25,4 +27,8 @@ app-header{
 }
 app-main-container{
   overflow: hidden;
+}
+
+router-outlet{
+  font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
 }

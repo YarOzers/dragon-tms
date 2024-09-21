@@ -52,17 +52,17 @@ h3.dark-theme{
   flex-direction: column;
   flex: 1 1 auto;
   overflow: auto;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 56px);
 }
 
 .mat-mdc-dialog-content.mdc-dialog__content{
-  height: calc(100vh - 72px - 100px);
-  max-height: calc(100vh - 72px - 100px);
+  height: calc(100vh - 56px - 100px);
+  max-height: calc(100vh - 56px - 100px);
 }
 
 .column left {
-  height: calc(100vh - 72px - 100px);
-  max-height: calc(100vh - 72px - 100px);
+  height: calc(100vh - 56px - 100px);
+  max-height: calc(100vh - 56px - 100px);
 }
 .mat-mdc-dialog-component-host.ng-star-inserted{
   overflow: auto;

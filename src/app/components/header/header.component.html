@@ -1,6 +1,6 @@
-<div fxLayout="row" class="header">
+<div fxLayout="row" class="header" fxLayoutAlign="space-between center">
   <!-- Кнопки для больших экранов -->
-  <div fxFlex="75" fxHide.lt-md  fxLayoutAlign="start center" class="header-btn-container">
+  <div  fxHide.lt-md  fxLayoutAlign="start center" class="header-btn-container">
     <div *ngIf="showProjectButtons">
       <button mat-flat-button (click)="goToProjectList()"
               [class.active-button]="activeButton != 'projects'">
@@ -22,7 +22,7 @@
   </div>
 
   <!-- Бургер-меню для маленьких экранов -->
-  <div fxFlex="5" fxShow.lt-md fxHide.gt-sm>
+  <div  fxShow.lt-md fxHide.gt-sm>
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
@@ -34,23 +34,25 @@
     <button mat-menu-item (click)="goToTestPlans()">Тест планы</button>
     <button mat-menu-item (click)="goToTestRuns()">Запуски автотестов</button>
   </mat-menu>
-  <div fxFlex="10" class="user-name">{{ userName }}</div>
 
+  <div fxLayout="row" fxLayoutAlign="end center">
+    <div  class="user-name">{{ userName }}</div>
+    <div >
+      <button mat-icon-button disabled (click)="toggleIcon()">
+        <mat-icon>{{ matIcon }}</mat-icon>
+      </button>
+    </div>
+    <div >
+      <button mat-icon-button (click)="openSupportDialog()">
+        <mat-icon>contact_support</mat-icon>
+      </button>
+    </div>
+    <div >
+      <button mat-icon-button (click)="logout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </div>
+  </div>
 
-  <div fxFlex="5">
-    <button mat-icon-button disabled (click)="toggleIcon()">
-      <mat-icon>{{ matIcon }}</mat-icon>
-    </button>
-  </div>
-  <div fxFlex="5">
-    <button mat-icon-button (click)="openSupportDialog()">
-      <mat-icon>contact_support</mat-icon>
-    </button>
-  </div>
-  <div fxFlex="5">
-    <button mat-icon-button (click)="logout()">
-      <mat-icon>logout</mat-icon>
-    </button>
-  </div>
 </div>
 

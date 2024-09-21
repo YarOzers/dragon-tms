@@ -52,10 +52,10 @@ h3.dark-theme{
   flex-direction: column;
   flex: 1 1 auto;
   overflow: auto;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 56px);
 }
 
 .mat-mdc-dialog-content.mdc-dialog__content{
-  height: calc(100vh - 72px);
-  max-height: calc(100vh - 72px);
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
 }
