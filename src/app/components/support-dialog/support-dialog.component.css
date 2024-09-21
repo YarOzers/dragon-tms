@@ -1,0 +1,14 @@
+.contact-item{
+  display: flex;
+  align-items: center; /* Центрирует по вертикали */
+  gap: 8px; /* Отступ между иконкой и текстом */
+  text-decoration: none; /* Убирает подчеркивание у ссылки */
+  color: inherit; /* Наследует цвет от родителя */
+  font-size: 18px; /* Размер иконки */
+}
+
+a{
+  text-decoration: none; /* Убирает подчеркивание у ссылки */
+}
+
+

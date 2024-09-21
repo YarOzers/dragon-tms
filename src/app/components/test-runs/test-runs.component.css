@@ -1,5 +1,5 @@
 .example-action-buttons {
-  padding-bottom: 20px;
+  padding-bottom: 0.3rem;
 }
 
 .example-headers-align .mat-expansion-panel-header-description {
@@ -16,6 +16,32 @@
 }
 
 .test-run-container{
-  height: calc(100vh - 120px);
+  height: calc(100vh - 72px);
   overflow: auto;
 }
+
+.test-run-table-container{
+  display: flex;
+  width: 90vw;
+}
+div.summary{
+  width: 90vw;
+}
+
+.success-result {
+  display: inline-block;
+  height: auto;
+  width: auto;
+  background-color: #00a82a;
+  color: white;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 0.3rem;
+}
+.summary{
+  margin-left: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+
+

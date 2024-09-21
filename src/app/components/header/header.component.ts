@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from "@angular/router";
-import {FlexLayoutModule} from "@angular/flex-layout";
+import {FlexLayoutModule, MediaObserver} from "@angular/flex-layout";
 import {MatIcon} from "@angular/material/icon";
 import {NgIf} from "@angular/common";
 import {HeaderService} from "../../services/header.service";
@@ -13,6 +13,9 @@ import {KeycloakService} from "keycloak-angular";
 import {jwtDecode} from "jwt-decode";
 import {AuthService} from "../../services/auth.service";
 import {DecodedToken} from "../../models/token";
+import {MatDialog} from "@angular/material/dialog";
+import {SupportDialogComponent} from "../support-dialog/support-dialog.component";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 @Component({
   selector: 'app-header',
@@ -23,7 +26,10 @@ import {DecodedToken} from "../../models/token";
     FlexLayoutModule,
     MatIconButton,
     MatIcon,
-    NgIf
+    NgIf,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
@@ -32,6 +38,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   @Output() notifyMain: EventEmitter<void> = new EventEmitter<void>();
   matIcon: string = 'wb_sunny';
   activeButton: string = 'testCases'; // По умолчанию активна кнопка 'Тест кейсы'
+  menuOpen: boolean = false;
+
 
   // Method to toggle the icon
   showProjectButtons: boolean = false;
@@ -46,7 +54,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private routeParamsService: RouterParamsService,
     private userService: UserService,
     private keycloakService: KeycloakService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialog: MatDialog,
+    private mediaObserver: MediaObserver
   ) {
   }
 
@@ -109,7 +119,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }
   }
 
-  goHome() {
+  goToProjectList() {
     this.router.navigate([''])
   }
 
@@ -142,5 +152,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     }).catch(err => console.error('Ошибка при выходе', err));
   }
 
+
+  openSupportDialog() {
+    const isSmallScreen = this.mediaObserver.isActive('ld-md');
+    const dialogRef = this.dialog.open(SupportDialogComponent, {
+
+      width: isSmallScreen ? '95%' : '65%',
+      height:'auto',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      data: {
+
+      } // Можно передать данные в диалоговое окно
+    });
+  }
 
 }

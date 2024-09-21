@@ -5,7 +5,7 @@ import {
   MatExpansionPanelDescription,
   MatExpansionPanelHeader, MatExpansionPanelTitle
 } from "@angular/material/expansion";
-import {MatButton, MatIconAnchor} from "@angular/material/button";
+import {MatButton, MatIconAnchor, MatIconButton} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatFormField} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
@@ -19,7 +19,7 @@ import {
   MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef,
   MatTable
 } from "@angular/material/table";
-import {DatePipe, NgForOf, NgOptimizedImage} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgOptimizedImage} from "@angular/common";
 import {TestRunnerService} from "../../services/test-runner.service";
 import {RouterParamsService} from "../../services/router-params.service";
 import {TestRun} from "../../models/test-run";
@@ -55,7 +55,9 @@ import {TestRunService} from "../../services/test-run.service";
     MatExpansionPanelTitle,
     FlexModule,
     NgOptimizedImage,
-    MatIconAnchor
+    MatIconAnchor,
+    NgClass,
+    MatIconButton
   ],
   templateUrl: './test-runs.component.html',
   styleUrl: './test-runs.component.css'

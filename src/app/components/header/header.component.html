@@ -1,30 +1,50 @@
 <div fxLayout="row" class="header">
-  <div fxFlex="5" fxLayoutAlign="end center">
-    <button mat-icon-button>
-      <mat-icon (click)="goHome()">home</mat-icon>
-    </button>
-  </div>
-  <div fxFlex="75">
+  <!-- Кнопки для больших экранов -->
+  <div fxFlex="75" fxHide.lt-md  fxLayoutAlign="start center" class="header-btn-container">
     <div *ngIf="showProjectButtons">
+      <button mat-flat-button (click)="goToProjectList()"
+              [class.active-button]="activeButton != 'projects'">
+         Проекты
+      </button>
       <button mat-flat-button (click)="goToTestCases()"
-              [class.active-button]="activeButton != 'testCases'"
-      >Тест кейсы
+              [class.active-button]="activeButton != 'testCases'">
+        Тест кейсы
       </button>
       <button mat-flat-button (click)="goToTestPlans()"
-              [class.active-button]="activeButton != 'testPlans'"
-      >Тест планы
+              [class.active-button]="activeButton != 'testPlans'">
+        Тест планы
       </button>
-
       <button mat-flat-button (click)="goToTestRuns()"
-              [class.active-button]="activeButton != 'testRuns'"
-      >Запуски автотестов
+              [class.active-button]="activeButton != 'testRuns'">
+        Запуски автотестов
       </button>
     </div>
   </div>
+
+  <!-- Бургер-меню для маленьких экранов -->
+  <div fxFlex="5" fxShow.lt-md fxHide.gt-sm>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <!-- Выпадающее меню -->
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="goToProjectList()">Проекты</button>
+    <button mat-menu-item (click)="goToTestCases()">Тест кейсы</button>
+    <button mat-menu-item (click)="goToTestPlans()">Тест планы</button>
+    <button mat-menu-item (click)="goToTestRuns()">Запуски автотестов</button>
+  </mat-menu>
   <div fxFlex="10" class="user-name">{{ userName }}</div>
+
+
   <div fxFlex="5">
     <button mat-icon-button disabled (click)="toggleIcon()">
       <mat-icon>{{ matIcon }}</mat-icon>
+    </button>
+  </div>
+  <div fxFlex="5">
+    <button mat-icon-button (click)="openSupportDialog()">
+      <mat-icon>contact_support</mat-icon>
     </button>
   </div>
   <div fxFlex="5">
