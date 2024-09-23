@@ -34,8 +34,8 @@ div.summary{
   width: auto;
   background-color: #00a82a;
   color: white;
-  border: 1px solid black;
-  border-radius: 4px;
+  border: 1px solid #018d24;
+  border-radius: 8px;
   padding: 0.3rem;
 }
 .summary{
