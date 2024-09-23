@@ -30,6 +30,7 @@ import {CreateTestPlanComponent} from "../create-test-plan/create-test-plan.comp
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {ExecuteTestPlanComponent} from "../execute-test-plan/execute-test-plan.component";
+import {FlexModule} from "@angular/flex-layout";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -54,7 +55,8 @@ import {ExecuteTestPlanComponent} from "../execute-test-plan/execute-test-plan.c
     MatIconButton,
     MatMenuTrigger,
     MatMenu,
-    MatMenuItem
+    MatMenuItem,
+    FlexModule
   ],
   templateUrl: './list-test-plan.component.html',
   styleUrl: './list-test-plan.component.scss'

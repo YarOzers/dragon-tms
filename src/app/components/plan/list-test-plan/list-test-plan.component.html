@@ -1,46 +1,50 @@
-<p>Test plans:</p>
-<div class="table-container" >
-  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
-         class="table">
-    <!-- Position Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
-        id
-      </th>
-      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-    </ng-container>
+<div fxLayout="column" fxLayoutAlign="space-between start">
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+           class="table">
+      <!-- Position Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">
+          id
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.id }}</td>
+      </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-        name
-      </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
+          name
+        </th>
+        <td mat-cell *matCellDef="let element"> {{ element.name }}</td>
+      </ng-container>
 
-    <!-- Menu Column -->
-    <ng-container matColumnDef="menu">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
-          <mat-icon >more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="opedEditTestPlanDialog(element.id)">Edit</button>
-          <button mat-menu-item >Delete</button>
-        </mat-menu>
-      </td>
-    </ng-container>
+      <!-- Menu Column -->
+      <ng-container matColumnDef="menu">
+        <th mat-header-cell *matHeaderCellDef> Actions</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="opedEditTestPlanDialog(element.id)">Edit</button>
+            <button mat-menu-item>Delete</button>
+          </mat-menu>
+        </td>
+      </ng-container>
 
+      <div *ngIf="isLoading" class="progress-bar-container">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="executeTestPlan(row.id)"></tr>
+    </table>
     <div *ngIf="isLoading" class="progress-bar-container">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
+  </div>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="executeTestPlan(row.id)"></tr>
-  </table>
-  <div *ngIf="isLoading" class="progress-bar-container">
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  <div>
+    <button mat-flat-button (click)="openCreateTestPlanDialog()">Добавить тест план</button>
   </div>
 </div>
-<button  mat-flat-button (click)="openCreateTestPlanDialog()">Добавить тест план</button>

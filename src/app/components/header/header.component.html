@@ -1,10 +1,9 @@
 <div fxLayout="row" class="header" fxLayoutAlign="space-between center">
   <!-- Кнопки для больших экранов -->
   <div  fxHide.lt-md  fxLayoutAlign="start center" class="header-btn-container">
-    <div *ngIf="showProjectButtons">
-      <button mat-flat-button (click)="goToProjectList()"
-              [class.active-button]="activeButton != 'projects'">
-         Проекты
+    <div *ngIf="showProjectButtons" fxLayoutAlign="start center">
+      <button mat-icon-button (click)="goToProjectList()">
+         <mat-icon>home</mat-icon>
       </button>
       <button mat-flat-button (click)="goToTestCases()"
               [class.active-button]="activeButton != 'testCases'">

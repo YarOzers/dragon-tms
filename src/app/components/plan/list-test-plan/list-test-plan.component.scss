@@ -9,9 +9,9 @@
 }
 
 .table-container{
-  width: 90vw;
-  height: 60vh;
-  margin-bottom: 1rem;
+  width: 95vw;
+  height: calc(100vh - 220px);
+  //margin-bottom: 1rem;
   overflow: auto;
 }
 

@@ -1,7 +1,5 @@
-
-
-<div fxFlex="column">
-  <div>
+<div>
+  <div mat-dialog-content class="example">
     <mat-form-field fxFlex="100">
       <input matInput type="text"
              [(ngModel)]="testPlanName"
@@ -20,9 +18,8 @@
         Название тест-плана должно быть не менее 3 символов.
       </mat-error>
     </mat-form-field>
-
   </div>
-  <div mat-dialog-content class="dialog-content" fxLayoutAlign="center center">
+  <div class="dialog-content" style="height: calc(100vh - 160px);">
     <as-split unit="percent" direction="horizontal" gutterSize="10" class="left-column-container">
       <as-split-area [size]="40">
         <div class="column left">
@@ -32,11 +29,11 @@
 
       <as-split-area [size]="60">
         <div class="column right">
-<!--          <h3>Test Cases:</h3>-->
-          <div class="table-container" >
-            <div class="table-container" fxLayout="column" >
-              <div fxLayoutAlign="start-center" fxFlex="none">
-                <button mat-icon-button [matMenuTriggerFor]="columnsMenu">
+          <!--          <h3>Test Cases:</h3>-->
+          <div class="table-container">
+            <div class="table-container">
+              <div class="table-btn-container">
+                <button mat-icon-button [matMenuTriggerFor]="columnsMenu" class="column-menu-btn">
                   <mat-icon>view_column</mat-icon>
                 </button>
                 <mat-menu #columnsMenu="matMenu">
@@ -47,7 +44,7 @@
                 </mat-menu>
               </div>
 
-              <div fxFlex="1 1 auto">
+              <div>
                 <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
                        class="table">
                   <!-- Checkbox Column -->
@@ -102,9 +99,10 @@
       </as-split-area>
     </as-split>
   </div>
-  <div mat-dialog-actions>
-    <button mat-flat-button (click)="save()" fxLayoutAlign="start center" class="save-btn">Сохранить</button>
-    <button mat-button (click)="closeMatDialog()" fxLayoutAlign="space-between center" class="close-btn">Отмена</button>
-  </div>
+
 </div>
 
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
+  <button mat-flat-button (click)="save()" class="save-btn">Сохранить</button>
+  <button mat-button (click)="closeMatDialog()" class="close-btn">Отмена</button>
+</div>

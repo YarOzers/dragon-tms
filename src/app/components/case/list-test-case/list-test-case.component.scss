@@ -11,12 +11,12 @@ app-tree{
   //padding: 10px; /* Отступы для красоты */
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  height: calc(100% - 56px)
 
 }
 
 .left {
-  background-color: #eef0ff; /* Цвет фона первой колонки */
+  background-color: #ffffff; /* Цвет фона первой колонки */
   width: 100vw;
 }
 
@@ -40,7 +40,7 @@ app-tree{
 
 .table-container{
   width: 100%;
-  height: 80vh;
+  height: 100%;
   margin-bottom: 1rem;
   overflow: auto;
 }
