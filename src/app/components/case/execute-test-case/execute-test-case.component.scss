@@ -2,7 +2,7 @@
   --mdc-dialog-container-shape: 0px;
 }
 
-.dialog-container{
+.dialog-container {
   width: 100vw;
   height: 100vh;
 }
@@ -17,7 +17,7 @@
 
 }
 
-.mat-mdc-dialog-actions,mdc-dialog__actions{
+.mat-mdc-dialog-actions, mdc-dialog__actions {
   margin: 0;
   padding: 0;
   z-index: 1002;
@@ -25,29 +25,29 @@
   width: 100vw;
 }
 
-.cdk-overlay-pane{
+.cdk-overlay-pane {
   min-width: 100%;
   min-height: 100%;
 }
 
-.mat-mdc-unelevated-button{
+.mat-mdc-unelevated-button {
   margin: 1rem;
   border-radius: 7px;
   padding: 1rem;
 }
 
-.card{
+.card {
   max-width: 80%;
   margin: 0.3rem;
 }
 
-mat-card-header{
+mat-card-header {
   font-size: small;
   padding: 0.4rem 0.4rem 0 1rem;
   text-align: center;
 }
 
-mat-card-content.mat-mdc-card-content{
+mat-card-content.mat-mdc-card-content {
   font-weight: bolder;
   padding: 0.4rem 0.4rem 0.4rem 1rem;
   color: #6a7080;
@@ -67,7 +67,11 @@ mat-card-content.mat-mdc-card-content{
   border-right: 1px solid #b2c5ff;
 }
 
-.test-case-editors{
+.mat-drawer.mat-sidenav.ng-trigger.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened {
+  background-color: #f0efff;
+}
+
+.test-case-editors {
 
   border: 1px solid #b2c5ff;
 }

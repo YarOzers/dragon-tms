@@ -79,6 +79,7 @@
   z-index: 2;
   height: 25px;
   //padding-left: 32px;
+  margin-top: 0.2rem;
 }
 
 .test-case-chain{
@@ -159,7 +160,7 @@
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
   border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
   border-radius: 4px;
-  padding: 0 0.3rem 0 0.3rem;
+  padding: 0.2rem 0.3rem 0.2rem 0.3rem;
   background-color: #dce2fc;
 }
 
@@ -180,8 +181,9 @@
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
   border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
   border-radius: 4px;
-  padding: 0 0.3rem 0 0.3rem;
+  padding: 0.2rem 0.3rem 0.2rem 0.3rem;
   background-color: #b2c5ff;
+
 }
 
 .folder-name-item:hover{
@@ -209,5 +211,9 @@ mat-icon.mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color
   color: #51525b;
 }
 
+.test-case-name.empty-folder{
+  background-color: #abaab4;
+  color: white;
+}
 
 

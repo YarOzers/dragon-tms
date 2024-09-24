@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {FlexModule} from "@angular/flex-layout";
-import {MatButton, MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconAnchor, MatIconButton} from "@angular/material/button";
 import {
   MatCell,
   MatCellDef,
@@ -14,13 +14,13 @@ import {
   MatTable,
   MatTableDataSource
 } from "@angular/material/table";
-import {MatCheckbox} from "@angular/material/checkbox";
+import {MatCheckbox, MatCheckboxChange} from "@angular/material/checkbox";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatProgressSpinner} from "@angular/material/progress-spinner";
 import {MatSort, MatSortHeader, Sort} from "@angular/material/sort";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf, NgOptimizedImage} from "@angular/common";
 import {SplitAreaComponent, SplitComponent} from "angular-split";
 import {TreeComponent} from "../../case/list-test-case/tree/tree.component";
 import {SelectionModel} from "@angular/cdk/collections";
@@ -78,6 +78,9 @@ import {WebSocketService} from "../../../services/web-socket.service";
     ExecuteTestPlanTreeComponent,
     CreateTestPlanTreeComponent,
     MatMenuItem,
+    MatIconAnchor,
+    NgOptimizedImage,
+    NgClass,
   ],
   templateUrl: './execute-test-plan.component.html',
   styleUrl: './execute-test-plan.component.scss'
@@ -86,11 +89,14 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   @ViewChild(CreateTestPlanTreeComponent) treeComponent!: CreateTestPlanTreeComponent;
   @ViewChild(MatSort) sort!: MatSort;
   private syncScheduled = false;
-  allColumns = ['select', 'run', 'id', 'name', 'type','result'];
-  displayedColumns: string[] = ['select', 'run', 'id', 'name', 'type', 'result'];
+  allColumns = ['select', 'id', 'run', 'report', 'name', 'type', 'result'];
+  displayedColumns: string[] = ['select', 'id', 'run', 'report', 'name', 'type', 'result'];
   displayedColumnsSelection: { [key: string]: boolean } = {
     select: true,
     id: true,
+    run: true,
+    report: true,
+    result: true,
     name: true,
     type: true
   };
@@ -149,7 +155,7 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
       this.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
     }
 
-    if (this.testPlanId){
+    if (this.testPlanId) {
       this.testPlanService.getTestPlan(Number(this.testPlanId)).subscribe(testPlan => {
         this.testPlan = testPlan;
       });
@@ -231,6 +237,7 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     this.folders = event;
     this.testCaseTableData = this.getAllTestCases(this.folders);
     this.dataSource.data = this.testCaseTableData;
+    this.isLoading = false;
   }
 
   getAllTestCases(folders: Folder[]): TestCase[] {
@@ -378,7 +385,7 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((testCaseResult) => {
-      if (testCaseResult){
+      if (testCaseResult) {
         testCaseResult.testPlanId = Number(this.route.snapshot.paramMap.get('testPlanId'));
         console.log("TEstCaseRESULT::::", testCaseResult);
         this.testCaseService.setTestCaseResult(testCaseId, testCaseResult).subscribe(testCase => {
@@ -404,5 +411,19 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   // Функция для переключения режима
   setRunMode(runInSingle: boolean): void {
     this.runTests = runInSingle;
+  }
+
+  // Toggle selection for all rows
+  toggleAll(event: MatCheckboxChange) {
+    if (event.checked) {
+      this.selection.select(...this.dataSource.data);
+    } else {
+      this.selection.clear();
+    }
+  }
+
+  toggleSelection(element: any) {
+
+    this.selection.toggle(element);
   }
 }

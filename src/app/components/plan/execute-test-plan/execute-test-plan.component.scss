@@ -1,91 +1,150 @@
+app-tree{
+  font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
+}
+
+.container {
+  display: flex;
+}
+
+.column {
+  /*flex: 1; !* Колонки будут занимать равное пространство *!*/
+  //padding: 10px; /* Отступы для красоты */
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 56px);
+  //overflow: hidden;
+
+}
+
+.left {
+  background-color: #ffffff; /* Цвет фона первой колонки */
+  width: 100vw;
+}
+
+.right {
+  background-color: #e3e7ff; /* Цвет фона второй колонки */
+  width: 100%;
+  overflow: hidden;
+}
+
+
+//Table --------------------------------------------------------------------
+
 .mat-mdc-unelevated-button{
   margin: 1rem;
   border-radius: 7px;
   padding: 1rem;
 }
 
-.mat-mdc-table.mat-mdc-header-cell.dark-theme{
+.mat-mdc-table .mat-mdc-header-cell.dark-theme{
   background-color: #000e00;
 }
 
-.table-container {
-  flex: 1 1 auto;
-  overflow-y: auto;
+.table-container{
+  width: 100%;
+  height: 100%;
+  margin-bottom: 1rem;
+  overflow: auto;
 }
 
 h3.dark-theme{
   color: #3d55c0;
 }
 
-/*.mat-mdc-dialog-surface.mdc-dialog__surface{*/
-/*  max-height: 10px;*/
-/*}*/
+//.mat-mdc-row.mdc-data-table__row.cdk-row.ng-star-inserted:hover{
+//  background-color: #eaedff;
+//
+//}
 
-:host {
-  --mdc-dialog-container-shape: 0px;
+.success-result {
+  display: inline-block;
+  background-color: #0b912e;
+  border-radius: 5px;
+  border: 2px solid #014801;
+  width: auto;
+  height: auto;
+  padding: 3px;
+  color: white;
 }
 
-.dialog-container{
-  width: 100vw;
+.fail-result {
+  display: inline-block;
+  background-color: #c29292;
+  border-radius: 5px;
+  border: 1px solid red;
+  width: auto;
+  height: auto;
+  padding: 3px;
+}
+
+as-split{
   height: 100vh;
-}
-
-::ng-deep .mat-mdc-dialog-container {
-  --mdc-dialog-container-shape: 0px !important;
-
-}
-
-.mat-mdc-dialog-container {
-  --mdc-dialog-container-shape: 0px !important;
-
-}
-
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  padding: 1rem;
-  margin-top: auto;
-}
-
-.dialog-content {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  overflow: auto;
-  height: calc(100vh - 56px);
-}
-
-.mat-mdc-dialog-content.mdc-dialog__content{
-  height: calc(100vh - 56px - 80px);
-  max-height: calc(100vh - 56px - 80px);
-}
-
-.column left {
-  height: calc(100vh - 56px - 80px);
-  max-height: calc(100vh - 56px - 80px);
-}
-.mat-mdc-dialog-component-host.ng-star-inserted{
-  overflow: auto;
-}
-
-.test-plan-input{
-  margin: 0 1rem 1rem 1rem;
-}
-input{
-  height: 30px;
-  border-radius: 4px;
-  color: black;
-}
-
-app-execute-test-plan-tree{
-  height: calc(100vh - 140px);
-}
-
-div.table-btn-container{
-  background-color: #b2c5ff;
-  margin-bottom: 0;
 }
 
 .column-menu-btn{
   margin-left: 1rem;
 }
+
+.column.right{
+  overflow: hidden;
+}
+
+div.table-btn-container{
+  margin-bottom: 0;
+  position: fixed;
+  top: 91px;
+  z-index: 1000;
+}
+
+as-split-area{
+  height: 100%;
+}
+
+/* Контейнер с таблицей */
+.table-container {
+  overflow: hidden;
+  position: relative;
+  height: calc(100vh - 56px); /* Высота без учёта хедера */
+  margin-top: 40px; /* Отступ от фиксированного контейнера с кнопками */
+}
+
+/* Прокручиваемая область внутри таблицы */
+.table-content {
+  overflow: auto;
+  max-height: calc(100vh - 156px); /* Учитываем высоту хедера и контейнера с кнопками */
+}
+
+table.table{
+  height: 100%;
+  border-collapse: collapse;
+}
+
+div.table-size-limit-container{
+  max-height: 1000px;
+}
+
+table.table thead {
+  position: sticky;
+  top: 0; /* Заголовок таблицы фиксирован в верхней части таблицы */
+  background-color: white;
+  z-index: 500;
+}
+
+div.test-plan-name{
+  margin-top: 40px;
+  height: 30px;
+}
+
+input{
+  border: #b2c5ff 2px solid;
+  font-weight: bolder;
+  height: 25px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+
+
+
+
+
