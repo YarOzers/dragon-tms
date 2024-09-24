@@ -11,21 +11,25 @@
 @import "styles/create-test-case.scss";
 @import "styles/editor.scss";
 @import "styles/mat-icon.scss";
+@import "styles/input.scss";
+@import "styles/dialog.scss";
+@import "styles/button.scss";
 
 @include mat.core();
 
 
-:root .light-theme{
+:root .dark-theme{
+
 
 
 }
 
 
-html, body {
+html, body .dark-theme{
   height: 100%;
   overflow: auto;
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
-  @include mat.all-component-themes(lgt.$light-theme);
+  --sys-background: mat.get-theme-color(drk.$dark-theme, 'primary', 0)
 }
 
 body {
@@ -64,24 +68,48 @@ mat-table{
 
 //      Скролбар   =========================================================
 
-/* Для Webkit-браузеров */
-::-webkit-scrollbar {
-  width: 8px; /* ширина вертикального скроллбара */
-  height: 8px; /* высота горизонтального скроллбара */
+.light-theme{
+  /* Для Webkit-браузеров */
+  ::-webkit-scrollbar {
+    width: 8px; /* ширина вертикального скроллбара */
+    height: 8px; /* высота горизонтального скроллбара */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: mat.get-theme-color(lgt.$light-theme, 'primary', 90); /* цвет дорожки скроллбара */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: mat.get-theme-color(lgt.$light-theme, 'primary', 70); /* цвет ползунка */
+    border-radius: 6px; /* скругление углов ползунка */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: mat.get-theme-color(lgt.$light-theme, 'primary', 50); /* цвет ползунка при наведении */
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1; /* цвет дорожки скроллбара */
+.dark-theme{
+  /* Для Webkit-браузеров */
+  ::-webkit-scrollbar {
+    width: 8px; /* ширина вертикального скроллбара */
+    height: 8px; /* высота горизонтального скроллбара */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: mat.get-theme-color(drk.$dark-theme, 'primary', 50); /* цвет дорожки скроллбара */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: mat.get-theme-color(drk.$dark-theme, 'primary', 30); /* цвет ползунка */
+    border-radius: 6px; /* скругление углов ползунка */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: mat.get-theme-color(drk.$dark-theme, 'primary', 20); /* цвет ползунка при наведении */
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: #888; /* цвет ползунка */
-  border-radius: 6px; /* скругление углов ползунка */
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555; /* цвет ползунка при наведении */
-}
 
 
 .highlight{
@@ -129,6 +157,23 @@ app-ck-editor{
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
 }
 
+
+//выравнивание иконок в mat-icon-button
+.center-icon-button {
+  display: flex;                /* Используем flexbox для кнопки */
+  align-items: center;          /* Центрируем по вертикали */
+  justify-content: center;      /* Центрируем по горизонтали */
+}
+
+
+
+.center-icon-button mat-icon {
+  display: flex;                /* Используем flexbox для иконки */
+  align-items: center;          /* Центрируем по вертикали */
+  justify-content: center;      /* Центрируем по горизонтали */
+  width: 24px;                  /* Стандартный размер иконки */
+  height: 24px;                 /* Стандартный размер иконки */
+}
 
 
 

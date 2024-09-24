@@ -53,4 +53,8 @@
   .mat-drawer-container.mat-sidenav-container.sidenav-container.mat-drawer-transition {
     background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0);
   }
+
+  .mat-drawer.mat-sidenav.ng-trigger.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened{
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0);
+  }
 }

@@ -2,7 +2,7 @@
 <div class="dialog-container">
   <div mat-dialog-content class="dialog-content">
 
-    <div class="test-case-name">
+    <div class="test-case-name-input">
       <div fxLayout="row" fxLayoutAlign="center-center">
         <div *ngIf="!new" fxFlex="6">
           <span fxFlex="6">{{ this.testCaseId }}</span>
@@ -65,9 +65,9 @@
         </mat-sidenav>
 
         <mat-sidenav-content>
-          <div fxLayout="row" class="toolbar-plus-btn">
+          <div fxLayout="row" class="toolbar-plus-btn" id="sidenav-toggle">
             <div fxFlex="7">
-              <button mat-icon-button (click)="toggleSidenav()">
+              <button mat-icon-button (click)="toggleSidenav()" class="center-icon-button">
                 <mat-icon>{{ sidenav.opened ? 'keyboard_arrow_left' : 'keyboard_arrow_right' }}</mat-icon>
               </button>
             </div>

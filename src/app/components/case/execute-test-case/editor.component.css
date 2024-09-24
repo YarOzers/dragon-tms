@@ -37,6 +37,7 @@ mat-sidenav-content {
 .toolbar-plus-btn {
   flex-shrink: 0; /* Запрещаем этому блоку сжиматься */
   z-index: 1001; /* Поверх всего, что внутри mat-sidenav-content */
+  margin: 0;
 }
 
 /* Делаем step-container прокручиваемым */

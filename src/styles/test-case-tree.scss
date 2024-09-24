@@ -14,7 +14,8 @@
 
   .test-case-name{
     border: 1px solid mat.get-theme-color(lgt.$light-theme, 'primary', 35); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 90);
+    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+    color: mat.get-theme-color(lgt.$light-theme, 'primary', 0);
   }
 
   .test-case-name:hover{
@@ -23,8 +24,9 @@
   }
 
   .folder-name-item{
-    border: 1px solid mat.get-theme-color(lgt.$light-theme, 'primary', 50); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+    border: 1px solid mat.get-theme-color(lgt.$light-theme, 'primary', 40); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 50);
+    color: mat.get-theme-color(lgt.$light-theme, 'primary', 95);
   }
 
   .folder-name-item:hover{
@@ -45,6 +47,9 @@
   .cdk-drag-folder.subfolder {
     border-left:  2px solid mat.get-theme-color(lgt.$light-theme, 'primary', 70);
   }
+  .cdk-drag.subfolder{
+    border-left:  2px solid mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +67,7 @@
   .test-case-name{
     border: 1px solid mat.get-theme-color(drk.$dark-theme, 'primary', 40); /* Для наглядности добавим границу */
     background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 20);
+    color: mat.get-theme-color(drk.$dark-theme, 'primary', 70);
   }
 
   .cdk-drag-folder.subfolder {
@@ -74,7 +80,8 @@
 
   .folder-name-item{
     border: 1px solid mat.get-theme-color(drk.$dark-theme, 'primary', 50); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 50);
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 40);
+    color: mat.get-theme-color(drk.$dark-theme, 'primary', 80);
   }
 
   .folder-name-item:hover{
@@ -83,11 +90,15 @@
 
   .empty-folder {
     border: 1px solid mat.get-theme-color(drk.$dark-theme, 'primary', 30); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 50);
+    background-color: mat.get-theme-color(drk.$dark-theme, 'neutral-variant', 25);
     color: mat.get-theme-color(drk.$dark-theme, 'primary', 80);
   }
 
   mat-icon {
-    color: mat.get-theme-color(drk.$dark-theme, 'primary', 60);
+    color: mat.get-theme-color(drk.$dark-theme, 'primary', 50);
+  }
+
+  .cdk-drag.subfolder{
+    border-left:  2px solid mat.get-theme-color(drk.$dark-theme, 'primary', 35);
   }
 }

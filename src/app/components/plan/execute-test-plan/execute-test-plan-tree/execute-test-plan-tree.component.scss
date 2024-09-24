@@ -30,6 +30,7 @@
   height: 25px;
   min-width: 300px;
   padding: 2px;
+  margin-bottom: 0.4rem;
   //border-bottom: 1px solid #ccc;
   display: flex;
   align-items: center;
@@ -64,7 +65,7 @@
 
 
 .cdk-drag.subfolder {
-  border-left: #c6c5d0 2px solid;
+  //border-left: #c6c5d0 2px solid;
   width: auto;
   //background-color: #33e003;
   padding: 0;
@@ -79,13 +80,13 @@
   z-index: 2;
   height: 25px;
   //padding-left: 32px;
-  margin-top: 0.2rem;
+  margin-bottom: 0.4rem;
 }
 
 .test-case-chain{
   height: 2px;
   width: 12px;
-  background-color: #c6c5d0;
+  //background-color: #c6c5d0;
 }
 
 .test-case-chain-empty{
@@ -111,7 +112,7 @@
   left: 20px;
   height: calc(100% - 10px);
   width: 2px;
-  background-color: #c6c5d0;
+  //background-color: #c6c5d0;
   top: -2px;
 }
 
@@ -158,17 +159,17 @@
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+  //border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
   border-radius: 4px;
   padding: 0.2rem 0.3rem 0.2rem 0.3rem;
-  background-color: #dce2fc;
+  //background-color: #dce2fc;
 }
 
 .test-case-name:hover{
   content: attr(data-full-text); /* Отображаем весь текст при наведении */
   //position: absolute;
   //background-color: #fff;
-  border: 1px solid #c6c5d0;
+  //border: 1px solid #c6c5d0;
   //padding: 5px;
   //white-space: normal;
   //z-index: 10;
@@ -179,10 +180,10 @@
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
+  //border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
   border-radius: 4px;
   padding: 0.2rem 0.3rem 0.2rem 0.3rem;
-  background-color: #b2c5ff;
+  //background-color: #b2c5ff;
 
 }
 
@@ -191,7 +192,7 @@
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #c6c5d0; /* Для наглядности добавим границу */
+  //border: 1px solid #c6c5d0; /* Для наглядности добавим границу */
 }
 
 .empty-folder{
@@ -199,21 +200,23 @@
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #abaab4; /* Для наглядности добавим границу */
+  //border: 1px solid #abaab4; /* Для наглядности добавим границу */
   border-radius: 4px;
   padding: 0.2rem;
-  background-color: #abaab4;
-  color: white;
+  //background-color: #abaab4;
+  //color: white;
 }
 
 mat-icon.mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color{
   margin: 0;
-  color: #51525b;
+  //color: #51525b;
 }
 
 .test-case-name.empty-folder{
-  background-color: #abaab4;
-  color: white;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  //background-color: #abaab4;
+  //color: white;
 }
 
 

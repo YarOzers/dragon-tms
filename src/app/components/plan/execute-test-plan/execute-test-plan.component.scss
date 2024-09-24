@@ -17,12 +17,12 @@ app-tree{
 }
 
 .left {
-  background-color: #ffffff; /* Цвет фона первой колонки */
+  //background-color: #ffffff; /* Цвет фона первой колонки */
   width: 100vw;
 }
 
 .right {
-  background-color: #e3e7ff; /* Цвет фона второй колонки */
+  //background-color: #e3e7ff; /* Цвет фона второй колонки */
   width: 100%;
   overflow: hidden;
 }
@@ -34,10 +34,6 @@ app-tree{
   margin: 1rem;
   border-radius: 7px;
   padding: 1rem;
-}
-
-.mat-mdc-table .mat-mdc-header-cell.dark-theme{
-  background-color: #000e00;
 }
 
 .table-container{
@@ -136,7 +132,7 @@ div.test-plan-name{
 }
 
 input{
-  border: #b2c5ff 2px solid;
+  //border: #b2c5ff 2px solid;
   font-weight: bolder;
   height: 25px;
   padding-left: 0.5rem;

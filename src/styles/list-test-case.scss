@@ -33,4 +33,8 @@
     width: 100%;
     overflow: hidden;
   }
+
+  div.ng-star-inserted.as-split-gutter {
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 20); /* Изменение фона сепаратора */
+  }
 }

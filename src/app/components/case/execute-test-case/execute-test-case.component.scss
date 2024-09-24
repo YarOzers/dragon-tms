@@ -22,7 +22,7 @@
   margin: 0;
   padding: 0;
   z-index: 1002;
-  background-color: #dbe1ff;
+  //background-color: #dbe1ff;
   width: 100vw;
 }
 
@@ -51,44 +51,52 @@ mat-card-header {
 mat-card-content.mat-mdc-card-content {
   font-weight: bolder;
   padding: 0.4rem 0.4rem 0.4rem 1rem;
-  color: #6a7080;
+  //color: #6a7080;
 }
 
 .top-radius {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  border: 1px solid #b2c5ff;
+  //border: 1px solid #b2c5ff;
 
 }
 
 .bottom-radius {
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  border-left: 1px solid #b2c5ff;
-  border-right: 1px solid #b2c5ff;
+  //border-left: 1px solid #b2c5ff;
+  //border-right: 1px solid #b2c5ff;
 }
 
 .mat-drawer.mat-sidenav.ng-trigger.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened {
-  background-color: #f0efff;
+  //background-color: #f0efff;
 }
 
 .test-case-editors {
 
-  border: 1px solid #b2c5ff;
+  //border: 1px solid #b2c5ff;
 }
 
 input{
-  background-color: #f0efff;
+  //background-color: #f0efff;
   border-radius: 4px;
-  border: 2px solid #b2c5ff;
+  //border: 2px solid #b2c5ff;
 }
 
-.test-case-name{
+.test-case-name-input{
   margin: 0;
 }
 
 .mat-mdc-dialog-content.mdc-dialog__content.dialog-content{
-  padding: 0;
-  padding-top: 0.5rem;
+  padding: 0.5rem 0 0;
 }
+
+.mat-drawer-content.mat-sidenav-content{
+  margin-top: 0;
+}
+
+#sidenav-toggle{
+  margin: 0;
+}
+
 

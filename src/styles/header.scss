@@ -10,7 +10,7 @@
   }
 
   .mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
-    background-color: mat.get-theme-color(lgt.$light-theme, 'neutral-variant', 70); /* Синий цвет фона для активной кнопки */
+    background-color: mat.get-theme-color(lgt.$light-theme, 'neutral-variant', 50); /* Синий цвет фона для активной кнопки */
     color: mat.get-theme-color(lgt.$light-theme, 'neutral-variant', 20);
     /* Добавьте другие стили для активной кнопки, если необходимо */
   }
@@ -18,13 +18,13 @@
 
 .dark-theme{
   .header{
-    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 40);
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 20);
     color: mat.get-theme-color(drk.$dark-theme,'primary', 80);
   }
 
   .mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
-    background-color: #89a0b9; /* Синий цвет фона для активной кнопки */
-    color: white;
+    background-color: mat.get-theme-color(drk.$dark-theme,'primary', 50); /* Синий цвет фона для активной кнопки */
+    color: mat.get-theme-color(drk.$dark-theme,'primary', 80);
     /* Добавьте другие стили для активной кнопки, если необходимо */
   }
 }
