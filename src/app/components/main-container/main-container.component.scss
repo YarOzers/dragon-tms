@@ -6,11 +6,10 @@ app-header{
   top: 0;
   width: 100vw;
   overflow: hidden;
-  background-color: #eef0ff;
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
 }
 
-.container{
+div.container{
   position: relative;
   top: 56px;
   overflow: hidden;

@@ -69,15 +69,17 @@ mat-sidenav {
 /* Обрабатываем материнский контейнер для контента, чтобы учитывать фиксированный header */
 mat-sidenav-content {
   position: relative;
-  top: 40px; /* Высота header */
   height: calc(100vh - 150px);
   overflow: hidden; /* Отключаем прокрутку для всего контента, кроме step-container */
 }
 
-.mat-drawer-content.mat-sidenav-content{
-  margin-top: 1rem;
+mat-sidenav-container{
+  margin-top: 15px;
 }
+/*.mat-drawer-content.mat-sidenav-content{*/
+/*  margin-top: 1rem;*/
+/*}*/
 
-mat-sidenav{
-  margin-top: 2rem;
-}
+/*mat-sidenav{*/
+/*  margin-top: 2rem;*/
+/*}*/

@@ -1,0 +1,36 @@
+@use '@angular/material' as mat;
+@use './m3-theme-green' as lgt;
+@use './m3-theme-dark' as drk;
+
+@include mat.core();
+
+.light-theme{
+
+  .left {
+    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 98); /* Цвет фона первой колонки */
+    width: 100vw;
+  }
+
+  .right {
+    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 98); /* Цвет фона второй колонки */
+    width: 100%;
+    overflow: hidden;
+  }
+
+  div.ng-star-inserted.as-split-gutter {
+    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 95); /* Изменение фона сепаратора */
+  }
+}
+
+.dark-theme{
+  .left {
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0); /* Цвет фона первой колонки */
+    width: 100vw;
+  }
+
+  .right {
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0); /* Цвет фона второй колонки */
+    width: 100%;
+    overflow: hidden;
+  }
+}

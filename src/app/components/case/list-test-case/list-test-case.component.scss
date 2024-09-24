@@ -17,12 +17,10 @@ app-tree{
 }
 
 .left {
-  background-color: #ffffff; /* Цвет фона первой колонки */
   width: 100vw;
 }
 
 .right {
-  background-color: #e3e7ff; /* Цвет фона второй колонки */
   width: 100%;
   overflow: hidden;
 }
@@ -46,15 +44,6 @@ app-tree{
   margin-bottom: 1rem;
   overflow: auto;
 }
-
-h3.dark-theme{
-  color: #3d55c0;
-}
-
-//.mat-mdc-row.mdc-data-table__row.cdk-row.ng-star-inserted:hover{
-//  background-color: #eaedff;
-//
-//}
 
 .success-result {
   display: inline-block;

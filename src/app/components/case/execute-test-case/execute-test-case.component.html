@@ -2,7 +2,7 @@
 <div class="dialog-container">
   <div mat-dialog-content class="dialog-content">
 
-    <div class="header">
+    <div class="test-case-name">
       <div fxLayout="row" fxLayoutAlign="center-center">
         <div *ngIf="!new" fxFlex="6">
           <span fxFlex="6">{{ this.testCaseId }}</span>
@@ -100,15 +100,7 @@
      }"
                          contenteditable="false"
                          fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, expectedResultEditor)"
-                         (paste)="autoResize($event, expectedResultEditor)"
-                         (focusin)="autoResize($event, expectedResultEditor)"
-                         (resize)="autoResize($event, expectedResultEditor)"
-                         (mouseup)="autoResize($event, expectedResultEditor)"
                          (blur)="updateEditorPreConditionContent(actionEditor, i, 'action')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)"
                     >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -121,15 +113,8 @@
      }"
                          contenteditable="false"
                          fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, actionEditor)"
-                         (paste)="autoResize($event, actionEditor)"
-                         (focusin)="autoResize($event, actionEditor)"
-                         (resize)="autoResize($event, actionEditor)"
-                         (mouseup)="autoResize($event, actionEditor)"
+
                          (blur)="updateEditorPreConditionContent(expectedResultEditor, i, 'expectedResult')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)"
                     >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
@@ -163,12 +148,7 @@
      }"
                          contenteditable="false"
                          fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, expectedResultEditor)"
-                         (paste)="autoResize($event, expectedResultEditor)"
-                         (blur)="updateEditorStepContent(actionEditor, i, 'action')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+                         (blur)="updateEditorStepContent(actionEditor, i, 'action')">
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
@@ -180,12 +160,8 @@
      }"
                          contenteditable="false"
                          fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, actionEditor)"
-                         (paste)="autoResize($event, actionEditor)"
                          (blur)="updateEditorStepContent(expectedResultEditor, i, 'expectedResult')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+ >
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
@@ -216,12 +192,8 @@
      }"
                          contenteditable="false"
                          fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, expectedResultEditor)"
-                         (paste)="autoResize($event, expectedResultEditor)"
                          (blur)="updateEditorPostConditionContent(actionEditor, i, 'action')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+>
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">
@@ -233,12 +205,8 @@
      }"
                          contenteditable="false"
                          fxFlex="50"
-                         (focus)="setActiveEditor($event)"
-                         (input)="autoResize($event, actionEditor)"
-                         (paste)="autoResize($event, actionEditor)"
                          (blur)="updateEditorPostConditionContent(expectedResultEditor, i, 'expectedResult')"
-                         (drop)="handleDrop($event)"
-                         (dragover)="handleDragOver($event)">
+>
                     </div>
                     <input type="file" #fileInput accept="image/*" style="display: none;"
                            (change)="onFileSelected($event)">

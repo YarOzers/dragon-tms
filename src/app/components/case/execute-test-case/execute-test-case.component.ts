@@ -6,7 +6,7 @@ import {
   Inject,
   OnDestroy, OnInit,
   Renderer2,
-  ViewChild
+  ViewChild, ViewEncapsulation
 } from '@angular/core';
 import {FlexModule} from "@angular/flex-layout";
 import {FormsModule} from "@angular/forms";

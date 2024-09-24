@@ -1,51 +1,184 @@
-// Определение переменной для цвета
-$border-color: #b2c5ff;
-$border-color-active: #5b82fc;
+@use '@angular/material' as mat;
+@use './m3-theme-green' as lgt;
+@use './m3-theme-dark' as drk;
+
+@include mat.core();
+
+$border-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+$border-color-active: mat.get-theme-color(lgt.$light-theme, 'primary', 50);
 $border-width: 2px;
 
+$border-color-dark: mat.get-theme-color(drk.$dark-theme, 'primary', 70);
+$border-color-active-dark: mat.get-theme-color(drk.$dark-theme, 'primary', 50);
+$border-width: 2px;
 
-.action-top-radius {
-  border-top-left-radius: 8px;
-  border: 1px solid $border-color;
-  /*border: 1px solid #b2c5ff;*/
+.light-theme{
+  .action-top-radius {
+    border-top-left-radius: 8px;
+    border: 1px solid $border-color;
+    /*border: 1px solid #b2c5ff;*/
 
+  }
+
+  .action-bottom-radius {
+    border-bottom-left-radius: 8px;
+    border-bottom: 1px solid $border-color;
+    border-left: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+  }
+
+  .action-test-case-editors {
+    border-bottom: 1px solid $border-color;
+    border-left: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+  }
+
+
+  //   ==============
+
+  .expected-result-top-radius {
+    border-top-right-radius: 8px;
+    border: 1px solid $border-color;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .expected-result-bottom-radius {
+    border-bottom-right-radius: 8px;
+    border-bottom: 1px solid $border-color;
+    border-left: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+  }
+
+  .expected-result-test-case-editors {
+    border-bottom: 1px solid $border-color;
+    border-left: 1px solid $border-color;
+    border-right: 1px solid $border-color;
+  }
+
+  .action-top-radius:focus {
+    border-top-left-radius: 8px;
+    border: $border-width solid $border-color-active;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .action-bottom-radius:focus {
+    border-bottom-left-radius: 8px;
+    border-bottom: $border-width solid $border-color-active;
+    border-left: $border-width solid $border-color-active;
+    border-right: $border-width solid $border-color-active;
+    border-top: $border-width solid $border-color-active;
+  }
+
+  .action-test-case-editors:focus {
+    border: $border-width solid $border-color-active;
+  }
+
+  .expected-result-top-radius:focus {
+    border-top-right-radius: 8px;
+    border: $border-width solid $border-color-active;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .expected-result-bottom-radius:focus {
+    border-bottom-right-radius: 8px;
+    border-bottom: $border-width solid $border-color-active;
+    border-left: $border-width solid $border-color-active;
+    border-right: $border-width solid $border-color-active;
+    border-top: $border-width solid $border-color-active;
+  }
+
+  .expected-result-test-case-editors:focus {
+    border: $border-width solid $border-color-active;
+  }
 }
 
-.action-bottom-radius {
-  border-bottom-left-radius: 8px;
-  border-bottom: 1px solid $border-color;
-  border-left: 1px solid $border-color;
-  border-right: 1px solid $border-color;
+
+.dark-theme{
+  .action-top-radius {
+    border-top-left-radius: 8px;
+    border: 1px solid $border-color-dark;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .action-bottom-radius {
+    border-bottom-left-radius: 8px;
+    border-bottom: 1px solid $border-color-dark;
+    border-left: 1px solid $border-color-dark;
+    border-right: 1px solid $border-color-dark;
+  }
+
+  .action-test-case-editors {
+    border-bottom: 1px solid $border-color-dark;
+    border-left: 1px solid $border-color-dark;
+    border-right: 1px solid $border-color-dark;
+  }
+
+
+  //   ==============
+
+  .expected-result-top-radius {
+    border-top-right-radius: 8px;
+    border: 1px solid $border-color-dark;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .expected-result-bottom-radius {
+    border-bottom-right-radius: 8px;
+    border-bottom: 1px solid $border-color-dark;
+    border-left: 1px solid $border-color-dark;
+    border-right: 1px solid $border-color-dark;
+  }
+
+  .expected-result-test-case-editors {
+    border-bottom: 1px solid $border-color-dark;
+    border-left: 1px solid $border-color-dark;
+    border-right: 1px solid $border-color-dark;
+  }
+
+  .action-top-radius:focus {
+    border-top-left-radius: 8px;
+    border: $border-width solid $border-color-active-dark;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .action-bottom-radius:focus {
+    border-bottom-left-radius: 8px;
+    border-bottom: $border-width solid $border-color-active-dark;
+    border-left: $border-width solid $border-color-active-dark;
+    border-right: $border-width solid $border-color-active-dark;
+    border-top: $border-width solid $border-color-active-dark;
+  }
+
+  .action-test-case-editors:focus {
+    border: $border-width solid $border-color-active-dark;
+  }
+
+  .expected-result-top-radius:focus {
+    border-top-right-radius: 8px;
+    border: $border-width solid $border-color-active-dark;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .expected-result-bottom-radius:focus {
+    border-bottom-right-radius: 8px;
+    border-bottom: $border-width solid $border-color-active-dark;
+    border-left: $border-width solid $border-color-active-dark;
+    border-right: $border-width solid $border-color-active-dark;
+    border-top: $border-width solid $border-color-active-dark;
+  }
+
+  .expected-result-test-case-editors:focus {
+    border: $border-width solid $border-color-active-dark;
+  }
 }
-
-.action-test-case-editors {
-  border-bottom: 1px solid $border-color;
-  border-left: 1px solid $border-color;
-  border-right: 1px solid $border-color;
-}
-
-
-//   ==============
-
-.expected-result-top-radius {
-  border-top-right-radius: 8px;
-  border: 1px solid $border-color;
-  /*border: 1px solid #b2c5ff;*/
-
-}
-
-.expected-result-bottom-radius {
-  border-bottom-right-radius: 8px;
-  border-bottom: 1px solid $border-color;
-  border-left: 1px solid $border-color;
-  border-right: 1px solid $border-color;
-}
-
-.expected-result-test-case-editors {
-  border-bottom: 1px solid $border-color;
-  border-left: 1px solid $border-color;
-  border-right: 1px solid $border-color;
-}
+// Определение переменной для цвета
 
 .editor.action{
   //padding: 0.5rem;
@@ -56,7 +189,7 @@ $border-width: 2px;
 }
 
 .button-container{
-  margin: 0.5rem;
+  margin: 0.2rem;
 }
 
 .center-icon-button mat-icon{
@@ -85,43 +218,7 @@ mat-expansion-panel.mat-expansion-panel-body{
   outline: none;
 }
 
-.action-top-radius:focus {
-  border-top-left-radius: 8px;
-  border: $border-width solid $border-color-active;
-  /*border: 1px solid #b2c5ff;*/
 
-}
-
-.action-bottom-radius:focus {
-  border-bottom-left-radius: 8px;
-  border-bottom: $border-width solid $border-color-active;
-  border-left: $border-width solid $border-color-active;
-  border-right: $border-width solid $border-color-active;
-  border-top: $border-width solid $border-color-active;
-}
-
-.action-test-case-editors:focus {
-  border: $border-width solid $border-color-active;
-}
-
-.expected-result-top-radius:focus {
-  border-top-right-radius: 8px;
-  border: $border-width solid $border-color-active;
-  /*border: 1px solid #b2c5ff;*/
-
-}
-
-.expected-result-bottom-radius:focus {
-  border-bottom-right-radius: 8px;
-  border-bottom: $border-width solid $border-color-active;
-  border-left: $border-width solid $border-color-active;
-  border-right: $border-width solid $border-color-active;
-  border-top: $border-width solid $border-color-active;
-}
-
-.expected-result-test-case-editors:focus {
-  border: $border-width solid $border-color-active;
-}
 
 //
 //.editor.action:active{

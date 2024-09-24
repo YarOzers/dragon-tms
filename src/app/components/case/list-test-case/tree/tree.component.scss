@@ -34,7 +34,8 @@
   align-items: center;
   cursor: pointer; /* Изменим курсор на указатель при наведении */
 }
-.folder-name{
+
+.folder-name {
   min-width: 150px;
 }
 
@@ -61,10 +62,8 @@
 }
 
 
-
 .cdk-drag-folder.subfolder {
   position: relative;
-  border-left: #c6c5d0 2px solid;
   width: auto;
   //background-color: #33e003;
   padding: 0;
@@ -93,47 +92,45 @@
   //padding-left: 32px;
 }
 
-.test-case-chain{
+.test-case-chain {
   height: 2px;
   width: 20px;
-  background-color: #c6c5d0;
 }
 
-.test-case-chain-empty{
+.test-case-chain-empty {
   width: 19px;
 }
 
-.test-case-chain-empty-empty{
+.test-case-chain-empty-empty {
   left: 10px;
 }
 
-.test-case-chain-empty-empty{
+.test-case-chain-empty-empty {
   padding: 10px;
 }
 
-.test-case-container{
+.test-case-container {
   padding-left: 32px;
   //background-color: #00a82a;
 }
 
-.test-case-sub-container{
+.test-case-sub-container {
   position: relative;
   //border-left: 1px solid black;
   //color: red;
 }
 
-.test-case-sub-container:before{
+.test-case-sub-container:before {
   content: '';
   position: absolute;
   //top: -10px;
   left: 20px;
   height: calc(100% - 6px);
   width: 2px;
-  background-color: #c6c5d0;
   top: -15px;
 }
 
-.background-element{
+.background-element {
   //background-color: #a6a1a1;
   position: absolute;
   z-index: 1;
@@ -147,7 +144,7 @@
   margin-right: 8px; /* Отступ справа от иконки */
 }
 
-.folder-icon{
+.folder-icon {
   margin-right: 8px; /* Отступ справа от иконки */
 }
 
@@ -155,15 +152,15 @@
   display: none;
 }
 
-.folder-header:hover .folder-btn-menu{
+.folder-header:hover .folder-btn-menu {
   display: inline;
 }
 
-.testcase-btn-menu{
+.testcase-btn-menu {
   display: none;
 }
 
-.test-case-item:hover .testcase-btn-menu{
+.test-case-item:hover .testcase-btn-menu {
   display: inline;
 }
 
@@ -171,58 +168,46 @@
   --mdc-dialog-container-shape: 0px;
 }
 
-.test-case-name{
+.test-case-name {
   width: 300px; /* Ширина контейнера */
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
   border-radius: 4px;
   padding: 0.3rem;
-  background-color: #dce2fc;
 }
 
-.test-case-name:hover{
+.test-case-name:hover {
   content: attr(data-full-text); /* Отображаем весь текст при наведении */
   //position: absolute;
   //background-color: #fff;
-  border: 1px solid #c6c5d0;
   //padding: 5px;
   //white-space: normal;
   //z-index: 10;
 }
 
-.folder-name-item{
+.folder-name-item {
   width: 300px; /* Ширина контейнера */
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #d3e9f8; /* Для наглядности добавим границу */
   border-radius: 4px;
   padding: 0.3rem;
-  background-color: #b2c5ff;
 }
 
-.folder-name-item:hover{
+.folder-name-item:hover {
   width: 300px; /* Ширина контейнера */
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-  border: 1px solid #c6c5d0; /* Для наглядности добавим границу */
 }
 
-.empty-folder{
-    width: 300px; /* Ширина контейнера */
-    overflow: hidden; /* Скрытие текста, который не помещается */
-    white-space: nowrap; /* Текст в одну строку */
-    text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
-    border: 1px solid #abaab4; /* Для наглядности добавим границу */
-    border-radius: 4px;
-    padding: 0.3rem;
-    background-color: #abaab4;
-  color: white;
+.empty-folder {
+  width: 300px; /* Ширина контейнера */
+  overflow: hidden; /* Скрытие текста, который не помещается */
+  white-space: nowrap; /* Текст в одну строку */
+  text-overflow: ellipsis; /* Добавление многоточия, если текст слишком длинный */
+  border-radius: 4px;
+  padding: 0.3rem;
 }
 
-mat-icon{
-  color: #51525b;
-}

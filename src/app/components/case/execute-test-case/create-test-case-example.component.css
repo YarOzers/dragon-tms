@@ -46,7 +46,7 @@ mat-checkbox{
 /* Контейнер для всего содержимого, чтобы учитывать фиксированный header */
 .sidenav-container {
   position: fixed;
-  top: 60px; /* Высота header */
+  top: 40px; /* Высота header */
   bottom: 75px;
   left: 0;
   width: 100%;
@@ -63,7 +63,7 @@ mat-checkbox{
 /* Задаем фиксированное положение боковой панели */
 mat-sidenav {
   position: fixed;
-  top: 60px; /* Высота header */
+  top: 40px; /* Высота header */
   bottom: 0;
   height: calc(100% - 135px ); /* Учитываем высоту header */
 }

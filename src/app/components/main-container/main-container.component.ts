@@ -15,7 +15,7 @@ import {RouterOutlet} from "@angular/router";
     RouterOutlet
   ],
   templateUrl: './main-container.component.html',
-  styleUrl: './main-container.component.css'
+  styleUrl: './main-container.component.scss'
 })
 export class MainContainerComponent {
   @ViewChild('headerComponent') headerComponent!: HeaderComponent;

@@ -1,0 +1,27 @@
+@use '@angular/material' as mat;
+@use './m3-theme-green' as lgt;
+@use './m3-theme-dark' as drk;
+
+@include mat.core();
+
+.light-theme{
+  .project-list{
+    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 98);
+  }
+
+  .mat-mdc-row.mdc-data-table__row.cdk-row:hover{
+    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 95);
+  }
+}
+
+.dark-theme{
+  .project-list{
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0);
+  }
+
+  .mat-mdc-row.mdc-data-table__row.cdk-row:hover{
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 60);
+  }
+}
+
+

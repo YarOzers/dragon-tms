@@ -2,7 +2,7 @@
 <div class="dialog-container">
   <div mat-dialog-content class="dialog-content">
 
-    <div class="header">
+    <div class="test-case-name-input">
       <div fxLayout="row" fxLayoutAlign="center-center">
         <div *ngIf="!new" fxFlex="6">
           <span fxFlex="6">{{ this.testCaseId }}</span>
@@ -13,7 +13,6 @@
         <mat-form-field fxFlex="91">
           <input matInput type="text"
                  [(ngModel)]="name"
-                 class="test-case-name"
                  placeholder="введите название тест кейса"
                  id="testCaseName"
                  required

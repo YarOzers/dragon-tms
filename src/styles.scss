@@ -1,30 +1,23 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-@use 'styles/m3-theme-light';
-@use 'styles/m3-theme-dark';
+@use 'styles/m3-theme-green' as lgt;
+@use 'styles/m3-theme-dark' as drk;
+
+@import "styles/header.scss";
+@import "styles/project-list.scss";
+@import "styles/test-case-tree.scss";
+@import "styles/list-test-case.scss";
+@import "styles/create-test-case.scss";
+@import "styles/editor.scss";
+@import "styles/mat-icon.scss";
 
 @include mat.core();
 
-$dragon-tms-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$rose-palette,
-    tertiary: mat.$blue-palette,
-  ),
-  density: (
-    scale: 0,
-  )
-));
+
+:root .light-theme{
 
 
-:root {
-  //@include mat.all-component-themes(m3-theme-light.$light-theme);
-  //@include mat.system-level-colors(m3-theme-light.$light-theme);
-  //--scrollbar-width: 12px;
-  //--scrollbar-track-color: #f1f1f1;
-  //--scrollbar-thumb-color: #888;
-  //--scrollbar-thumb-hover-color: #555;
 }
 
 
@@ -32,13 +25,7 @@ html, body {
   height: 100%;
   overflow: auto;
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
-  //@include mat.core-theme(m3-theme-light.$light-theme);
-  //@include mat.button-theme(m3-theme-light.$light-theme);
-  //@include mat.system-level-colors(m3-theme-light.$light-theme);
-  //@include mat.bottom-sheet-base(m3-theme-light.$light-theme);
-  //@include mat.table-theme(m3-theme-light.$light-theme);
-  //@include mat.all-component-themes(m3-theme-light.$light-theme);
-
+  @include mat.all-component-themes(lgt.$light-theme);
 }
 
 body {
@@ -46,21 +33,30 @@ body {
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
 }
 
+mat-card{
+  @include mat.all-component-colors(lgt.$light-theme);
+  @include mat.system-level-colors(lgt.$light-theme);
+}
+
+mat-table{
+  @include mat.all-component-colors(lgt.$light-theme);
+  @include mat.system-level-colors(lgt.$light-theme);
+}
 
 .light-theme {
-  @include mat.all-component-bases(m3-theme-light.$light-theme);
-  @include mat.system-level-colors(m3-theme-light.$light-theme);
-  @include mat.all-component-themes(m3-theme-light.$light-theme);
-  @include mat.all-component-typographies(m3-theme-light.$light-theme);
-  background-color: #fbf8ff ;
+  @include mat.all-component-bases(lgt.$light-theme);
+  @include mat.system-level-colors(lgt.$light-theme);
+  @include mat.all-component-themes(lgt.$light-theme);
+  @include mat.all-component-typographies(lgt.$light-theme);
+  @include mat.all-component-colors(lgt.$light-theme)
 }
 
 .dark-theme {
-  @include mat.system-level-colors(m3-theme-dark.$dark-theme);
-  @include mat.all-component-bases(m3-theme-dark.$dark-theme);
-  @include mat.all-component-themes(m3-theme-dark.$dark-theme);
-  @include mat.all-component-typographies(m3-theme-dark.$dark-theme);
-  @include mat.system-level-typography(m3-theme-dark.$dark-theme);
+  @include mat.system-level-colors(drk.$dark-theme);
+  @include mat.all-component-bases(drk.$dark-theme);
+  @include mat.all-component-themes(drk.$dark-theme);
+  @include mat.all-component-typographies(drk.$dark-theme);
+  @include mat.system-level-typography(drk.$dark-theme);
   background-color: #000000;
   color: #3a4c9c;
 }
@@ -87,16 +83,6 @@ body {
   background: #555; /* цвет ползунка при наведении */
 }
 
-/* Для Firefox */
-//* {
-//  scrollbar-width: thin; /* ширина скроллбара */
-//  scrollbar-color: #888 #f1f1f1; /* цвет ползунка и цвет дорожки */
-//}
-
-
-
-
-//editor;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 .highlight{
   background-color: rgba(255, 255, 0, 0.76);
@@ -114,23 +100,6 @@ body {
   background-color: #f44336; /* Красный цвет для ошибок */
   color: #fff;
 }
-
-
-
-
-//.resizable {
-//  display: inline-block;
-//  resize: both; /* Позволяет изменять размер и по ширине, и по высоте */
-//  overflow: auto; /* Чтобы содержимое могло "переливаться" при изменении размера */
-//  border: 1px solid #ccc; /* Границы, чтобы было видно, что div можно изменять */
-//  padding: 5px;
-//}
-//
-//.resizable img {
-//  max-width: 100%; /* Изображение будет подстраиваться под размер родителя */
-//  height: auto; /* Сохраняем пропорции */
-//}
-
 .mat-flat-button{
   padding: 1rem;
 }
@@ -159,5 +128,8 @@ app-ck-editor{
 *{
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
 }
+
+
+
 
 

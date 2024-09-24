@@ -1,5 +1,6 @@
 :host {
   --mdc-dialog-container-shape: 0px;
+  //--sys-surface: black;
 }
 
 .dialog-container {
@@ -76,4 +77,18 @@ mat-card-content.mat-mdc-card-content {
   border: 1px solid #b2c5ff;
 }
 
+input{
+  background-color: #f0efff;
+  border-radius: 4px;
+  border: 2px solid #b2c5ff;
+}
+
+.test-case-name{
+  margin: 0;
+}
+
+.mat-mdc-dialog-content.mdc-dialog__content.dialog-content{
+  padding: 0;
+  padding-top: 0.5rem;
+}
 

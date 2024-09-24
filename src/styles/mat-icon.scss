@@ -1,0 +1,13 @@
+@use '@angular/material' as mat;
+@use './m3-theme-green' as lgt;
+@use './m3-theme-dark' as drk;
+
+@include mat.core();
+
+.light-theme {
+
+}
+
+.dark-theme {
+
+}

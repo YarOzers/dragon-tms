@@ -1,21 +1,36 @@
-.header{
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+@use '@angular/material' as mat;
+@use "../../../styles/m3-theme-green" as lgt;
+//@use "../../../styles/m3-theme-dark" as drk;
+
+@include mat.core();
+
+
+.header {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
-.mat-mdc-unelevated-button{
+
+//.header{
+//  padding-top: 0.5rem;
+//  padding-bottom: 0.5rem;
+//  background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 95);
+//}
+
+
+.mat-mdc-unelevated-button {
   border-radius: 5px;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
 }
 
-.mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
-  background-color: #89a0b9; /* Синий цвет фона для активной кнопки */
-  color: white;
-  /* Добавьте другие стили для активной кнопки, если необходимо */
-}
+//.mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
+//  background-color: #89a0b9; /* Синий цвет фона для активной кнопки */
+//  color: white;
+//  /* Добавьте другие стили для активной кнопки, если необходимо */
+//}
 
-.user-name{
+.user-name {
   text-align: center;
   justify-items: center;
   display: flex;
@@ -25,6 +40,6 @@
   text-overflow: ellipsis;
 }
 
-.header-btn-container{
+.header-btn-container {
   text-align: center;
 }

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {Project, ProjectDTO} from "../../../models/project";
 import {ProjectService} from "../../../services/project.service";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
@@ -16,8 +16,6 @@ import {RouterParamsService} from "../../../services/router-params.service";
 import {HttpClientModule} from "@angular/common/http";
 import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
-import {AuthService} from "../../../services/auth.service";
-import {UserService} from "../../../services/user.service";
 import {MediaObserver} from "@angular/flex-layout";
 import {CkEditorComponent} from "../../ckeditor/ck-editor/ck-editor.component";
 
@@ -42,7 +40,7 @@ import {CkEditorComponent} from "../../ckeditor/ck-editor/ck-editor.component";
     CkEditorComponent
   ],
   templateUrl: './list-project.component.html',
-  styleUrl: './list-project.component.scss'
+  styleUrl: './list-project.component.scss',
 })
 export class ListProjectComponent implements OnInit, AfterViewInit {
 

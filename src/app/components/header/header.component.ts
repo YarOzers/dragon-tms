@@ -32,7 +32,9 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
     MatMenuTrigger
   ],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+  styleUrls: [
+    './header.component.scss'
+  ]
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @Output() notifyMain: EventEmitter<void> = new EventEmitter<void>();
