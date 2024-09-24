@@ -11,7 +11,8 @@ app-tree{
   //padding: 10px; /* Отступы для красоты */
   display: flex;
   flex-direction: column;
-  height: calc(100% - 56px)
+  height: calc(100% - 56px);
+  //overflow: hidden;
 
 }
 
@@ -23,6 +24,7 @@ app-tree{
 .right {
   background-color: #e3e7ff; /* Цвет фона второй колонки */
   width: 100%;
+  overflow: hidden;
 }
 
 
@@ -78,4 +80,56 @@ h3.dark-theme{
 as-split{
   height: 100vh;
 }
+
+.column-menu-btn{
+  margin-left: 1rem;
+}
+
+.column.right{
+  overflow: hidden;
+}
+
+div.table-btn-container{
+  margin-bottom: 0;
+  position: fixed;
+  top: 56px;
+  z-index: 1000;
+}
+
+as-split-area{
+  height: 100%;
+}
+
+/* Контейнер с таблицей */
+.table-container {
+  overflow: hidden;
+  position: relative;
+  height: calc(100vh - 56px); /* Высота без учёта хедера */
+  margin-top: 40px; /* Отступ от фиксированного контейнера с кнопками */
+}
+
+/* Прокручиваемая область внутри таблицы */
+.table-content {
+  overflow-y: auto;
+  max-height: calc(100vh - 156px); /* Учитываем высоту хедера и контейнера с кнопками */
+}
+
+table.table{
+  height: 100%;
+border-collapse: collapse;
+}
+
+div.table-size-limit-container{
+  max-height: 1000px;
+}
+
+table.table thead {
+  position: sticky;
+  top: 0; /* Заголовок таблицы фиксирован в верхней части таблицы */
+  background-color: white;
+  z-index: 500;
+}
+
+
+
 

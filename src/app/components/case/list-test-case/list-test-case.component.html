@@ -6,14 +6,14 @@
   </as-split-area>
 
   <!-- Table -->
-  <as-split-area [size]="60">
+  <as-split-area [size]="60" maxSize="99.999">
     <div class="column right">
 <!--      <h3>Test Cases:</h3>-->
       <div class="table-container">
-        <div class="table-container" fxLayout="column" fxLayoutGap="10px">
-          <div fxLayoutAlign="start-center" fxFlex="none">
+        <div  fxLayout="column">
+          <div fxLayoutAlign="start-center" fxFlex="none" class="table-btn-container">
             <!-- Иконка-кнопка для открытия меню выбора колонок -->
-            <button mat-icon-button [matMenuTriggerFor]="columnsMenu">
+            <button mat-icon-button [matMenuTriggerFor]="columnsMenu" class="column-menu-btn">
               <mat-icon>view_column</mat-icon>
             </button>
             <!-- Меню для выбора колонок -->
@@ -59,8 +59,10 @@
             <!--            </button>-->
           </div>
 
-          <div fxFlex="1 1 auto">
-            <div>
+          </div>
+
+          <div fxFlex="1 1 auto" class="table-container-margin-top">
+            <div class="table-content">
               <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
                      class="table">
 
@@ -151,14 +153,12 @@
               </table>
             </div>
 
-
             <div *ngIf="isLoading" class="progress-bar-container">
               <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             </div>
           </div>
         </div>
       </div>
-    </div>
   </as-split-area>
 </as-split>
 
