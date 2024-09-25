@@ -1,13 +1,26 @@
 @use '@angular/material' as mat;
-@use './m3-theme-green' as lgt;
+@use './m3-theme-green' as grn;
+@use './m3-theme-bliue-light' as blu;
 @use './m3-theme-dark' as drk;
 
 @include mat.core();
 
 
-.light-theme{
-  span.mdc-button__label{
-    color: mat.get-theme-color(lgt.$light-theme, 'primary', 98);
+.green-theme {
+  span.mdc-button__label {
+    color: mat.get-theme-color(grn.$light-theme, 'primary', 98);
   }
-
 }
+
+.blue-theme {
+  span.mdc-button__label {
+    color: mat.get-theme-color(blu.$light-theme, 'primary', 98);
+  }
+}
+
+.dark-theme {
+  span.mdc-button__label {
+    color: mat.get-theme-color(drk.$dark-theme, 'primary', 98);
+  }
+}
+

@@ -1,28 +1,58 @@
 @use '@angular/material' as mat;
-@use './m3-theme-green' as lgt;
+@use './m3-theme-green' as grn;
+@use './m3-theme-bliue-light' as blu;
 @use './m3-theme-dark' as drk;
 
 @include mat.core();
 
-.light-theme {
+.green-theme {
   .mat-mdc-dialog-actions, mdc-dialog__actions {
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 70);
   }
 
   .mat-mdc-dialog-surface.mdc-dialog__surface {
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 98);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 98);
   }
 
   .mat-drawer-content.mat-sidenav-content {
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 98);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 98);
   }
 
   .mat-drawer.mat-sidenav.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened {
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 98);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 98);
   }
 
   .mat-drawer-container.mat-sidenav-container.sidenav-container.mat-drawer-transition {
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 98);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 98);
+  }
+
+  [disabled=true] {
+    .mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color[disabled] {
+      color: white;
+    }
+  }
+
+}
+
+.blue-theme {
+  .mat-mdc-dialog-actions, mdc-dialog__actions {
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 70);
+  }
+
+  .mat-mdc-dialog-surface.mdc-dialog__surface {
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 98);
+  }
+
+  .mat-drawer-content.mat-sidenav-content {
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 98);
+  }
+
+  .mat-drawer.mat-sidenav.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened {
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 98);
+  }
+
+  .mat-drawer-container.mat-sidenav-container.sidenav-container.mat-drawer-transition {
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 98);
   }
 
   [disabled=true] {

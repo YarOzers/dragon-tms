@@ -16,6 +16,7 @@ import {DecodedToken} from "../../models/token";
 import {MatDialog} from "@angular/material/dialog";
 import {SupportDialogComponent} from "../support-dialog/support-dialog.component";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {MatToolbarRow} from "@angular/material/toolbar";
 
 @Component({
   selector: 'app-header',
@@ -29,7 +30,8 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
     NgIf,
     MatMenu,
     MatMenuItem,
-    MatMenuTrigger
+    MatMenuTrigger,
+    MatToolbarRow
   ],
   templateUrl: './header.component.html',
   styleUrls: [

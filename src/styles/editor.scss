@@ -1,18 +1,25 @@
 @use '@angular/material' as mat;
-@use './m3-theme-green' as lgt;
+@use './m3-theme-green' as grn;
+@use './m3-theme-bliue-light' as blu;
 @use './m3-theme-dark' as drk;
 
 @include mat.core();
 
-$border-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
-$border-color-active: mat.get-theme-color(lgt.$light-theme, 'primary', 50);
 $border-width: 2px;
+
+$border-color: mat.get-theme-color(grn.$light-theme, 'primary', 70);
+$border-color-active: mat.get-theme-color(grn.$light-theme, 'primary', 50);
+
+
+$border-color-blue: mat.get-theme-color(blu.$light-theme, 'primary', 70);
+$border-color-active-blue: mat.get-theme-color(blu.$light-theme, 'primary', 50);
+
 
 $border-color-dark: mat.get-theme-color(drk.$dark-theme, 'primary', 70);
 $border-color-active-dark: mat.get-theme-color(drk.$dark-theme, 'primary', 50);
-$border-width: 2px;
 
-.light-theme{
+
+.green-theme{
   .action-top-radius {
     border-top-left-radius: 8px;
     border: 1px solid $border-color;
@@ -92,6 +99,89 @@ $border-width: 2px;
 
   .expected-result-test-case-editors:focus {
     border: $border-width solid $border-color-active;
+  }
+}
+
+.blue-theme{
+  .action-top-radius {
+    border-top-left-radius: 8px;
+    border: 1px solid $border-color-blue;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .action-bottom-radius {
+    border-bottom-left-radius: 8px;
+    border-bottom: 1px solid $border-color-blue;
+    border-left: 1px solid $border-color-blue;
+    border-right: 1px solid $border-color-blue;
+  }
+
+  .action-test-case-editors {
+    border-bottom: 1px solid $border-color-blue;
+    border-left: 1px solid $border-color-blue;
+    border-right: 1px solid $border-color-blue;
+  }
+
+
+  //   ==============
+
+  .expected-result-top-radius {
+    border-top-right-radius: 8px;
+    border: 1px solid $border-color-blue;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .expected-result-bottom-radius {
+    border-bottom-right-radius: 8px;
+    border-bottom: 1px solid $border-color-blue;
+    border-left: 1px solid $border-color-blue;
+    border-right: 1px solid $border-color-blue;
+  }
+
+  .expected-result-test-case-editors {
+    border-bottom: 1px solid $border-color-blue;
+    border-left: 1px solid $border-color-blue;
+    border-right: 1px solid $border-color-blue;
+  }
+
+  .action-top-radius:focus {
+    border-top-left-radius: 8px;
+    border: $border-width solid $border-color-active-blue;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .action-bottom-radius:focus {
+    border-bottom-left-radius: 8px;
+    border-bottom: $border-width solid $border-color-active-blue;
+    border-left: $border-width solid $border-color-active-blue;
+    border-right: $border-width solid $border-color-active-blue;
+    border-top: $border-width solid $border-color-active-blue;
+  }
+
+  .action-test-case-editors:focus {
+    border: $border-width solid $border-color-active-blue;
+  }
+
+  .expected-result-top-radius:focus {
+    border-top-right-radius: 8px;
+    border: $border-width solid $border-color-active-blue;
+    /*border: 1px solid #b2c5ff;*/
+
+  }
+
+  .expected-result-bottom-radius:focus {
+    border-bottom-right-radius: 8px;
+    border-bottom: $border-width solid $border-color-active-blue;
+    border-left: $border-width solid $border-color-active-blue;
+    border-right: $border-width solid $border-color-active-blue;
+    border-top: $border-width solid $border-color-active-blue;
+  }
+
+  .expected-result-test-case-editors:focus {
+    border: $border-width solid $border-color-active-blue;
   }
 }
 

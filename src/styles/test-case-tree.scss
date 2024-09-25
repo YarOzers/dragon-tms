@@ -1,58 +1,107 @@
 @use '@angular/material' as mat;
-@use './m3-theme-green' as lgt;
+@use './m3-theme-green' as grn;
+@use './m3-theme-bliue-light' as blu;
 @use './m3-theme-dark' as drk;
 
 @include mat.core();
 
-.light-theme{
+.green-theme{
   .test-case-chain{
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 70);
   }
   .test-case-sub-container:before{
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 70);
   }
 
   .test-case-name{
-    border: 1px solid mat.get-theme-color(lgt.$light-theme, 'primary', 35); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 70);
-    color: mat.get-theme-color(lgt.$light-theme, 'primary', 0);
+    border: 1px solid mat.get-theme-color(grn.$light-theme, 'primary', 35); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 70);
+    color: mat.get-theme-color(grn.$light-theme, 'primary', 0);
   }
 
   .test-case-name:hover{
-    border: 1px solid mat.get-theme-color(lgt.$light-theme, 'primary', 60);
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 80);
+    border: 1px solid mat.get-theme-color(grn.$light-theme, 'primary', 60);
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 80);
   }
 
   .folder-name-item{
-    border: 1px solid mat.get-theme-color(lgt.$light-theme, 'primary', 40); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 50);
-    color: mat.get-theme-color(lgt.$light-theme, 'primary', 95);
+    border: 1px solid mat.get-theme-color(grn.$light-theme, 'primary', 40); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 50);
+    color: mat.get-theme-color(grn.$light-theme, 'primary', 95);
   }
 
   .folder-name-item:hover{
-    border: 1px solid mat.get-theme-color(lgt.$light-theme, 'primary', 30); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 60);
+    border: 1px solid mat.get-theme-color(grn.$light-theme, 'primary', 30); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 60);
   }
 
   .empty-folder {
-    border: 1px solid mat.get-theme-color(lgt.$light-theme, 'neutral-variant', 80); /* Для наглядности добавим границу */
-    background-color: mat.get-theme-color(lgt.$light-theme, 'neutral-variant', 70);
-    color: mat.get-theme-color(lgt.$light-theme, 'neutral-variant', 95);
+    border: 1px solid mat.get-theme-color(grn.$light-theme, 'neutral-variant', 80); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(grn.$light-theme, 'neutral-variant', 70);
+    color: mat.get-theme-color(grn.$light-theme, 'neutral-variant', 95);
   }
 
   mat-icon{
-    color: mat.get-theme-color(lgt.$light-theme, 'primary', 30);
+    color: mat.get-theme-color(grn.$light-theme, 'primary', 30);
   }
 
   .cdk-drag-folder.subfolder {
-    border-left:  2px solid mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+    border-left:  2px solid mat.get-theme-color(grn.$light-theme, 'primary', 70);
   }
   .cdk-drag.subfolder{
-    border-left:  2px solid mat.get-theme-color(lgt.$light-theme, 'primary', 70);
+    border-left:  2px solid mat.get-theme-color(grn.$light-theme, 'primary', 70);
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+.blue-theme{
+  .test-case-chain{
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 70);
+  }
+  .test-case-sub-container:before{
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 70);
+  }
+
+  .test-case-name{
+    border: 1px solid mat.get-theme-color(blu.$light-theme, 'primary', 35); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 70);
+    color: mat.get-theme-color(blu.$light-theme, 'primary', 0);
+  }
+
+  .test-case-name:hover{
+    border: 1px solid mat.get-theme-color(blu.$light-theme, 'primary', 60);
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 80);
+  }
+
+  .folder-name-item{
+    border: 1px solid mat.get-theme-color(blu.$light-theme, 'primary', 40); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 50);
+    color: mat.get-theme-color(blu.$light-theme, 'primary', 95);
+  }
+
+  .folder-name-item:hover{
+    border: 1px solid mat.get-theme-color(blu.$light-theme, 'primary', 30); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 60);
+  }
+
+  .empty-folder {
+    border: 1px solid mat.get-theme-color(blu.$light-theme, 'neutral-variant', 80); /* Для наглядности добавим границу */
+    background-color: mat.get-theme-color(blu.$light-theme, 'neutral-variant', 70);
+    color: mat.get-theme-color(blu.$light-theme, 'neutral-variant', 95);
+  }
+
+  mat-icon{
+    color: mat.get-theme-color(blu.$light-theme, 'primary', 30);
+  }
+
+  .cdk-drag-folder.subfolder {
+    border-left:  2px solid mat.get-theme-color(blu.$light-theme, 'primary', 70);
+  }
+  .cdk-drag.subfolder{
+    border-left:  2px solid mat.get-theme-color(blu.$light-theme, 'primary', 70);
+  }
+}
 
 .dark-theme{
   .test-case-chain{

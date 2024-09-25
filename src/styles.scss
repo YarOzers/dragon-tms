@@ -1,7 +1,8 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
-@use 'styles/m3-theme-green' as lgt;
+@use 'styles/m3-theme-green' as grn;
+@use 'styles/m3-theme-bliue-light' as blu;
 @use 'styles/m3-theme-dark' as drk;
 
 @import "styles/header.scss";
@@ -18,14 +19,12 @@
 @include mat.core();
 
 
-:root .dark-theme{
-
-
+:root {
 
 }
 
 
-html, body .dark-theme{
+html, body {
   height: 100%;
   overflow: auto;
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
@@ -37,22 +36,42 @@ body {
   font-family: 'Roboto', sans-serif; /* Здесь укажите нужный шрифт */
 }
 
-mat-card{
-  @include mat.all-component-colors(lgt.$light-theme);
-  @include mat.system-level-colors(lgt.$light-theme);
+
+
+.green-theme {
+  @include mat.all-component-bases(grn.$light-theme);
+  @include mat.system-level-colors(grn.$light-theme);
+  @include mat.all-component-themes(grn.$light-theme);
+  @include mat.all-component-typographies(grn.$light-theme);
+  @include mat.all-component-colors(grn.$light-theme);
+
+  mat-table{
+    @include mat.all-component-colors(grn.$light-theme);
+    @include mat.system-level-colors(grn.$light-theme);
+  }
+
+  mat-card{
+    @include mat.all-component-colors(grn.$light-theme);
+    @include mat.system-level-colors(grn.$light-theme);
+  }
 }
 
-mat-table{
-  @include mat.all-component-colors(lgt.$light-theme);
-  @include mat.system-level-colors(lgt.$light-theme);
-}
+.blue-theme {
+  @include mat.all-component-bases(blu.$light-theme);
+  @include mat.system-level-colors(blu.$light-theme);
+  @include mat.all-component-themes(blu.$light-theme);
+  @include mat.all-component-typographies(blu.$light-theme);
+  @include mat.all-component-colors(blu.$light-theme);
 
-.light-theme {
-  @include mat.all-component-bases(lgt.$light-theme);
-  @include mat.system-level-colors(lgt.$light-theme);
-  @include mat.all-component-themes(lgt.$light-theme);
-  @include mat.all-component-typographies(lgt.$light-theme);
-  @include mat.all-component-colors(lgt.$light-theme)
+  mat-table{
+    @include mat.all-component-colors(blu.$light-theme);
+    @include mat.system-level-colors(blu.$light-theme);
+  }
+
+  mat-card{
+    @include mat.all-component-colors(blu.$light-theme);
+    @include mat.system-level-colors(blu.$light-theme);
+  }
 }
 
 .dark-theme {
@@ -63,12 +82,22 @@ mat-table{
   @include mat.system-level-typography(drk.$dark-theme);
   background-color: #000000;
   color: #3a4c9c;
+
+  mat-table{
+    @include mat.all-component-colors(drk.$dark-theme);
+    @include mat.system-level-colors(drk.$dark-theme);
+  }
+
+  mat-card{
+    @include mat.all-component-colors(drk.$dark-theme);
+    @include mat.system-level-colors(drk.$dark-theme);
+  }
 }
 
 
 //      Скролбар   =========================================================
 
-.light-theme{
+.green-theme{
   /* Для Webkit-браузеров */
   ::-webkit-scrollbar {
     width: 8px; /* ширина вертикального скроллбара */
@@ -76,16 +105,16 @@ mat-table{
   }
 
   ::-webkit-scrollbar-track {
-    background: mat.get-theme-color(lgt.$light-theme, 'primary', 90); /* цвет дорожки скроллбара */
+    background: mat.get-theme-color(grn.$light-theme, 'primary', 90); /* цвет дорожки скроллбара */
   }
 
   ::-webkit-scrollbar-thumb {
-    background: mat.get-theme-color(lgt.$light-theme, 'primary', 70); /* цвет ползунка */
+    background: mat.get-theme-color(grn.$light-theme, 'primary', 70); /* цвет ползунка */
     border-radius: 6px; /* скругление углов ползунка */
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: mat.get-theme-color(lgt.$light-theme, 'primary', 50); /* цвет ползунка при наведении */
+    background: mat.get-theme-color(grn.$light-theme, 'primary', 50); /* цвет ползунка при наведении */
   }
 }
 
