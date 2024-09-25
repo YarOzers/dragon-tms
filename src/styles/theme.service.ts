@@ -6,7 +6,7 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 export class ThemeService {
   private renderer: Renderer2;
   private currentTheme: string = 'green-theme'; // Текущая тема по умолчанию
-  private availableThemes: string[] = ['dark-theme','blue-theme','green-theme']; // Массив доступных тем
+  private availableThemes: string[] = ['dark-theme','blue-theme','green-theme','crab-theme','blue-dark-theme']; // Массив доступных тем
 
   constructor(rendererFactory: RendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);
@@ -21,20 +21,25 @@ export class ThemeService {
   }
 
   // Установка конкретной темы
-  setTheme(theme: string): void {
-    const previousTheme = this.currentTheme;
-    this.currentTheme = theme;
-    const root = document.documentElement;
+  setTheme(theme: string | null): void {
+    if (theme !== null){const previousTheme = this.currentTheme;
+      this.currentTheme = theme;
+      const root = document.documentElement;
+      localStorage.setItem('theme', theme)
 
-    // Удаляем предыдущую тему
-    if (previousTheme) {
-      this.renderer.removeClass(root, previousTheme);
-    }
+      // Удаляем предыдущую тему
+      if (previousTheme) {
+        this.renderer.removeClass(root, previousTheme);
+      }
 
-    // Добавляем новую тему
-    this.renderer.addClass(root, theme);
+      // Добавляем новую тему
+      this.renderer.addClass(root, theme);}
+
   }
 
+  getAvailableThemes(): string[]{
+    return this.availableThemes;
+  }
   // Получение текущей темы
   getCurrentTheme(): string {
     return this.currentTheme;

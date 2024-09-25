@@ -1,7 +1,10 @@
 @use '@angular/material' as mat;
+
 @use './m3-theme-green' as grn;
 @use './m3-theme-bliue-light' as blu;
+@use './m3-theme-crab' as crb;
 @use './m3-theme-dark' as drk;
+@use './m3-theme-blue-dark' as b-drk;
 
 @include mat.core();
 
@@ -21,10 +24,26 @@
   }
 }
 
+.crab-theme{
+  input{
+    border: 2px solid mat.get-theme-color(crb.$light-theme, 'primary', 60);
+    //background-color: mat.get-theme-color(lgt.$light-theme, 'primary', 95);
+    color: mat.get-theme-color(crb.$light-theme, 'primary', 0);
+  }
+}
+
 .dark-theme{
   input{
     border: 2px solid mat.get-theme-color(drk.$dark-theme, 'primary', 50);
     //background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 10);
     color: mat.get-theme-color(drk.$dark-theme, 'primary', 70);
+  }
+}
+
+.blue-dark-theme{
+  input{
+    border: 2px solid mat.get-theme-color(b-drk.$dark-theme, 'primary', 50);
+    //background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 10);
+    color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 70);
   }
 }

@@ -3,7 +3,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {ActivatedRoute, NavigationEnd, Router, RouterOutlet} from "@angular/router";
 import {FlexLayoutModule, MediaObserver} from "@angular/flex-layout";
 import {MatIcon} from "@angular/material/icon";
-import {NgIf} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {HeaderService} from "../../services/header.service";
 import {filter} from "rxjs";
 import {RouterParamsService} from "../../services/router-params.service";
@@ -17,6 +17,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {SupportDialogComponent} from "../support-dialog/support-dialog.component";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MatToolbarRow} from "@angular/material/toolbar";
+import {ThemeService} from "../../../styles/theme.service";
 
 @Component({
   selector: 'app-header',
@@ -31,7 +32,8 @@ import {MatToolbarRow} from "@angular/material/toolbar";
     MatMenu,
     MatMenuItem,
     MatMenuTrigger,
-    MatToolbarRow
+    MatToolbarRow,
+    NgForOf
   ],
   templateUrl: './header.component.html',
   styleUrls: [
@@ -43,6 +45,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   matIcon: string = 'wb_sunny';
   activeButton: string = 'testCases'; // По умолчанию активна кнопка 'Тест кейсы'
   menuOpen: boolean = false;
+  themes: string[] = [];
 
 
   // Method to toggle the icon
@@ -60,7 +63,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private keycloakService: KeycloakService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private mediaObserver: MediaObserver
+    private mediaObserver: MediaObserver,
+    private themeService: ThemeService
   ) {
   }
 
@@ -75,6 +79,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    if (localStorage.getItem('theme')){
+      this.themeService.setTheme(localStorage.getItem('theme'));
+    }
+
+    this.themes = this.themeService.getAvailableThemes();
     this.headerService.showButtons$.subscribe(show => {
       this.showProjectButtons = show;
     });
@@ -147,6 +156,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.activeButton = 'testRuns';
     this.router.navigate([`project/${this.projectId}/test-runs`], {state: {go: true}})
   }
+
   logout() {
     this.keycloakService.logout(window.location.origin).then(r => {
       // Очистка локальных данных
@@ -162,13 +172,25 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(SupportDialogComponent, {
 
       width: isSmallScreen ? '95%' : '65%',
-      height:'auto',
+      height: 'auto',
       maxWidth: '100%',
       maxHeight: '100%',
-      data: {
-
-      } // Можно передать данные в диалоговое окно
+      data: {} // Можно передать данные в диалоговое окно
     });
   }
 
+  setTheme(theme: string) {
+    this.themeService.setTheme(theme);
+  }
+
+  getDisplayThemeName(tm: string): string {
+    const displayNames: { [key: string]: string } = {
+      'dark-theme': 'dark',
+      'blue-theme': 'blue',
+      'green-theme': 'green',
+      'crab-theme': 'crab',
+      'blue-dark-theme': 'blue dark'
+    }
+    return displayNames[tm];
+  }
 }

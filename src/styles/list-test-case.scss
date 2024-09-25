@@ -1,7 +1,9 @@
 @use '@angular/material' as mat;
 @use './m3-theme-green' as grn;
 @use './m3-theme-bliue-light' as blu;
+@use './m3-theme-crab' as crb;
 @use './m3-theme-dark' as drk;
+@use './m3-theme-blue-dark' as b-drk;
 
 @include mat.core();
 
@@ -38,6 +40,24 @@
     background-color: mat.get-theme-color(blu.$light-theme, 'primary', 95); /* Изменение фона сепаратора */
   }
 }
+
+.crab-theme{
+  .left {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98); /* Цвет фона первой колонки */
+    width: 100vw;
+  }
+
+  .right {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98); /* Цвет фона второй колонки */
+    width: 100%;
+    overflow: hidden;
+  }
+
+  div.ng-star-inserted.as-split-gutter {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 95); /* Изменение фона сепаратора */
+  }
+}
+
 .dark-theme{
   .left {
     background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0); /* Цвет фона первой колонки */
@@ -51,6 +71,23 @@
   }
 
   div.ng-star-inserted.as-split-gutter {
-    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 20); /* Изменение фона сепаратора */
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 10); /* Изменение фона сепаратора */
+  }
+}
+
+.blue-dark-theme{
+  .left {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0); /* Цвет фона первой колонки */
+    width: 100vw;
+  }
+
+  .right {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0); /* Цвет фона второй колонки */
+    width: 100%;
+    overflow: hidden;
+  }
+
+  div.ng-star-inserted.as-split-gutter {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 10); /* Изменение фона сепаратора */
   }
 }

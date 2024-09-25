@@ -1,7 +1,10 @@
 @use '@angular/material' as mat;
+
 @use './m3-theme-green' as grn;
 @use './m3-theme-bliue-light' as blu;
+@use './m3-theme-crab' as crb;
 @use './m3-theme-dark' as drk;
+@use './m3-theme-blue-dark' as b-drk;
 
 @include mat.core();
 
@@ -29,6 +32,18 @@
   }
 }
 
+.crab-theme{
+  .header{
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 70);
+  }
+
+  .mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
+    background-color: mat.get-theme-color(crb.$light-theme, 'neutral-variant', 50); /* Синий цвет фона для активной кнопки */
+    color: mat.get-theme-color(crb.$light-theme, 'neutral-variant', 20);
+    /* Добавьте другие стили для активной кнопки, если необходимо */
+  }
+}
+
 .dark-theme{
   .header{
     background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 20);
@@ -36,8 +51,21 @@
   }
 
   .mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
-    background-color: mat.get-theme-color(drk.$dark-theme,'primary', 50); /* Синий цвет фона для активной кнопки */
+    background-color: mat.get-theme-color(drk.$dark-theme,'primary', 60); /* Синий цвет фона для активной кнопки */
     color: mat.get-theme-color(drk.$dark-theme,'primary', 80);
+    /* Добавьте другие стили для активной кнопки, если необходимо */
+  }
+}
+
+.blue-dark-theme{
+  .header{
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 20);
+    color: mat.get-theme-color(b-drk.$dark-theme,'primary', 80);
+  }
+
+  .mdc-button.mdc-button--unelevated.mat-mdc-unelevated-button.active-button.mat-unthemed.mat-mdc-button-base {
+    background-color: mat.get-theme-color(b-drk.$dark-theme,'primary', 60); /* Синий цвет фона для активной кнопки */
+    color: mat.get-theme-color(b-drk.$dark-theme,'primary', 80);
     /* Добавьте другие стили для активной кнопки, если необходимо */
   }
 }

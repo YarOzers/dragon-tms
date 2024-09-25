@@ -3,7 +3,9 @@
 @use '@angular/material' as mat;
 @use 'styles/m3-theme-green' as grn;
 @use 'styles/m3-theme-bliue-light' as blu;
+@use 'styles/m3-theme-crab' as crb;
 @use 'styles/m3-theme-dark' as drk;
+@use 'styles/m3-theme-blue-dark' as b-drk;
 
 @import "styles/header.scss";
 @import "styles/project-list.scss";
@@ -74,14 +76,32 @@ body {
   }
 }
 
+.crab-theme {
+  @include mat.all-component-bases(crb.$light-theme);
+  @include mat.system-level-colors(crb.$light-theme);
+  @include mat.all-component-themes(crb.$light-theme);
+  @include mat.all-component-typographies(crb.$light-theme);
+  @include mat.all-component-colors(crb.$light-theme);
+
+  mat-table{
+    @include mat.all-component-colors(crb.$light-theme);
+    @include mat.system-level-colors(crb.$light-theme);
+  }
+
+  mat-card{
+    @include mat.all-component-colors(crb.$light-theme);
+    @include mat.system-level-colors(crb.$light-theme);
+  }
+}
+
 .dark-theme {
   @include mat.system-level-colors(drk.$dark-theme);
   @include mat.all-component-bases(drk.$dark-theme);
   @include mat.all-component-themes(drk.$dark-theme);
   @include mat.all-component-typographies(drk.$dark-theme);
   @include mat.system-level-typography(drk.$dark-theme);
-  background-color: #000000;
-  color: #3a4c9c;
+  //background-color: #000000;
+  //color: #3a4c9c;
 
   mat-table{
     @include mat.all-component-colors(drk.$dark-theme);
@@ -92,6 +112,36 @@ body {
     @include mat.all-component-colors(drk.$dark-theme);
     @include mat.system-level-colors(drk.$dark-theme);
   }
+
+  @include mat.button-color(drk.$dark-theme);
+
+}
+
+.blue-dark-theme {
+  @include mat.system-level-colors(b-drk.$dark-theme);
+  @include mat.all-component-bases(b-drk.$dark-theme);
+  @include mat.all-component-themes(b-drk.$dark-theme);
+  @include mat.all-component-typographies(b-drk.$dark-theme);
+  @include mat.system-level-typography(b-drk.$dark-theme);
+  //background-color: #000000;
+  //color: #3a4c9c;
+
+  mat-table{
+    @include mat.all-component-colors(b-drk.$dark-theme);
+    @include mat.system-level-colors(b-drk.$dark-theme);
+  }
+
+  mat-card{
+    @include mat.all-component-colors(b-drk.$dark-theme);
+    @include mat.system-level-colors(b-drk.$dark-theme);
+  }
+
+  @include mat.button-color(b-drk.$dark-theme);
+
+  body{
+    background-color: black;
+  }
+
 }
 
 
@@ -115,6 +165,48 @@ body {
 
   ::-webkit-scrollbar-thumb:hover {
     background: mat.get-theme-color(grn.$light-theme, 'primary', 50); /* цвет ползунка при наведении */
+  }
+}
+
+.blue-theme{
+  /* Для Webkit-браузеров */
+  ::-webkit-scrollbar {
+    width: 8px; /* ширина вертикального скроллбара */
+    height: 8px; /* высота горизонтального скроллбара */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: mat.get-theme-color(blu.$light-theme, 'primary', 90); /* цвет дорожки скроллбара */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: mat.get-theme-color(blu.$light-theme, 'primary', 70); /* цвет ползунка */
+    border-radius: 6px; /* скругление углов ползунка */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: mat.get-theme-color(blu.$light-theme, 'primary', 50); /* цвет ползунка при наведении */
+  }
+}
+
+.crab-theme{
+  /* Для Webkit-браузеров */
+  ::-webkit-scrollbar {
+    width: 8px; /* ширина вертикального скроллбара */
+    height: 8px; /* высота горизонтального скроллбара */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: mat.get-theme-color(crb.$light-theme, 'primary', 90); /* цвет дорожки скроллбара */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: mat.get-theme-color(crb.$light-theme, 'primary', 70); /* цвет ползунка */
+    border-radius: 6px; /* скругление углов ползунка */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: mat.get-theme-color(crb.$light-theme, 'primary', 50); /* цвет ползунка при наведении */
   }
 }
 
@@ -204,6 +296,9 @@ app-ck-editor{
   height: 24px;                 /* Стандартный размер иконки */
 }
 
+p{
+  margin: 0;
+}
 
 
 

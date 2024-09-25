@@ -1,7 +1,10 @@
 @use '@angular/material' as mat;
+
 @use './m3-theme-green' as grn;
 @use './m3-theme-bliue-light' as blu;
+@use './m3-theme-crab' as crb;
 @use './m3-theme-dark' as drk;
+@use './m3-theme-blue-dark' as b-drk;
 
 @include mat.core();
 
@@ -63,6 +66,35 @@
 
 }
 
+.crab-theme {
+  .mat-mdc-dialog-actions, mdc-dialog__actions {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 70);
+  }
+
+  .mat-mdc-dialog-surface.mdc-dialog__surface {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98);
+  }
+
+  .mat-drawer-content.mat-sidenav-content {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98);
+  }
+
+  .mat-drawer.mat-sidenav.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98);
+  }
+
+  .mat-drawer-container.mat-sidenav-container.sidenav-container.mat-drawer-transition {
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98);
+  }
+
+  [disabled=true] {
+    .mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color[disabled] {
+      color: white;
+    }
+  }
+
+}
+
 .dark-theme {
   .mat-mdc-dialog-actions, mdc-dialog__actions {
     background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 70);
@@ -86,5 +118,31 @@
 
   .mat-drawer.mat-sidenav.ng-trigger.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened{
     background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0);
+  }
+}
+
+.blue-dark-theme {
+  .mat-mdc-dialog-actions, mdc-dialog__actions {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 70);
+  }
+
+  .mat-mdc-dialog-surface.mdc-dialog__surface {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
+  }
+
+  .mat-drawer-content.mat-sidenav-content {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
+  }
+
+  .mat-drawer.mat-sidenav.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'neutral', 4);
+  }
+
+  .mat-drawer-container.mat-sidenav-container.sidenav-container.mat-drawer-transition {
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
+  }
+
+  .mat-drawer.mat-sidenav.ng-trigger.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened{
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
   }
 }

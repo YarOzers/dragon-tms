@@ -36,11 +36,21 @@
 
   <div fxLayout="row" fxLayoutAlign="end center">
     <div  class="user-name">{{ userName }}</div>
-    <div >
-      <button mat-icon-button (click)="toggleIcon()">
-        <mat-icon>{{ matIcon }}</mat-icon>
-      </button>
+<!--    <div >-->
+<!--      <button mat-icon-button (click)="toggleIcon()">-->
+<!--        <mat-icon>{{ matIcon }}</mat-icon>-->
+<!--      </button>-->
+<!--    </div>-->
+
+    <div>
+      <button mat-icon-button [matMenuTriggerFor]="theme"><mat-icon>format_color_fill</mat-icon></button>
+      <mat-menu #theme="matMenu">
+        <div *ngFor="let tm of themes">
+          <button mat-menu-item (click)="setTheme(tm)">{{getDisplayThemeName(tm)}}</button>
+        </div>
+      </mat-menu>
     </div>
+
     <div >
       <button mat-icon-button (click)="openSupportDialog()">
         <mat-icon>contact_support</mat-icon>
