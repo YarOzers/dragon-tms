@@ -43,17 +43,17 @@
   }
 
   .mat-mdc-row.mdc-data-table__row.cdk-row:hover{
-    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 40);
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 30);
   }
 }
 
-.dark-theme{
+.blue-dark-theme{
   .project-list{
     background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
   }
 
   .mat-mdc-row.mdc-data-table__row.cdk-row:hover{
-    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 40);
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 30);
   }
 }
 
