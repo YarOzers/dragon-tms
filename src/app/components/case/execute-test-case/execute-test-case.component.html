@@ -222,7 +222,7 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem">Сохранить</button>
+  <button [disabled]="!hasQaRole()" mat-flat-button (click)="save()" class="save-btn" style="padding: 1rem">Сохранить</button>
   <button mat-button (click)="closeMatDialog()" class="close-btn" style="margin: 0 1rem 0 1rem; padding: 1rem">
     Отмена
   </button>

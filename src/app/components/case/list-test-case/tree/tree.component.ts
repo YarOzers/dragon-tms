@@ -25,6 +25,7 @@ import {TestCaseService} from "../../../../services/test-case.service";
 import {ActivatedRoute} from "@angular/router";
 import {MoveAndCopyDialogComponent} from "../move-and-copy-dialog/move-and-copy-dialog.component";
 import {MediaObserver} from "@angular/flex-layout";
+import {KeycloakService} from "keycloak-angular";
 
 
 @Component({
@@ -61,7 +62,8 @@ export class TreeComponent implements OnInit, AfterViewInit {
     private routerParamsService: RouterParamsService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private mediaObserver: MediaObserver
+    private mediaObserver: MediaObserver,
+    private keycloakService: KeycloakService
   ) {
     // this.routerParamsService.projectId$.subscribe(id => {
     //   this.projectId = id;
@@ -664,6 +666,10 @@ export class TreeComponent implements OnInit, AfterViewInit {
     },()=>{
 
     });
+  }
+
+  hasQaRole(): boolean {
+    return this.keycloakService.isUserInRole('ROLE_QA');
   }
 }
 

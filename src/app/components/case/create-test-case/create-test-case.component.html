@@ -333,7 +333,7 @@
           class="save-btn"
           style="padding: 1rem"
           [disabled]="!hasChange
-           || testCaseNameInput.invalid || testCaseType.invalid || testCaseAutomationFlag.invalid || testCasePriority.invalid || testCaseStatus.invalid || testCaseExecutionTime.invalid"
+           || testCaseNameInput.invalid || testCaseType.invalid || testCaseAutomationFlag.invalid || testCasePriority.invalid || testCaseStatus.invalid || testCaseExecutionTime.invalid || hasQaRole()"
   >Сохранить
   </button>
   <button mat-button

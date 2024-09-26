@@ -5,6 +5,7 @@ import {FolderService} from "../../../../services/folder.service";
 import {NgIf} from "@angular/common";
 import {MatButton} from "@angular/material/button";
 import {TestCaseService} from "../../../../services/test-case.service";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-move-and-copy-dialog',
@@ -24,6 +25,7 @@ export class MoveAndCopyDialogComponent implements OnInit, AfterViewInit {
     private folderService: FolderService,
     private testCaseService: TestCaseService,
     private dialogRef: MatDialogRef<MoveAndCopyDialogComponent>,
+    private keycloakService: KeycloakService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
   }
@@ -77,5 +79,9 @@ export class MoveAndCopyDialogComponent implements OnInit, AfterViewInit {
         this.dialogRef.close(testCase);
       })
     }
+  }
+
+  hasQaRole(): boolean {
+    return this.keycloakService.isUserInRole('ROLE_QA');
   }
 }

@@ -29,10 +29,8 @@
     background-color: mat.get-theme-color(grn.$light-theme, 'primary', 98);
   }
 
-  [disabled=true] {
-    .mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color[disabled] {
-      color: white;
-    }
+  .mat-drawer-container.mat-sidenav-container.sidenav-container{
+    background-color: mat.get-theme-color(grn.$light-theme, 'primary', 98);
   }
 
 }
@@ -58,10 +56,8 @@
     background-color: mat.get-theme-color(blu.$light-theme, 'primary', 98);
   }
 
-  [disabled=true] {
-    .mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color[disabled] {
-      color: white;
-    }
+  .mat-drawer-container.mat-sidenav-container.sidenav-container{
+    background-color: mat.get-theme-color(blu.$light-theme, 'primary', 98);
   }
 
 }
@@ -87,10 +83,8 @@
     background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98);
   }
 
-  [disabled=true] {
-    .mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color[disabled] {
-      color: white;
-    }
+  .mat-drawer-container.mat-sidenav-container.sidenav-container{
+    background-color: mat.get-theme-color(crb.$light-theme, 'primary', 98);
   }
 
 }
@@ -119,6 +113,10 @@
   .mat-drawer.mat-sidenav.ng-trigger.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened{
     background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0);
   }
+
+  .mat-drawer-container.mat-sidenav-container.sidenav-container{
+    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0);
+  }
 }
 
 .blue-dark-theme {
@@ -143,6 +141,10 @@
   }
 
   .mat-drawer.mat-sidenav.ng-trigger.ng-trigger-transform.ng-star-inserted.mat-drawer-side.mat-drawer-opened{
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
+  }
+
+  .mat-drawer-container.mat-sidenav-container.sidenav-container{
     background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
   }
 }

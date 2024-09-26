@@ -11,3 +11,19 @@
 .dark-theme {
 
 }
+
+.mat-mdc-menu-trigger.mdc-icon-button.mat-mdc-icon-button.mat-mdc-button-disabled.mat-unthemed.mat-mdc-button-base[disabled] {
+  opacity: 0.5;
+}
+
+.mdc-icon-button.mat-mdc-icon-button.mat-primary.mat-mdc-button-disabled.mat-mdc-button-base.ng-star-inserted[disabled]{
+  opacity: 0.5;
+}
+
+.mdc-icon-button.mat-mdc-icon-button.mat-mdc-button-disabled.mat-unthemed.mat-mdc-button-base[disabled]{
+  opacity: 0.5;
+}
+
+.mat-icon.notranslate.material-icons.mat-ligature-font.mat-icon-no-color[disabled]{
+  opacity: 0.5;
+}

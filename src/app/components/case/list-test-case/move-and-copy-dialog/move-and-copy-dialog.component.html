@@ -21,8 +21,8 @@
 
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button (click)="copy()">Копировать</button>
-  <button *ngIf="!data.onlyCopy" mat-button (click)="move()">Переместить</button>
+  <button [disabled]="!hasQaRole()" mat-button (click)="copy()">Копировать</button>
+  <button *ngIf="!data.onlyCopy " [disabled]="!hasQaRole()" mat-button (click)="move()">Переместить</button>
   <button mat-button (click)="closeMatDialog()">Отмена</button>
 </mat-dialog-actions>
 

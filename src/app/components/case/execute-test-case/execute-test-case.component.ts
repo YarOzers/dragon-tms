@@ -36,6 +36,8 @@ import {TestCaseService} from "../../../services/test-case.service";
 import {ActivatedRoute} from "@angular/router";
 import {TimerComponent} from "../../timer/timer.component";
 import {UserService} from "../../../services/user.service";
+import {KeycloakAdapter} from "keycloak-js";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-execute-test-case',
@@ -214,7 +216,8 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
     private projectService: ProjectService,
     private testCaseService: TestCaseService,
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -1295,5 +1298,9 @@ export class ExecuteTestCaseComponent implements AfterViewInit, OnDestroy, OnIni
 
   getData() {
     console.log('preConditions---------------->', this.preConditions);
+  }
+
+  hasQaRole(): boolean {
+    return this.keycloakService.isUserInRole('ROLE_QA');
   }
 }

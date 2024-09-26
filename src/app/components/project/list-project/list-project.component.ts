@@ -18,6 +18,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {MediaObserver} from "@angular/flex-layout";
 import {CkEditorComponent} from "../../ckeditor/ck-editor/ck-editor.component";
+import {KeycloakService} from "keycloak-angular";
+import {RoleInfoDialogComponent} from "./role-info-dialog/role-info-dialog.component";
 
 @Component({
   selector: 'app-list-project',
@@ -63,6 +65,7 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
     private headerService: HeaderService,
     private routerParamsService: RouterParamsService,
     private mediaObserver: MediaObserver,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -99,6 +102,10 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+
+    if (!this.keycloakService.isUserInRole("ROLE_QA")){
+      this.openRoleInfoDialog();
+    }
 
   }
 
@@ -174,5 +181,31 @@ export class ListProjectComponent implements OnInit, AfterViewInit {
       }
     )
 
+  }
+
+  hasAdminRole(): boolean {
+    return this.keycloakService.isUserInRole('ROLE_ADMIN');
+  }
+
+  openRoleInfoDialog(): void {
+
+    const isSmallScreen = this.mediaObserver.isActive('ld-md');
+    const dialogRef = this.dialog.open(RoleInfoDialogComponent, {
+
+      width: isSmallScreen ? '90%' : 'auto',
+      height: 'auto',
+      data: {
+        type: 'project',
+        folderName: ''
+      } // Можно передать данные в диалоговое окно
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined && result !== '') {
+        this.addProject(result);
+      } else {
+        console.log("Введите имя проекта!!!")
+      }
+    });
   }
 }

@@ -26,7 +26,7 @@
             </mat-menu>
 
             <!-- Кнопка для запуска всех отмеченных автотестов -->
-            <button mat-icon-button (click)="runSelectedAutoTests()">
+            <button [disabled]="!hasQaRole()" mat-icon-button (click)="runSelectedAutoTests()">
               <mat-icon>playlist_play</mat-icon>
             </button>
 
@@ -39,7 +39,7 @@
             <!-- Выпадающее меню -->
             <mat-menu #menu="matMenu">
               <!-- Пункт "Запустить в общем ране" -->
-              <button mat-menu-item (click)="setRunMode(true)">
+              <button [disabled]="!hasQaRole()" mat-menu-item (click)="setRunMode(true)">
                 <!-- Контейнер для галочки -->
                 <mat-icon *ngIf="runTests">check</mat-icon>
                 <mat-icon *ngIf="!runTests" style="opacity: 0;">check</mat-icon>
@@ -47,7 +47,7 @@
               </button>
 
               <!-- Пункт "Запустить в отдельных ранах" -->
-              <button mat-menu-item (click)="setRunMode(false)">
+              <button [disabled]="!hasQaRole()" mat-menu-item (click)="setRunMode(false)">
                 <!-- Контейнер для галочки -->
                 <mat-icon *ngIf="!runTests">check</mat-icon>
                 <mat-icon *ngIf="runTests" style="opacity: 0;">check</mat-icon>
@@ -139,7 +139,7 @@
                   </th>
                   <td mat-cell *matCellDef="let element">
                     <button *ngIf="element.automationFlag === 'AUTO'" mat-icon-button
-                            color="primary" (click)="runTestCase(element,$event)" [disabled]="element.isRunning">
+                            color="primary" (click)="runTestCase(element,$event)" [disabled]="element.isRunning || !hasQaRole()">
                       <mat-icon *ngIf="!element.isRunning">play_arrow</mat-icon>
                       <mat-progress-spinner *ngIf="element.isRunning" mode="indeterminate"
                                             diameter="20"></mat-progress-spinner>

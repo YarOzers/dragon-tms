@@ -215,7 +215,7 @@
   .test-case-name{
     border: 1px solid mat.get-theme-color(b-drk.$dark-theme, 'primary', 40); /* Для наглядности добавим границу */
     background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 20);
-    color: mat.get-theme-color(drk.$dark-theme, 'primary', 70);
+    color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 70);
   }
 
   .cdk-drag-folder.subfolder {
@@ -229,7 +229,7 @@
   .folder-name-item{
     border: 1px solid mat.get-theme-color(b-drk.$dark-theme, 'primary', 50); /* Для наглядности добавим границу */
     background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 40);
-    color: mat.get-theme-color(drk.$dark-theme, 'primary', 80);
+    color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 80);
   }
 
   .folder-name-item:hover{

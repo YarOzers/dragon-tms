@@ -28,13 +28,16 @@
 
 .dark-theme {
   span.mdc-button__label {
-    color: mat.get-theme-color(drk.$dark-theme, 'primary', 95);
+    color: mat.get-theme-color(drk.$dark-theme, 'primary', 80);
   }
 }
 
 .blue-dark-theme {
   span.mdc-button__label {
-    color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 95);
+    color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 80);
   }
 }
+
+
+
 

@@ -17,6 +17,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {FolderService} from "../../services/folder.service";
 import {TestCaseService} from "../../services/test-case.service";
 import {MatIcon} from "@angular/material/icon";
+import {KeycloakAdapter} from "keycloak-js";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-dialog',
@@ -57,6 +59,7 @@ export class DialogComponent implements OnInit {
     private dialogRef: MatDialogRef<DialogComponent>,
     private folderService: FolderService,
     private testCaseService: TestCaseService,
+    private keycloakService: KeycloakService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.projectForm = this.fb.group({
@@ -167,5 +170,9 @@ export class DialogComponent implements OnInit {
 
       this.dialogRef.close();
     });
+  }
+
+  hasQaRole(): boolean {
+    return this.keycloakService.isUserInRole('ROLE_QA');
   }
 }

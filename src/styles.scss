@@ -64,6 +64,7 @@ body {
   @include mat.all-component-themes(blu.$light-theme);
   @include mat.all-component-typographies(blu.$light-theme);
   @include mat.all-component-colors(blu.$light-theme);
+  @include mat.icon-button-theme(blu.$light-theme);
 
   mat-table{
     @include mat.all-component-colors(blu.$light-theme);
@@ -92,6 +93,7 @@ body {
     @include mat.all-component-colors(crb.$light-theme);
     @include mat.system-level-colors(crb.$light-theme);
   }
+
 }
 
 .dark-theme {
@@ -299,6 +301,8 @@ app-ck-editor{
 p{
   margin: 0;
 }
+
+
 
 
 

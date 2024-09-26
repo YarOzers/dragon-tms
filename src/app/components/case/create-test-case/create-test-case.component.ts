@@ -45,6 +45,8 @@ import {
 import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 import {UserService} from "../../../services/user.service";
 import {CkEditorComponent} from "../../ckeditor/ck-editor/ck-editor.component";
+import Keycloak from "keycloak-js";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-create-test-case',
@@ -229,7 +231,8 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
     private routerParamsService: RouterParamsService,
     private testCaseService: TestCaseService,
     private dialog: MatDialog,
-    private userService: UserService
+    private userService: UserService,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -251,7 +254,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
       this.testCaseService.getTestCase(+this.dataDialog.testCaseId).subscribe({
           next: (testCase) => {
             this.setVersionFromData(testCase);
-            this.selectedVersion = this.versions[this.versions.length -1].value;
+            this.selectedVersion = this.versions[this.versions.length - 1].value;
             console.log('testCase in setFields::: ', testCase)
             this.setFieldsAndSteps(testCase);
           }, error: (err) => {
@@ -1052,7 +1055,7 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
   updateEditorPreConditionContent(editor: string, index: number, field: 'action' | 'expectedResult'): void {
     if (editor) {
       this.preConditions[index][field] = editor;
-      console.log('POSTCONDITIONS:::',this.preConditions[index][field]);
+      console.log('POSTCONDITIONS:::', this.preConditions[index][field]);
       // this.preConditions[index][field] = editor.innerHTML;
     }
   }
@@ -1352,7 +1355,11 @@ export class CreateTestCaseComponent implements AfterViewInit, OnDestroy, OnInit
 
   protected readonly prompt = prompt;
 
-  receiveEditor($event: string):string {
+  receiveEditor($event: string): string {
     return $event;
+  }
+
+  hasQaRole(): boolean {
+    return this.keycloakService.isUserInRole("ROLE_QA");
   }
 }

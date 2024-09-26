@@ -39,6 +39,7 @@ import {TestRunnerService} from "../../../services/test-runner.service";
 import {WebSocketService} from "../../../services/web-socket.service";
 import {User} from "../../../models/user";
 import {UserService} from "../../../services/user.service";
+import {KeycloakService} from "keycloak-angular";
 
 
 @Component({
@@ -127,7 +128,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     private routerParamsService: RouterParamsService,
     private testRunnerService: TestRunnerService,
     private webSocketService: WebSocketService,
-    private userService: UserService
+    private userService: UserService,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -349,5 +351,9 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   // Функция для переключения режима
   setRunMode(runInSingle: boolean): void {
     this.runTests = runInSingle;
+  }
+
+  hasQaRole(): boolean{
+    return this.keycloakService.isUserInRole("ROLE_QA");
   }
 }

@@ -81,6 +81,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     if (localStorage.getItem('theme')){
       this.themeService.setTheme(localStorage.getItem('theme'));
+    }else {
+      this.themeService.setTheme('blue-theme');
     }
 
     this.themes = this.themeService.getAvailableThemes();

@@ -43,6 +43,7 @@ import {TestRunnerService} from "../../../services/test-runner.service";
 import {User} from "../../../models/user";
 import {UserService} from "../../../services/user.service";
 import {WebSocketService} from "../../../services/web-socket.service";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-execute-test-plan',
@@ -141,7 +142,8 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
     private testCaseService: TestCaseService,
     private testRunnerService: TestRunnerService,
     private userService: UserService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -425,5 +427,9 @@ export class ExecuteTestPlanComponent implements OnInit, AfterViewInit {
   toggleSelection(element: any) {
 
     this.selection.toggle(element);
+  }
+
+  hasQaRole(): boolean{
+    return this.keycloakService.isUserInRole("ROLE_QA")
   }
 }

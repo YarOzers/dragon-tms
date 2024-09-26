@@ -31,6 +31,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {ExecuteTestPlanComponent} from "../execute-test-plan/execute-test-plan.component";
 import {FlexModule} from "@angular/flex-layout";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-list-test-plan',
@@ -87,7 +88,8 @@ export class ListTestPlanComponent implements AfterViewInit {
     private router: Router,
     private headerService: HeaderService,
     private activeRouter: ActivatedRoute,
-    private routerParamsService: RouterParamsService
+    private routerParamsService: RouterParamsService,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -284,5 +286,9 @@ export class ListTestPlanComponent implements AfterViewInit {
       {
         state: {go: true}
       });
+  }
+
+  hasQaRole(): boolean {
+    return this.keycloakService.isUserInRole('ROLE_QA');
   }
 }
