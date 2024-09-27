@@ -36,7 +36,7 @@ import {FolderService} from "../../../../services/folder.service";
     FormsModule
   ],
   templateUrl: './create-test-plan-tree.component.html',
-  styleUrl: './create-test-plan-tree.component.css'
+  styleUrl: './create-test-plan-tree.component.scss'
 })
 export class CreateTestPlanTreeComponent implements OnInit, AfterViewInit {
   selectedFolder: Folder | null = null;

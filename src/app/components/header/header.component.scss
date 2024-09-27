@@ -38,6 +38,7 @@
   overflow: hidden; /* Скрытие текста, который не помещается */
   white-space: nowrap; /* Текст в одну строку */
   text-overflow: ellipsis;
+  margin-right: 1rem;
 }
 
 .header-btn-container {

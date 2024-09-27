@@ -29,7 +29,7 @@
   margin: 0;
   padding: 0;
   z-index: 1002;
-  background-color: #dbe1ff;
+  //background-color: #dbe1ff;
   width: 100vw;
 }
 
@@ -81,7 +81,7 @@
   margin: 0;
   padding: 0;
   z-index: 1002;
-  background-color: #dbe1ff;
+  //background-color: #dbe1ff;
   width: 100%;
   display: flex;
   justify-content: space-between; /* Кнопки разнесены по краям */
@@ -94,13 +94,13 @@
 }
 
 #example.example{
-  background-color: #ffffff;
+  //background-color: #ffffff;
   height: 100%;
   width: 100%;
 }
 
 .mat-mdc-dialog-content.mdc-dialog__content.exapmle{
-  background-color: #ffffff;
+  //background-color: #ffffff;
   height: calc(100vh - 300px);
   width: 100%;
   display: flex;
@@ -119,7 +119,7 @@ button.close-btn{
 }
 
 .table-btn-container{
-  background-color: #b2c5ff;
+  //background-color: #b2c5ff;
 }
 
 .column-menu-btn{

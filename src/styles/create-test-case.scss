@@ -95,7 +95,7 @@
   }
 
   .mat-mdc-dialog-surface.mdc-dialog__surface {
-    background-color: mat.get-theme-color(drk.$dark-theme, 'primary', 0);
+    background-color: mat.get-theme-color(drk.$dark-theme, 'neutral', 4);
   }
 
   .mat-drawer-content.mat-sidenav-content {
@@ -125,7 +125,7 @@
   }
 
   .mat-mdc-dialog-surface.mdc-dialog__surface {
-    background-color: mat.get-theme-color(b-drk.$dark-theme, 'primary', 0);
+    background-color: mat.get-theme-color(b-drk.$dark-theme, 'neutral', 4);
   }
 
   .mat-drawer-content.mat-sidenav-content {

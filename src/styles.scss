@@ -233,6 +233,27 @@ body {
   }
 }
 
+.blue-dark-theme{
+  /* Для Webkit-браузеров */
+  ::-webkit-scrollbar {
+    width: 8px; /* ширина вертикального скроллбара */
+    height: 8px; /* высота горизонтального скроллбара */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: mat.get-theme-color(b-drk.$dark-theme, 'primary', 50); /* цвет дорожки скроллбара */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: mat.get-theme-color(b-drk.$dark-theme, 'primary', 30); /* цвет ползунка */
+    border-radius: 6px; /* скругление углов ползунка */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: mat.get-theme-color(b-drk.$dark-theme, 'primary', 20); /* цвет ползунка при наведении */
+  }
+}
+
 
 
 .highlight{

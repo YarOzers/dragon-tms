@@ -41,6 +41,7 @@ import {TestPlan} from "../../../models/test-plan";
 import {TestPlanService} from "../../../services/test-plan.service";
 import {UserService} from "../../../services/user.service";
 import {TestCaseService} from "../../../services/test-case.service";
+import {KeycloakService} from "keycloak-angular";
 
 @Component({
   selector: 'app-create-test-plan',
@@ -128,7 +129,8 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
     private routerParamsService: RouterParamsService,
     private testPlanService: TestPlanService,
     private userService: UserService,
-    private testCaseService: TestCaseService
+    private testCaseService: TestCaseService,
+    private keycloakService: KeycloakService
   ) {
   }
 
@@ -329,5 +331,9 @@ export class CreateTestPlanComponent implements OnInit, AfterViewInit {
 
   onChange() {
     this.hasChange = true;
+  }
+
+  hasQaRole():boolean{
+    return this.keycloakService.isUserInRole("ROLE_QA")
   }
 }

@@ -103,6 +103,6 @@
 </div>
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center">
-  <button mat-flat-button (click)="save()" class="save-btn">Сохранить</button>
+  <button mat-flat-button [disabled]="!hasQaRole()" (click)="save()" class="save-btn">Сохранить</button>
   <button mat-button (click)="closeMatDialog()" class="close-btn">Отмена</button>
 </div>
