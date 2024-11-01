@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as Stomp from 'stompjs';
 import SockJS from 'sockjs-client'; // Исправленный импорт
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AutotestResult} from "../models/autotest-result";
 import {environment} from "../environment";
-import { KeycloakService } from 'keycloak-angular';
+import {KeycloakService} from 'keycloak-angular';
 import {UserService} from "./user.service"; // Импорт KeycloakService для получения токена
 
 @Injectable({
@@ -27,8 +27,6 @@ export class WebSocketService {
   } // Добавляем KeycloakService в конструктор
 
 
-
-
   async connect() {
     const token = await this.keycloakService.getToken(); // Получаем токен от Keycloak
 
@@ -44,7 +42,9 @@ export class WebSocketService {
       console.log('Connected: ' + frame);
       console.log('Encode email::', this.encodedEmail)
 
-      this.stompClient.subscribe(`/topic/test-status/${this.encodedEmail}`, (message: any) => {
+      //не знаю зачем я так делал, будет проверка на пользака, и ответ придет только тому, кто запустил тесты))
+      // this.stompClient.subscribe(`/topic/test-status/${this.encodedEmail}`, (message: any) => {
+      this.stompClient.subscribe(`/topic/test-status/`, (message: any) => {
         if (message.body) {
           this.testStatusSubject.next(JSON.parse(message.body));
         }
