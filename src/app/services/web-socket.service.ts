@@ -14,7 +14,10 @@ export class WebSocketService {
   private wsUrl = environment.wsUrl;
   private stompClient: any;
   private testStatusSubject = new BehaviorSubject<any>(null);
-  testStatus$: Observable<AutotestResult[]> = this.testStatusSubject.asObservable();
+  testStartSubject = new BehaviorSubject<any>(null); // Новый BehaviorSubject для отслеживания запуска тестов
+  testStatus$: Observable<any> = this.testStatusSubject.asObservable();
+
+
   private userEmail!: string;
   private encodedEmail!: string;
 
@@ -46,7 +49,14 @@ export class WebSocketService {
       // this.stompClient.subscribe(`/topic/test-status/${this.encodedEmail}`, (message: any) => {
       this.stompClient.subscribe(`/topic/test-status/`, (message: any) => {
         if (message.body) {
-          this.testStatusSubject.next(JSON.parse(message.body));
+          const statusUpdate = JSON.parse(message.body);
+
+          // Проверяем статус и отправляем соответствующие данные в Subject
+          if (statusUpdate.status === 'started') {
+            this.testStartSubject.next(statusUpdate); // Обновляем Subject для статуса запуска
+          } else {
+            this.testStatusSubject.next(statusUpdate); // Обновляем Subject для финального статуса
+          }
         }
       });
     }, (error: any) => {

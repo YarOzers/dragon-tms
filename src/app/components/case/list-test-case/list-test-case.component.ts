@@ -40,6 +40,8 @@ import {WebSocketService} from "../../../services/web-socket.service";
 import {User} from "../../../models/user";
 import {UserService} from "../../../services/user.service";
 import {KeycloakService} from "keycloak-angular";
+import {Subject, takeUntil} from "rxjs";
+import {AutotestResult} from "../../../models/autotest-result";
 
 
 @Component({
@@ -118,6 +120,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   dataIndex: any;
   private testResults: any;
   private testPlanId: number = 1;
+  private destroy$ = new Subject<void>(); // Определение Subject для управления подписками
+
 
   constructor(
     private projectService: ProjectService,
@@ -203,32 +207,42 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.webSocketService.connect();
 
-    // Подписываемся на обновление статуса тестов
-    this.webSocketService.testStatus$.subscribe(status => {
-      if (status) {
-        console.log("Status From WebSocket:::: ", status);
-
-        for (const st of status) {
-
-          console.log("st::", st);
-          this.dataSource.data.forEach(testCase => {
-            if (testCase.id === Number(st.AS_ID)) {
-              testCase.isRunning = false;
-              testCase.reportUrl = st.reportUrl;
-              if (st.status === 'passed') {
-                testCase.result = 'SUCCESSFULLY';
+    this.webSocketService.connect().then(() => {
+      // Подписываемся на обновление статуса тестов при запуске
+      this.webSocketService.testStartSubject
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(status => {
+          if (status && status.status === "started") {
+            console.log("Test started:", status.testIds);
+            status.testIds.forEach((id: string) => {
+              const testCase = this.dataSource.data.find(tc => tc.id === Number(id));
+              if (testCase) {
+                testCase.isRunning = true;
               }
-              if (st.status !== 'passed') {
-                testCase.result = 'FAILED';
-              }
+            });
+            // Обновляем таблицу
+            this.dataSource.data = [...this.dataSource.data];
+          }
+        });
 
+      // Подписываемся на завершение тестов
+      this.webSocketService.testStatus$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(status => {
+          if (status && status.status !== "started") {
+            for (const st of status) {
+              this.dataSource.data.forEach(testCase => {
+                if (testCase.id === Number(st.AS_ID)) {
+                  testCase.isRunning = false;
+                  testCase.reportUrl = st.reportUrl;
+                  testCase.result = st.status === 'passed' ? 'SUCCESSFULLY' : 'FAILED';
+                }
+              });
             }
-          });
-        }
-        console.log("DATASOURCE>DATA:::", this.dataSource.data);
-        // Если требуется обновить таблицу данных
-        this.dataSource.data = [...this.dataSource.data];
-      }
+            console.log("DATASOURCE>DATA:::", this.dataSource.data);
+            this.dataSource.data = [...this.dataSource.data];
+          }
+        });
     });
   }
 
@@ -240,7 +254,10 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.webSocketService.disconnect();
+    // this.webSocketService.disconnect();
+    // Завершаем поток для уничтожения всех подписок, связанных с этим компонентом
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 
