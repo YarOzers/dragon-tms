@@ -42,6 +42,7 @@ import {UserService} from "../../../services/user.service";
 import {KeycloakService} from "keycloak-angular";
 import {Subject, takeUntil} from "rxjs";
 import {AutotestResult} from "../../../models/autotest-result";
+import {TestCaseExportService} from "../../../services/test-case-export.service";
 
 
 @Component({
@@ -133,7 +134,8 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
     private testRunnerService: TestRunnerService,
     private webSocketService: WebSocketService,
     private userService: UserService,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
+    private testCaseExportService: TestCaseExportService
   ) {
   }
 
@@ -372,5 +374,16 @@ export class ListTestCaseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   hasQaRole(): boolean{
     return this.keycloakService.isUserInRole("ROLE_QA");
+  }
+
+  exportTestCases() {
+
+    const selectedTests: any = this.selection.selected;
+    const ids: String[] = [];
+    for(const test of selectedTests){
+      ids.push(String(test.id));
+    }
+    console.log(ids);
+    this.testCaseExportService.downloadTestCases(ids);
   }
 }
